@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>กะสอบ TEST</title>
+<style>
+:root{--orange:#f58220;--ink:#172033;--bg:#f5f7fb;--line:#e4e8ef;--ok:#178a52;--bad:#c43b3b}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:14px 18px;position:sticky;top:0;z-index:5}
+.brand{font-weight:900;font-size:22px}.brand b{color:var(--orange)}
+.wrap{max-width:1000px;margin:auto;padding:18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 5px 18px #1720330a}
+h1,h2,h3{margin-top:0}.muted{color:#697386}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}
+.primary{background:var(--orange);color:#fff}.ghost{background:#eef1f6;color:var(--ink)}.danger{background:#fff0f0;color:var(--bad)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.set{border:1px solid var(--line);border-radius:16px;padding:16px}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.timer{font-weight:900;font-size:20px}
+.progress{height:9px;background:#edf0f5;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--orange);width:0}
+.choice{display:block;border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0;cursor:pointer}.choice:has(input:checked){border:2px solid var(--orange);background:#fff8f1}.choice input{margin-right:9px}
+.navnums{display:flex;gap:7px;flex-wrap:wrap}.num{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:9px}.num.answered{background:#fff1e5;border-color:#ffbf88}.num.current{outline:2px solid var(--orange)}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.hide{display:none!important}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+textarea{width:100%;min-height:180px;border:1px solid var(--line);border-radius:12px;padding:12px;font-family:monospace}
+.admin input,.admin select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;margin:5px 0 10px}
+.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#fff1e5;color:#9a4c08;font-weight:700;font-size:13px}
+.review{border-left:4px solid var(--line);padding-left:13px;margin:18px 0}.correct{border-color:var(--ok)}.wrong{border-color:var(--bad)}
+footer{text-align:center;color:#7c8595;padding:20px}
+</style>
+</head>
+<body>
+<header><div class="wrap" style="padding:0"><div class="brand">กะสอบ <b>TEST</b></div></div></header>
+<main class="wrap">
+<section id="home">
+ <div class="card"><h1>ระบบทำข้อสอบออนไลน์</h1><p class="muted">เลือกชุดข้อสอบเพื่อเริ่มทำ ระบบจะจับเวลา บันทึกคำตอบในเครื่อง และตรวจคะแนนอัตโนมัติ</p></div>
+ <div id="sets" class="grid"></div>
+ <div class="card admin">
+   <div class="topline"><div><h3 style="margin:0">สำหรับผู้จัดทำข้อสอบ</h3><span class="muted">เพิ่มชุดข้อสอบโดยนำ JSON ที่ระบบสร้างไปวางในไฟล์เว็บ</span></div><button class="btn ghost" onclick="toggleAdmin()">เปิด/ปิด เครื่องมือเพิ่มข้อสอบ</button></div>
+   <div id="adminBox" class="hide" style="margin-top:15px">
+    <p><b>เพิ่มข้อสอบทีละข้อ</b> แล้วกด “สร้าง JSON” เมื่อครบชุด</p>
+    <input id="aSet" placeholder="ชื่อชุด เช่น ชุดที่ 2">
+    <input id="aSubject" placeholder="วิชา เช่น ภาษาไทย">
+    <input id="aQ" placeholder="คำถาม">
+    <input id="a1" placeholder="ตัวเลือก 1"><input id="a2" placeholder="ตัวเลือก 2"><input id="a3" placeholder="ตัวเลือก 3"><input id="a4" placeholder="ตัวเลือก 4">
+    <select id="aAns"><option value="0">เฉลย 1</option><option value="1">เฉลย 2</option><option value="2">เฉลย 3</option><option value="3">เฉลย 4</option></select>
+    <input id="aExp" placeholder="คำอธิบายเฉลย">
+    <button class="btn primary" onclick="addDraft()">เพิ่มข้อนี้</button>
+    <button class="btn ghost" onclick="makeJSON()">สร้าง JSON</button>
+    <p id="draftCount" class="muted">ยังไม่มีข้อ</p><textarea id="jsonOut" placeholder="JSON จะปรากฏตรงนี้"></textarea>
+    <p class="muted">หมายเหตุ: GitHub Pages ไม่มีฐานข้อมูล จึงยังไม่ใช่ “หลังบ้านออนไลน์” แต่เครื่องมือนี้ช่วยจัดรูปข้อสอบให้พร้อมนำเข้าได้ โดยไม่ต้องเขียนโครงสร้าง JSON เอง</p>
+   </div>
+ </div>
+</section>
+
+<section id="exam" class="hide">
+ <div class="card">
+  <div class="topline"><div><span id="examSet" class="badge"></span><h2 id="subject" style="margin:8px 0 0"></h2></div><div class="timer" id="timer">00:00</div></div>
+  <p id="counter" class="muted"></p><div class="progress"><i id="bar"></i></div>
+ </div>
+ <div class="card"><h3 id="question"></h3><div id="choices"></div>
+  <div class="actions"><button class="btn ghost" onclick="prevQ()">← ก่อนหน้า</button><button class="btn primary" onclick="nextQ()">ถัดไป →</button></div>
+ </div>
+ <div class="card"><h3>กระดาษคำตอบ</h3><div id="navnums" class="navnums"></div><br><button class="btn danger" onclick="submitExam()">ส่งข้อสอบและตรวจคะแนน</button></div>
+</section>
+
+<section id="result" class="hide"></section>
+</main>
+<footer>กะสอบ TEST • ระบบตัวอย่างพร้อมใช้งานบน GitHub Pages</footer>
+
+<script>
+/* ====== แก้/เพิ่มชุดข้อสอบในส่วนนี้ได้ ====== */
+const quizSets = [
+ {id:"set1",title:"ชุดทดลอง",minutes:20,questions:[
+  {subject:"ความสามารถทั่วไป",q:"ถ้า 5 : 8 = x : 40 แล้ว x มีค่าเท่าใด",c:["5","10","20","25"],a:3,e:"5/8 = x/40 ดังนั้น x = 25"},
+  {subject:"ภาษาไทย",q:"ข้อใดเป็นคำซ้ำ",c:["บ้านเรือน","เด็ก ๆ","รถไฟ","น้ำใจ"],a:1,e:"“เด็ก ๆ” เป็นคำซ้ำ โดยใช้ไม้ยมก"},
+  {subject:"ภาษาอังกฤษ",q:"She ___ to school every day.",c:["go","goes","going","gone"],a:1,e:"ประธานเอกพจน์ She ใน Present Simple ใช้ goes"},
+  {subject:"คอมพิวเตอร์",q:"ข้อใดเป็นเว็บเบราว์เซอร์",c:["Safari","Excel","PowerPoint","Windows"],a:0,e:"Safari เป็นเว็บเบราว์เซอร์"},
+  {subject:"สังคมฯ",q:"ASEAN ย่อมาจากข้อใด",c:["Association of Southeast Asian Nations","Asian Economic Nations","Alliance of South East Nations","Association of South Economic Area"],a:0,e:"ASEAN = Association of Southeast Asian Nations"},
+  {subject:"กฎหมาย",q:"ข้อใดเป็นตัวอย่างของกฎหมายมหาชน",c:["กฎหมายแพ่ง","กฎหมายพาณิชย์","กฎหมายปกครอง","สัญญาซื้อขาย"],a:2,e:"กฎหมายปกครองเป็นสาขาหนึ่งของกฎหมายมหาชน"},
+  {subject:"สารบรรณ",q:"หนังสือราชการที่มีความเร่งด่วนควรดำเนินการอย่างไร",c:["เก็บไว้ก่อน","ดำเนินการตามระดับความเร่งด่วน","ส่งเฉพาะทางไปรษณีย์","ไม่ต้องลงรับ"],a:1,e:"ต้องดำเนินการให้เหมาะสมตามชั้น/ระดับความเร่งด่วน"}
+ ]}
+];
+let active=null,idx=0,answers=[],left=0,tick=null,draft=[];
+
+function show(id){["home","exam","result"].forEach(x=>document.getElementById(x).classList.toggle("hide",x!==id))}
+function renderSets(){let el=document.getElementById("sets");el.innerHTML=quizSets.map((s,i)=>`<div class="set"><span class="badge">${s.questions.length} ข้อ</span><h3>${s.title}</h3><p class="muted">เวลา ${s.minutes} นาที</p><button class="btn primary" onclick="startExam(${i})">เริ่มทำข้อสอบ</button></div>`).join("")}
+function startExam(i){active=quizSets[i];idx=0;answers=JSON.parse(localStorage.getItem("ans_"+active.id)||"null")||Array(active.questions.length).fill(null);left=active.minutes*60;show("exam");renderNav();renderQ();clearInterval(tick);tick=setInterval(()=>{left--;renderTimer();if(left<=0)submitExam(true)},1000);renderTimer()}
+function renderTimer(){let m=Math.max(0,Math.floor(left/60)),s=Math.max(0,left%60);document.getElementById("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function renderQ(){let q=active.questions[idx];document.getElementById("examSet").textContent=active.title;document.getElementById("subject").textContent=q.subject;document.getElementById("counter").textContent=`ข้อ ${idx+1} จาก ${active.questions.length} • ตอบแล้ว ${answers.filter(x=>x!==null).length} ข้อ`;document.getElementById("bar").style.width=((idx+1)/active.questions.length*100)+"%";document.getElementById("question").textContent=(idx+1)+". "+q.q;document.getElementById("choices").innerHTML=q.c.map((x,j)=>`<label class="choice"><input type="radio" name="c" ${answers[idx]===j?"checked":""} onchange="pick(${j})"> ${j+1}. ${x}</label>`).join("");renderNav()}
+function pick(j){answers[idx]=j;localStorage.setItem("ans_"+active.id,JSON.stringify(answers));renderQ()}
+function renderNav(){if(!active)return;document.getElementById("navnums").innerHTML=active.questions.map((_,i)=>`<button class="num ${answers[i]!==null?"answered":""} ${i===idx?"current":""}" onclick="go(${i})">${i+1}</button>`).join("")}
+function go(i){idx=i;renderQ();scrollTo({top:0,behavior:"smooth"})} function nextQ(){if(idx<active.questions.length-1){idx++;renderQ();scrollTo({top:0,behavior:"smooth"})}} function prevQ(){if(idx>0){idx--;renderQ();scrollTo({top:0,behavior:"smooth"})}}
+function submitExam(auto=false){if(!auto&&!confirm("ต้องการส่งข้อสอบและตรวจคะแนนใช่หรือไม่?"))return;clearInterval(tick);let score=active.questions.reduce((n,q,i)=>n+(answers[i]===q.a),0);let by={};active.questions.forEach((q,i)=>{by[q.subject]??={ok:0,total:0};by[q.subject].total++;if(answers[i]===q.a)by[q.subject].ok++});let html=`<div class="card"><h1>ผลการทำข้อสอบ</h1><h2>${score} / ${active.questions.length} คะแนน</h2><p class="muted">${active.title}</p><table><tr><th>วิชา</th><th>คะแนน</th></tr>${Object.entries(by).map(([k,v])=>`<tr><td>${k}</td><td>${v.ok}/${v.total}</td></tr>`).join("")}</table><br><button class="btn primary" onclick="localStorage.removeItem('ans_${active.id}');location.reload()">กลับหน้าแรก</button></div><div class="card"><h2>เฉลยอธิบาย</h2>`;
+ active.questions.forEach((q,i)=>{let ok=answers[i]===q.a;html+=`<div class="review ${ok?"correct":"wrong"}"><b>ข้อ ${i+1}. ${q.q}</b><p>คำตอบของคุณ: ${answers[i]===null?"ไม่ได้ตอบ":(answers[i]+1)+". "+q.c[answers[i]]}</p><p><b>เฉลย: ${q.a+1}. ${q.c[q.a]}</b></p><p class="muted">${q.e||""}</p></div>`});html+="</div>";document.getElementById("result").innerHTML=html;show("result");scrollTo(0,0)}
+function toggleAdmin(){document.getElementById("adminBox").classList.toggle("hide")}
+function addDraft(){let vals=["aQ","a1","a2","a3","a4"].map(id=>document.getElementById(id).value.trim());if(vals.some(x=>!x)){alert("กรอกคำถามและตัวเลือกให้ครบ");return}draft.push({subject:document.getElementById("aSubject").value||"ไม่ระบุวิชา",q:vals[0],c:vals.slice(1),a:+document.getElementById("aAns").value,e:document.getElementById("aExp").value});document.getElementById("draftCount").textContent=`เพิ่มแล้ว ${draft.length} ข้อ`;["aQ","a1","a2","a3","a4","aExp"].forEach(id=>document.getElementById(id).value="")}
+function makeJSON(){let obj={id:"set"+Date.now(),title:document.getElementById("aSet").value||"ชุดใหม่",minutes:120,questions:draft};document.getElementById("jsonOut").value=JSON.stringify(obj,null,2)}
+renderSets();
+</script>
+</body></html>
