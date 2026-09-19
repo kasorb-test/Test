@@ -1,19 +1,312 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KASORB TEST</title>
-<style>*{box-sizing:border-box}body{margin:0;background:#f6f6f6;font-family:system-ui,-apple-system,sans-serif;color:#222}.w{max-width:720px;margin:auto;padding:18px}.brand{font-size:28px;font-weight:900;color:#f47b20}.card{background:white;border:1px solid #e8e8e8;border-radius:18px;padding:20px;margin-top:16px}input{width:100%;padding:13px;border:1px solid #ccc;border-radius:11px;margin:6px 0;font-size:16px}button,.btn{display:block;width:100%;padding:13px;border:0;border-radius:11px;font-size:16px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}.orange{background:#f47b20;color:white}.outline{background:white;color:#f47b20;border:1px solid #f47b20;margin-top:9px}.light{background:#eee;color:#222;margin-top:9px}.black{background:#222;color:white;margin-top:14px}.hide{display:none}.muted{color:#666}ul{line-height:1.9;padding-left:22px}.q{font-size:18px;font-weight:700;margin:18px 0 8px}label{display:block;border:1px solid #ddd;padding:11px;border-radius:10px;margin:7px 0}label input{width:auto;margin-right:8px}</style></head>
-<body><main class="w"><div class="brand">KASORB TEST</div><div class="muted">ระบบฝึกทำข้อสอบออนไลน์</div>
-<section id="authBox" class="card"><h2 id="title">เข้าสู่ระบบ</h2><input id="email" type="email" placeholder="อีเมล"><input id="pass" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว"><button id="go" class="orange">เข้าสู่ระบบ</button><button id="switch" class="outline">สมัครสมาชิกฟรี</button><button id="forgot" class="light">ลืมรหัสผ่าน</button><p id="msg" class="muted"></p></section>
-<section id="home" class="hide"><div class="card"><b id="who"></b><button id="logout" class="light">ออกจากระบบ</button></div>
-<div class="card"><h2>ข้อสอบฟรี</h2><p>สมัครสมาชิกแล้วทดลองทำข้อสอบฟรีได้ทันที</p><button id="start" class="orange">เริ่มทำข้อสอบฟรี</button></div>
-<div class="card"><h2>อยากทำข้อสอบเพิ่ม?</h2><p>เข้าถึงข้อสอบเพิ่มเติม พร้อม <b>เฉลยและคำอธิบาย</b></p><ul><li>ฝึกทำได้หลายชุด</li><li>ทำซ้ำได้</li><li>ดูคะแนนหลังส่งคำตอบ</li><li>มีไฟล์ PDF ให้ดาวน์โหลด</li></ul><a class="btn black" href="https://m.me/kasorb" target="_blank">สนใจข้อสอบเพิ่มเติม ติดต่อแอดมิน</a></div></section>
-<section id="quiz" class="card hide"><h2>ชุดทดลองฟรี</h2><div id="questions"></div><button id="submit" class="orange">ส่งคำตอบ</button><button id="back" class="light">กลับ</button><div id="result"></div></section></main>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KASORB TEST</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222}
+main{max-width:760px;margin:auto;padding:25px 16px}
+.brand{font-size:28px;font-weight:800;color:#ff7a16;margin-bottom:5px}
+.sub{color:#777;margin-bottom:25px}
+.card{background:white;border:1px solid #e5e5e5;border-radius:20px;padding:25px;margin-bottom:20px}
+h2{margin-top:0}
+input{width:100%;padding:15px;margin:7px 0;border:1px solid #ddd;border-radius:12px;font-size:16px}
+button{width:100%;padding:15px;margin-top:10px;border:0;border-radius:12px;font-size:16px;font-weight:bold}
+.orange{background:#ff7a16;color:white}
+.outline{background:white;border:1px solid #ff7a16;color:#e96b0b}
+.gray{background:#eee;color:#333}
+.hide{display:none}
+.muted{color:#666;line-height:1.6}
+li{margin:8px 0}
+</style>
+</head>
+
+<body>
+<main>
+
+<div class="brand">KASORB TEST</div>
+<div class="sub">ระบบฝึกทำข้อสอบออนไลน์</div>
+
+<section id="auth" class="card">
+<h2>เข้าสู่ระบบ</h2>
+
+<input id="email" type="email" placeholder="อีเมล">
+<input id="password" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว">
+
+<button id="login" class="orange">เข้าสู่ระบบ</button>
+<button id="register" class="outline">สมัครสมาชิกฟรี</button>
+<button id="forgot" class="gray">ลืมรหัสผ่าน</button>
+
+<p id="msg"></p>
+</section>
+
+
+<section id="home" class="hide">
+
+<div class="card">
+<p id="userEmail"></p>
+<button id="logout" class="gray">ออกจากระบบ</button>
+</div>
+
+<div class="card">
+<h2>ข้อสอบแจกฟรี</h2>
+<p class="muted">สมัครสมาชิกแล้วทดลองทำข้อสอบฟรีได้ทันที</p>
+<button id="startFree" class="orange">เริ่มทำข้อสอบฟรี</button>
+</div>
+
+<div class="card">
+<h2>อยากทำข้อสอบเพิ่ม?</h2>
+<p class="muted">เข้าถึงข้อสอบเพิ่มเติม พร้อมเฉลยและคำอธิบาย</p>
+<ul>
+<li>ฝึกทำได้หลายชุด</li>
+<li>ทำซ้ำได้</li>
+<li>ดูคะแนนหลังส่งคำตอบ</li>
+<li>มีไฟล์ PDF ให้ดาวน์โหลด</li>
+</ul>
+<button class="orange" onclick="window.open('https://m.me/kasorb','_blank')">
+สนใจข้อสอบเพิ่มเติม ติดต่อแอดมิน
+</button>
+</div>
+
+</section>
+
+
+<section id="freeMenu" class="hide">
+<div class="card">
+<h2>ข้อสอบแจกฟรี</h2>
+<p class="muted">เลือกประเภทข้อสอบที่ต้องการฝึกทำ</p>
+
+<button id="subjectExam" class="orange">ข้อสอบแยกรายวิชา</button>
+<button id="careerExam" class="outline">ข้อสอบเสมือนจริงตามสายงาน</button>
+<button class="gray backHome">กลับหน้าแรก</button>
+</div>
+</section>
+
+
+<section id="subjects" class="hide">
+<div class="card">
+<h2>ข้อสอบแยกรายวิชา</h2>
+
+<button class="outline subject">ความสามารถทั่วไป</button>
+<button class="outline subject">ภาษาไทย</button>
+<button class="outline subject">ภาษาอังกฤษ</button>
+<button class="outline subject">คอมพิวเตอร์สำนักงาน</button>
+<button class="outline subject">สังคมฯ</button>
+<button class="outline subject">กฎหมายฯ</button>
+<button class="outline subject">สารบรรณฯ + ลักษณะที่ 54</button>
+
+<button class="gray backFree">กลับ</button>
+</div>
+</section>
+
+
+<section id="careers" class="hide">
+<div class="card">
+<h2>ข้อสอบเสมือนจริงตามสายงาน</h2>
+
+<button class="outline career" data-group="admin">อำนวยการ</button>
+<button class="outline career" data-group="admin">พิสูจน์หลักฐาน</button>
+<button class="outline career" data-group="patrol">ปราบปราม</button>
+
+<button class="gray backFree">กลับ</button>
+</div>
+</section>
+
+
+<section id="sets" class="hide">
+<div class="card">
+<h2 id="setTitle">เลือกชุดข้อสอบ</h2>
+<p id="setInfo" class="muted"></p>
+
+<button id="freeSet1" class="orange">ชุดที่ 1 — ฟรี</button>
+
+<button id="backSet" class="gray">กลับ</button>
+</div>
+</section>
+
+
+<section id="quiz" class="hide">
+<div class="card">
+<h2 id="quizTitle">ข้อสอบฟรี</h2>
+
+<p class="muted">
+หน้านี้พร้อมสำหรับลงข้อสอบจริง
+</p>
+
+<button id="backQuiz" class="gray">กลับ</button>
+</div>
+</section>
+
+</main>
+
+
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";import{getFirestore,doc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",authDomain:"kasorb-test-ad000.firebaseapp.com",projectId:"kasorb-test-ad000",storageBucket:"kasorb-test-ad000.firebasestorage.app",messagingSenderId:"999267444865",appId:"1:999267444865:web:5509772cd5f94af768c580"};const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=x=>document.getElementById(x);let reg=false;
-$("switch").onclick=()=>{reg=!reg;$("title").textContent=reg?"สมัครสมาชิกฟรี":"เข้าสู่ระบบ";$("go").textContent=reg?"สมัครสมาชิก":"เข้าสู่ระบบ";$("switch").textContent=reg?"มีบัญชีแล้ว เข้าสู่ระบบ":"สมัครสมาชิกฟรี";$("msg").textContent=""};
-$("go").onclick=async()=>{try{if(reg){let c=await createUserWithEmailAndPassword(auth,$("email").value.trim(),$("pass").value);await setDoc(doc(db,"users",c.user.uid),{email:c.user.email,role:"student",plan:"free",active:false,createdAt:serverTimestamp()})}else await signInWithEmailAndPassword(auth,$("email").value.trim(),$("pass").value)}catch(e){$("msg").textContent=e.code==="auth/email-already-in-use"?"อีเมลนี้สมัครแล้ว กรุณาเข้าสู่ระบบ":"ดำเนินการไม่สำเร็จ กรุณาตรวจสอบอีเมลและรหัสผ่าน"}};
-$("forgot").onclick=async()=>{if(!$("email").value.trim())return $("msg").textContent="กรอกอีเมลก่อน";try{await sendPasswordResetEmail(auth,$("email").value.trim());$("msg").textContent="ส่งอีเมลตั้งรหัสผ่านใหม่แล้ว"}catch(e){$("msg").textContent="ส่งอีเมลไม่สำเร็จ"}};$("logout").onclick=()=>signOut(auth);
-onAuthStateChanged(auth,u=>{$("authBox").classList.toggle("hide",!!u);$("home").classList.toggle("hide",!u);if(u)$("who").textContent=u.email});
-const qs=[{q:"ถ้า 5 : 8 = x : 40 แล้ว x มีค่าเท่าใด",c:["5","10","20","25"],a:3,e:"5/8 = x/40 คูณไขว้ จะได้ x = 25"},{q:"ข้อใดเป็นคำซ้ำ",c:["บ้านเรือน","เด็ก ๆ","รถไฟ","น้ำใจ"],a:1,e:"เด็ก ๆ เป็นคำซ้ำโดยใช้ไม้ยมก"},{q:"She ___ to school every day.",c:["go","goes","going","gone"],a:1,e:"She เป็นประธานเอกพจน์ใน Present Simple จึงใช้ goes"},{q:"ข้อใดเป็นเว็บเบราว์เซอร์",c:["Safari","Excel","PowerPoint","Windows"],a:0,e:"Safari เป็นเว็บเบราว์เซอร์"}];
-$("start").onclick=()=>{$("home").classList.add("hide");$("quiz").classList.remove("hide");$("result").innerHTML="";$("questions").innerHTML=qs.map((x,i)=>`<div class="q">${i+1}. ${x.q}</div>${x.c.map((v,j)=>`<label><input type="radio" name="q${i}" value="${j}">${j+1}. ${v}</label>`).join("")}`).join("")};
-$("back").onclick=()=>{$("quiz").classList.add("hide");$("home").classList.remove("hide")};$("submit").onclick=()=>{let s=0,d="";qs.forEach((x,i)=>{let p=document.querySelector(`input[name=q${i}]:checked`),v=p?+p.value:-1;if(v===x.a)s++;d+=`<p><b>ข้อ ${i+1}: ${v===x.a?"ถูก":"ผิด"}</b><br>เฉลย ${x.a+1}. ${x.c[x.a]}<br>${x.e}</p>`});$("result").innerHTML=`<hr><h2>คะแนน ${s}/${qs.length}</h2>${d}`};
-</script></body></html>
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged,
+sendPasswordResetEmail
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+setDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+const firebaseConfig={
+apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",
+authDomain:"kasorb-test-ad000.firebaseapp.com",
+projectId:"kasorb-test-ad000",
+storageBucket:"kasorb-test-ad000.firebasestorage.app",
+messagingSenderId:"999267444865",
+appId:"1:999267444865:web:5509772cd5f94af768c580"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+const $=id=>document.getElementById(id);
+
+const pages=["auth","home","freeMenu","subjects","careers","sets","quiz"];
+
+function show(id){
+pages.forEach(p=>$(p).classList.add("hide"));
+$(id).classList.remove("hide");
+}
+
+
+$("register").onclick=async()=>{
+try{
+const c=await createUserWithEmailAndPassword(
+auth,
+$("email").value.trim(),
+$("password").value
+);
+
+await setDoc(doc(db,"users",c.user.uid),{
+email:c.user.email,
+role:"student",
+plan:"free",
+active:false,
+createdAt:serverTimestamp()
+});
+
+}catch(e){
+$("msg").textContent=e.message;
+}
+};
+
+
+$("login").onclick=async()=>{
+try{
+await signInWithEmailAndPassword(
+auth,
+$("email").value.trim(),
+$("password").value
+);
+}catch(e){
+$("msg").textContent="อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+}
+};
+
+
+$("forgot").onclick=async()=>{
+const email=$("email").value.trim();
+
+if(!email){
+$("msg").textContent="กรุณากรอกอีเมลก่อน";
+return;
+}
+
+try{
+await sendPasswordResetEmail(auth,email);
+$("msg").textContent="ส่งอีเมลตั้งรหัสผ่านใหม่แล้ว";
+}catch(e){
+$("msg").textContent="ไม่สามารถส่งอีเมลได้";
+}
+};
+
+
+$("logout").onclick=()=>signOut(auth);
+
+
+onAuthStateChanged(auth,user=>{
+if(user){
+$("userEmail").textContent=user.email;
+show("home");
+}else{
+show("auth");
+}
+});
+
+
+$("startFree").onclick=()=>show("freeMenu");
+
+$("subjectExam").onclick=()=>show("subjects");
+
+$("careerExam").onclick=()=>show("careers");
+
+
+document.querySelectorAll(".backHome").forEach(b=>{
+b.onclick=()=>show("home");
+});
+
+document.querySelectorAll(".backFree").forEach(b=>{
+b.onclick=()=>show("freeMenu");
+});
+
+
+document.querySelectorAll(".subject").forEach(b=>{
+b.onclick=()=>{
+$("setTitle").textContent=b.textContent;
+$("setInfo").textContent="เลือกชุดข้อสอบแจกฟรี";
+show("sets");
+};
+});
+
+
+document.querySelectorAll(".career").forEach(b=>{
+b.onclick=()=>{
+
+if(b.dataset.group==="admin"){
+$("setTitle").textContent="อำนวยการ / พิสูจน์หลักฐาน";
+$("setInfo").textContent="อำนวยการและพิสูจน์หลักฐานใช้ชุดข้อสอบเดียวกัน";
+}else{
+$("setTitle").textContent="ปราบปราม";
+$("setInfo").textContent="ข้อสอบเสมือนจริงสายปราบปราม";
+}
+
+show("sets");
+};
+});
+
+
+$("freeSet1").onclick=()=>{
+$("quizTitle").textContent=$("setTitle").textContent+" — ชุดที่ 1";
+show("quiz");
+};
+
+
+$("backSet").onclick=()=>show("freeMenu");
+
+$("backQuiz").onclick=()=>show("sets");
+
+</script>
+
+</body>
+</html>
