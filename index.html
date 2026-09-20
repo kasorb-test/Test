@@ -13,13 +13,14 @@ main{max-width:760px;margin:auto;padding:25px 16px}
 .sub{color:#777;margin-bottom:25px}
 .card{background:white;border:1px solid #e5e5e5;border-radius:20px;padding:25px;margin-bottom:20px}
 h2{margin-top:0}
-input{width:100%;padding:15px;margin:7px 0;border:1px solid #ddd;border-radius:12px;font-size:16px}
+input,select{width:100%;padding:15px;margin:7px 0;border:1px solid #ddd;border-radius:12px;font-size:16px}
 button{width:100%;padding:15px;margin-top:10px;border:0;border-radius:12px;font-size:16px;font-weight:bold}
 .orange{background:#ff7a16;color:white}
 .outline{background:white;border:1px solid #ff7a16;color:#e96b0b}
 .gray{background:#eee;color:#333}
 .hide{display:none}
 .muted{color:#666;line-height:1.6}
+#userRank{font-weight:600;margin-top:4px}
 li{margin:8px 0}
 </style>
 </head>
@@ -35,7 +36,46 @@ li{margin:8px 0}
 
 <input id="email" type="email" placeholder="อีเมล">
 <input id="password" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว">
+<input id="nickname" type="text" placeholder="ชื่อเล่น">
+<select id="emoji">
+  <option value="">เลือกอิโมจิของคุณ</option>
+  <option>😀</option><option>😃</option><option>😄</option><option>😆</option>
+  <option>😂</option><option>🤣</option><option>😊</option><option>😇</option>
+  <option>🙂</option><option>😉</option><option>😍</option><option>🥰</option>
+  <option>😘</option><option>😋</option><option>😜</option><option>🤪</option>
+  <option>🤓</option><option>😎</option><option>🥳</option><option>🤩</option>
+  <option>🥹</option><option>😭</option><option>😴</option><option>🤔</option>
+  <option>🫡</option><option>🤗</option><option>🤭</option><option>🫣</option>
+  <option>😏</option><option>😤</option><option>😡</option><option>😱</option>
+  <option>😈</option>
 
+  <option>👮‍♂️</option><option>👮‍♀️</option>
+
+  <option>👍</option><option>👎</option><option>👌</option><option>✌️</option>
+  <option>🤞</option><option>🤟</option><option>🤘</option><option>🤙</option>
+  <option>👏</option><option>🙌</option><option>🫶</option><option>🙏</option>
+  <option>💪</option><option>👊</option><option>✊</option><option>🤝</option>
+  <option>☝️</option><option>👆</option><option>👉</option><option>👈</option>
+
+  <option>❤️</option><option>🧡</option><option>💛</option><option>💚</option>
+  <option>💙</option><option>💜</option><option>🩷</option><option>🤍</option>
+  <option>🖤</option>
+
+  <option>📚</option><option>📖</option><option>📕</option><option>📘</option>
+  <option>📝</option><option>✏️</option><option>🎓</option>
+
+  <option>🐶</option><option>🐱</option><option>🐰</option><option>🐼</option>
+  <option>🐻</option><option>🦊</option><option>🐯</option><option>🐸</option>
+
+  <option>⭐</option><option>🌈</option><option>🔥</option><option>🍀</option>
+  <option>💯</option><option>🎯</option>
+
+  <option>🚗</option><option>🚙</option><option>🏎️</option><option>🚕</option>
+  <option>🛻</option><option>🚓</option><option>🚑</option><option>🚒</option>
+  <option>🚐</option><option>🚌</option><option>🏍️</option><option>🛵</option>
+  <option>🚲</option><option>✈️</option><option>🚁</option><option>🚆</option>
+  <option>🚂</option><option>🚤</option><option>⛵</option>
+</select>
 <button id="login" class="orange">เข้าสู่ระบบ</button>
 <button id="register" class="outline">สมัครสมาชิกฟรี</button>
 <button id="forgot" class="gray">ลืมรหัสผ่าน</button>
@@ -48,6 +88,7 @@ li{margin:8px 0}
 
 <div class="card">
 <p id="userEmail"></p>
+<p id="userRank" class="muted"></p>
 <button id="logout" class="gray">ออกจากระบบ</button>
 </div>
 
@@ -161,6 +202,7 @@ from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import {
 getFirestore,
 doc,
+getDoc, 
 setDoc,
 serverTimestamp
 }
@@ -192,6 +234,8 @@ $(id).classList.remove("hide");
 
 $("register").onclick=async()=>{
 try{
+if(!$("nickname").value.trim() || !$("emoji").value){ $("msg").textContent="กรุณากรอกชื่อเล่นและเลือกอิโมจิ"; return; }
+  
 const c=await createUserWithEmailAndPassword(
 auth,
 $("email").value.trim(),
@@ -200,9 +244,12 @@ $("password").value
 
 await setDoc(doc(db,"users",c.user.uid),{
 email:c.user.email,
+nickname:$("nickname").value.trim(),
+emoji:$("emoji").value,
 role:"student",
 plan:"free",
 active:false,
+rank:"ผู้ทดลองสอบ • Lv.0",
 createdAt:serverTimestamp()
 });
 
@@ -245,9 +292,13 @@ $("msg").textContent="ไม่สามารถส่งอีเมลได�
 $("logout").onclick=()=>signOut(auth);
 
 
-onAuthStateChanged(auth,user=>{
+onAuthStateChanged(auth,async user=>{
 if(user){
-$("userEmail").textContent=user.email;
+const profile=await getDoc(doc(db,"users",user.uid)); 
+const data=profile.exists()?profile.data():{}; 
+$("userEmail").textContent=(data.emoji||"")+" "+(data.nickname||user.email);
+if(data.nickname) $("userEmail").textContent=(data.emoji||"")+" "+data.nickname;
+$("userRank").textContent=data.rank || "ผู้ทดลองสอบ • Lv.0";
 show("home");
 }else{
 show("auth");
