@@ -232,9 +232,9 @@ $(id).classList.remove("hide");
 }
 
 
-$("register").onclick=async()=>{
+$("createAccount").onclick=async()=>{
 try{
-if(!$("nickname").value.trim() || !$("emoji").value){ $("msg").textContent="กรุณากรอกชื่อเล่นและเลือกอิโมจิ"; return; }
+if(!$("nickname").value.trim() || !$("emoji").value){ $("signupMsg").textContent="กรุณากรอกชื่อเล่นและเลือกอิโมจิ"; return; }
   
 const c=await createUserWithEmailAndPassword(
 auth,
@@ -254,7 +254,7 @@ createdAt:serverTimestamp()
 });
 
 }catch(e){
-$("msg").textContent=e.message;
+$("signupMsg").textContent=e.message;
 }
 };
 
@@ -296,7 +296,7 @@ onAuthStateChanged(auth,async user=>{
 if(user){
 const profile=await getDoc(doc(db,"users",user.uid)); 
 const data=profile.exists()?profile.data():{}; 
-$("userEmail").textContent=(data.emoji||"")+" "+(data.nickname||user.email);
+
 if(data.nickname) $("userEmail").textContent=(data.emoji||"")+" "+data.nickname;
 $("userRank").textContent=data.rank || "ผู้ทดลองสอบ • Lv.0";
 show("home");
