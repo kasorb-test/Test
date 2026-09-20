@@ -2,183 +2,375 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KASORB TEST</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222}
-main{max-width:760px;margin:auto;padding:25px 16px}
-.brand{font-size:28px;font-weight:800;color:#ff7a16;margin-bottom:5px}
-.sub{color:#777;margin-bottom:25px}
-.card{background:white;border:1px solid #e5e5e5;border-radius:20px;padding:25px;margin-bottom:20px}
-h2{margin-top:0}
-input,select{width:100%;padding:15px;margin:7px 0;border:1px solid #ddd;border-radius:12px;font-size:16px}
-button{width:100%;padding:15px;margin-top:10px;border:0;border-radius:12px;font-size:16px;font-weight:bold}
-.orange{background:#ff7a16;color:white}
-.outline{background:white;border:1px solid #ff7a16;color:#e96b0b}
-.gray{background:#eee;color:#333}
-.hide{display:none}
-.muted{color:#666;line-height:1.6}
-#userRank{font-weight:600;margin-top:4px}
-li{margin:8px 0}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f6f6f6;
+  color:#222;
+}
+
+main{
+  max-width:760px;
+  margin:auto;
+  padding:25px 16px;
+}
+
+.brand{
+  font-size:30px;
+  font-weight:800;
+  color:#ff7a16;
+  margin-bottom:5px;
+}
+
+.sub{
+  color:#777;
+  margin-bottom:25px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #e5e5e5;
+  border-radius:22px;
+  padding:24px;
+  margin-bottom:18px;
+}
+
+h2{
+  margin-top:0;
+}
+
+input,select{
+  width:100%;
+  padding:15px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:14px;
+  font-size:16px;
+  background:#fff;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin-top:10px;
+  border:0;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.orange{
+  background:#ff7a16;
+  color:white;
+}
+
+.outline{
+  background:white;
+  border:1px solid #ff7a16;
+  color:#e96b0c;
+}
+
+.gray{
+  background:#eee;
+  color:#333;
+}
+
+.hide{
+  display:none;
+}
+
+.muted{
+  color:#666;
+  line-height:1.6;
+}
+
+.message{
+  margin-top:12px;
+  color:#d35400;
+}
+
+.profile{
+  text-align:center;
+}
+
+.avatar{
+  font-size:52px;
+  margin-bottom:5px;
+}
+
+.nickname{
+  font-size:22px;
+  font-weight:700;
+}
+
+.rank{
+  color:#777;
+  margin-top:5px;
+}
+
+ul{
+  line-height:1.8;
+  padding-left:22px;
+}
 </style>
 </head>
 
 <body>
+
 <main>
 
 <div class="brand">KASORB TEST</div>
 <div class="sub">ระบบฝึกทำข้อสอบออนไลน์</div>
 
-<section id="auth" class="card">
+
+<!-- เข้าสู่ระบบ -->
+<section id="loginPage" class="card">
+
 <h2>เข้าสู่ระบบ</h2>
 
-<input id="email" type="email" placeholder="อีเมล">
-<input id="password" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว">
-<input id="nickname" type="text" placeholder="ชื่อเล่น">
-<select id="emoji">
-  <option value="">เลือกอิโมจิของคุณ</option>
-  <option>😀</option><option>😃</option><option>😄</option><option>😆</option>
-  <option>😂</option><option>🤣</option><option>😊</option><option>😇</option>
-  <option>🙂</option><option>😉</option><option>😍</option><option>🥰</option>
-  <option>😘</option><option>😋</option><option>😜</option><option>🤪</option>
-  <option>🤓</option><option>😎</option><option>🥳</option><option>🤩</option>
-  <option>🥹</option><option>😭</option><option>😴</option><option>🤔</option>
-  <option>🫡</option><option>🤗</option><option>🤭</option><option>🫣</option>
-  <option>😏</option><option>😤</option><option>😡</option><option>😱</option>
-  <option>😈</option>
+<input id="loginEmail"
+       type="email"
+       placeholder="อีเมล">
 
-  <option>👮‍♂️</option><option>👮‍♀️</option>
+<input id="loginPassword"
+       type="password"
+       placeholder="รหัสผ่าน">
 
-  <option>👍</option><option>👎</option><option>👌</option><option>✌️</option>
-  <option>🤞</option><option>🤟</option><option>🤘</option><option>🤙</option>
-  <option>👏</option><option>🙌</option><option>🫶</option><option>🙏</option>
-  <option>💪</option><option>👊</option><option>✊</option><option>🤝</option>
-  <option>☝️</option><option>👆</option><option>👉</option><option>👈</option>
+<button id="loginBtn" class="orange">
+เข้าสู่ระบบ
+</button>
 
-  <option>❤️</option><option>🧡</option><option>💛</option><option>💚</option>
-  <option>💙</option><option>💜</option><option>🩷</option><option>🤍</option>
-  <option>🖤</option>
+<button id="goRegister" class="outline">
+สมัครสมาชิกฟรี
+</button>
 
-  <option>📚</option><option>📖</option><option>📕</option><option>📘</option>
-  <option>📝</option><option>✏️</option><option>🎓</option>
+<button id="forgotBtn" class="gray">
+ลืมรหัสผ่าน
+</button>
 
-  <option>🐶</option><option>🐱</option><option>🐰</option><option>🐼</option>
-  <option>🐻</option><option>🦊</option><option>🐯</option><option>🐸</option>
+<p id="loginMsg" class="message"></p>
 
-  <option>⭐</option><option>🌈</option><option>🔥</option><option>🍀</option>
-  <option>💯</option><option>🎯</option>
-
-  <option>🚗</option><option>🚙</option><option>🏎️</option><option>🚕</option>
-  <option>🛻</option><option>🚓</option><option>🚑</option><option>🚒</option>
-  <option>🚐</option><option>🚌</option><option>🏍️</option><option>🛵</option>
-  <option>🚲</option><option>✈️</option><option>🚁</option><option>🚆</option>
-  <option>🚂</option><option>🚤</option><option>⛵</option>
-</select>
-<button id="login" class="orange">เข้าสู่ระบบ</button>
-<button id="register" class="outline">สมัครสมาชิกฟรี</button>
-<button id="forgot" class="gray">ลืมรหัสผ่าน</button>
-
-<p id="msg"></p>
 </section>
 
 
-<section id="home" class="hide">
+<!-- สมัครสมาชิก -->
+<section id="registerPage" class="card hide">
 
-<div class="card">
-<p id="userEmail"></p>
-<p id="userRank" class="muted"></p>
-<button id="logout" class="gray">ออกจากระบบ</button>
+<h2>สมัครสมาชิกฟรี</h2>
+
+<p class="muted">
+สร้างบัญชีเพื่อเริ่มทำข้อสอบฟรี
+</p>
+
+<input id="registerEmail"
+       type="email"
+       placeholder="อีเมล">
+
+<input id="registerPassword"
+       type="password"
+       placeholder="รหัสผ่านอย่างน้อย 6 ตัว">
+
+<input id="nickname"
+       type="text"
+       maxlength="20"
+       placeholder="ชื่อเล่น">
+
+<select id="emoji">
+
+<option value="">เลือกอิโมจิของคุณ</option>
+
+<option>😀</option>
+<option>😃</option>
+<option>😄</option>
+<option>😁</option>
+<option>😊</option>
+<option>🙂</option>
+<option>😉</option>
+<option>🥰</option>
+<option>😍</option>
+<option>😎</option>
+
+<option>🐶</option>
+<option>🐱</option>
+<option>🐭</option>
+<option>🐹</option>
+<option>🐰</option>
+<option>🦊</option>
+<option>🐻</option>
+<option>🐼</option>
+<option>🐨</option>
+<option>🐯</option>
+
+<option>🦁</option>
+<option>🐸</option>
+<option>🐵</option>
+<option>🐧</option>
+<option>🐥</option>
+<option>🦄</option>
+<option>🐝</option>
+<option>🦋</option>
+<option>🌻</option>
+<option>⭐</option>
+
+</select>
+
+<button id="createAccount" class="orange">
+สมัครสมาชิก
+</button>
+
+<button id="backLogin" class="gray">
+กลับหน้าเข้าสู่ระบบ
+</button>
+
+<p id="signupMsg" class="message"></p>
+
+</section>
+
+
+<!-- หน้าหลักหลังเข้าสู่ระบบ -->
+<section id="homePage" class="hide">
+
+<div class="card profile">
+
+<div id="userEmoji" class="avatar">🙂</div>
+
+<div id="userNickname" class="nickname">
+สมาชิก KASORB
 </div>
 
+<div id="userEmail" class="muted"></div>
+
+<div id="userRank" class="rank">
+ผู้ทดลองสอบ • Lv.0
+</div>
+
+<button id="logoutBtn" class="gray">
+ออกจากระบบ
+</button>
+
+</div>
+
+
 <div class="card">
+
 <h2>ข้อสอบแจกฟรี</h2>
-<p class="muted">สมัครสมาชิกแล้วทดลองทำข้อสอบฟรีได้ทันที</p>
-<button id="startFree" class="orange">เริ่มทำข้อสอบฟรี</button>
+
+<p class="muted">
+สมาชิกสามารถทดลองทำข้อสอบฟรีได้ทันที
+</p>
+
+<button id="startFree" class="orange">
+เริ่มทำข้อสอบฟรี
+</button>
+
 </div>
 
+
 <div class="card">
-<h2>อยากทำข้อสอบเพิ่ม?</h2>
-<p class="muted">เข้าถึงข้อสอบเพิ่มเติม พร้อมเฉลยและคำอธิบาย</p>
+
+<h2>ข้อสอบเพิ่มเติม</h2>
+
+<p class="muted">
+เข้าถึงชุดข้อสอบเพิ่มเติม พร้อมเฉลยและคำอธิบาย
+</p>
+
 <ul>
 <li>ฝึกทำได้หลายชุด</li>
 <li>ทำซ้ำได้</li>
 <li>ดูคะแนนหลังส่งคำตอบ</li>
 <li>มีไฟล์ PDF ให้ดาวน์โหลด</li>
 </ul>
-<button class="orange" onclick="window.open('https://m.me/kasorb','_blank')">
+
+<button class="orange"
+onclick="window.open('https://m.me/kasorb','_blank')">
 สนใจข้อสอบเพิ่มเติม ติดต่อแอดมิน
 </button>
+
 </div>
 
 </section>
 
 
+<!-- เมนูข้อสอบฟรี -->
 <section id="freeMenu" class="hide">
+
 <div class="card">
+
 <h2>ข้อสอบแจกฟรี</h2>
-<p class="muted">เลือกประเภทข้อสอบที่ต้องการฝึกทำ</p>
-
-<button id="subjectExam" class="orange">ข้อสอบแยกรายวิชา</button>
-<button id="careerExam" class="outline">ข้อสอบเสมือนจริงตามสายงาน</button>
-<button class="gray backHome">กลับหน้าแรก</button>
-</div>
-</section>
-
-
-<section id="subjects" class="hide">
-<div class="card">
-<h2>ข้อสอบแยกรายวิชา</h2>
-
-<button class="outline subject">ความสามารถทั่วไป</button>
-<button class="outline subject">ภาษาไทย</button>
-<button class="outline subject">ภาษาอังกฤษ</button>
-<button class="outline subject">คอมพิวเตอร์สำนักงาน</button>
-<button class="outline subject">สังคมฯ</button>
-<button class="outline subject">กฎหมายฯ</button>
-<button class="outline subject">สารบรรณฯ + ลักษณะที่ 54</button>
-
-<button class="gray backFree">กลับ</button>
-</div>
-</section>
-
-
-<section id="careers" class="hide">
-<div class="card">
-<h2>ข้อสอบเสมือนจริงตามสายงาน</h2>
-
-<button class="outline career" data-group="admin">อำนวยการ</button>
-<button class="outline career" data-group="admin">พิสูจน์หลักฐาน</button>
-<button class="outline career" data-group="patrol">ปราบปราม</button>
-
-<button class="gray backFree">กลับ</button>
-</div>
-</section>
-
-
-<section id="sets" class="hide">
-<div class="card">
-<h2 id="setTitle">เลือกชุดข้อสอบ</h2>
-<p id="setInfo" class="muted"></p>
-
-<button id="freeSet1" class="orange">ชุดที่ 1 — ฟรี</button>
-
-<button id="backSet" class="gray">กลับ</button>
-</div>
-</section>
-
-
-<section id="quiz" class="hide">
-<div class="card">
-<h2 id="quizTitle">ข้อสอบฟรี</h2>
 
 <p class="muted">
-หน้านี้พร้อมสำหรับลงข้อสอบจริง
+เลือกประเภทข้อสอบที่ต้องการฝึกทำ
 </p>
 
-<button id="backQuiz" class="gray">กลับ</button>
+<button id="subjectExam" class="orange">
+ข้อสอบแยกรายวิชา
+</button>
+
+<button id="careerExam" class="outline">
+ข้อสอบเสมือนจริงตามสายงาน
+</button>
+
+<button id="backHome1" class="gray">
+กลับหน้าหลัก
+</button>
+
 </div>
+
+</section>
+
+
+<!-- รายวิชา -->
+<section id="subjectsPage" class="hide">
+
+<div class="card">
+
+<h2>ข้อสอบแยกรายวิชา</h2>
+
+<button class="outline">ความสามารถทั่วไป / คณิตศาสตร์</button>
+<button class="outline">ภาษาไทย</button>
+<button class="outline">ภาษาอังกฤษ</button>
+<button class="outline">คอมพิวเตอร์สำนักงาน</button>
+<button class="outline">กฎหมายที่ประชาชนควรรู้</button>
+<button class="outline">สังคม วัฒนธรรม และอาเซียน</button>
+<button class="outline">งานสารบรรณ</button>
+<button class="outline">ลักษณะที่ 54</button>
+
+<button id="backFree1" class="gray">
+ย้อนกลับ
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ตามสายงาน -->
+<section id="careerPage" class="hide">
+
+<div class="card">
+
+<h2>ข้อสอบเสมือนจริงตามสายงาน</h2>
+
+<button class="outline">สายอำนวยการ</button>
+<button class="outline">สายปราบปราม</button>
+<button class="outline">สายพิสูจน์หลักฐาน</button>
+<button class="outline">กองร้อยน้ำหวาน</button>
+<button class="outline">พลร่ม</button>
+<button class="outline">ตชด.</button>
+
+<button id="backFree2" class="gray">
+ย้อนกลับ
+</button>
+
+</div>
+
 </section>
 
 </main>
@@ -186,176 +378,440 @@ li{margin:8px 0}
 
 <script type="module">
 
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getAuth,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut,
-onAuthStateChanged,
-sendPasswordResetEmail
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  onAuthStateChanged
 }
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-getFirestore,
-doc,
-getDoc, 
-setDoc,
-serverTimestamp
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
 }
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-const firebaseConfig={
-apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",
-authDomain:"kasorb-test-ad000.firebaseapp.com",
-projectId:"kasorb-test-ad000",
-storageBucket:"kasorb-test-ad000.firebasestorage.app",
-messagingSenderId:"999267444865",
-appId:"1:999267444865:web:5509772cd5f94af768c580"
+const firebaseConfig = {
+
+  apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",
+
+  authDomain:"kasorb-test-ad000.firebaseapp.com",
+
+  projectId:"kasorb-test-ad000",
+
+  storageBucket:"kasorb-test-ad000.firebasestorage.app",
+
+  messagingSenderId:"999267444865",
+
+  appId:"1:999267444865:web:5509772cd5f94af768c580"
+
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
 
-const $=id=>document.getElementById(id);
+const app = initializeApp(firebaseConfig);
 
-const pages=["auth","home","freeMenu","subjects","careers","sets","quiz"];
+const auth = getAuth(app);
 
-function show(id){
-pages.forEach(p=>$(p).classList.add("hide"));
-$(id).classList.remove("hide");
+const db = getFirestore(app);
+
+
+const $ = id => document.getElementById(id);
+
+
+const pages = [
+  "loginPage",
+  "registerPage",
+  "homePage",
+  "freeMenu",
+  "subjectsPage",
+  "careerPage"
+];
+
+
+function show(page){
+
+  pages.forEach(id=>{
+    $(id).classList.add("hide");
+  });
+
+  $(page).classList.remove("hide");
+
 }
 
+
+/* ไปหน้าสมัคร */
+
+$("goRegister").onclick=()=>{
+
+  $("signupMsg").textContent="";
+
+  show("registerPage");
+
+};
+
+
+/* กลับหน้า Login */
+
+$("backLogin").onclick=()=>{
+
+  $("loginMsg").textContent="";
+
+  show("loginPage");
+
+};
+
+
+/* สมัครสมาชิก */
 
 $("createAccount").onclick=async()=>{
-try{
-if(!$("nickname").value.trim() || !$("emoji").value){ $("signupMsg").textContent="กรุณากรอกชื่อเล่นและเลือกอิโมจิ"; return; }
-  
-const c=await createUserWithEmailAndPassword(
-auth,
-$("email").value.trim(),
-$("password").value
-);
 
-await setDoc(doc(db,"users",c.user.uid),{
-email:c.user.email,
-nickname:$("nickname").value.trim(),
-emoji:$("emoji").value,
-role:"student",
-plan:"free",
-active:false,
-rank:"ผู้ทดลองสอบ • Lv.0",
-createdAt:serverTimestamp()
-});
+  const email =
+    $("registerEmail").value.trim();
 
-}catch(e){
-$("signupMsg").textContent=e.message;
-}
+  const password =
+    $("registerPassword").value;
+
+  const nickname =
+    $("nickname").value.trim();
+
+  const emoji =
+    $("emoji").value;
+
+
+  if(!email){
+
+    $("signupMsg").textContent=
+    "กรุณากรอกอีเมล";
+
+    return;
+
+  }
+
+
+  if(password.length < 6){
+
+    $("signupMsg").textContent=
+    "รหัสผ่านต้องมีอย่างน้อย 6 ตัว";
+
+    return;
+
+  }
+
+
+  if(!nickname){
+
+    $("signupMsg").textContent=
+    "กรุณากรอกชื่อเล่น";
+
+    return;
+
+  }
+
+
+  if(!emoji){
+
+    $("signupMsg").textContent=
+    "กรุณาเลือกอิโมจิ";
+
+    return;
+
+  }
+
+
+  try{
+
+    $("signupMsg").textContent=
+    "กำลังสมัครสมาชิก...";
+
+
+    const credential =
+    await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+
+    await setDoc(
+      doc(db,"users",credential.user.uid),
+      {
+
+        email:email,
+
+        nickname:nickname,
+
+        emoji:emoji,
+
+        role:"student",
+
+        plan:"free",
+
+        active:false,
+
+        rank:"ผู้ทดลองสอบ • Lv.0",
+
+        createdAt:serverTimestamp()
+
+      }
+    );
+
+
+    $("signupMsg").textContent="";
+
+
+  }catch(error){
+
+    if(error.code==="auth/email-already-in-use"){
+
+      $("signupMsg").textContent=
+      "อีเมลนี้มีบัญชีอยู่แล้ว";
+
+    }else if(error.code==="auth/invalid-email"){
+
+      $("signupMsg").textContent=
+      "รูปแบบอีเมลไม่ถูกต้อง";
+
+    }else{
+
+      $("signupMsg").textContent=
+      "สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่";
+
+    }
+
+  }
+
 };
 
 
-$("login").onclick=async()=>{
-try{
-await signInWithEmailAndPassword(
-auth,
-$("email").value.trim(),
-$("password").value
-);
-}catch(e){
-$("msg").textContent="อีเมลหรือรหัสผ่านไม่ถูกต้อง";
-}
+/* เข้าสู่ระบบ */
+
+$("loginBtn").onclick=async()=>{
+
+  const email =
+    $("loginEmail").value.trim();
+
+  const password =
+    $("loginPassword").value;
+
+
+  if(!email || !password){
+
+    $("loginMsg").textContent=
+    "กรุณากรอกอีเมลและรหัสผ่าน";
+
+    return;
+
+  }
+
+
+  try{
+
+    $("loginMsg").textContent=
+    "กำลังเข้าสู่ระบบ...";
+
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+
+    $("loginMsg").textContent="";
+
+
+  }catch(error){
+
+    $("loginMsg").textContent=
+    "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+
+  }
+
 };
 
 
-$("forgot").onclick=async()=>{
-const email=$("email").value.trim();
+/* ลืมรหัสผ่าน */
 
-if(!email){
-$("msg").textContent="กรุณากรอกอีเมลก่อน";
-return;
-}
+$("forgotBtn").onclick=async()=>{
 
-try{
-await sendPasswordResetEmail(auth,email);
-$("msg").textContent="ส่งอีเมลตั้งรหัสผ่านใหม่แล้ว";
-}catch(e){
-$("msg").textContent="ไม่สามารถส่งอีเมลได้";
-}
+  const email =
+    $("loginEmail").value.trim();
+
+
+  if(!email){
+
+    $("loginMsg").textContent=
+    "กรุณากรอกอีเมลก่อน";
+
+    return;
+
+  }
+
+
+  try{
+
+    await sendPasswordResetEmail(
+      auth,
+      email
+    );
+
+
+    $("loginMsg").textContent=
+    "ส่งอีเมลสำหรับตั้งรหัสผ่านใหม่แล้ว";
+
+
+  }catch(error){
+
+    $("loginMsg").textContent=
+    "ไม่สามารถส่งอีเมลได้";
+
+  }
+
 };
 
 
-$("logout").onclick=()=>signOut(auth);
+/* ออกจากระบบ */
 
+$("logoutBtn").onclick=async()=>{
+
+  await signOut(auth);
+
+};
+
+
+/* ตรวจสอบสถานะผู้ใช้ */
 
 onAuthStateChanged(auth,async user=>{
-if(user){
-const profile=await getDoc(doc(db,"users",user.uid)); 
-const data=profile.exists()?profile.data():{}; 
 
-if(data.nickname) $("userEmail").textContent=(data.emoji||"")+" "+data.nickname;
-$("userRank").textContent=data.rank || "ผู้ทดลองสอบ • Lv.0";
-show("home");
-}else{
-show("auth");
-}
+  if(!user){
+
+    show("loginPage");
+
+    return;
+
+  }
+
+
+  try{
+
+    const profile =
+    await getDoc(
+      doc(db,"users",user.uid)
+    );
+
+
+    if(profile.exists()){
+
+      const data =
+      profile.data();
+
+
+      $("userEmoji").textContent =
+      data.emoji || "🙂";
+
+
+      $("userNickname").textContent =
+      data.nickname || "สมาชิก KASORB";
+
+
+      $("userEmail").textContent =
+      user.email || "";
+
+
+      $("userRank").textContent =
+      data.rank || "ผู้ทดลองสอบ • Lv.0";
+
+    }else{
+
+      $("userEmoji").textContent="🙂";
+
+      $("userNickname").textContent=
+      "สมาชิก KASORB";
+
+      $("userEmail").textContent=
+      user.email || "";
+
+      $("userRank").textContent=
+      "ผู้ทดลองสอบ • Lv.0";
+
+    }
+
+
+    show("homePage");
+
+
+  }catch(error){
+
+    $("userEmoji").textContent="🙂";
+
+    $("userNickname").textContent=
+    "สมาชิก KASORB";
+
+    $("userEmail").textContent=
+    user.email || "";
+
+    $("userRank").textContent=
+    "ผู้ทดลองสอบ • Lv.0";
+
+    show("homePage");
+
+  }
+
 });
 
 
-$("startFree").onclick=()=>show("freeMenu");
+/* เมนูข้อสอบ */
 
-$("subjectExam").onclick=()=>show("subjects");
+$("startFree").onclick=()=>{
 
-$("careerExam").onclick=()=>show("careers");
+  show("freeMenu");
 
-
-document.querySelectorAll(".backHome").forEach(b=>{
-b.onclick=()=>show("home");
-});
-
-document.querySelectorAll(".backFree").forEach(b=>{
-b.onclick=()=>show("freeMenu");
-});
-
-
-document.querySelectorAll(".subject").forEach(b=>{
-b.onclick=()=>{
-$("setTitle").textContent=b.textContent;
-$("setInfo").textContent="เลือกชุดข้อสอบแจกฟรี";
-show("sets");
 };
-});
 
 
-document.querySelectorAll(".career").forEach(b=>{
-b.onclick=()=>{
+$("subjectExam").onclick=()=>{
 
-if(b.dataset.group==="admin"){
-$("setTitle").textContent="อำนวยการ / พิสูจน์หลักฐาน";
-$("setInfo").textContent="อำนวยการและพิสูจน์หลักฐานใช้ชุดข้อสอบเดียวกัน";
-}else{
-$("setTitle").textContent="ปราบปราม";
-$("setInfo").textContent="ข้อสอบเสมือนจริงสายปราบปราม";
-}
+  show("subjectsPage");
 
-show("sets");
-};
-});
-
-
-$("freeSet1").onclick=()=>{
-$("quizTitle").textContent=$("setTitle").textContent+" — ชุดที่ 1";
-show("quiz");
 };
 
 
-$("backSet").onclick=()=>show("freeMenu");
+$("careerExam").onclick=()=>{
 
-$("backQuiz").onclick=()=>show("sets");
+  show("careerPage");
+
+};
+
+
+$("backHome1").onclick=()=>{
+
+  show("homePage");
+
+};
+
+
+$("backFree1").onclick=()=>{
+
+  show("freeMenu");
+
+};
+
+
+$("backFree2").onclick=()=>{
+
+  show("freeMenu");
+
+};
 
 </script>
 
