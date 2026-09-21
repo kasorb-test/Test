@@ -10,7 +10,7 @@
 
 body{
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
   background:#f6f6f6;
   color:#222;
 }
@@ -18,106 +18,180 @@ body{
 main{
   max-width:760px;
   margin:auto;
-  padding:25px 16px;
+  padding:28px 18px 60px;
 }
 
-.brand{
-  font-size:30px;
-  font-weight:800;
-  color:#ff7a16;
+h1{
+  color:#ff7417;
   margin-bottom:5px;
 }
 
-.sub{
+.subtitle{
   color:#777;
-  margin-bottom:25px;
+  margin-top:0;
+  margin-bottom:32px;
 }
 
 .card{
   background:#fff;
-  border:1px solid #e5e5e5;
+  border:1px solid #e2e2e2;
   border-radius:22px;
-  padding:24px;
-  margin-bottom:18px;
+  padding:26px;
+  margin-bottom:22px;
 }
 
-h2{
-  margin-top:0;
+.hidden{
+  display:none!important;
 }
 
-input,select{
+input{
   width:100%;
   padding:15px;
   margin:7px 0;
   border:1px solid #ddd;
-  border-radius:14px;
+  border-radius:12px;
   font-size:16px;
-  background:#fff;
 }
 
 button{
   width:100%;
-  padding:15px;
-  margin-top:10px;
   border:0;
-  border-radius:14px;
+  border-radius:12px;
+  padding:15px;
   font-size:16px;
-  font-weight:600;
   cursor:pointer;
+  margin-top:9px;
 }
 
-.orange{
-  background:#ff7a16;
-  color:white;
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-.outline{
-  background:white;
-  border:1px solid #ff7a16;
-  color:#e96b0c;
+.primary{
+  background:#ff7417;
+  color:#fff;
+  font-weight:bold;
 }
 
-.gray{
+.secondary{
   background:#eee;
   color:#333;
 }
 
-.hide{
-  display:none;
+.outline{
+  background:#fff;
+  border:1px solid #ddd;
+  color:#333;
 }
 
-.muted{
-  color:#666;
-  line-height:1.6;
+.small{
+  font-size:14px;
+  color:#777;
 }
 
-.message{
-  margin-top:12px;
-  color:#d35400;
-}
-
-.profile{
+.center{
   text-align:center;
 }
 
 .avatar{
-  font-size:52px;
-  margin-bottom:5px;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #fff;
+  box-shadow:0 2px 10px #ccc;
 }
 
-.nickname{
-  font-size:22px;
-  font-weight:700;
+.avatar-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:18px 0;
+}
+
+.avatar-choice{
+  padding:5px;
+  background:#fff;
+  border:3px solid transparent;
+  border-radius:18px;
+  cursor:pointer;
+}
+
+.avatar-choice.selected{
+  border-color:#ff7417;
+}
+
+.avatar-choice img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:14px;
+  display:block;
+}
+
+.profile-name{
+  font-size:24px;
+  font-weight:bold;
+  margin:14px 0 6px;
 }
 
 .rank{
   color:#777;
-  margin-top:5px;
+  margin:8px 0;
 }
 
-ul{
-  line-height:1.8;
-  padding-left:22px;
+.plan{
+  display:inline-block;
+  margin:8px 0 10px;
+  padding:7px 14px;
+  border-radius:30px;
+  background:#f1f1f1;
+  font-size:14px;
+}
+
+.plan.premium{
+  background:#fff0df;
+  color:#d75b00;
+  font-weight:bold;
+}
+
+.notice{
+  background:#fff7ef;
+  border:1px solid #ffd6b7;
+  padding:15px;
+  border-radius:12px;
+  margin:14px 0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.menu-card{
+  background:#fff;
+  border:1px solid #e5e5e5;
+  border-radius:18px;
+  padding:20px;
+  margin-top:15px;
+}
+
+.subject-btn{
+  text-align:left;
+  background:#f7f7f7;
+  margin:6px 0;
+}
+
+.level-image{
+  width:70px;
+  height:70px;
+  object-fit:contain;
+  display:none;
+  margin:10px auto;
+}
+
+@media(max-width:520px){
+  .avatar-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
 }
 </style>
 </head>
@@ -126,132 +200,106 @@ ul{
 
 <main>
 
-<div class="brand">KASORB TEST</div>
-<div class="sub">ระบบฝึกทำข้อสอบออนไลน์</div>
+<h1>KASORB TEST</h1>
+<p class="subtitle">ระบบฝึกทำข้อสอบออนไลน์</p>
 
 
-<!-- เข้าสู่ระบบ -->
+<!-- LOGIN -->
+
 <section id="loginPage" class="card">
 
 <h2>เข้าสู่ระบบ</h2>
 
-<input id="loginEmail"
-       type="email"
-       placeholder="อีเมล">
+<input id="loginEmail" type="email" placeholder="อีเมล">
+<input id="loginPassword" type="password" placeholder="รหัสผ่าน">
 
-<input id="loginPassword"
-       type="password"
-       placeholder="รหัสผ่าน">
-
-<button id="loginBtn" class="orange">
+<button class="primary" id="loginBtn">
 เข้าสู่ระบบ
 </button>
 
-<button id="goRegister" class="outline">
-สมัครสมาชิกฟรี
-</button>
-
-<button id="forgotBtn" class="gray">
-ลืมรหัสผ่าน
-</button>
-
-<p id="loginMsg" class="message"></p>
-
-</section>
-
-
-<!-- สมัครสมาชิก -->
-<section id="registerPage" class="card hide">
-
-<h2>สมัครสมาชิกฟรี</h2>
-
-<p class="muted">
-สร้างบัญชีเพื่อเริ่มทำข้อสอบฟรี
-</p>
-
-<input id="registerEmail"
-       type="email"
-       placeholder="อีเมล">
-
-<input id="registerPassword"
-       type="password"
-       placeholder="รหัสผ่านอย่างน้อย 6 ตัว">
-
-<input id="nickname"
-       type="text"
-       maxlength="20"
-       placeholder="ชื่อเล่น">
-
-<select id="emoji">
-
-<option value="">เลือกอิโมจิของคุณ</option>
-
-<option>😀</option>
-<option>😃</option>
-<option>😄</option>
-<option>😁</option>
-<option>😊</option>
-<option>🙂</option>
-<option>😉</option>
-<option>🥰</option>
-<option>😍</option>
-<option>😎</option>
-
-<option>🐶</option>
-<option>🐱</option>
-<option>🐭</option>
-<option>🐹</option>
-<option>🐰</option>
-<option>🦊</option>
-<option>🐻</option>
-<option>🐼</option>
-<option>🐨</option>
-<option>🐯</option>
-
-<option>🦁</option>
-<option>🐸</option>
-<option>🐵</option>
-<option>🐧</option>
-<option>🐥</option>
-<option>🦄</option>
-<option>🐝</option>
-<option>🦋</option>
-<option>🌻</option>
-<option>⭐</option>
-
-</select>
-
-<button id="createAccount" class="orange">
+<button class="secondary" id="goRegisterBtn">
 สมัครสมาชิก
 </button>
 
-<button id="backLogin" class="gray">
-กลับหน้าเข้าสู่ระบบ
+<button class="outline" id="forgotBtn">
+ลืมรหัสผ่าน
 </button>
 
-<p id="signupMsg" class="message"></p>
+<p id="loginMsg" class="small"></p>
 
 </section>
 
 
-<!-- หน้าหลักหลังเข้าสู่ระบบ -->
-<section id="homePage" class="hide">
+<!-- REGISTER -->
 
-<div class="card profile">
+<section id="registerPage" class="card hidden">
 
-<div id="userEmoji" class="avatar">🙂</div>
+<h2>สมัครสมาชิก</h2>
 
-<div id="userNickname" class="nickname">
+<input id="regEmail" type="email" placeholder="อีเมล">
+
+<input
+id="regPassword"
+type="password"
+placeholder="รหัสผ่านอย่างน้อย 6 ตัว"
+>
+
+<input
+id="regNickname"
+type="text"
+maxlength="20"
+placeholder="ชื่อเล่น"
+>
+
+<h3>เลือกรูปโปรไฟล์</h3>
+
+<div id="registerAvatarGrid" class="avatar-grid"></div>
+
+<button class="primary" id="registerBtn">
+สร้างบัญชี
+</button>
+
+<button class="secondary" id="backLoginBtn">
+กลับหน้าเข้าสู่ระบบ
+</button>
+
+<p id="registerMsg" class="small"></p>
+
+</section>
+
+
+<!-- HOME -->
+
+<section id="homePage" class="hidden">
+
+<div class="card center">
+
+<img
+id="profileAvatar"
+class="avatar"
+src="avatar01.png"
+alt="Avatar"
+>
+
+<div id="profileNickname" class="profile-name">
 สมาชิก KASORB
 </div>
 
-<div id="userEmail" class="muted"></div>
+<img id="levelImage" class="level-image" alt="Level">
 
-<div id="userRank" class="rank">
+<div id="profileRank" class="rank">
 ผู้ทดลองสอบ • Lv.0
 </div>
 
-<button id="logoutBtn" class="gray">
+<div id="profilePlan" class="plan">
+สมาชิกทั่วไป
+</div>
+
+<button class="secondary" id="manageBtn">
+จัดการบัญชี
+</button>
+
+<button class="outline" id="logoutBtn">
 ออกจากระบบ
 </button>
 
@@ -260,14 +308,14 @@ ul{
 
 <div class="card">
 
-<h2>ข้อสอบแจกฟรี</h2>
+<h2>ชุดข้อสอบสำหรับสมาชิกทั่วไป</h2>
 
-<p class="muted">
-สมาชิกสามารถทดลองทำข้อสอบฟรีได้ทันที
+<p>
+เลือกชุดข้อสอบเพื่อทดสอบและประเมินความรู้ของคุณ
 </p>
 
-<button id="startFree" class="orange">
-เริ่มทำข้อสอบฟรี
+<button class="primary" id="freeQuizBtn">
+เลือกชุดข้อสอบ
 </button>
 
 </div>
@@ -275,22 +323,19 @@ ul{
 
 <div class="card">
 
-<h2>ข้อสอบเพิ่มเติม</h2>
+<h2>ชุดข้อสอบสำหรับสมาชิก Premium</h2>
 
-<p class="muted">
-เข้าถึงชุดข้อสอบเพิ่มเติม พร้อมเฉลยและคำอธิบาย
+<p>
+สิทธิ์การเข้าถึงชุดข้อสอบและเนื้อหาเพิ่มเติมสำหรับสมาชิก Premium
 </p>
 
-<ul>
-<li>ฝึกทำได้หลายชุด</li>
-<li>ทำซ้ำได้</li>
-<li>ดูคะแนนหลังส่งคำตอบ</li>
-<li>มีไฟล์ PDF ให้ดาวน์โหลด</li>
-</ul>
+<p>• ชุดข้อสอบหลากหลายตามหมวดวิชา</p>
+<p>• สามารถทำแบบทดสอบซ้ำได้</p>
+<p>• แสดงผลคะแนนหลังส่งคำตอบ</p>
+<p>• เอกสารประกอบในรูปแบบ PDF</p>
 
-<button class="orange"
-onclick="window.open('https://m.me/kasorb','_blank')">
-สนใจข้อสอบเพิ่มเติม ติดต่อแอดมิน
+<button class="secondary" id="premiumBtn">
+ดูรายละเอียดสมาชิก Premium
 </button>
 
 </div>
@@ -298,520 +343,1273 @@ onclick="window.open('https://m.me/kasorb','_blank')">
 </section>
 
 
-<!-- เมนูข้อสอบฟรี -->
-<section id="freeMenu" class="hide">
+<!-- ACCOUNT -->
 
-<div class="card">
+<section id="accountPage" class="card hidden">
 
-<h2>ข้อสอบแจกฟรี</h2>
+<h2>จัดการบัญชี</h2>
 
-<p class="muted">
-เลือกประเภทข้อสอบที่ต้องการฝึกทำ
+<div class="center">
+
+<img
+id="accountAvatar"
+class="avatar"
+src="avatar01.png"
+alt="Avatar"
+>
+
+</div>
+
+
+<h3>เปลี่ยนรูปโปรไฟล์</h3>
+
+<div id="accountAvatarGrid" class="avatar-grid"></div>
+
+
+<hr style="border:0;border-top:1px solid #eee;margin:28px 0">
+
+
+<h3>ชื่อเล่น</h3>
+
+<input
+id="nicknameInput"
+type="text"
+maxlength="20"
+>
+
+<div class="notice">
+เมื่อเปลี่ยนชื่อเล่นแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน
+</div>
+
+<button class="primary" id="changeNicknameBtn">
+เปลี่ยนชื่อเล่น
+</button>
+
+<p id="nicknameStatus" class="small"></p>
+
+
+<hr style="border:0;border-top:1px solid #eee;margin:28px 0">
+
+
+<h3>รหัสผ่าน</h3>
+
+<p class="small">
+ระบบจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลที่ใช้สมัครสมาชิก
 </p>
 
-<button id="subjectExam" class="orange">
-ข้อสอบแยกรายวิชา
+<button class="secondary" id="resetPasswordBtn">
+ส่งลิงก์เปลี่ยนรหัสผ่าน
 </button>
 
-<button id="careerExam" class="outline">
-ข้อสอบเสมือนจริงตามสายงาน
-</button>
-
-<button id="backHome1" class="gray">
+<button class="outline" id="backHomeBtn">
 กลับหน้าหลัก
 </button>
 
-</div>
-
 </section>
 
 
-<!-- รายวิชา -->
-<section id="subjectsPage" class="hide">
+<!-- FREE MENU -->
 
-<div class="card">
+<section id="freeMenuPage" class="card hidden">
 
-<h2>ข้อสอบแยกรายวิชา</h2>
+<h2>เลือกชุดข้อสอบ</h2>
 
-<button class="outline">ความสามารถทั่วไป / คณิตศาสตร์</button>
-<button class="outline">ภาษาไทย</button>
-<button class="outline">ภาษาอังกฤษ</button>
-<button class="outline">คอมพิวเตอร์สำนักงาน</button>
-<button class="outline">กฎหมายที่ประชาชนควรรู้</button>
-<button class="outline">สังคม วัฒนธรรม และอาเซียน</button>
-<button class="outline">งานสารบรรณ</button>
-<button class="outline">ลักษณะที่ 54</button>
 
-<button id="backFree1" class="gray">
-ย้อนกลับ
+<div class="menu-card">
+
+<h3>ข้อสอบแยกรายวิชา</h3>
+
+<button class="subject-btn">
+ความสามารถทั่วไป / คณิตศาสตร์
+</button>
+
+<button class="subject-btn">
+ภาษาไทย
+</button>
+
+<button class="subject-btn">
+ภาษาอังกฤษ
+</button>
+
+<button class="subject-btn">
+คอมพิวเตอร์สำนักงาน
+</button>
+
+<button class="subject-btn">
+กฎหมายที่ประชาชนควรรู้
+</button>
+
+<button class="subject-btn">
+สังคม วัฒนธรรม และอาเซียน
+</button>
+
+<button class="subject-btn">
+งานสารบรรณ
+</button>
+
+<button class="subject-btn">
+ลักษณะที่ 54
 </button>
 
 </div>
 
-</section>
 
+<div class="menu-card">
 
-<!-- ตามสายงาน -->
-<section id="careerPage" class="hide">
+<h3>ข้อสอบเสมือนจริงตามสายงาน</h3>
 
-<div class="card">
+<button class="subject-btn">
+สายอำนวยการ
+</button>
 
-<h2>ข้อสอบเสมือนจริงตามสายงาน</h2>
+<button class="subject-btn">
+สายปราบปราม
+</button>
 
-<button class="outline">สายอำนวยการ</button>
-<button class="outline">สายปราบปราม</button>
-<button class="outline">สายพิสูจน์หลักฐาน</button>
-<button class="outline">กองร้อยน้ำหวาน</button>
-<button class="outline">พลร่ม</button>
-<button class="outline">ตชด.</button>
+<button class="subject-btn">
+สายพิสูจน์หลักฐาน
+</button>
 
-<button id="backFree2" class="gray">
-ย้อนกลับ
+<button class="subject-btn">
+กองร้อยน้ำหวาน
+</button>
+
+<button class="subject-btn">
+พลร่ม
+</button>
+
+<button class="subject-btn">
+ตชด.
 </button>
 
 </div>
 
+
+<button class="outline" id="freeBackBtn">
+กลับหน้าหลัก
+</button>
+
 </section>
+
 
 </main>
 
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
 
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut,
-  onAuthStateChanged
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged,
+sendPasswordResetEmail
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 
 import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  serverTimestamp
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+serverTimestamp,
+Timestamp
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 
 const firebaseConfig = {
 
-  apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",
+apiKey:
+"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",
 
-  authDomain:"kasorb-test-ad000.firebaseapp.com",
+authDomain:
+"kasorb-test-ad000.firebaseapp.com",
 
-  projectId:"kasorb-test-ad000",
+projectId:
+"kasorb-test-ad000",
 
-  storageBucket:"kasorb-test-ad000.firebasestorage.app",
+storageBucket:
+"kasorb-test-ad000.firebasestorage.app",
 
-  messagingSenderId:"999267444865",
+messagingSenderId:
+"999267444865",
 
-  appId:"1:999267444865:web:5509772cd5f94af768c580"
+appId:
+"1:999267444865:web:5509772cd5f94af768c580"
 
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+getAuth(app);
 
-const db = getFirestore(app);
-
-
-const $ = id => document.getElementById(id);
-
-
-const pages = [
-  "loginPage",
-  "registerPage",
-  "homePage",
-  "freeMenu",
-  "subjectsPage",
-  "careerPage"
-];
+const db =
+getFirestore(app);
 
 
-function show(page){
+let currentUser = null;
 
-  pages.forEach(id=>{
-    $(id).classList.add("hide");
-  });
+let currentData = null;
 
-  $(page).classList.remove("hide");
+let selectedRegisterAvatar =
+"avatar01.png";
+
+
+const avatarFiles =
+Array.from(
+{length:20},
+(_,i)=>
+`avatar${String(i+1).padStart(2,"0")}.png`
+);
+
+
+function $(id){
+
+return document.getElementById(id);
 
 }
 
 
-/* ไปหน้าสมัคร */
+function hideAll(){
 
-$("goRegister").onclick=()=>{
+[
+"loginPage",
+"registerPage",
+"homePage",
+"accountPage",
+"freeMenuPage"
+]
+.forEach(
+id =>
+$(id).classList.add("hidden")
+);
 
-  $("signupMsg").textContent="";
+}
 
-  show("registerPage");
+
+function show(id){
+
+hideAll();
+
+$(id).classList.remove("hidden");
+
+}
+
+
+function createAvatarGrid(
+containerId,
+type
+){
+
+const box =
+$(containerId);
+
+box.innerHTML="";
+
+
+avatarFiles.forEach(
+(file,index)=>{
+
+const item =
+document.createElement("div");
+
+item.className =
+"avatar-choice";
+
+
+const img =
+document.createElement("img");
+
+img.src=file;
+
+img.alt="Avatar";
+
+
+item.appendChild(img);
+
+
+if(
+type==="register"
+&& index===0
+){
+
+item.classList.add("selected");
+
+}
+
+
+item.onclick =
+async()=>{
+
+box
+.querySelectorAll(".avatar-choice")
+.forEach(
+x =>
+x.classList.remove("selected")
+);
+
+item.classList.add("selected");
+
+
+if(
+type==="register"
+){
+
+selectedRegisterAvatar=file;
+
+return;
+
+}
+
+
+$("accountAvatar").src=file;
+
+
+if(!currentUser){
+
+return;
+
+}
+
+
+try{
+
+await updateDoc(
+
+doc(
+db,
+"users",
+currentUser.uid
+),
+
+{
+avatar:file
+}
+
+);
+
+
+currentData.avatar=file;
+
+$("profileAvatar").src=file;
+
+
+}catch(error){
+
+alert(
+"ยังไม่สามารถบันทึกรูปโปรไฟล์ได้"
+);
+
+}
 
 };
 
 
-/* กลับหน้า Login */
+box.appendChild(item);
 
-$("backLogin").onclick=()=>{
+}
+);
 
-  $("loginMsg").textContent="";
-
-  show("loginPage");
-
-};
+}
 
 
-/* สมัครสมาชิก */
-
-$("createAccount").onclick=async()=>{
-
-  const email =
-    $("registerEmail").value.trim();
-
-  const password =
-    $("registerPassword").value;
-
-  const nickname =
-    $("nickname").value.trim();
-
-  const emoji =
-    $("emoji").value;
+createAvatarGrid(
+"registerAvatarGrid",
+"register"
+);
 
 
-  if(!email){
-
-    $("signupMsg").textContent=
-    "กรุณากรอกอีเมล";
-
-    return;
-
-  }
+createAvatarGrid(
+"accountAvatarGrid",
+"account"
+);
 
 
-  if(password.length < 6){
-
-    $("signupMsg").textContent=
-    "รหัสผ่านต้องมีอย่างน้อย 6 ตัว";
-
-    return;
-
-  }
+$("goRegisterBtn")
+.onclick =
+()=>show("registerPage");
 
 
-  if(!nickname){
-
-    $("signupMsg").textContent=
-    "กรุณากรอกชื่อเล่น";
-
-    return;
-
-  }
+$("backLoginBtn")
+.onclick =
+()=>show("loginPage");
 
 
-  if(!emoji){
-
-    $("signupMsg").textContent=
-    "กรุณาเลือกอิโมจิ";
-
-    return;
-
-  }
+$("backHomeBtn")
+.onclick =
+()=>show("homePage");
 
 
-  try{
-
-    $("signupMsg").textContent=
-    "กำลังสมัครสมาชิก...";
-
-
-    const credential =
-    await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+$("freeBackBtn")
+.onclick =
+()=>show("homePage");
 
 
-    await setDoc(
-      doc(db,"users",credential.user.uid),
-      {
-
-        email:email,
-
-        nickname:nickname,
-
-        emoji:emoji,
-
-        role:"student",
-
-        plan:"free",
-
-        active:false,
-
-        rank:"ผู้ทดลองสอบ • Lv.0",
-
-        createdAt:serverTimestamp()
-
-      }
-    );
+$("manageBtn")
+.onclick =
+()=>openAccount();
 
 
-    $("signupMsg").textContent="";
+$("freeQuizBtn")
+.onclick =
+()=>show("freeMenuPage");
 
 
-  }catch(error){
+$("premiumBtn")
+.onclick =
+()=>{
 
-    if(error.code==="auth/email-already-in-use"){
+if(
+currentData?.plan==="premium"
+){
 
-      $("signupMsg").textContent=
-      "อีเมลนี้มีบัญชีอยู่แล้ว";
+alert(
+"บัญชีของคุณเป็นสมาชิก Premium แล้ว"
+);
 
-    }else if(error.code==="auth/invalid-email"){
+}else{
 
-      $("signupMsg").textContent=
-      "รูปแบบอีเมลไม่ถูกต้อง";
+alert(
+"กรุณาติดต่อแอดมินเพื่อสมัครสมาชิก Premium"
+);
 
-    }else{
-
-      $("signupMsg").textContent=
-      "สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่";
-
-    }
-
-  }
+}
 
 };
 
 
-/* เข้าสู่ระบบ */
+$("registerBtn")
+.onclick =
+async()=>{
 
-$("loginBtn").onclick=async()=>{
-
-  const email =
-    $("loginEmail").value.trim();
-
-  const password =
-    $("loginPassword").value;
-
-
-  if(!email || !password){
-
-    $("loginMsg").textContent=
-    "กรุณากรอกอีเมลและรหัสผ่าน";
-
-    return;
-
-  }
+const email =
+$("regEmail")
+.value
+.trim();
 
 
-  try{
-
-    $("loginMsg").textContent=
-    "กำลังเข้าสู่ระบบ...";
-
-
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+const password =
+$("regPassword")
+.value;
 
 
-    $("loginMsg").textContent="";
+const nickname =
+$("regNickname")
+.value
+.trim();
 
 
-  }catch(error){
+$("registerMsg")
+.textContent="";
 
-    $("loginMsg").textContent=
-    "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
 
-  }
+if(
+!email
+||
+!password
+||
+!nickname
+){
+
+$("registerMsg")
+.textContent =
+"กรุณากรอกข้อมูลให้ครบ";
+
+return;
+
+}
+
+
+if(
+password.length<6
+){
+
+$("registerMsg")
+.textContent =
+"รหัสผ่านต้องมีอย่างน้อย 6 ตัว";
+
+return;
+
+}
+
+
+try{
+
+const result =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+await setDoc(
+
+doc(
+db,
+"users",
+result.user.uid
+),
+
+{
+
+email:email,
+
+nickname:nickname,
+
+avatar:
+selectedRegisterAvatar,
+
+role:"student",
+
+plan:"free",
+
+active:false,
+
+xp:0,
+
+score:0,
+
+level:0,
+
+nicknameChangedAt:null,
+
+createdAt:
+serverTimestamp()
+
+}
+
+);
+
+
+alert(
+"สมัครสมาชิกเรียบร้อยแล้ว"
+);
+
+
+}catch(error){
+
+if(
+error.code
+===
+"auth/email-already-in-use"
+){
+
+$("registerMsg")
+.textContent =
+"อีเมลนี้มีบัญชีอยู่แล้ว กรุณาเข้าสู่ระบบ";
+
+}else{
+
+$("registerMsg")
+.textContent =
+"สมัครสมาชิกไม่สำเร็จ";
+
+}
+
+}
 
 };
 
 
-/* ลืมรหัสผ่าน */
+$("loginBtn")
+.onclick =
+async()=>{
 
-$("forgotBtn").onclick=async()=>{
-
-  const email =
-    $("loginEmail").value.trim();
-
-
-  if(!email){
-
-    $("loginMsg").textContent=
-    "กรุณากรอกอีเมลก่อน";
-
-    return;
-
-  }
+const email =
+$("loginEmail")
+.value
+.trim();
 
 
-  try{
-
-    await sendPasswordResetEmail(
-      auth,
-      email
-    );
+const password =
+$("loginPassword")
+.value;
 
 
-    $("loginMsg").textContent=
-    "ส่งอีเมลสำหรับตั้งรหัสผ่านใหม่แล้ว";
+$("loginMsg")
+.textContent="";
 
 
-  }catch(error){
+if(
+!email
+||
+!password
+){
 
-    $("loginMsg").textContent=
-    "ไม่สามารถส่งอีเมลได้";
+$("loginMsg")
+.textContent =
+"กรุณากรอกอีเมลและรหัสผ่าน";
 
-  }
+return;
+
+}
+
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+}catch(error){
+
+$("loginMsg")
+.textContent =
+"อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+
+}
 
 };
 
 
-/* ออกจากระบบ */
+$("logoutBtn")
+.onclick =
+async()=>{
 
-$("logoutBtn").onclick=async()=>{
-
-  await signOut(auth);
-
-};
-
-
-/* ตรวจสอบสถานะผู้ใช้ */
-
-onAuthStateChanged(auth,async user=>{
-
-  if(!user){
-
-    show("loginPage");
-
-    return;
-
-  }
-
-
-  try{
-
-    const profile =
-    await getDoc(
-      doc(db,"users",user.uid)
-    );
-
-
-    if(profile.exists()){
-
-      const data =
-      profile.data();
-
-
-      $("userEmoji").textContent =
-      data.emoji || "🙂";
-
-
-      $("userNickname").textContent =
-      data.nickname || "สมาชิก KASORB";
-
-
-      $("userEmail").textContent =
-      user.email || "";
-
-
-      $("userRank").textContent =
-      data.rank || "ผู้ทดลองสอบ • Lv.0";
-
-    }else{
-
-      $("userEmoji").textContent="🙂";
-
-      $("userNickname").textContent=
-      "สมาชิก KASORB";
-
-      $("userEmail").textContent=
-      user.email || "";
-
-      $("userRank").textContent=
-      "ผู้ทดลองสอบ • Lv.0";
-
-    }
-
-
-    show("homePage");
-
-
-  }catch(error){
-
-    $("userEmoji").textContent="🙂";
-
-    $("userNickname").textContent=
-    "สมาชิก KASORB";
-
-    $("userEmail").textContent=
-    user.email || "";
-
-    $("userRank").textContent=
-    "ผู้ทดลองสอบ • Lv.0";
-
-    show("homePage");
-
-  }
-
-});
-
-
-/* เมนูข้อสอบ */
-
-$("startFree").onclick=()=>{
-
-  show("freeMenu");
+await signOut(auth);
 
 };
 
 
-$("subjectExam").onclick=()=>{
+$("forgotBtn")
+.onclick =
+async()=>{
 
-  show("subjectsPage");
+const email =
+$("loginEmail")
+.value
+.trim();
+
+
+if(!email){
+
+alert(
+"กรุณากรอกอีเมลในช่องอีเมลก่อน"
+);
+
+return;
+
+}
+
+
+try{
+
+await sendPasswordResetEmail(
+auth,
+email
+);
+
+
+alert(
+"ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลแล้ว"
+);
+
+
+}catch(error){
+
+alert(
+"ไม่สามารถส่งอีเมลได้ กรุณาตรวจสอบอีเมลอีกครั้ง"
+);
+
+}
 
 };
 
 
-$("careerExam").onclick=()=>{
+$("resetPasswordBtn")
+.onclick =
+async()=>{
 
-  show("careerPage");
+if(!currentUser){
+
+return;
+
+}
+
+
+try{
+
+await sendPasswordResetEmail(
+auth,
+currentUser.email
+);
+
+
+alert(
+"ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลของคุณแล้ว"
+);
+
+
+}catch(error){
+
+alert(
+"ไม่สามารถส่งลิงก์เปลี่ยนรหัสผ่านได้"
+);
+
+}
 
 };
 
 
-$("backHome1").onclick=()=>{
+function premiumRank(
+level
+){
 
-  show("homePage");
+const ranks = [
+
+"ผู้สมัครสอบ",
+
+"นสต.",
+
+"ส.ต.ต.",
+
+"ส.ต.ท.",
+
+"ส.ต.อ.",
+
+"จ.ส.ต.",
+
+"ด.ต.",
+
+"รอง สว.",
+
+"สว.",
+
+"รอง ผกก.",
+
+"สวญ.",
+
+"ผกก.",
+
+"รอง ผบก.",
+
+"ผบก.",
+
+"รอง ผบช.",
+
+"ผบช.",
+
+"ผู้ช่วย ผบ.ตร.",
+
+"รอง ผบ.ตร.",
+
+"จตช.",
+
+"ผบ.ตร."
+
+];
+
+
+const safeLevel =
+Math.max(
+0,
+Math.min(
+19,
+Number(level||0)
+)
+);
+
+
+return ranks[safeLevel];
+
+}
+
+
+async function loadProfile(
+user
+){
+
+const snap =
+await getDoc(
+
+doc(
+db,
+"users",
+user.uid
+)
+
+);
+
+
+if(
+snap.exists()
+){
+
+currentData =
+snap.data();
+
+}else{
+
+currentData = {
+
+nickname:
+"สมาชิก KASORB",
+
+avatar:
+"avatar01.png",
+
+plan:
+"free",
+
+level:0
+
+};
+
+}
+
+
+renderProfile();
+
+}
+
+
+function renderProfile(){
+
+const avatar =
+currentData?.avatar
+||
+"avatar01.png";
+
+
+const nickname =
+currentData?.nickname
+||
+"สมาชิก KASORB";
+
+
+const plan =
+currentData?.plan
+||
+"free";
+
+
+const level =
+Math.max(
+0,
+Math.min(
+19,
+Number(
+currentData?.level
+||
+0
+)
+)
+);
+
+
+$("profileAvatar")
+.src =
+avatar;
+
+
+$("accountAvatar")
+.src =
+avatar;
+
+
+$("profileNickname")
+.textContent =
+nickname;
+
+
+$("nicknameInput")
+.value =
+nickname;
+
+
+/*
+สมาชิกทั่วไป
+แยกจากระบบ Level Premium
+*/
+
+if(
+plan!=="premium"
+){
+
+$("profileRank")
+.textContent =
+"ผู้ทดลองสอบ • Lv.0";
+
+
+$("profilePlan")
+.textContent =
+"สมาชิกทั่วไป";
+
+
+$("profilePlan")
+.classList
+.remove("premium");
+
+}
+
+
+/*
+สมาชิก Premium
+Lv.0 = ผู้สมัครสอบ
+Lv.1 = นสต.
+*/
+
+else{
+
+$("profileRank")
+.textContent =
+`${premiumRank(level)} • Lv.${level}`;
+
+
+$("profilePlan")
+.textContent =
+"สมาชิก Premium";
+
+
+$("profilePlan")
+.classList
+.add("premium");
+
+}
+
+}
+
+
+function openAccount(){
+
+if(!currentData){
+
+return;
+
+}
+
+
+$("accountAvatar")
+.src =
+currentData.avatar
+||
+"avatar01.png";
+
+
+$("nicknameInput")
+.value =
+currentData.nickname
+||
+"";
+
+
+updateNicknameButton();
+
+
+show(
+"accountPage"
+);
+
+}
+
+
+function nicknameNextDate(){
+
+const value =
+currentData
+?.nicknameChangedAt;
+
+
+if(!value){
+
+return null;
+
+}
+
+
+let changed=null;
+
+
+if(
+value instanceof Timestamp
+){
+
+changed =
+value.toDate();
+
+}
+
+else if(
+value?.toDate
+){
+
+changed =
+value.toDate();
+
+}
+
+
+if(!changed){
+
+return null;
+
+}
+
+
+const next =
+new Date(changed);
+
+
+next.setDate(
+next.getDate()+30
+);
+
+
+return next;
+
+}
+
+
+function updateNicknameButton(){
+
+const next =
+nicknameNextDate();
+
+
+if(
+!next
+||
+new Date()>=next
+){
+
+$("changeNicknameBtn")
+.disabled=false;
+
+
+$("nicknameStatus")
+.textContent =
+"คุณสามารถเปลี่ยนชื่อเล่นได้";
+
+
+return;
+
+}
+
+
+$("changeNicknameBtn")
+.disabled=true;
+
+
+const diff =
+Math.ceil(
+
+(
+next-new Date()
+)
+
+/
+86400000
+
+);
+
+
+$("nicknameStatus")
+.textContent =
+`สามารถเปลี่ยนชื่อเล่นได้อีกครั้งในประมาณ ${diff} วัน`;
+
+}
+
+
+$("changeNicknameBtn")
+.onclick =
+async()=>{
+
+if(
+!currentUser
+||
+!currentData
+){
+
+return;
+
+}
+
+
+const newName =
+$("nicknameInput")
+.value
+.trim();
+
+
+if(!newName){
+
+alert(
+"กรุณากรอกชื่อเล่น"
+);
+
+return;
+
+}
+
+
+if(
+newName
+===
+currentData.nickname
+){
+
+alert(
+"ชื่อเล่นยังเหมือนเดิม"
+);
+
+return;
+
+}
+
+
+const next =
+nicknameNextDate();
+
+
+if(
+next
+&&
+new Date()<next
+){
+
+alert(
+"ยังไม่ครบกำหนด 30 วันสำหรับการเปลี่ยนชื่อเล่น"
+);
+
+return;
+
+}
+
+
+const ok =
+confirm(
+
+`ยืนยันเปลี่ยนชื่อเล่นเป็น "${newName}" หรือไม่?
+
+หลังจากเปลี่ยนแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน`
+
+);
+
+
+if(!ok){
+
+return;
+
+}
+
+
+try{
+
+await updateDoc(
+
+doc(
+db,
+"users",
+currentUser.uid
+),
+
+{
+
+nickname:newName,
+
+nicknameChangedAt:
+serverTimestamp()
+
+}
+
+);
+
+
+currentData.nickname =
+newName;
+
+
+currentData.nicknameChangedAt =
+Timestamp.now();
+
+
+$("profileNickname")
+.textContent =
+newName;
+
+
+updateNicknameButton();
+
+
+alert(
+"เปลี่ยนชื่อเล่นเรียบร้อยแล้ว"
+);
+
+
+}catch(error){
+
+alert(
+"ยังไม่สามารถบันทึกชื่อเล่นได้"
+);
+
+}
 
 };
 
 
-$("backFree1").onclick=()=>{
+onAuthStateChanged(
 
-  show("freeMenu");
+auth,
 
-};
+async(user)=>{
+
+if(user){
+
+currentUser=user;
 
 
-$("backFree2").onclick=()=>{
+try{
 
-  show("freeMenu");
+await loadProfile(user);
 
-};
+show(
+"homePage"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+show(
+"homePage"
+);
+
+}
+
+}
+
+else{
+
+currentUser=null;
+
+currentData=null;
+
+show(
+"loginPage"
+);
+
+}
+
+}
+
+);
 
 </script>
 
