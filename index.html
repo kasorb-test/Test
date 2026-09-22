@@ -1,40 +1,1593 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#ff7417"><title>KASORB TEST</title>
-<!-- KASORB FINAL PROFILE BUILD 2026-09-21 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KASORB TEST</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Thai",sans-serif;background:#f6f6f6;color:#222}main{max-width:760px;margin:auto;padding:28px 18px 60px}h1{color:#ff7417;margin:0 0 4px}.subtitle{color:#777;margin:0 0 28px}.card{background:#fff;border:1px solid #e2e2e2;border-radius:22px;padding:24px;margin-bottom:22px}.hidden{display:none!important}input{width:100%;padding:14px 15px;margin:7px 0;border:1px solid #ddd;border-radius:12px;font-size:16px}button{width:100%;border:0;border-radius:12px;padding:14px 15px;font-size:16px;cursor:pointer;margin-top:9px}button:disabled{opacity:.55}.primary{background:#ff7417;color:#fff;font-weight:700}.secondary{background:#eee;color:#333}.outline{background:#fff;border:1px solid #ddd}.small{font-size:14px;color:#777;line-height:1.55}.center{text-align:center}.avatar{width:104px;height:104px;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 3px 12px #bbb;background:#eee}.avatar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.avatar-choice{padding:5px;background:#fff;border:3px solid transparent;border-radius:18px}.avatar-choice.selected{border-color:#ff7417}.avatar-choice img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;display:block}.profile-name{font-size:24px;font-weight:700;margin:14px 0 6px}.rank{color:#666;margin:8px 0}.plan{display:inline-block;margin:6px 0 10px;padding:7px 14px;border-radius:999px;background:#f1f1f1;font-size:14px}.plan.premium{background:#fff0df;color:#d75b00;font-weight:700}.notice{background:#fff7ef;border:1px solid #ffd6b7;padding:14px;border-radius:12px;margin:14px 0;font-size:14px;line-height:1.6}.menu-card{background:#fff;border:1px solid #e5e5e5;border-radius:18px;padding:18px;margin-top:15px}.subject-btn{text-align:left;background:#f7f7f7;margin:6px 0}.version{text-align:center;color:#aaa;font-size:11px;margin-top:24px}@media(max-width:520px){.avatar-grid{grid-template-columns:repeat(3,1fr)}.card{padding:20px}}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+  background:#f6f6f6;
+  color:#222;
+}
+main{
+  max-width:760px;
+  margin:auto;
+  padding:28px 18px 60px;
+}
+h1{color:#ff7417;margin:0 0 5px}
+h2{margin-top:0}
+.subtitle{color:#777;margin:0 0 30px}
+.card{
+  background:#fff;
+  border:1px solid #e2e2e2;
+  border-radius:22px;
+  padding:26px;
+  margin-bottom:22px;
+}
+.hidden{display:none!important}
+.center{text-align:center}
+
+input{
+  width:100%;
+  padding:15px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:9px;
+}
+button:disabled{opacity:.55}
+
+.primary{background:#ff7417;color:#fff;font-weight:bold}
+.secondary{background:#eee;color:#333}
+.outline{background:#fff;border:1px solid #ddd;color:#333}
+.small{font-size:14px;color:#777;line-height:1.6}
+
+.avatar{
+  width:104px;
+  height:104px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #fff;
+  box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
+.profile-name{
+  font-size:24px;
+  font-weight:bold;
+  margin:14px 0 6px;
+}
+.rank{color:#777;margin:7px 0}
+.plan{
+  display:inline-block;
+  margin:6px 0 12px;
+  padding:7px 14px;
+  border-radius:30px;
+  background:#f1f1f1;
+  font-size:14px;
+}
+.plan.premium{
+  background:#fff0df;
+  color:#d75b00;
+  font-weight:bold;
+}
+
+/* ข้อมูลของฉัน */
+.info-profile{
+  text-align:center;
+  margin-bottom:25px;
+}
+.info-avatar-wrap{
+  position:relative;
+  width:104px;
+  margin:0 auto;
+}
+.edit-avatar{
+  position:absolute;
+  right:-9px;
+  bottom:2px;
+  width:38px;
+  height:38px;
+  padding:0;
+  margin:0;
+  border-radius:50%;
+  background:#ff7417;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.edit-avatar svg,
+.edit-inline svg{
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+}
+
+.info-list{
+  border-top:1px solid #eee;
+  margin-top:20px;
+}
+.info-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:17px 0;
+  border-bottom:1px solid #eee;
+}
+.info-label{
+  width:115px;
+  color:#777;
+  font-size:14px;
+}
+.info-value{
+  flex:1;
+  font-weight:600;
+  word-break:break-word;
+}
+.edit-inline{
+  width:38px;
+  height:38px;
+  padding:0;
+  margin:0;
+  background:#f3f3f3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#555;
+}
+
+.edit-box{
+  margin-top:18px;
+  padding:18px;
+  background:#fafafa;
+  border:1px solid #e8e8e8;
+  border-radius:16px;
+}
+
+.avatar-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:15px;
+}
+.avatar-choice{
+  padding:5px;
+  border:3px solid transparent;
+  border-radius:18px;
+  background:#fff;
+  cursor:pointer;
+}
+.avatar-choice.selected{border-color:#ff7417}
+.avatar-choice img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  display:block;
+  border-radius:14px;
+}
+
+.notice{
+  background:#fff7ef;
+  border:1px solid #ffd6b7;
+  padding:14px;
+  border-radius:12px;
+  margin:12px 0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.menu-card{
+  border:1px solid #e5e5e5;
+  border-radius:18px;
+  padding:20px;
+  margin-top:15px;
+}
+.subject-btn{
+  text-align:left;
+  background:#f7f7f7;
+  margin:6px 0;
+}
+
+@media(max-width:520px){
+  .avatar-grid{grid-template-columns:repeat(3,1fr)}
+  .info-label{width:90px}
+}
 </style>
-</head><body><main>
-<h1>KASORB TEST</h1><p class="subtitle">ระบบฝึกทำข้อสอบออนไลน์</p>
-<section id="loginPage" class="card"><h2>เข้าสู่ระบบ</h2><input id="loginEmail" type="email" placeholder="อีเมล"><input id="loginPassword" type="password" placeholder="รหัสผ่าน"><button class="primary" id="loginBtn">เข้าสู่ระบบ</button><button class="secondary" id="goRegisterBtn">สมัครสมาชิก</button><button class="outline" id="forgotBtn">ลืมรหัสผ่าน</button><p id="loginMsg" class="small"></p></section>
-<section id="registerPage" class="card hidden"><h2>สมัครสมาชิก</h2><input id="regEmail" type="email" placeholder="อีเมล"><input id="regPassword" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว"><input id="regNickname" maxlength="20" placeholder="ชื่อเล่น"><h3>เลือกรูปโปรไฟล์</h3><div id="registerAvatarGrid" class="avatar-grid"></div><button class="primary" id="registerBtn">สร้างบัญชี</button><button class="secondary" id="backLoginBtn">กลับหน้าเข้าสู่ระบบ</button><p id="registerMsg" class="small"></p></section>
-<section id="homePage" class="hidden"><div class="card center"><img id="profileAvatar" class="avatar" src="avatar01.png?v=20260921"><div id="profileNickname" class="profile-name">สมาชิก KASORB</div><div id="profileRank" class="rank">ผู้ทดลองสอบ • Lv.0</div><div id="profilePlan" class="plan">สมาชิกทั่วไป</div><button class="secondary" id="manageBtn">จัดการบัญชี</button><button class="outline" id="logoutBtn">ออกจากระบบ</button></div><div class="card"><h2>ชุดข้อสอบสำหรับสมาชิกทั่วไป</h2><p>เลือกชุดข้อสอบเพื่อทดสอบและประเมินความรู้ของคุณ</p><button class="primary" id="freeQuizBtn">เลือกชุดข้อสอบ</button></div><div class="card"><h2>ชุดข้อสอบสำหรับสมาชิก Premium</h2><p>สิทธิ์การเข้าถึงชุดข้อสอบและเนื้อหาเพิ่มเติมสำหรับสมาชิก Premium</p><p>• ชุดข้อสอบหลากหลายตามหมวดวิชา</p><p>• สามารถทำแบบทดสอบซ้ำได้</p><p>• แสดงผลคะแนนหลังส่งคำตอบ</p><p>• เอกสารประกอบในรูปแบบ PDF</p><button class="secondary" id="premiumBtn">ดูรายละเอียดสมาชิก Premium</button></div></section>
-<section id="accountPage" class="card hidden"><h2>จัดการบัญชี</h2><div class="center"><img id="accountAvatar" class="avatar" src="avatar01.png?v=20260921"></div><h3>เปลี่ยนรูปโปรไฟล์</h3><div id="accountAvatarGrid" class="avatar-grid"></div><hr style="border:0;border-top:1px solid #eee;margin:28px 0"><h3>ชื่อเล่น</h3><input id="nicknameInput" maxlength="20"><div class="notice">เมื่อยืนยันเปลี่ยนชื่อเล่นแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน</div><button class="primary" id="changeNicknameBtn">เปลี่ยนชื่อเล่น</button><p id="nicknameStatus" class="small"></p><hr style="border:0;border-top:1px solid #eee;margin:28px 0"><h3>รหัสผ่าน</h3><p class="small">ระบบจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลที่ใช้สมัครสมาชิก</p><button class="secondary" id="resetPasswordBtn">ส่งลิงก์เปลี่ยนรหัสผ่าน</button><button class="outline" id="backHomeBtn">กลับหน้าหลัก</button></section>
-<section id="freeMenuPage" class="card hidden"><h2>เลือกชุดข้อสอบ</h2><div class="menu-card"><h3>ข้อสอบแยกรายวิชา</h3><button class="subject-btn">ความสามารถทั่วไป / คณิตศาสตร์</button><button class="subject-btn">ภาษาไทย</button><button class="subject-btn">ภาษาอังกฤษ</button><button class="subject-btn">คอมพิวเตอร์สำนักงาน</button><button class="subject-btn">กฎหมายที่ประชาชนควรรู้</button><button class="subject-btn">สังคม วัฒนธรรม และอาเซียน</button><button class="subject-btn">งานสารบรรณ</button><button class="subject-btn">ลักษณะที่ 54</button></div><div class="menu-card"><h3>ข้อสอบเสมือนจริงตามสายงาน</h3><button class="subject-btn">สายอำนวยการ</button><button class="subject-btn">สายปราบปราม</button><button class="subject-btn">สายพิสูจน์หลักฐาน</button><button class="subject-btn">กองร้อยน้ำหวาน</button><button class="subject-btn">พลร่ม</button><button class="subject-btn">ตชด.</button></div><button class="outline" id="freeBackBtn">กลับหน้าหลัก</button></section>
-<div class="version">KASORB profile build 2026-09-21</div></main>
+</head>
+
+<body>
+<main>
+
+<h1>KASORB TEST</h1>
+<p class="subtitle">ระบบฝึกทำข้อสอบออนไลน์</p>
+
+
+<!-- LOGIN -->
+<section id="loginPage" class="card">
+
+<h2>เข้าสู่ระบบ</h2>
+
+<input id="loginEmail" type="email" placeholder="อีเมล">
+<input id="loginPassword" type="password" placeholder="รหัสผ่าน">
+
+<button class="primary" id="loginBtn">เข้าสู่ระบบ</button>
+<button class="secondary" id="goRegisterBtn">สมัครสมาชิก</button>
+<button class="outline" id="forgotBtn">ลืมรหัสผ่าน</button>
+
+<p id="loginMsg" class="small"></p>
+
+</section>
+
+
+<!-- REGISTER -->
+<section id="registerPage" class="card hidden">
+
+<h2>สมัครสมาชิก</h2>
+
+<input id="regEmail" type="email" placeholder="อีเมล">
+<input id="regPassword" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว">
+<input id="regNickname" type="text" maxlength="20" placeholder="ชื่อเล่น">
+
+<h3>เลือกรูปโปรไฟล์</h3>
+<div id="registerAvatarGrid" class="avatar-grid"></div>
+
+<button class="primary" id="registerBtn">สร้างบัญชี</button>
+<button class="secondary" id="backLoginBtn">กลับหน้าเข้าสู่ระบบ</button>
+
+<p id="registerMsg" class="small"></p>
+
+</section>
+
+
+<!-- HOME -->
+<section id="homePage" class="hidden">
+
+<div class="card center">
+
+<img id="profileAvatar" class="avatar" src="avatar01.png">
+
+<div id="profileNickname" class="profile-name">
+สมาชิก KASORB
+</div>
+
+<div id="profileRank" class="rank">
+ผู้ทดลองสอบ • Lv.0
+</div>
+
+<div id="profilePlan" class="plan">
+สมาชิกทั่วไป
+</div>
+
+<button class="secondary" id="myInfoBtn">
+ข้อมูลของฉัน
+</button>
+
+<button class="outline" id="logoutBtn">
+ออกจากระบบ
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>ชุดข้อสอบสำหรับสมาชิกทั่วไป</h2>
+
+<p>เลือกชุดข้อสอบเพื่อทดสอบและประเมินความรู้ของคุณ</p>
+
+<button class="primary" id="freeQuizBtn">
+เลือกชุดข้อสอบ
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>ชุดข้อสอบสำหรับสมาชิก Premium</h2>
+
+<p>สิทธิ์การเข้าถึงชุดข้อสอบและเนื้อหาเพิ่มเติมสำหรับสมาชิก Premium</p>
+
+<p>• ชุดข้อสอบหลากหลายตามหมวดวิชา</p>
+<p>• สามารถทำแบบทดสอบซ้ำได้</p>
+<p>• แสดงผลคะแนนหลังส่งคำตอบ</p>
+<p>• เอกสารประกอบในรูปแบบ PDF</p>
+
+<button class="secondary" id="premiumBtn">
+ดูรายละเอียดสมาชิก Premium
+</button>
+
+</div>
+
+</section>
+
+
+<!-- MY INFO -->
+<section id="myInfoPage" class="card hidden">
+
+<h2>ข้อมูลของฉัน</h2>
+
+<div class="info-profile">
+
+<div class="info-avatar-wrap">
+
+<img
+id="myInfoAvatar"
+class="avatar"
+src="avatar01.png"
+>
+
+<button
+id="showAvatarEditBtn"
+class="edit-avatar"
+aria-label="เปลี่ยนรูปโปรไฟล์"
+>
+<svg viewBox="0 0 24 24">
+<path d="M12 20h9"/>
+<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+</svg>
+</button>
+
+</div>
+
+</div>
+
+
+<div class="info-list">
+
+<div class="info-row">
+<div class="info-label">ชื่อเล่น</div>
+<div id="myInfoNickname" class="info-value">สมาชิก KASORB</div>
+
+<button
+id="showNicknameEditBtn"
+class="edit-inline"
+aria-label="แก้ไขชื่อเล่น"
+>
+<svg viewBox="0 0 24 24">
+<path d="M12 20h9"/>
+<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+</svg>
+</button>
+</div>
+
+
+<div class="info-row">
+<div class="info-label">อีเมล</div>
+<div id="myInfoEmail" class="info-value">-</div>
+</div>
+
+
+<div class="info-row">
+<div class="info-label">ระดับ</div>
+<div id="myInfoRank" class="info-value">ผู้ทดลองสอบ • Lv.0</div>
+</div>
+
+
+<div class="info-row">
+<div class="info-label">สถานะ</div>
+<div id="myInfoPlan" class="info-value">สมาชิกทั่วไป</div>
+</div>
+
+</div>
+
+
+<!-- กดดินสอรูปแล้วค่อยแสดง -->
+<div id="avatarEditBox" class="edit-box hidden">
+
+<h3>เปลี่ยนรูปโปรไฟล์</h3>
+
+<div id="accountAvatarGrid" class="avatar-grid"></div>
+
+<button class="outline" id="cancelAvatarEditBtn">
+ยกเลิก
+</button>
+
+</div>
+
+
+<!-- กดดินสอชื่อแล้วค่อยแสดง -->
+<div id="nicknameEditBox" class="edit-box hidden">
+
+<h3>เปลี่ยนชื่อเล่น</h3>
+
+<input
+id="nicknameInput"
+type="text"
+maxlength="20"
+>
+
+<div class="notice">
+เมื่อยืนยันเปลี่ยนชื่อเล่นแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน
+</div>
+
+<button class="primary" id="changeNicknameBtn">
+ยืนยันเปลี่ยนชื่อเล่น
+</button>
+
+<p id="nicknameStatus" class="small"></p>
+
+<button class="outline" id="cancelNicknameEditBtn">
+ยกเลิก
+</button>
+
+</div>
+
+
+<div style="margin-top:25px">
+
+<button class="secondary" id="resetPasswordBtn">
+เปลี่ยนรหัสผ่าน
+</button>
+
+<button class="outline" id="backHomeBtn">
+กลับหน้าหลัก
+</button>
+
+</div>
+
+</section>
+
+
+<!-- FREE MENU -->
+<section id="freeMenuPage" class="card hidden">
+
+<h2>เลือกชุดข้อสอบ</h2>
+
+<div class="menu-card">
+
+<h3>ข้อสอบแยกรายวิชา</h3>
+
+<button class="subject-btn">ความสามารถทั่วไป / คณิตศาสตร์</button>
+<button class="subject-btn">ภาษาไทย</button>
+<button class="subject-btn">ภาษาอังกฤษ</button>
+<button class="subject-btn">คอมพิวเตอร์สำนักงาน</button>
+<button class="subject-btn">กฎหมายที่ประชาชนควรรู้</button>
+<button class="subject-btn">สังคม วัฒนธรรม และอาเซียน</button>
+<button class="subject-btn">งานสารบรรณ</button>
+<button class="subject-btn">ลักษณะที่ 54</button>
+
+</div>
+
+
+<div class="menu-card">
+
+<h3>ข้อสอบเสมือนจริงตามสายงาน</h3>
+
+<button class="subject-btn">สายอำนวยการ</button>
+<button class="subject-btn">สายปราบปราม</button>
+<button class="subject-btn">สายพิสูจน์หลักฐาน</button>
+<button class="subject-btn">กองร้อยน้ำหวาน</button>
+<button class="subject-btn">พลร่ม</button>
+<button class="subject-btn">ตชด.</button>
+
+</div>
+
+<button class="outline" id="freeBackBtn">
+กลับหน้าหลัก
+</button>
+
+</section>
+
+</main>
+
+
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import{getFirestore,doc,getDoc,setDoc,updateDoc,serverTimestamp,Timestamp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",authDomain:"kasorb-test-ad000.firebaseapp.com",projectId:"kasorb-test-ad000",storageBucket:"kasorb-test-ad000.firebasestorage.app",messagingSenderId:"999267444865",appId:"1:999267444865:web:5509772cd5f94af768c580"};
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);let currentUser=null,currentData=null,selectedRegisterAvatar="avatar01.png";const avatarFiles=Array.from({length:20},(_,i)=>`avatar${String(i+1).padStart(2,"0")}.png`),$=id=>document.getElementById(id),avatarUrl=f=>`${f}?v=20260921`;
-function hideAll(){["loginPage","registerPage","homePage","accountPage","freeMenuPage"].forEach(id=>$(id).classList.add("hidden"))}function show(id){hideAll();$(id).classList.remove("hidden")}
-function createAvatarGrid(containerId,type){const box=$(containerId);box.innerHTML="";avatarFiles.forEach((file,index)=>{const item=document.createElement("div");item.className="avatar-choice";if(type==="register"&&index===0)item.classList.add("selected");const img=document.createElement("img");img.src=avatarUrl(file);item.appendChild(img);item.onclick=async()=>{box.querySelectorAll(".avatar-choice").forEach(x=>x.classList.remove("selected"));item.classList.add("selected");if(type==="register"){selectedRegisterAvatar=file;return}$("accountAvatar").src=avatarUrl(file);if(!currentUser)return;try{await updateDoc(doc(db,"users",currentUser.uid),{avatar:file});currentData.avatar=file;$("profileAvatar").src=avatarUrl(file)}catch(e){console.error(e);alert("ยังไม่สามารถบันทึกรูปโปรไฟล์ได้")}};box.appendChild(item)})}
-createAvatarGrid("registerAvatarGrid","register");createAvatarGrid("accountAvatarGrid","account");
-$("goRegisterBtn").onclick=()=>show("registerPage");$("backLoginBtn").onclick=()=>show("loginPage");$("backHomeBtn").onclick=()=>show("homePage");$("freeBackBtn").onclick=()=>show("homePage");$("manageBtn").onclick=()=>openAccount();$("freeQuizBtn").onclick=()=>show("freeMenuPage");$("premiumBtn").onclick=()=>alert(currentData?.plan==="premium"?"บัญชีของคุณเป็นสมาชิก Premium แล้ว":"กรุณาติดต่อแอดมินเพื่อสมัครสมาชิก Premium");
-$("registerBtn").onclick=async()=>{const email=$("regEmail").value.trim(),password=$("regPassword").value,nickname=$("regNickname").value.trim();$("registerMsg").textContent="";if(!email||!password||!nickname){$("registerMsg").textContent="กรุณากรอกข้อมูลให้ครบ";return}if(password.length<6){$("registerMsg").textContent="รหัสผ่านต้องมีอย่างน้อย 6 ตัว";return}try{const result=await createUserWithEmailAndPassword(auth,email,password);await setDoc(doc(db,"users",result.user.uid),{email,nickname,avatar:selectedRegisterAvatar,role:"student",plan:"free",active:false,xp:0,score:0,level:0,nicknameChangedAt:null,createdAt:serverTimestamp()});alert("สมัครสมาชิกเรียบร้อยแล้ว")}catch(e){console.error(e);$("registerMsg").textContent=e.code==="auth/email-already-in-use"?"อีเมลนี้มีบัญชีอยู่แล้ว กรุณาเข้าสู่ระบบ":"สมัครสมาชิกไม่สำเร็จ"}};
-$("loginBtn").onclick=async()=>{const email=$("loginEmail").value.trim(),password=$("loginPassword").value;$("loginMsg").textContent="";if(!email||!password){$("loginMsg").textContent="กรุณากรอกอีเมลและรหัสผ่าน";return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){console.error(e);$("loginMsg").textContent="อีเมลหรือรหัสผ่านไม่ถูกต้อง"}};$("logoutBtn").onclick=async()=>signOut(auth);
-$("forgotBtn").onclick=async()=>{const email=$("loginEmail").value.trim();if(!email){alert("กรุณากรอกอีเมลในช่องอีเมลก่อน");return}try{await sendPasswordResetEmail(auth,email);alert("ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลแล้ว")}catch(e){console.error(e);alert("ไม่สามารถส่งอีเมลได้ กรุณาตรวจสอบอีเมลอีกครั้ง")}};
-$("resetPasswordBtn").onclick=async()=>{if(!currentUser)return;try{await sendPasswordResetEmail(auth,currentUser.email);alert("ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลของคุณแล้ว")}catch(e){console.error(e);alert("ไม่สามารถส่งลิงก์เปลี่ยนรหัสผ่านได้")}};
-function premiumRank(level){const ranks=["ผู้สมัครสอบ","นสต.","ส.ต.ต.","ส.ต.ท.","ส.ต.อ.","จ.ส.ต.","ด.ต.","รอง สว.","สว.","รอง ผกก.","สวญ.","ผกก.","รอง ผบก.","ผบก.","รอง ผบช.","ผบช.","ผู้ช่วย ผบ.ตร.","รอง ผบ.ตร.","จตช.","ผบ.ตร."];return ranks[Math.max(0,Math.min(19,Number(level||0)))]}
-async function loadProfile(user){const snap=await getDoc(doc(db,"users",user.uid));currentData=snap.exists()?snap.data():{nickname:"สมาชิก KASORB",avatar:"avatar01.png",plan:"free",level:0};renderProfile()}
-function renderProfile(){const avatar=currentData?.avatar||"avatar01.png",nickname=currentData?.nickname||"สมาชิก KASORB",plan=currentData?.plan||"free",level=Math.max(0,Math.min(19,Number(currentData?.level||0)));$("profileAvatar").src=avatarUrl(avatar);$("accountAvatar").src=avatarUrl(avatar);$("profileNickname").textContent=nickname;$("nicknameInput").value=nickname;if(plan==="premium"){$("profileRank").textContent=`${premiumRank(level)} • Lv.${level}`;$("profilePlan").textContent="สมาชิก Premium";$("profilePlan").classList.add("premium")}else{$("profileRank").textContent="ผู้ทดลองสอบ • Lv.0";$("profilePlan").textContent="สมาชิกทั่วไป";$("profilePlan").classList.remove("premium")}}
-function openAccount(){if(!currentData)return;$("accountAvatar").src=avatarUrl(currentData.avatar||"avatar01.png");$("nicknameInput").value=currentData.nickname||"";updateNicknameButton();show("accountPage")}
-function nicknameNextDate(){const value=currentData?.nicknameChangedAt;if(!value)return null;let changed=null;if(value instanceof Timestamp)changed=value.toDate();else if(value?.toDate)changed=value.toDate();if(!changed)return null;const next=new Date(changed);next.setDate(next.getDate()+30);return next}
-function updateNicknameButton(){const next=nicknameNextDate();if(!next||new Date()>=next){$("changeNicknameBtn").disabled=false;$("nicknameStatus").textContent="คุณสามารถเปลี่ยนชื่อเล่นได้";return}$("changeNicknameBtn").disabled=true;const diff=Math.ceil((next-new Date())/86400000);$("nicknameStatus").textContent=`สามารถเปลี่ยนชื่อเล่นได้อีกครั้งในประมาณ ${diff} วัน`}
-$("changeNicknameBtn").onclick=async()=>{if(!currentUser||!currentData)return;const newName=$("nicknameInput").value.trim();if(!newName){alert("กรุณากรอกชื่อเล่น");return}if(newName===currentData.nickname){alert("ชื่อเล่นยังเหมือนเดิม");return}const next=nicknameNextDate();if(next&&new Date()<next){alert("ยังไม่ครบกำหนด 30 วันสำหรับการเปลี่ยนชื่อเล่น");return}if(!confirm(`ยืนยันเปลี่ยนชื่อเล่นเป็น "${newName}" หรือไม่?\n\nหลังจากเปลี่ยนแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน`))return;try{await updateDoc(doc(db,"users",currentUser.uid),{nickname:newName,nicknameChangedAt:serverTimestamp()});currentData.nickname=newName;currentData.nicknameChangedAt=Timestamp.now();$("profileNickname").textContent=newName;updateNicknameButton();alert("เปลี่ยนชื่อเล่นเรียบร้อยแล้ว")}catch(e){console.error(e);alert("ยังไม่สามารถบันทึกชื่อเล่นได้")}};
-onAuthStateChanged(auth,async user=>{if(user){currentUser=user;try{await loadProfile(user);show("homePage")}catch(e){console.error(e);show("homePage")}}else{currentUser=null;currentData=null;show("loginPage")}});
-</script></body></html>
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged,
+sendPasswordResetEmail
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+serverTimestamp,
+Timestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+
+const firebaseConfig = {
+apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",
+authDomain:"kasorb-test-ad000.firebaseapp.com",
+projectId:"kasorb-test-ad000",
+storageBucket:"kasorb-test-ad000.firebasestorage.app",
+messagingSenderId:"999267444865",
+appId:"1:999267444865:web:5509772cd5f94af768c580"
+};
+
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+let currentUser=null;
+let currentData=null;
+let selectedRegisterAvatar="avatar01.png";
+
+
+const avatarFiles=
+Array.from(
+{length:20},
+(_,i)=>`avatar${String(i+1).padStart(2,"0")}.png`
+);
+
+
+const $=id=>document.getElementById(id);
+
+
+function hideAll(){
+
+[
+"loginPage",
+"registerPage",
+"homePage",
+"myInfoPage",
+"freeMenuPage"
+]
+.forEach(
+id=>$(id).classList.add("hidden")
+);
+
+}
+
+
+function show(id){
+
+hideAll();
+
+$(id).classList.remove("hidden");
+
+}
+
+
+function createAvatarGrid(containerId,type){
+
+const box=$(containerId);
+
+box.innerHTML="";
+
+
+avatarFiles.forEach(
+(file,index)=>{
+
+const item=
+document.createElement("div");
+
+item.className="avatar-choice";
+
+
+if(
+type==="register"
+&&
+index===0
+){
+
+item.classList.add("selected");
+
+}
+
+
+const img=
+document.createElement("img");
+
+img.src=file;
+
+img.alt="Avatar";
+
+
+item.appendChild(img);
+
+
+item.onclick=
+async()=>{
+
+box
+.querySelectorAll(".avatar-choice")
+.forEach(
+x=>x.classList.remove("selected")
+);
+
+item.classList.add("selected");
+
+
+if(type==="register"){
+
+selectedRegisterAvatar=file;
+
+return;
+
+}
+
+
+if(!currentUser){
+
+return;
+
+}
+
+
+try{
+
+await updateDoc(
+
+doc(
+db,
+"users",
+currentUser.uid
+),
+
+{
+avatar:file
+}
+
+);
+
+
+currentData.avatar=file;
+
+
+$("profileAvatar").src=file;
+
+$("myInfoAvatar").src=file;
+
+
+$("avatarEditBox")
+.classList
+.add("hidden");
+
+
+alert(
+"เปลี่ยนรูปโปรไฟล์เรียบร้อยแล้ว"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"ยังไม่สามารถบันทึกรูปโปรไฟล์ได้"
+);
+
+}
+
+};
+
+
+box.appendChild(item);
+
+}
+);
+
+}
+
+
+createAvatarGrid(
+"registerAvatarGrid",
+"register"
+);
+
+
+createAvatarGrid(
+"accountAvatarGrid",
+"account"
+);
+
+
+$("goRegisterBtn").onclick=
+()=>show("registerPage");
+
+
+$("backLoginBtn").onclick=
+()=>show("loginPage");
+
+
+$("backHomeBtn").onclick=
+()=>show("homePage");
+
+
+$("freeBackBtn").onclick=
+()=>show("homePage");
+
+
+$("myInfoBtn").onclick=
+()=>openMyInfo();
+
+
+$("freeQuizBtn").onclick=
+()=>show("freeMenuPage");
+
+
+$("showAvatarEditBtn").onclick=
+()=>{
+
+$("nicknameEditBox")
+.classList
+.add("hidden");
+
+$("avatarEditBox")
+.classList
+.remove("hidden");
+
+};
+
+
+$("cancelAvatarEditBtn").onclick=
+()=>{
+
+$("avatarEditBox")
+.classList
+.add("hidden");
+
+};
+
+
+$("showNicknameEditBtn").onclick=
+()=>{
+
+$("avatarEditBox")
+.classList
+.add("hidden");
+
+$("nicknameEditBox")
+.classList
+.remove("hidden");
+
+updateNicknameButton();
+
+};
+
+
+$("cancelNicknameEditBtn").onclick=
+()=>{
+
+$("nicknameEditBox")
+.classList
+.add("hidden");
+
+};
+
+
+$("premiumBtn").onclick=
+()=>{
+
+if(
+currentData?.plan==="premium"
+){
+
+alert(
+"บัญชีของคุณเป็นสมาชิก Premium แล้ว"
+);
+
+}else{
+
+alert(
+"กรุณาติดต่อแอดมินเพื่อสมัครสมาชิก Premium"
+);
+
+}
+
+};
+
+
+$("registerBtn").onclick=
+async()=>{
+
+const email=
+$("regEmail").value.trim();
+
+const password=
+$("regPassword").value;
+
+const nickname=
+$("regNickname").value.trim();
+
+
+$("registerMsg").textContent="";
+
+
+if(
+!email
+||
+!password
+||
+!nickname
+){
+
+$("registerMsg").textContent=
+"กรุณากรอกข้อมูลให้ครบ";
+
+return;
+
+}
+
+
+if(password.length<6){
+
+$("registerMsg").textContent=
+"รหัสผ่านต้องมีอย่างน้อย 6 ตัว";
+
+return;
+
+}
+
+
+try{
+
+const result=
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+await setDoc(
+
+doc(
+db,
+"users",
+result.user.uid
+),
+
+{
+
+email:email,
+
+nickname:nickname,
+
+avatar:selectedRegisterAvatar,
+
+role:"student",
+
+plan:"free",
+
+active:false,
+
+level:0,
+
+score:0,
+
+xp:0,
+
+nicknameChangedAt:null,
+
+createdAt:serverTimestamp()
+
+}
+
+);
+
+
+alert(
+"สมัครสมาชิกเรียบร้อยแล้ว"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+
+if(
+error.code==="auth/email-already-in-use"
+){
+
+$("registerMsg").textContent=
+"อีเมลนี้มีบัญชีอยู่แล้ว กรุณาเข้าสู่ระบบ";
+
+}else{
+
+$("registerMsg").textContent=
+"สมัครสมาชิกไม่สำเร็จ";
+
+}
+
+}
+
+};
+
+
+$("loginBtn").onclick=
+async()=>{
+
+const email=
+$("loginEmail").value.trim();
+
+const password=
+$("loginPassword").value;
+
+
+$("loginMsg").textContent="";
+
+
+if(
+!email
+||
+!password
+){
+
+$("loginMsg").textContent=
+"กรุณากรอกอีเมลและรหัสผ่าน";
+
+return;
+
+}
+
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+}catch(error){
+
+$("loginMsg").textContent=
+"อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+
+}
+
+};
+
+
+$("logoutBtn").onclick=
+async()=>{
+
+await signOut(auth);
+
+};
+
+
+$("forgotBtn").onclick=
+async()=>{
+
+const email=
+$("loginEmail").value.trim();
+
+
+if(!email){
+
+alert(
+"กรุณากรอกอีเมลก่อน"
+);
+
+return;
+
+}
+
+
+try{
+
+await sendPasswordResetEmail(
+auth,
+email
+);
+
+
+alert(
+"ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลแล้ว"
+);
+
+
+}catch(error){
+
+alert(
+"ไม่สามารถส่งอีเมลได้"
+);
+
+}
+
+};
+
+
+$("resetPasswordBtn").onclick=
+async()=>{
+
+if(!currentUser){
+
+return;
+
+}
+
+
+try{
+
+await sendPasswordResetEmail(
+auth,
+currentUser.email
+);
+
+
+alert(
+"ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลของคุณแล้ว"
+);
+
+
+}catch(error){
+
+alert(
+"ไม่สามารถส่งลิงก์เปลี่ยนรหัสผ่านได้"
+);
+
+}
+
+};
+
+
+function premiumRank(level){
+
+const ranks=[
+
+"ผู้สมัครสอบ",
+"นสต.",
+"ส.ต.ต.",
+"ส.ต.ท.",
+"ส.ต.อ.",
+"จ.ส.ต.",
+"ด.ต.",
+"รอง สว.",
+"สว.",
+"รอง ผกก.",
+"สวญ.",
+"ผกก.",
+"รอง ผบก.",
+"ผบก.",
+"รอง ผบช.",
+"ผบช.",
+"ผู้ช่วย ผบ.ตร.",
+"รอง ผบ.ตร.",
+"จตช.",
+"ผบ.ตร."
+
+];
+
+
+const safe=
+Math.max(
+0,
+Math.min(
+19,
+Number(level||0)
+)
+);
+
+
+return ranks[safe];
+
+}
+
+
+function getRankText(){
+
+const plan=
+currentData?.plan||"free";
+
+
+const level=
+Number(
+currentData?.level||0
+);
+
+
+if(
+plan!=="premium"
+){
+
+return "ผู้ทดลองสอบ • Lv.0";
+
+}
+
+
+return `${premiumRank(level)} • Lv.${level}`;
+
+}
+
+
+function getPlanText(){
+
+return currentData?.plan==="premium"
+?
+"สมาชิก Premium"
+:
+"สมาชิกทั่วไป";
+
+}
+
+
+async function loadProfile(user){
+
+const snap=
+await getDoc(
+
+doc(
+db,
+"users",
+user.uid
+)
+
+);
+
+
+if(snap.exists()){
+
+currentData=
+snap.data();
+
+}else{
+
+currentData={
+
+email:user.email||"",
+
+nickname:"สมาชิก KASORB",
+
+avatar:"avatar01.png",
+
+plan:"free",
+
+level:0
+
+};
+
+}
+
+
+renderProfile();
+
+}
+
+
+function renderProfile(){
+
+const avatar=
+currentData?.avatar
+||
+"avatar01.png";
+
+
+const nickname=
+currentData?.nickname
+||
+"สมาชิก KASORB";
+
+
+$("profileAvatar").src=
+avatar;
+
+
+$("profileNickname")
+.textContent=
+nickname;
+
+
+$("profileRank")
+.textContent=
+getRankText();
+
+
+$("profilePlan")
+.textContent=
+getPlanText();
+
+
+if(
+currentData?.plan==="premium"
+){
+
+$("profilePlan")
+.classList
+.add("premium");
+
+}else{
+
+$("profilePlan")
+.classList
+.remove("premium");
+
+}
+
+}
+
+
+function openMyInfo(){
+
+if(!currentData){
+
+return;
+
+}
+
+
+const avatar=
+currentData.avatar
+||
+"avatar01.png";
+
+
+const nickname=
+currentData.nickname
+||
+"สมาชิก KASORB";
+
+
+$("myInfoAvatar").src=
+avatar;
+
+
+$("myInfoNickname")
+.textContent=
+nickname;
+
+
+$("myInfoEmail")
+.textContent=
+currentData.email
+||
+currentUser?.email
+||
+"-";
+
+
+$("myInfoRank")
+.textContent=
+getRankText();
+
+
+$("myInfoPlan")
+.textContent=
+getPlanText();
+
+
+$("nicknameInput")
+.value=
+nickname;
+
+
+$("avatarEditBox")
+.classList
+.add("hidden");
+
+
+$("nicknameEditBox")
+.classList
+.add("hidden");
+
+
+show(
+"myInfoPage"
+);
+
+}
+
+
+function nicknameNextDate(){
+
+const value=
+currentData?.nicknameChangedAt;
+
+
+if(!value){
+
+return null;
+
+}
+
+
+let changed=null;
+
+
+if(
+value instanceof Timestamp
+){
+
+changed=value.toDate();
+
+}
+
+else if(
+value?.toDate
+){
+
+changed=value.toDate();
+
+}
+
+
+if(!changed){
+
+return null;
+
+}
+
+
+const next=
+new Date(changed);
+
+
+next.setDate(
+next.getDate()+30
+);
+
+
+return next;
+
+}
+
+
+function updateNicknameButton(){
+
+const next=
+nicknameNextDate();
+
+
+if(
+!next
+||
+new Date()>=next
+){
+
+$("changeNicknameBtn")
+.disabled=false;
+
+
+$("nicknameStatus")
+.textContent=
+"คุณสามารถเปลี่ยนชื่อเล่นได้";
+
+
+return;
+
+}
+
+
+$("changeNicknameBtn")
+.disabled=true;
+
+
+const diff=
+Math.ceil(
+
+(
+next-new Date()
+)
+
+/86400000
+
+);
+
+
+$("nicknameStatus")
+.textContent=
+`สามารถเปลี่ยนชื่อเล่นได้อีกครั้งในประมาณ ${diff} วัน`;
+
+}
+
+
+$("changeNicknameBtn").onclick=
+async()=>{
+
+if(
+!currentUser
+||
+!currentData
+){
+
+return;
+
+}
+
+
+const newName=
+$("nicknameInput")
+.value
+.trim();
+
+
+if(!newName){
+
+alert(
+"กรุณากรอกชื่อเล่น"
+);
+
+return;
+
+}
+
+
+if(
+newName===
+currentData.nickname
+){
+
+alert(
+"ชื่อเล่นยังเหมือนเดิม"
+);
+
+return;
+
+}
+
+
+const next=
+nicknameNextDate();
+
+
+if(
+next
+&&
+new Date()<next
+){
+
+alert(
+"ยังไม่ครบกำหนด 30 วันสำหรับการเปลี่ยนชื่อเล่น"
+);
+
+return;
+
+}
+
+
+const ok=
+confirm(
+
+`ยืนยันเปลี่ยนชื่อเล่นเป็น "${newName}" หรือไม่?
+
+หลังจากเปลี่ยนแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน`
+
+);
+
+
+if(!ok){
+
+return;
+
+}
+
+
+try{
+
+await updateDoc(
+
+doc(
+db,
+"users",
+currentUser.uid
+),
+
+{
+
+nickname:newName,
+
+nicknameChangedAt:
+serverTimestamp()
+
+}
+
+);
+
+
+currentData.nickname=
+newName;
+
+
+currentData.nicknameChangedAt=
+Timestamp.now();
+
+
+$("profileNickname")
+.textContent=
+newName;
+
+
+$("myInfoNickname")
+.textContent=
+newName;
+
+
+$("nicknameEditBox")
+.classList
+.add("hidden");
+
+
+alert(
+"เปลี่ยนชื่อเล่นเรียบร้อยแล้ว"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+
+alert(
+"ยังไม่สามารถบันทึกชื่อเล่นได้"
+);
+
+}
+
+};
+
+
+onAuthStateChanged(
+
+auth,
+
+async(user)=>{
+
+if(user){
+
+currentUser=user;
+
+
+try{
+
+await loadProfile(user);
+
+show(
+"homePage"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+show(
+"homePage"
+);
+
+}
+
+}
+
+else{
+
+currentUser=null;
+
+currentData=null;
+
+show(
+"loginPage"
+);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
