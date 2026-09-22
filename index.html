@@ -222,7 +222,32 @@ button:disabled{opacity:.55}
 <h2>เข้าสู่ระบบ</h2>
 
 <input id="loginEmail" type="email" placeholder="อีเมล">
-<input id="loginPassword" type="password" placeholder="รหัสผ่าน">
+<div style="position:relative;">
+  <input
+    id="loginPassword"
+    type="password"
+    placeholder="รหัสผ่าน"
+    style="padding-right:52px;"
+  >
+
+  <button
+    type="button"
+    id="toggleLoginPassword"
+    style="
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      width:38px;
+      height:38px;
+      padding:0;
+      margin:0;
+      background:transparent;
+      border:0;
+      font-size:22px;
+    "
+  >👁</button>
+</div> 
 
 <button class="primary" id="loginBtn">เข้าสู่ระบบ</button>
 <button class="secondary" id="goRegisterBtn">สมัครสมาชิก</button>
