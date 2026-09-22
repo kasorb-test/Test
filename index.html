@@ -246,7 +246,7 @@ button:disabled{opacity:.55}
       border:0;
       font-size:22px;
     "
-  >👁</button>
+  ></button>
 </div> 
 
 <button class="primary" id="loginBtn">เข้าสู่ระบบ</button>
@@ -1611,7 +1611,29 @@ show(
 }
 
 );
+const toggleLoginPassword = document.getElementById("toggleLoginPassword");
+const loginPassword = document.getElementById("loginPassword");
+const eyeIcon = document.getElementById("eyeIcon");
 
+if (toggleLoginPassword && loginPassword && eyeIcon) {
+  toggleLoginPassword.addEventListener("click", () => {
+    const isHidden = loginPassword.type === "password";
+
+    loginPassword.type = isHidden ? "text" : "password";
+
+    eyeIcon.innerHTML = isHidden
+      ? `
+        <path d="M3 3l18 18"></path>
+        <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+        <path d="M9.9 4.2A9.8 9.8 0 0 1 12 4c6.5 0 10 8 10 8a17.8 17.8 0 0 1-2.1 3.2"></path>
+        <path d="M6.6 6.6C3.9 8.4 2 12 2 12s3.5 8 10 8a9.7 9.7 0 0 0 4.2-.9"></path>
+      `
+      : `
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      `;
+  });
+}
 </script>
 
 </body>
