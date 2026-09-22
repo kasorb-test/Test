@@ -213,6 +213,107 @@ input{
   color:#333;
 }
 
+.sidebar-home{
+  margin-bottom:14px;
+}
+
+.sidebar-home .nav-btn{
+  background:#fff;
+  border:1px solid #ececec;
+  box-shadow:0 5px 16px rgba(0,0,0,.05);
+}
+
+.menu-group{
+  margin:10px 0;
+  border:1px solid #ececec;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 5px 16px rgba(0,0,0,.05);
+  overflow:hidden;
+}
+
+.group-toggle{
+  width:100%;
+  border:0;
+  background:#fff;
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:#333;
+  font-weight:700;
+  text-align:left;
+}
+
+.group-toggle:hover{
+  background:#fff8f2;
+}
+
+.group-toggle .group-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.group-toggle svg{
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.group-chevron{
+  transition:transform .18s ease;
+}
+
+.menu-group.open .group-chevron{
+  transform:rotate(180deg);
+}
+
+.submenu{
+  display:none;
+  padding:0 8px 8px;
+  border-top:1px solid #f2f2f2;
+  background:#fcfcfc;
+}
+
+.menu-group.open .submenu{
+  display:block;
+}
+
+.submenu .nav-btn{
+  position:relative;
+  padding:11px 12px 11px 30px;
+  border-radius:10px;
+  margin:5px 0;
+  font-size:14px;
+}
+
+.submenu .nav-btn.active{
+  background:#fff0e4;
+  color:#e86208;
+  box-shadow:inset 3px 0 0 #ff7417;
+}
+
+.sidebar-bottom{
+  display:grid;
+  gap:8px;
+}
+
+.sidebar-bottom .nav-btn{
+  background:#fff;
+  border:1px solid #ececec;
+  box-shadow:0 5px 16px rgba(0,0,0,.05);
+}
+
+.sidebar-bottom .logout-btn{
+  margin-top:8px;
+}
+
 .app-main{
   margin-left:var(--sidebar);
   min-height:100vh;
@@ -802,7 +903,7 @@ placeholder="ชื่อเล่น"
 id="regQuote"
 type="text"
 maxlength="50"
-placeholder="คำคม / วลีประจำตัว (ไม่บังคับ)"
+placeholder="คำคม / คำคม/คติประจำตัว (ไม่บังคับ)"
 >
 
 <h3>เลือกรูปโปรไฟล์</h3>
@@ -852,52 +953,96 @@ class="small"
 
 <div class="sidebar-menu">
 
-<button class="nav-btn active" data-page="homePage" data-title="หน้าหลัก">
-หน้าหลัก
-</button>
+<div class="sidebar-home">
+  <button class="nav-btn active" data-page="homePage" data-title="หน้าหลัก">
+    หน้าหลัก
+  </button>
+</div>
 
-<div class="sidebar-section">แบบทดสอบ</div>
+<div class="menu-group" data-group="tests">
+  <button class="group-toggle" type="button" data-toggle-group="tests">
+    <span class="group-left">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 4h16v16H4z"></path>
+        <path d="M8 9h8M8 13h8M8 17h5"></path>
+      </svg>
+      <span>แบบทดสอบ</span>
+    </span>
+    <svg class="group-chevron" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </button>
 
-<button class="nav-btn sub" data-page="subjectPage" data-title="แบบทดสอบรายวิชา">
-แบบทดสอบรายวิชา
-</button>
+  <div class="submenu">
+    <button class="nav-btn" data-page="subjectPage" data-title="แบบทดสอบรายวิชา">
+      แบบทดสอบรายวิชา
+    </button>
+    <button class="nav-btn" data-page="mockPage" data-title="แบบทดสอบเสมือนจริง">
+      แบบทดสอบเสมือนจริง
+    </button>
+  </div>
+</div>
 
-<button class="nav-btn sub" data-page="mockPage" data-title="แบบทดสอบเสมือนจริง">
-แบบทดสอบเสมือนจริง
-</button>
+<div class="menu-group" data-group="results">
+  <button class="group-toggle" type="button" data-toggle-group="results">
+    <span class="group-left">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 19V9"></path>
+        <path d="M10 19V5"></path>
+        <path d="M16 19v-7"></path>
+        <path d="M22 19H2"></path>
+      </svg>
+      <span>ผลการทดสอบ</span>
+    </span>
+    <svg class="group-chevron" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </button>
 
-<div class="sidebar-section">ผลการทดสอบ</div>
+  <div class="submenu">
+    <button class="nav-btn" data-page="scorePage" data-title="ภาพรวมผลการทดสอบ">
+      ภาพรวมผลการทดสอบ
+    </button>
+    <button class="nav-btn" data-page="historyPage" data-title="ประวัติการทำแบบทดสอบ">
+      ประวัติการทำแบบทดสอบ
+    </button>
+  </div>
+</div>
 
-<button class="nav-btn sub" data-page="scorePage" data-title="ภาพรวมผลการทดสอบ">
-ภาพรวมผลการทดสอบ
-</button>
+<div class="menu-group" data-group="account">
+  <button class="group-toggle" type="button" data-toggle-group="account">
+    <span class="group-left">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 21a8 8 0 0 0-16 0"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span>บัญชีของฉัน</span>
+    </span>
+    <svg class="group-chevron" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </button>
 
-<button class="nav-btn sub" data-page="historyPage" data-title="ประวัติการทำแบบทดสอบ">
-ประวัติการทำแบบทดสอบ
-</button>
-
-<div class="sidebar-section">บัญชีของฉัน</div>
-
-<button class="nav-btn sub" data-page="myInfoPage" data-title="ข้อมูลของฉัน">
-ข้อมูลของฉัน
-</button>
-
-<button class="nav-btn sub" data-page="premiumPage" data-title="สถานะสมาชิก">
-สถานะสมาชิก
-</button>
+  <div class="submenu">
+    <button class="nav-btn" data-page="myInfoPage" data-title="ข้อมูลของฉัน">
+      ข้อมูลของฉัน
+    </button>
+    <button class="nav-btn" data-page="premiumPage" data-title="สถานะสมาชิก">
+      สถานะสมาชิก
+    </button>
+  </div>
+</div>
 
 </div>
 
 <div class="sidebar-bottom">
+  <button class="nav-btn" id="contactAdminBtn" type="button">
+    ติดต่อแอดมิน
+  </button>
 
-<button class="nav-btn" id="contactAdminBtn" type="button">
-ติดต่อแอดมิน
-</button>
-
-<button class="nav-btn logout-btn" id="logoutBtn" type="button">
-ออกจากระบบ
-</button>
-
+  <button class="nav-btn logout-btn" id="logoutBtn" type="button">
+    ออกจากระบบ
+  </button>
 </div>
 
 </aside>
@@ -1487,7 +1632,7 @@ class="info-value"
 <div class="info-row">
 
 <div class="info-label">
-วลีประจำตัว
+คำคม/คติประจำตัว
 </div>
 
 <div
@@ -1496,6 +1641,18 @@ class="info-value"
 >
 -
 </div>
+
+<button
+id="showQuoteEditBtn"
+class="edit-inline"
+type="button"
+aria-label="แก้ไขคำคม/คติประจำตัว"
+>
+<svg viewBox="0 0 24 24">
+<path d="M12 20h9"></path>
+<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+</svg>
+</button>
 
 </div>
 
@@ -1566,6 +1723,43 @@ id="cancelNicknameEditBtn"
 
 </div>
 
+
+
+<div
+id="quoteEditBox"
+class="edit-box hidden"
+>
+
+<h3>
+แก้ไขคำคม/คติประจำตัว
+</h3>
+
+<input
+id="quoteInput"
+type="text"
+maxlength="50"
+placeholder="พิมพ์คำคมหรือคติประจำตัว"
+>
+
+<p class="small">
+สูงสุด 50 ตัวอักษร
+</p>
+
+<button
+class="btn primary"
+id="changeQuoteBtn"
+>
+บันทึกคำคม/คติประจำตัว
+</button>
+
+<button
+class="btn outline"
+id="cancelQuoteEditBtn"
+>
+ยกเลิก
+</button>
+
+</div>
 
 <div style="margin-top:22px">
 
@@ -2142,6 +2336,26 @@ $("logoutBtn").onclick=async()=>{
 };
 
 
+/* SIDEBAR GROUPS */
+
+document
+.querySelectorAll("[data-toggle-group]")
+.forEach(
+toggle=>{
+
+toggle.onclick=()=>{
+
+const group=
+toggle.closest(".menu-group");
+
+group.classList.toggle("open");
+
+};
+
+}
+);
+
+
 /* SIDEBAR */
 
 const sidebar=
@@ -2217,6 +2431,18 @@ btn.classList.toggle(
 "active",
 btn.dataset.page===pageId
 );
+
+
+if(btn.dataset.page===pageId){
+
+const parentGroup=
+btn.closest(".menu-group");
+
+if(parentGroup){
+  parentGroup.classList.add("open");
+}
+
+}
 
 }
 );
@@ -2613,6 +2839,11 @@ $("nicknameEditBox")
 .classList
 .add("hidden");
 
+
+$("quoteEditBox")
+.classList
+.add("hidden");
+
 }
 
 
@@ -2916,6 +3147,101 @@ console.error(error);
 
 alert(
 "ยังไม่สามารถบันทึกชื่อเล่นได้"
+);
+
+}
+
+};
+
+
+/* EDIT QUOTE */
+
+$("showQuoteEditBtn")
+.onclick=
+()=>{
+
+$("avatarEditBox")
+.classList
+.add("hidden");
+
+$("nicknameEditBox")
+.classList
+.add("hidden");
+
+$("quoteInput")
+.value=
+currentData?.quote
+||
+"";
+
+$("quoteEditBox")
+.classList
+.toggle("hidden");
+
+};
+
+
+$("cancelQuoteEditBtn")
+.onclick=
+()=>{
+
+$("quoteEditBox")
+.classList
+.add("hidden");
+
+};
+
+
+$("changeQuoteBtn")
+.onclick=
+async()=>{
+
+if(
+!currentUser
+||
+!currentData
+){
+return;
+}
+
+const newQuote=
+$("quoteInput")
+.value
+.trim();
+
+try{
+
+await updateDoc(
+doc(
+db,
+"users",
+currentUser.uid
+),
+{
+quote:newQuote
+}
+);
+
+currentData.quote=
+newQuote;
+
+renderProfile();
+renderMyInfo();
+
+$("quoteEditBox")
+.classList
+.add("hidden");
+
+alert(
+"บันทึกคำคม/คติประจำตัวเรียบร้อยแล้ว"
+);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"ยังไม่สามารถบันทึกคำคม/คติประจำตัวได้"
 );
 
 }
