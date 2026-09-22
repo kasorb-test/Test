@@ -172,6 +172,47 @@ input{
   font-weight:700;
 }
 
+.sidebar{
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar-menu{
+  flex:1;
+  overflow-y:auto;
+}
+
+.sidebar-section{
+  margin:18px 12px 7px;
+  color:#9a9a9a;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+}
+
+.nav-btn.sub{
+  padding-left:24px;
+}
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding-top:16px;
+  border-top:1px solid #eeeeee;
+}
+
+.sidebar-bottom .nav-btn{
+  margin:4px 0;
+}
+
+.sidebar-bottom .logout-btn{
+  color:#777;
+}
+
+.sidebar-bottom .logout-btn:hover{
+  background:#f5f5f5;
+  color:#333;
+}
+
 .app-main{
   margin-left:var(--sidebar);
   min-height:100vh;
@@ -246,6 +287,105 @@ input{
   color:#888;
   font-size:12px;
   margin-top:2px;
+}
+
+.top-progress{
+  margin-top:6px;
+  min-width:150px;
+}
+
+.top-progress-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:11px;
+  color:#777;
+  margin-bottom:4px;
+}
+
+.top-progress-track{
+  width:100%;
+  height:6px;
+  background:#eeeeee;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.top-progress-fill{
+  width:0%;
+  height:100%;
+  background:var(--orange);
+  border-radius:999px;
+  transition:width .2s ease;
+}
+
+
+.top-quote{
+  margin-top:6px;
+  max-width:240px;
+  font-size:11px;
+  color:#777;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.leader-quote{
+  margin-top:3px;
+  max-width:420px;
+  color:#888;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.my-rank-box{
+  margin-top:18px;
+  padding:16px;
+  background:#fff7ef;
+  border:1px solid #ffd8b8;
+  border-radius:14px;
+}
+
+.my-rank-title{
+  margin:0 0 10px;
+  font-size:14px;
+  color:#777;
+}
+
+.system-stats{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-top:18px;
+}
+
+.stat-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+}
+
+.stat-value{
+  font-size:24px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.stat-label{
+  margin-top:6px;
+  color:#777;
+  font-size:12px;
+}
+
+@media(max-width:800px){
+  .system-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
 }
 
 .content{
@@ -522,7 +662,23 @@ input{
   }
 
   .top-member-text{
-    display:none;
+    display:block;
+  }
+
+  .top-name{
+    font-size:13px;
+  }
+
+  .top-rank{
+    font-size:11px;
+  }
+
+  .top-progress{
+    min-width:110px;
+  }
+
+  .top-progress-row{
+    font-size:10px;
   }
 
   .content{
@@ -554,7 +710,7 @@ input{
 <main class="auth-main">
 
 <h1 class="brand-title">KASORB TEST</h1>
-<p class="subtitle">ระบบฝึกทำข้อสอบออนไลน์</p>
+<p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
 
 
 <section id="loginPage" class="card">
@@ -598,11 +754,19 @@ viewBox="0 0 24 24"
 เข้าสู่ระบบ
 </button>
 
-<button class="btn secondary" id="goRegisterBtn">
+<button
+class="btn"
+id="goRegisterBtn"
+style="background:#22c55e;color:white;font-weight:700;"
+>
 สมัครสมาชิก
 </button>
 
-<button class="btn outline" id="forgotBtn">
+<button
+class="btn"
+id="forgotBtn"
+style="background:#f3f4f6;color:#666;border:1px solid #e5e7eb;"
+>
 ลืมรหัสผ่าน
 </button>
 
@@ -632,6 +796,13 @@ id="regNickname"
 type="text"
 maxlength="20"
 placeholder="ชื่อเล่น"
+>
+
+<input
+id="regQuote"
+type="text"
+maxlength="50"
+placeholder="คำคม / วลีประจำตัว (ไม่บังคับ)"
 >
 
 <h3>เลือกรูปโปรไฟล์</h3>
@@ -676,56 +847,58 @@ class="small"
 
 <div class="sidebar-brand">
 <strong>KASORB TEST</strong>
-<span>ระบบฝึกทำข้อสอบออนไลน์</span>
+<span>ระบบฝึกทำแบบทดสอบออนไลน์</span>
 </div>
 
-<button
-class="nav-btn active"
-data-page="homePage"
-data-title="หน้าหลัก"
->
+<div class="sidebar-menu">
+
+<button class="nav-btn active" data-page="homePage" data-title="หน้าหลัก">
 หน้าหลัก
 </button>
 
-<button
-class="nav-btn"
-data-page="subjectPage"
-data-title="ข้อสอบแยกรายวิชา"
->
-ข้อสอบแยกรายวิชา
+<div class="sidebar-section">แบบทดสอบ</div>
+
+<button class="nav-btn sub" data-page="subjectPage" data-title="แบบทดสอบรายวิชา">
+แบบทดสอบรายวิชา
 </button>
 
-<button
-class="nav-btn"
-data-page="mockPage"
-data-title="ข้อสอบเสมือนจริง"
->
-ข้อสอบเสมือนจริง
+<button class="nav-btn sub" data-page="mockPage" data-title="แบบทดสอบเสมือนจริง">
+แบบทดสอบเสมือนจริง
 </button>
 
-<button
-class="nav-btn"
-data-page="historyPage"
-data-title="ประวัติการทำข้อสอบ"
->
-ประวัติการทำข้อสอบ
+<div class="sidebar-section">ผลการทดสอบ</div>
+
+<button class="nav-btn sub" data-page="scorePage" data-title="ภาพรวมผลการทดสอบ">
+ภาพรวมผลการทดสอบ
 </button>
 
-<button
-class="nav-btn"
-data-page="scorePage"
-data-title="คะแนนและ Level"
->
-คะแนน / Level
+<button class="nav-btn sub" data-page="historyPage" data-title="ประวัติการทำแบบทดสอบ">
+ประวัติการทำแบบทดสอบ
 </button>
 
-<button
-class="nav-btn"
-data-page="premiumPage"
-data-title="สมาชิก Premium"
->
-สมาชิก Premium
+<div class="sidebar-section">บัญชีของฉัน</div>
+
+<button class="nav-btn sub" data-page="myInfoPage" data-title="ข้อมูลของฉัน">
+ข้อมูลของฉัน
 </button>
+
+<button class="nav-btn sub" data-page="premiumPage" data-title="สถานะสมาชิก">
+สถานะสมาชิก
+</button>
+
+</div>
+
+<div class="sidebar-bottom">
+
+<button class="nav-btn" id="contactAdminBtn" type="button">
+ติดต่อแอดมิน
+</button>
+
+<button class="nav-btn logout-btn" id="logoutBtn" type="button">
+ออกจากระบบ
+</button>
+
+</div>
 
 </aside>
 
@@ -790,6 +963,18 @@ class="top-rank"
 ผู้ทดลองสอบ • Lv.0
 </div>
 
+<div class="top-progress">
+  <div class="top-progress-row">
+    <span>ความคืบหน้า</span>
+    <strong id="topProgressText">0%</strong>
+  </div>
+  <div class="top-progress-track">
+    <div id="topProgressFill" class="top-progress-fill"></div>
+  </div>
+</div>
+
+<div id="topQuote" class="top-quote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
+
 </div>
 
 </button>
@@ -812,49 +997,8 @@ class="app-page active"
 </h2>
 
 <p class="page-desc">
-เลือกหมวดข้อสอบที่ต้องการ
+ติดตามอันดับ ความคืบหน้า และสถิติการใช้งาน
 </p>
-
-
-<div class="grid-two">
-
-<div class="dashboard-card">
-
-<h3>ข้อสอบแยกรายวิชา</h3>
-
-<p>
-ฝึกทำข้อสอบแยกตามวิชาที่ใช้ในการสอบ
-</p>
-
-<button
-class="btn primary"
-id="homeSubjectBtn"
->
-เลือกวิชา
-</button>
-
-</div>
-
-
-<div class="dashboard-card">
-
-<h3>ข้อสอบเสมือนจริง</h3>
-
-<p>
-ฝึกทำข้อสอบตามสายงานและรูปแบบการสอบจริง
-</p>
-
-<button
-class="btn secondary"
-id="homeMockBtn"
->
-เลือกสายงาน
-</button>
-
-</div>
-
-</div>
-
 
 
 <div class="dashboard-card" style="margin-top:18px">
@@ -870,6 +1014,7 @@ id="homeMockBtn"
     <div>
       <div style="font-weight:700;">Nink</div>
       <div style="font-size:13px;color:#666;">ส.ต.อ. • Lv.4</div>
+      <div class="leader-quote">“พยายามวันนี้ เพื่อวันติดยศ”</div>
     </div>
   </div>
   <strong>8,420 XP</strong>
@@ -882,6 +1027,7 @@ id="homeMockBtn"
     <div>
       <div style="font-weight:700;">Ploy</div>
       <div style="font-size:13px;color:#666;">ส.ต.ท. • Lv.3</div>
+      <div class="leader-quote">“ค่อย ๆ ไป แต่ไม่หยุด”</div>
     </div>
   </div>
   <strong>7,980 XP</strong>
@@ -894,6 +1040,7 @@ id="homeMockBtn"
     <div>
       <div style="font-weight:700;">Jane</div>
       <div style="font-size:13px;color:#666;">ส.ต.ต. • Lv.2</div>
+      <div class="leader-quote">“ทำให้เต็มที่ในทุกข้อ”</div>
     </div>
   </div>
   <strong>7,250 XP</strong>
@@ -903,7 +1050,7 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">4</strong>
     <img src="avatar04.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Beam</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>Beam</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เป้าหมายมีไว้ไปให้ถึง”</div></div>
   </div>
   <strong>6,900 XP</strong>
 </div>
@@ -912,7 +1059,7 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">5</strong>
     <img src="avatar05.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Mint</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>Mint</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เก่งขึ้นทุกครั้งที่ลงมือทำ”</div></div>
   </div>
   <strong>6,520 XP</strong>
 </div>
@@ -921,7 +1068,7 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">6</strong>
     <img src="avatar06.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>First</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>First</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วินัยสำคัญกว่าแรงฮึด”</div></div>
   </div>
   <strong>6,100 XP</strong>
 </div>
@@ -930,7 +1077,7 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">7</strong>
     <img src="avatar07.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Film</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>Film</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วันนี้ต้องดีกว่าเมื่อวาน”</div></div>
   </div>
   <strong>5,860 XP</strong>
 </div>
@@ -939,7 +1086,7 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">8</strong>
     <img src="avatar08.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Ice</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>Ice</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“อ่านให้เข้าใจ ทำให้แม่น”</div></div>
   </div>
   <strong>5,500 XP</strong>
 </div>
@@ -948,7 +1095,7 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">9</strong>
     <img src="avatar09.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Bank</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>Bank</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น”</div></div>
   </div>
   <strong>5,120 XP</strong>
 </div>
@@ -957,24 +1104,49 @@ id="homeMockBtn"
   <div style="display:flex;align-items:center;gap:12px;">
     <strong style="width:28px;">10</strong>
     <img src="avatar10.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>May</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div></div>
+    <div><b>May</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ไม่หยุดจนกว่าจะสำเร็จ”</div></div>
   </div>
   <strong>4,850 XP</strong>
 </div> 
   </div>
 
-  <div
-    id="myLeaderboardRank"
-    style="
-      margin-top:18px;
-      padding:15px;
-      background:#fff7ef;
-      border-radius:12px;
-      display:none;
-    "
-  ></div>
+  <div id="myLeaderboardRank" class="my-rank-box">
+  <div class="my-rank-title">อันดับของฉัน</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+      <strong id="myRankNumber" style="width:42px;">—</strong>
+      <img id="myRankAvatar" src="avatar20.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+      <div style="min-width:0;">
+        <div id="myRankNickname" style="font-weight:700;">สมาชิก KASORB</div>
+        <div id="myRankLevel" style="font-size:13px;color:#666;">ผู้ทดลองสอบ • Lv.0</div>
+        <div id="myRankQuote" class="leader-quote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
+      </div>
+    </div>
+    <strong id="myRankXp">0 XP</strong>
+  </div>
+</div>
 
 </div>
+
+<div class="system-stats">
+  <div class="stat-card">
+    <div id="statQuestions" class="stat-value">—</div>
+    <div class="stat-label">จำนวนข้อทั้งหมด</div>
+  </div>
+  <div class="stat-card">
+    <div id="statMembers" class="stat-value">—</div>
+    <div class="stat-label">สมาชิกทั้งหมด</div>
+  </div>
+  <div class="stat-card">
+    <div id="statOnline" class="stat-value">—</div>
+    <div class="stat-label">กำลังใช้งาน</div>
+  </div>
+  <div class="stat-card">
+    <div id="statTestsToday" class="stat-value">—</div>
+    <div class="stat-label">ทำแบบทดสอบแล้ววันนี้</div>
+  </div>
+</div>
+
 </section>
 
 
@@ -986,11 +1158,11 @@ class="app-page"
 >
 
 <h2 class="page-heading">
-ข้อสอบแยกรายวิชา
+แบบทดสอบรายวิชา
 </h2>
 
 <p class="page-desc">
-เลือกวิชาที่ต้องการฝึกทำข้อสอบ
+เลือกวิชาที่ต้องการฝึกทำแบบทดสอบ
 </p>
 
 <div class="card">
@@ -1040,7 +1212,7 @@ class="app-page"
 >
 
 <h2 class="page-heading">
-ข้อสอบเสมือนจริง
+แบบทดสอบเสมือนจริง
 </h2>
 
 <p class="page-desc">
@@ -1086,15 +1258,15 @@ class="app-page"
 >
 
 <h2 class="page-heading">
-ประวัติการทำข้อสอบ
+ประวัติการทำแบบทดสอบ
 </h2>
 
 <p class="page-desc">
-รายการข้อสอบที่เคยทำ
+รายการแบบทดสอบที่เคยทำ
 </p>
 
 <div class="card placeholder">
-ยังไม่มีประวัติการทำข้อสอบ
+ยังไม่มีประวัติการทำแบบทดสอบ
 </div>
 
 </section>
@@ -1108,11 +1280,11 @@ class="app-page"
 >
 
 <h2 class="page-heading">
-คะแนนและ Level
+ภาพรวมผลการทดสอบ
 </h2>
 
 <p class="page-desc">
-ดูคะแนนสะสมและระดับปัจจุบัน
+สรุปผลการทดสอบ คะแนน XP ระดับ และความคืบหน้า
 </p>
 
 <div class="grid-two">
@@ -1157,16 +1329,16 @@ class="app-page"
 >
 
 <h2 class="page-heading">
-สมาชิก Premium
+สถานะสมาชิก
 </h2>
 
 <p class="page-desc">
-สิทธิ์สำหรับสมาชิก Premium
+สิทธิ์สำหรับสถานะสมาชิก
 </p>
 
 <div class="card">
 
-<p>• ชุดข้อสอบเพิ่มเติม</p>
+<p>• แบบทดสอบเพิ่มเติม</p>
 <p>• ทำแบบทดสอบซ้ำได้</p>
 <p>• แสดงผลคะแนน</p>
 <p>• เฉลยและคำอธิบาย</p>
@@ -1308,6 +1480,21 @@ id="myInfoPlan"
 class="info-value"
 >
 สมาชิกทั่วไป
+</div>
+
+</div>
+
+<div class="info-row">
+
+<div class="info-label">
+วลีประจำตัว
+</div>
+
+<div
+id="myInfoQuote"
+class="info-value"
+>
+-
 </div>
 
 </div>
@@ -1715,6 +1902,12 @@ $("regNickname")
 .trim();
 
 
+const quote=
+$("regQuote")
+.value
+.trim();
+
+
 $("registerMsg")
 .textContent="";
 
@@ -1772,6 +1965,8 @@ result.user.uid
 email:email,
 
 nickname:nickname,
+
+quote:quote,
 
 avatar:selectedRegisterAvatar,
 
@@ -1934,9 +2129,17 @@ alert(
 };
 
 
+/* CONTACT ADMIN */
+
+$("contactAdminBtn").onclick=()=>{
+  window.location.href="fb-messenger://user-thread/kasorb";
+};
+
 /* LOGOUT */
 
-$("logoutBtn")?.remove();
+$("logoutBtn").onclick=async()=>{
+  await signOut(auth);
+};
 
 
 /* SIDEBAR */
@@ -2049,25 +2252,6 @@ btn.dataset.title
 
 
 /* HOME NAV */
-
-$("homeSubjectBtn")
-.onclick=
-()=>showAppPage(
-"subjectPage",
-"ข้อสอบแยกรายวิชา"
-);
-
-
-$("homeMockBtn")
-.onclick=
-()=>showAppPage(
-"mockPage",
-"ข้อสอบเสมือนจริง"
-);
-
-
-
-
 /* TOP PROFILE */
 
 $("topProfileBtn")
@@ -2077,6 +2261,64 @@ $("topProfileBtn")
 "ข้อมูลของฉัน"
 );
 
+
+/*/* PROGRESS + SCORE + XP */
+
+function progressPercent(){
+  const value=Number(currentData?.progressPercent||0);
+  return Math.max(0,Math.min(100,value));
+}
+
+/*
+  คะแนนสะสมจากการทำชุดเดิม
+  ครั้งที่ 1 = คะแนนที่ทำได้เต็ม
+  ครั้งที่ 2 = 50%
+  ครั้งที่ 3 = 25%
+  ครั้งที่ 4 เป็นต้นไป = 1 คะแนน
+*/
+function calculateRepeatScore(correct,attemptNumber){
+  const score=Math.max(0,Number(correct||0));
+  const attempt=Math.max(1,Number(attemptNumber||1));
+
+  if(attempt===1) return score;
+  if(attempt===2) return score*0.5;
+  if(attempt===3) return score*0.25;
+  return 1;
+}
+
+/*
+  XP ใช้ระบบเดิมที่ตกลงไว้
+  - ชุดย่อย 20 ข้อ ครั้งแรก = (จำนวนข้อถูก x 4) + โบนัสทำจบ 20 XP
+  - ชุดเสมือนจริง 150 ข้อ ครั้งแรก = (% คะแนน x 2) + โบนัสทำจบ 50 XP
+  - ทำชุดเดิมซ้ำ ไม่รับ XP เต็มอีก
+    ให้ XP เฉพาะส่วนที่ทำคะแนนดีขึ้นจากสถิติเดิม
+*/
+function calculateQuizXP(correct,totalQuestions,attemptNumber=1,previousBestCorrect=0){
+  const correctNow=Math.max(0,Number(correct||0));
+  const total=Math.max(1,Number(totalQuestions||1));
+  const attempt=Math.max(1,Number(attemptNumber||1));
+
+  if(attempt===1){
+    if(total===20){
+      return (correctNow*4)+20;
+    }
+
+    if(total===150){
+      const percent=(correctNow/150)*100;
+      return (percent*2)+50;
+    }
+
+    return correctNow;
+  }
+
+  const improvement=Math.max(
+    0,
+    correctNow-Number(previousBestCorrect||0)
+  );
+
+  /* ทำซ้ำ: 1 XP ต่อข้อที่ทำได้ดีขึ้น */
+  return improvement;
+}
 
 /* RANK */
 
@@ -2149,7 +2391,7 @@ function planText(){
 
 return currentData?.plan==="premium"
 ?
-"สมาชิก Premium"
+"สถานะสมาชิก"
 :
 "สมาชิกทั่วไป";
 
@@ -2189,6 +2431,9 @@ user.email||"",
 nickname:
 "สมาชิก KASORB",
 
+quote:
+"",
+
 avatar:
 "avatar20.png",
 
@@ -2199,7 +2444,9 @@ level:0,
 
 score:0,
 
-xp:0
+xp:0,
+
+progressPercent:0
 
 };
 
@@ -2243,6 +2490,37 @@ nickname;
 $("topRank")
 .textContent=
 rank;
+
+
+const quote=
+currentData?.quote
+||
+"";
+
+$("topQuote")
+.textContent=
+quote
+?
+`“${quote}”`
+:
+"";
+
+$("myRankAvatar").src=avatar;
+$("myRankNickname").textContent=nickname;
+$("myRankLevel").textContent=rank;
+$("myRankQuote").textContent=quote ? `“${quote}”` : "";
+$("myRankXp").textContent=`${Number(currentData?.xp||0).toLocaleString()} XP`;
+
+
+const progress=progressPercent();
+
+$("topProgressText")
+.textContent=
+`${progress}%`;
+
+$("topProgressFill")
+.style.width=
+`${progress}%`;
 
 
 $("scoreValue")
@@ -2312,6 +2590,13 @@ rankText();
 $("myInfoPlan")
 .textContent=
 planText();
+
+
+$("myInfoQuote")
+.textContent=
+currentData?.quote
+||
+"-";
 
 
 $("nicknameInput")
