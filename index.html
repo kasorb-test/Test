@@ -208,6 +208,23 @@ input{
   color:#777;
 }
 
+.menu-inline{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.menu-inline svg{
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  flex:0 0 auto;
+}
+
 .sidebar-bottom .logout-btn:hover{
   background:#f5f5f5;
   color:#333;
@@ -357,14 +374,17 @@ input{
   display:flex;
   align-items:center;
   gap:10px;
-  border:0;
-  background:transparent;
-  border-radius:12px;
-  padding:6px 8px;
+  border:1px solid #e9e9e9;
+  background:#fff;
+  border-radius:16px;
+  padding:8px 12px;
+  min-width:285px;
+  box-shadow:0 5px 16px rgba(0,0,0,.05);
 }
 
 .member-top:hover{
-  background:#f7f7f7;
+  background:#fffaf6;
+  border-color:#ffd6b8;
 }
 
 .top-avatar{
@@ -766,6 +786,11 @@ input{
     display:block;
   }
 
+  .member-top{
+    min-width:220px;
+    padding:7px 9px;
+  }
+
   .top-name{
     font-size:13px;
   }
@@ -955,7 +980,14 @@ class="small"
 
 <div class="sidebar-home">
   <button class="nav-btn active" data-page="homePage" data-title="หน้าหลัก">
-    หน้าหลัก
+    <span class="menu-inline">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 11.5 12 4l9 7.5"></path>
+        <path d="M5.5 10.5V20h13v-9.5"></path>
+        <path d="M9.5 20v-5h5v5"></path>
+      </svg>
+      <span>หน้าหลัก</span>
+    </span>
   </button>
 </div>
 
@@ -1037,11 +1069,24 @@ class="small"
 
 <div class="sidebar-bottom">
   <button class="nav-btn" id="contactAdminBtn" type="button">
-    ติดต่อแอดมิน
+    <span class="menu-inline">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path>
+        <path d="M8 12h.01M12 12h.01M16 12h.01"></path>
+      </svg>
+      <span>ติดต่อเรา</span>
+    </span>
   </button>
 
   <button class="nav-btn logout-btn" id="logoutBtn" type="button">
-    ออกจากระบบ
+    <span class="menu-inline">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M10 4H5v16h5"></path>
+        <path d="M14 8l4 4-4 4"></path>
+        <path d="M8 12h10"></path>
+      </svg>
+      <span>ออกจากระบบ</span>
+    </span>
   </button>
 </div>
 
@@ -1478,23 +1523,54 @@ class="app-page"
 </h2>
 
 <p class="page-desc">
-สิทธิ์สำหรับสถานะสมาชิก
+ตรวจสอบสถานะและสิทธิ์ของบัญชีสมาชิก
 </p>
 
 <div class="card">
 
-<p>• แบบทดสอบเพิ่มเติม</p>
-<p>• ทำแบบทดสอบซ้ำได้</p>
-<p>• แสดงผลคะแนน</p>
-<p>• เฉลยและคำอธิบาย</p>
-<p>• เอกสารประกอบ PDF</p>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+  <div>
+    <div style="font-size:14px;color:#888;margin-bottom:6px;">สถานะปัจจุบัน</div>
+    <div id="membershipBadge" style="display:inline-block;padding:7px 12px;border-radius:999px;font-weight:700;background:#f2f2f2;color:#555;">
+      FREE
+    </div>
+  </div>
 
-<button
-class="btn primary"
-id="premiumContactBtn"
->
-ดูสถานะสมาชิก
-</button>
+  <button
+    class="btn primary"
+    id="upgradePremiumBtn"
+    style="width:auto;min-width:210px;margin-top:0;"
+  >
+    อัปเกรดเป็น PREMIUM
+  </button>
+</div>
+
+<div id="membershipFreeBox" style="margin-top:22px;">
+  <h3 style="margin-bottom:8px;">สมาชิก FREE</h3>
+  <p style="color:#777;line-height:1.7;margin-top:0;">
+    ใช้งานแบบทดสอบฟรีได้ตามสิทธิ์ของบัญชี
+  </p>
+
+  <div style="margin-top:16px;line-height:1.9;">
+    <div>• แบบทดสอบฟรี</div>
+    <div>• บันทึกประวัติการทำแบบทดสอบ</div>
+    <div>• สะสมคะแนน XP และ Level</div>
+  </div>
+</div>
+
+<div id="membershipPremiumBox" class="hidden" style="margin-top:22px;">
+  <h3 style="margin-bottom:8px;">สมาชิก PREMIUM</h3>
+  <p style="color:#777;line-height:1.7;margin-top:0;">
+    ปลดล็อกสิทธิ์ Premium ของบัญชีแล้ว
+  </p>
+
+  <div style="margin-top:16px;line-height:1.9;">
+    <div>• แบบทดสอบ Premium</div>
+    <div>• ทำแบบทดสอบซ้ำได้</div>
+    <div>• เฉลยและคำอธิบาย</div>
+    <div>• เอกสารประกอบ PDF</div>
+  </div>
+</div>
 
 </div>
 
@@ -2459,6 +2535,14 @@ renderMyInfo();
 
 }
 
+if(
+pageId==="premiumPage"
+){
+
+renderMembershipStatus();
+
+}
+
 }
 
 
@@ -2680,6 +2764,7 @@ progressPercent:0
 
 
 renderProfile();
+renderMembershipStatus();
 
 }
 
@@ -3286,15 +3371,67 @@ alert(
 };
 
 
-/* PREMIUM STATUS */
+/* MEMBERSHIP STATUS */
 
-$("premiumContactBtn")
+function renderMembershipStatus(){
+
+const isPremium=
+currentData?.plan==="premium";
+
+$("membershipBadge")
+.textContent=
+isPremium
+?
+"PREMIUM"
+:
+"FREE";
+
+$("membershipBadge")
+.style.background=
+isPremium
+?
+"#fff0e4"
+:
+"#f2f2f2";
+
+$("membershipBadge")
+.style.color=
+isPremium
+?
+"#e86208"
+:
+"#555";
+
+$("membershipFreeBox")
+.classList
+.toggle(
+"hidden",
+isPremium
+);
+
+$("membershipPremiumBox")
+.classList
+.toggle(
+"hidden",
+!isPremium
+);
+
+$("upgradePremiumBtn")
+.classList
+.toggle(
+"hidden",
+isPremium
+);
+
+}
+
+
+$("upgradePremiumBtn")
 .onclick=
 ()=>{
 
-alert(
-planText()
-);
+window.location.href=
+"fb-messenger://user-thread/kasorb";
 
 };
 
