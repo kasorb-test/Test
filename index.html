@@ -1201,9 +1201,31 @@ input{
   }
 }
 
+
+/* Non-blocking status messages */
+#kasorbToast{position:fixed;right:22px;bottom:22px;z-index:99999;max-width:360px;padding:10px 14px;border-radius:10px;background:#fff;border:1px solid #eadfd6;box-shadow:0 8px 24px rgba(0,0,0,.10);font-size:13px;font-weight:700;color:#4b5563;opacity:0;transform:translateY(8px);pointer-events:none;transition:.18s ease}
+#kasorbToast.show{opacity:1;transform:translateY(0)}
+.save-status{min-height:18px;margin:7px 0 4px;color:#16834a;font-weight:700}
+#confirmAvatarEditBtn{margin-top:12px}
 </style>
 </head>
 <body>
+
+<script>
+(function(){
+const toast=document.createElement("div");
+toast.id="kasorbToast";
+document.body.appendChild(toast);
+let timer=null;
+window.alert=function(message){
+toast.textContent=String(message ?? "");
+toast.classList.add("show");
+clearTimeout(timer);
+timer=setTimeout(()=>toast.classList.remove("show"),2200);
+};
+})();
+</script>
+
 <!-- AUTH -->
 <div id="authShell">
 <main class="auth-main">
@@ -1703,7 +1725,9 @@ input{
 เปลี่ยนรูปโปรไฟล์
 </h3>
 <div class="avatar-grid" id="accountAvatarGrid"></div>
-<button class="btn outline" id="cancelAvatarEditBtn">
+<button class="btn primary" id="confirmAvatarEditBtn" type="button">ยืนยันการเปลี่ยนรูป</button>
+<p class="small save-status" id="avatarSaveStatus"></p>
+<button class="btn outline" id="cancelAvatarEditBtn" type="button">
 ยกเลิก
 </button>
 </div>
@@ -1855,6 +1879,7 @@ let currentData=null;
 
 /* สมาชิกใหม่ที่ไม่กดเลือกรูป ใช้ avatar20 */
 let selectedRegisterAvatar="avatar20.png";
+let selectedAccountAvatar=null;
 
 
 const avatarFiles=
@@ -2008,66 +2033,13 @@ item.classList
 .add("selected");
 
 
-if(
-type==="register"
-){
-
+if(type==="register"){
 selectedRegisterAvatar=file;
-
 return;
-
 }
-
-
-if(!currentUser){
-
-return;
-
-}
-
-
-try{
-
-await updateDoc(
-
-doc(
-db,
-"users",
-currentUser.uid
-),
-
-{
-avatar:file
-}
-
-);
-
-
-currentData.avatar=file;
-
-
-renderProfile();
-
-
-$("avatarEditBox")
-.classList
-.add("hidden");
-
-
-alert(
-"เปลี่ยนรูปโปรไฟล์เรียบร้อยแล้ว"
-);
-
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"ยังไม่สามารถบันทึกรูปโปรไฟล์ได้"
-);
-
-}
+selectedAccountAvatar=file;
+const avatarStatus=$("avatarSaveStatus");
+if(avatarStatus){avatarStatus.textContent="เลือกรูปแล้ว กด “ยืนยันการเปลี่ยนรูป” เพื่อบันทึก";}
 
 };
 
@@ -2883,6 +2855,27 @@ $("avatarEditBox")
 .classList
 .toggle("hidden");
 
+};
+
+
+$("confirmAvatarEditBtn")
+.onclick=
+async()=>{
+if(!currentUser || !selectedAccountAvatar){return;}
+const status=$("avatarSaveStatus");
+try{
+await updateDoc(doc(db,"users",currentUser.uid),{avatar:selectedAccountAvatar});
+currentData.avatar=selectedAccountAvatar;
+renderProfile();
+if(status){
+status.textContent="บันทึกแล้ว";
+setTimeout(()=>{if(status.textContent==="บันทึกแล้ว")status.textContent="";},1800);
+}
+setTimeout(()=>{$("avatarEditBox").classList.add("hidden");},450);
+}catch(error){
+console.error(error);
+if(status){status.textContent="บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง";}
+}
 };
 
 
