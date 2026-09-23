@@ -54,7 +54,6 @@ button,input{
 
 button{
   cursor:pointer;
-
 }
 
 .auth-main{
@@ -979,11 +978,8 @@ input{
 
 /* KASORB header redesign V9 */
 .topbar{
-  display:flex;
-  justify-content:flex-end;
-  align-items:flex-start;
-  padding:14px 24px 18px;
-  min-height:0;
+  display:grid;grid-template-columns:1fr;gap:12px;
+  align-items:stretch;padding:14px 24px 18px;min-height:0;
 }
 .topbar-left{width:100%;display:block}
 .top-caption-box{
@@ -1211,51 +1207,35 @@ input{
 #kasorbToast.show{opacity:1;transform:translateY(0)}
 .save-status{min-height:18px;margin:7px 0 4px;color:#16834a;font-weight:700}
 #confirmAvatarEditBtn{margin-top:12px}
-#confirmAvatarEditBtn{margin-top:12px}
 
+/* ===== KASORB TOP-RIGHT FINAL OVERRIDE ===== */
+.today-news{display:none !important;}
+.topbar{
+  display:block !important;
+  position:relative !important;
+  padding:12px 24px 14px !important;
+}
 .topbar-second-row{
   display:flex !important;
-  justify-content:flex-end !important;
-  align-items:center !important;
   width:100% !important;
-}
-
-.topbar-second-row .member-top{
-  margin-left:auto !important;
-  margin-right:0 !important;
-}
-
-} 
-/* RIGHT SIDEBAR */
-.right-sidebar{
-position:fixed;
-  top:0;
-  right:0;
-  margin:0 !important;
-  left:auto !important;
-  width:320px;
-  height:100vh;
-  background:#fff;
-  border-left:1px solid #e9e9e9;
-  box-sizing:border-box;
-  z-index:20;
-}
-  .right-sidebar .member-top{
-  width:100% !important;
-  margin:0 !important;
-}
-
- .topbar-second-row{
-  display:flex !important;
   justify-content:flex-end !important;
   align-items:flex-start !important;
-  width:100% !important;
-  margin:0 !important;
+  gap:0 !important;
 }
-
-.topbar-second-row .member-top{
-  margin-left:auto !important;
-  margin-right:0 !important;
+.topbar-second-row > .member-top{
+  margin:0 0 0 auto !important;
+  justify-self:auto !important;
+  flex:0 0 360px !important;
+  width:360px !important;
+  max-width:360px !important;
+}
+@media (max-width:760px){
+  .topbar{padding:10px 12px 12px !important;}
+  .topbar-second-row > .member-top{
+    flex:1 1 auto !important;
+    width:100% !important;
+    max-width:none !important;
+  }
 }
 </style>
 </head>
@@ -1444,40 +1424,29 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <div class="top-caption-main">I WANNA BE A POLICE OFFICER</div>
 </div>
 </div>
-<!-- USER INFO TOP RIGHT -->  
-<aside class="right-sidebar">
-
-  
-  <button class="member-top" id="topProfileBtn" type="button">
-  <img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar01.png">
-
-  <div class="top-member-text">
-    <div class="top-name" id="topNickname">สมาชิก KASORB</div>
-    <div class="top-rank" id="topRank">ผู้ทดลองสอบ • Lv.0</div>
-    <div class="top-quote" id="topQuote">“ตั้งใจวันนี้ให้ดีที่สุด”</div>
-  </div>
-
-  <div class="top-progress">
-    <div class="top-progress-row">
-      <span>ความคืบหน้า</span>
-      <strong id="topProgressText">0%</strong>
-    </div>
-
-    <div class="top-progress-track">
-      <div class="top-progress-fill"></div>
-    </div>
-  </div>
-</button>
-</aside>  
-  
 <div class="topbar-second-row">
-
-
+<section class="today-news" aria-label="ข่าวสารวันนี้">
+<div class="today-news-title">ข่าวสารวันนี้</div>
+<div class="today-news-placeholder">พื้นที่สำหรับประกาศและข้อมูลอัปเดต</div>
+</section>
+<button class="member-top" id="topProfileBtn" type="button">
+<img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar20.png"/>
+<div class="top-member-text">
+<div class="top-name" id="topNickname">สมาชิก KASORB</div>
+<div class="top-rank" id="topRank">ผู้ทดลองสอบ • Lv.0</div>
+<div class="top-quote" id="topQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
+</div>
+<div class="top-progress">
+<div class="top-progress-row">
+<span>ฝึกแบบทดสอบถึงไหนแล้ว</span>
+<strong id="topProgressText">0%</strong>
+</div>
+<div class="top-progress-track"><div class="top-progress-fill" id="topProgressFill"></div></div>
+</div>
+</button>
+</div>
 </header>
 <main class="content">
-
-
-  
 <!-- HOME -->
 <section class="app-page active" id="homePage">
 <h2 class="page-heading">
