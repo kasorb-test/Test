@@ -922,6 +922,60 @@ input{
   .top-progress{min-width:150px}
   .top-quote{font-size:12px;max-width:210px}
 }
+
+/* KASORB profile emphasis V8 */
+.member-top{
+  min-width:500px;
+  max-width:560px;
+  padding:16px 20px;
+  gap:18px;
+  border:1px solid #dfe4ea;
+  border-radius:20px;
+  box-shadow:0 12px 30px rgba(20,34,60,.14);
+}
+.top-avatar{
+  width:92px;height:92px;flex:0 0 92px;
+  border:3px solid #fff;
+  box-shadow:0 5px 16px rgba(0,0,0,.18);
+}
+.top-member-text{flex:1;min-width:0}
+.top-name{font-size:20px;font-weight:900;color:#16243a;line-height:1.2}
+.top-rank{
+  margin-top:7px;padding:6px 12px;
+  font-size:14px;font-weight:900;
+  border:1px solid #ffb777;
+  box-shadow:0 4px 12px rgba(232,98,8,.18),0 0 10px rgba(255,183,119,.18);
+}
+.top-progress{margin-top:11px;min-width:290px}
+.top-progress-row{font-size:13px;font-weight:700}
+.top-progress-row strong{font-size:14px;color:#15803d}
+.top-progress-track{height:9px;background:#e9ecef}
+.top-progress-fill{background:#22c55e;box-shadow:0 0 9px rgba(34,197,94,.42)}
+.top-quote{
+  margin-top:9px;max-width:none;
+  font-size:14px;font-weight:900;line-height:1.4;
+  color:#102f59;
+  white-space:normal;overflow:visible;text-overflow:clip;
+  text-shadow:0 1px 0 rgba(255,255,255,.95),0 2px 5px rgba(16,47,89,.22),0 0 8px rgba(55,105,170,.10);
+}
+.my-rank-box .leader-quote{
+  color:#102f59;font-size:14px;font-weight:900;line-height:1.45;
+  white-space:normal;overflow:visible;text-overflow:clip;
+  text-shadow:0 1px 0 rgba(255,255,255,.95),0 2px 5px rgba(16,47,89,.20),0 0 8px rgba(55,105,170,.10);
+}
+.my-rank-box .rank-badge{
+  font-size:14px;padding:8px 14px;
+  box-shadow:0 4px 12px rgba(232,98,8,.18),0 0 10px rgba(255,183,119,.16);
+}
+@media(max-width:800px){
+  .member-top{min-width:0;width:min(100%,460px);padding:13px 14px;gap:12px}
+  .top-avatar{width:70px;height:70px;flex-basis:70px}
+  .top-name{font-size:17px}
+  .top-rank{font-size:12px;padding:5px 9px}
+  .top-progress{min-width:0}
+  .top-quote{font-size:12.5px;max-width:none}
+}
+
 </style>
 </head>
 <body>
