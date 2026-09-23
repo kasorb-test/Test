@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <title>KASORB TEST</title>
-
 <style>
 *{box-sizing:border-box}
 
@@ -874,1040 +874,656 @@ input{
   }
 }
 
+
+/* KASORB profile emphasis V7 */
+.member-top{
+  min-width:360px;
+  padding:16px 18px;
+  gap:15px;
+  border:1px solid #e2e5ea;
+  border-radius:18px;
+  box-shadow:0 9px 24px rgba(20,34,60,.11);
+}
+.top-avatar{width:54px;height:54px;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.14)}
+.top-name{font-size:16px;font-weight:800;color:#1e293b}
+.top-rank{
+  display:inline-flex;align-items:center;
+  margin-top:6px;padding:5px 10px;
+  border:1px solid #ffc18f;border-radius:999px;
+  background:#fff5ec;color:#d85b08;
+  font-size:13px;font-weight:800;
+  box-shadow:0 3px 9px rgba(232,98,8,.12);
+}
+.top-progress{margin-top:10px;min-width:205px}
+.top-progress-row{font-size:12px;font-weight:600;color:#596273}
+.top-progress-row strong{font-size:13px;color:#26354d}
+.top-progress-track{height:8px}
+.top-quote{
+  margin-top:8px;max-width:280px;
+  font-size:13px;font-weight:800;color:#17365d;
+}
+.leader-quote{color:#17365d;font-weight:800;font-size:12.5px}
+.rank-badge{
+  display:inline-flex;flex:0 0 auto;align-items:center;
+  padding:7px 12px;border:1px solid #ffc18f;border-radius:999px;
+  background:#fff5ec;color:#d85b08;font-weight:800;
+  box-shadow:0 3px 9px rgba(232,98,8,.12);
+}
+.my-rank-box{box-shadow:0 7px 18px rgba(232,98,8,.10)}
+.my-rank-box .leader-quote{color:#17365d;font-weight:800}
+/* Editors appear directly beneath the item being edited */
+#myInfoPage .edit-box{margin:8px 0 14px}
+#avatarEditBox{margin-top:14px;text-align:left}
+@media(max-width:800px){
+  .member-top{min-width:0;width:auto;padding:12px 13px;gap:10px}
+  .top-avatar{width:48px;height:48px}
+  .top-name{font-size:14px}
+  .top-rank{font-size:12px;padding:4px 8px}
+  .top-progress{min-width:150px}
+  .top-quote{font-size:12px;max-width:210px}
+}
 </style>
 </head>
-
 <body>
-
-
 <!-- AUTH -->
-
 <div id="authShell">
-
 <main class="auth-main">
-
 <h1 class="brand-title">KASORB TEST</h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
-
-
-<section id="loginPage" class="card">
-
+<section class="card" id="loginPage">
 <h2>เข้าสู่ระบบ</h2>
-
-<input
-id="loginEmail"
-type="email"
-placeholder="อีเมล"
->
-
+<input id="loginEmail" placeholder="อีเมล" type="email"/>
 <div class="password-wrap">
-
-<input
-id="loginPassword"
-type="password"
-placeholder="รหัสผ่าน"
->
-
-<button
-type="button"
-id="toggleLoginPassword"
-class="password-eye"
-aria-label="แสดงหรือซ่อนรหัสผ่าน"
->
-
-<svg
-id="eyeIcon"
-viewBox="0 0 24 24"
->
+<input id="loginPassword" placeholder="รหัสผ่าน" type="password"/>
+<button aria-label="แสดงหรือซ่อนรหัสผ่าน" class="password-eye" id="toggleLoginPassword" type="button">
+<svg id="eyeIcon" viewbox="0 0 24 24">
 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
 <circle cx="12" cy="12" r="3"></circle>
 </svg>
-
 </button>
-
 </div>
-
 <button class="btn primary" id="loginBtn">
 เข้าสู่ระบบ
 </button>
-
-<button
-class="btn"
-id="goRegisterBtn"
-style="background:#22c55e;color:white;font-weight:700;"
->
+<button class="btn" id="goRegisterBtn" style="background:#22c55e;color:white;font-weight:700;">
 สมัครสมาชิก
 </button>
-
-<button
-class="btn"
-id="forgotBtn"
-style="background:#f3f4f6;color:#666;border:1px solid #e5e7eb;"
->
+<button class="btn" id="forgotBtn" style="background:#f3f4f6;color:#666;border:1px solid #e5e7eb;">
 ลืมรหัสผ่าน
 </button>
-
-<p id="loginMsg" class="small"></p>
-
+<p class="small" id="loginMsg"></p>
 </section>
-
-
-<section id="registerPage" class="card hidden">
-
+<section class="card hidden" id="registerPage">
 <h2>สมัครสมาชิก</h2>
-
-<input
-id="regEmail"
-type="email"
-placeholder="อีเมล"
->
-
-<input
-id="regPassword"
-type="password"
-placeholder="รหัสผ่านอย่างน้อย 6 ตัว"
->
-
-<input
-id="regNickname"
-type="text"
-maxlength="20"
-placeholder="ชื่อเล่น"
->
-
-<input
-id="regQuote"
-type="text"
-maxlength="50"
-placeholder="คำคม / คำคม/คติประจำตัว (ไม่บังคับ)"
->
-
+<input id="regEmail" placeholder="อีเมล" type="email"/>
+<input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password"/>
+<input id="regNickname" maxlength="20" placeholder="ชื่อเล่น" type="text"/>
+<input id="regQuote" maxlength="50" placeholder="คำคม / คำคม/คติประจำตัว (ไม่บังคับ)" type="text"/>
 <h3>เลือกรูปโปรไฟล์</h3>
-
-<div
-id="registerAvatarGrid"
-class="avatar-grid"
-></div>
-
-<button
-class="btn primary"
-id="registerBtn"
->
+<div class="avatar-grid" id="registerAvatarGrid"></div>
+<button class="btn primary" id="registerBtn">
 สร้างบัญชี
 </button>
-
-<button
-class="btn secondary"
-id="backLoginBtn"
->
+<button class="btn secondary" id="backLoginBtn">
 กลับหน้าเข้าสู่ระบบ
 </button>
-
-<p
-id="registerMsg"
-class="small"
-></p>
-
+<p class="small" id="registerMsg"></p>
 </section>
-
 </main>
-
 </div>
-
-
 <!-- APP -->
-
-<div id="appShell" class="hidden">
-
-
-<aside id="sidebar" class="sidebar">
-
+<div class="hidden" id="appShell">
+<aside class="sidebar" id="sidebar">
 <div class="sidebar-brand">
 <strong>KASORB TEST</strong>
 <span>ระบบฝึกทำแบบทดสอบออนไลน์</span>
 </div>
-
 <div class="sidebar-menu">
-
 <div class="sidebar-home">
-  <button class="nav-btn active" data-page="homePage" data-title="หน้าหลัก">
-    <span class="menu-inline">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 11.5 12 4l9 7.5"></path>
-        <path d="M5.5 10.5V20h13v-9.5"></path>
-        <path d="M9.5 20v-5h5v5"></path>
-      </svg>
-      <span>หน้าหลัก</span>
-    </span>
-  </button>
+<button class="nav-btn active" data-page="homePage" data-title="หน้าหลัก">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M3 11.5 12 4l9 7.5"></path>
+<path d="M5.5 10.5V20h13v-9.5"></path>
+<path d="M9.5 20v-5h5v5"></path>
+</svg>
+<span>หน้าหลัก</span>
+</span>
+</button>
 </div>
-
 <div class="menu-group" data-group="tests">
-  <button class="group-toggle" type="button" data-toggle-group="tests">
-    <span class="group-left">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 4h16v16H4z"></path>
-        <path d="M8 9h8M8 13h8M8 17h5"></path>
-      </svg>
-      <span>แบบทดสอบ</span>
-    </span>
-    <svg class="group-chevron" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="m6 9 6 6 6-6"></path>
-    </svg>
-  </button>
-
-  <div class="submenu">
-    <button class="nav-btn" data-page="subjectPage" data-title="แบบทดสอบรายวิชา">
+<button class="group-toggle" data-toggle-group="tests" type="button">
+<span class="group-left">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M4 4h16v16H4z"></path>
+<path d="M8 9h8M8 13h8M8 17h5"></path>
+</svg>
+<span>แบบทดสอบ</span>
+</span>
+<svg aria-hidden="true" class="group-chevron" viewbox="0 0 24 24">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</button>
+<div class="submenu">
+<button class="nav-btn" data-page="subjectPage" data-title="แบบทดสอบรายวิชา">
       แบบทดสอบรายวิชา
     </button>
-    <button class="nav-btn" data-page="mockPage" data-title="แบบทดสอบเสมือนจริง">
+<button class="nav-btn" data-page="mockPage" data-title="แบบทดสอบเสมือนจริง">
       แบบทดสอบเสมือนจริง
     </button>
-  </div>
 </div>
-
+</div>
 <div class="menu-group" data-group="results">
-  <button class="group-toggle" type="button" data-toggle-group="results">
-    <span class="group-left">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 19V9"></path>
-        <path d="M10 19V5"></path>
-        <path d="M16 19v-7"></path>
-        <path d="M22 19H2"></path>
-      </svg>
-      <span>ผลการทดสอบ</span>
-    </span>
-    <svg class="group-chevron" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="m6 9 6 6 6-6"></path>
-    </svg>
-  </button>
-
-  <div class="submenu">
-    <button class="nav-btn" data-page="scorePage" data-title="ภาพรวมผลการทดสอบ">
+<button class="group-toggle" data-toggle-group="results" type="button">
+<span class="group-left">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M4 19V9"></path>
+<path d="M10 19V5"></path>
+<path d="M16 19v-7"></path>
+<path d="M22 19H2"></path>
+</svg>
+<span>ผลการทดสอบ</span>
+</span>
+<svg aria-hidden="true" class="group-chevron" viewbox="0 0 24 24">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</button>
+<div class="submenu">
+<button class="nav-btn" data-page="scorePage" data-title="ภาพรวมผลการทดสอบ">
       ภาพรวมผลการทดสอบ
     </button>
-    <button class="nav-btn" data-page="historyPage" data-title="ประวัติการทำแบบทดสอบ">
+<button class="nav-btn" data-page="historyPage" data-title="ประวัติการทำแบบทดสอบ">
       ประวัติการทำแบบทดสอบ
     </button>
-  </div>
 </div>
-
+</div>
 <div class="menu-group" data-group="account">
-  <button class="group-toggle" type="button" data-toggle-group="account">
-    <span class="group-left">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20 21a8 8 0 0 0-16 0"></path>
-        <circle cx="12" cy="7" r="4"></circle>
-      </svg>
-      <span>บัญชีของฉัน</span>
-    </span>
-    <svg class="group-chevron" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="m6 9 6 6 6-6"></path>
-    </svg>
-  </button>
-
-  <div class="submenu">
-    <button class="nav-btn" data-page="myInfoPage" data-title="ข้อมูลของฉัน">
+<button class="group-toggle" data-toggle-group="account" type="button">
+<span class="group-left">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M20 21a8 8 0 0 0-16 0"></path>
+<circle cx="12" cy="7" r="4"></circle>
+</svg>
+<span>บัญชีของฉัน</span>
+</span>
+<svg aria-hidden="true" class="group-chevron" viewbox="0 0 24 24">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</button>
+<div class="submenu">
+<button class="nav-btn" data-page="myInfoPage" data-title="ข้อมูลของฉัน">
       ข้อมูลของฉัน
     </button>
-    <button class="nav-btn" data-page="premiumPage" data-title="สถานะสมาชิก">
+<button class="nav-btn" data-page="premiumPage" data-title="สถานะสมาชิก">
       สถานะสมาชิก
     </button>
-  </div>
 </div>
-
 </div>
-
+</div>
 <div class="sidebar-bottom">
-  <button class="nav-btn" id="contactAdminBtn" type="button">
-    <span class="menu-inline">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path>
-        <path d="M8 12h.01M12 12h.01M16 12h.01"></path>
-      </svg>
-      <span>ติดต่อเรา</span>
-    </span>
-  </button>
-
-  <button class="nav-btn logout-btn" id="logoutBtn" type="button">
-    <span class="menu-inline">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M10 4H5v16h5"></path>
-        <path d="M14 8l4 4-4 4"></path>
-        <path d="M8 12h10"></path>
-      </svg>
-      <span>ออกจากระบบ</span>
-    </span>
-  </button>
+<button class="nav-btn" id="contactAdminBtn" type="button">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path>
+<path d="M8 12h.01M12 12h.01M16 12h.01"></path>
+</svg>
+<span>ติดต่อเรา</span>
+</span>
+</button>
+<button class="nav-btn logout-btn" id="logoutBtn" type="button">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M10 4H5v16h5"></path>
+<path d="M14 8l4 4-4 4"></path>
+<path d="M8 12h10"></path>
+</svg>
+<span>ออกจากระบบ</span>
+</span>
+</button>
 </div>
-
 </aside>
-
-
-<div
-id="sidebarOverlay"
-class="sidebar-overlay"
-></div>
-
-
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="app-main">
-
-
 <header class="topbar">
-
 <div class="topbar-left">
-
-<button
-id="menuToggle"
-class="menu-toggle"
-type="button"
->
+<button class="menu-toggle" id="menuToggle" type="button">
 ☰
 </button>
-
 <div class="top-caption-box">
-  <div class="top-caption-main">I WANNA BE A POLICE OFFICER</div>
+<div class="top-caption-main">I WANNA BE A POLICE OFFICER</div>
 </div>
-
 </div>
-
-
-<button
-id="topProfileBtn"
-class="member-top"
-type="button"
->
-
-<img
-id="topAvatar"
-class="top-avatar"
-src="avatar20.png"
-alt="Avatar"
->
-
+<button class="member-top" id="topProfileBtn" type="button">
+<img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar20.png"/>
 <div class="top-member-text">
-
-<div
-id="topNickname"
-class="top-name"
->
+<div class="top-name" id="topNickname">
 สมาชิก KASORB
 </div>
-
-<div
-id="topRank"
-class="top-rank"
->
+<div class="top-rank" id="topRank">
 ผู้ทดลองสอบ • Lv.0
 </div>
-
 <div class="top-progress">
-  <div class="top-progress-row">
-    <span>ความคืบหน้า</span>
-    <strong id="topProgressText">0%</strong>
-  </div>
-  <div class="top-progress-track">
-    <div id="topProgressFill" class="top-progress-fill"></div>
-  </div>
+<div class="top-progress-row">
+<span>ความคืบหน้า</span>
+<strong id="topProgressText">0%</strong>
 </div>
-
-<div id="topQuote" class="top-quote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
-
+<div class="top-progress-track">
+<div class="top-progress-fill" id="topProgressFill"></div>
 </div>
-
+</div>
+<div class="top-quote" id="topQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
+</div>
 </button>
-
 </header>
-
-
 <main class="content">
-
-
 <!-- HOME -->
-
-<section
-id="homePage"
-class="app-page active"
->
-
+<section class="app-page active" id="homePage">
 <h2 class="page-heading">
 หน้าหลัก
 </h2>
-
 <p class="page-desc">
 ติดตามอันดับ ความคืบหน้า และสถิติการใช้งาน
 </p>
-
-
 <div class="dashboard-card" style="margin-top:18px">
-
-  <h3>อันดับผู้ทำคะแนนสะสมสูงสุด</h3>
-  <p style="color:#777">Top 10 จาก XP สะสม</p>
-
-  <div id="leaderboardList">
-  <div class="leaderboard-item rank-1" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;font-size:20px;">1</strong>
-    <img src="avatar01.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;">
-    <div>
-      <div style="font-weight:700;">Nink</div>
-      <div style="font-size:13px;color:#666;">ส.ต.อ. • Lv.4</div>
-      <div class="leader-quote">“พยายามวันนี้ เพื่อวันติดยศ”</div>
-    </div>
-  </div>
-  <strong>8,420 XP</strong>
+<h3>อันดับผู้ทำคะแนนสะสมสูงสุด</h3>
+<p style="color:#777">Top 10 จาก XP สะสม</p>
+<div id="leaderboardList">
+<div class="leaderboard-item rank-1" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;font-size:20px;">1</strong>
+<img src="avatar01.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
+<div>
+<div style="font-weight:700;">Nink</div>
+<div style="font-size:13px;color:#666;">ส.ต.อ. • Lv.4</div>
+<div class="leader-quote">“พยายามวันนี้ เพื่อวันติดยศ”</div>
 </div>
-
+</div>
+<strong>8,420 XP</strong>
+</div>
 <div class="leaderboard-item rank-2" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;font-size:20px;">2</strong>
-    <img src="avatar02.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;">
-    <div>
-      <div style="font-weight:700;">Ploy</div>
-      <div style="font-size:13px;color:#666;">ส.ต.ท. • Lv.3</div>
-      <div class="leader-quote">“ค่อย ๆ ไป แต่ไม่หยุด”</div>
-    </div>
-  </div>
-  <strong>7,980 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;font-size:20px;">2</strong>
+<img src="avatar02.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
+<div>
+<div style="font-weight:700;">Ploy</div>
+<div style="font-size:13px;color:#666;">ส.ต.ท. • Lv.3</div>
+<div class="leader-quote">“ค่อย ๆ ไป แต่ไม่หยุด”</div>
 </div>
-
+</div>
+<strong>7,980 XP</strong>
+</div>
 <div class="leaderboard-item rank-3" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;font-size:20px;">3</strong>
-    <img src="avatar03.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;">
-    <div>
-      <div style="font-weight:700;">Jane</div>
-      <div style="font-size:13px;color:#666;">ส.ต.ต. • Lv.2</div>
-      <div class="leader-quote">“ทำให้เต็มที่ในทุกข้อ”</div>
-    </div>
-  </div>
-  <strong>7,250 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;font-size:20px;">3</strong>
+<img src="avatar03.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
+<div>
+<div style="font-weight:700;">Jane</div>
+<div style="font-size:13px;color:#666;">ส.ต.ต. • Lv.2</div>
+<div class="leader-quote">“ทำให้เต็มที่ในทุกข้อ”</div>
 </div>
-
+</div>
+<strong>7,250 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">4</strong>
-    <img src="avatar04.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Beam</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เป้าหมายมีไว้ไปให้ถึง”</div></div>
-  </div>
-  <strong>6,900 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">4</strong>
+<img src="avatar04.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>Beam</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เป้าหมายมีไว้ไปให้ถึง”</div></div>
 </div>
-
+<strong>6,900 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">5</strong>
-    <img src="avatar05.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Mint</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เก่งขึ้นทุกครั้งที่ลงมือทำ”</div></div>
-  </div>
-  <strong>6,520 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">5</strong>
+<img src="avatar05.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>Mint</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เก่งขึ้นทุกครั้งที่ลงมือทำ”</div></div>
 </div>
-
+<strong>6,520 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">6</strong>
-    <img src="avatar06.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>First</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วินัยสำคัญกว่าแรงฮึด”</div></div>
-  </div>
-  <strong>6,100 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">6</strong>
+<img src="avatar06.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>First</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วินัยสำคัญกว่าแรงฮึด”</div></div>
 </div>
-
+<strong>6,100 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">7</strong>
-    <img src="avatar07.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Film</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วันนี้ต้องดีกว่าเมื่อวาน”</div></div>
-  </div>
-  <strong>5,860 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">7</strong>
+<img src="avatar07.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>Film</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วันนี้ต้องดีกว่าเมื่อวาน”</div></div>
 </div>
-
+<strong>5,860 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">8</strong>
-    <img src="avatar08.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Ice</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“อ่านให้เข้าใจ ทำให้แม่น”</div></div>
-  </div>
-  <strong>5,500 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">8</strong>
+<img src="avatar08.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>Ice</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“อ่านให้เข้าใจ ทำให้แม่น”</div></div>
 </div>
-
+<strong>5,500 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">9</strong>
-    <img src="avatar09.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>Bank</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น”</div></div>
-  </div>
-  <strong>5,120 XP</strong>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">9</strong>
+<img src="avatar09.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>Bank</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น”</div></div>
 </div>
-
+<strong>5,120 XP</strong>
+</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <strong style="width:28px;">10</strong>
-    <img src="avatar10.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-    <div><b>May</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ไม่หยุดจนกว่าจะสำเร็จ”</div></div>
-  </div>
-  <strong>4,850 XP</strong>
-</div> 
-  </div>
-
-  <div id="myLeaderboardRank" class="my-rank-box">
-  <div class="my-rank-title">อันดับของฉัน</div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-    <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-      <strong id="myRankNumber" style="width:42px;">—</strong>
-      <img id="myRankAvatar" src="avatar20.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
-      <div style="min-width:0;">
-        <div id="myRankNickname" style="font-weight:700;">สมาชิก KASORB</div>
-        <div id="myRankLevel" style="font-size:13px;color:#666;">ผู้ทดลองสอบ • Lv.0</div>
-        <div id="myRankQuote" class="leader-quote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
-      </div>
-    </div>
-    <strong id="myRankXp">0 XP</strong>
-  </div>
+<div style="display:flex;align-items:center;gap:12px;">
+<strong style="width:28px;">10</strong>
+<img src="avatar10.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+<div><b>May</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ไม่หยุดจนกว่าจะสำเร็จ”</div></div>
 </div>
-
+<strong>4,850 XP</strong>
 </div>
-
+</div>
+<div class="my-rank-box" id="myLeaderboardRank">
+<div class="my-rank-title">อันดับของฉัน</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+<div style="display:flex;align-items:center;gap:12px;min-width:0;">
+<strong id="myRankNumber" style="width:42px;">—</strong>
+<img id="myRankAvatar" src="avatar20.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;"/>
+<div style="min-width:0;">
+<div id="myRankNickname" style="font-weight:700;">สมาชิก KASORB</div>
+<div id="myRankLevel" style="font-size:13px;color:#666;">ผู้ทดลองสอบ • Lv.0</div>
+<div class="leader-quote" id="myRankQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
+</div>
+</div>
+<strong id="myRankXp">0 XP</strong>
+</div>
+</div>
+</div>
 <div class="system-stats">
-  <div class="stat-card">
-    <div id="statQuestions" class="stat-value">—</div>
-    <div class="stat-label">จำนวนข้อทั้งหมด</div>
-  </div>
-  <div class="stat-card">
-    <div id="statMembers" class="stat-value">—</div>
-    <div class="stat-label">สมาชิกทั้งหมด</div>
-  </div>
-  <div class="stat-card">
-    <div id="statOnline" class="stat-value">—</div>
-    <div class="stat-label">กำลังใช้งาน</div>
-  </div>
-  <div class="stat-card">
-    <div id="statTestsToday" class="stat-value">—</div>
-    <div class="stat-label">ทำแบบทดสอบแล้ววันนี้</div>
-  </div>
+<div class="stat-card">
+<div class="stat-value" id="statQuestions">—</div>
+<div class="stat-label">จำนวนข้อทั้งหมด</div>
 </div>
-
+<div class="stat-card">
+<div class="stat-value" id="statMembers">—</div>
+<div class="stat-label">สมาชิกทั้งหมด</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" id="statOnline">—</div>
+<div class="stat-label">กำลังใช้งาน</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" id="statTestsToday">—</div>
+<div class="stat-label">ทำแบบทดสอบแล้ววันนี้</div>
+</div>
+</div>
 </section>
-
-
 <!-- SUBJECT -->
-
-<section
-id="subjectPage"
-class="app-page"
->
-
+<section class="app-page" id="subjectPage">
 <h2 class="page-heading">
 แบบทดสอบรายวิชา
 </h2>
-
 <p class="page-desc">
 เลือกวิชาที่ต้องการฝึกทำแบบทดสอบ
 </p>
-
 <div class="card">
-
 <button class="list-button">
 ความสามารถทั่วไป / คณิตศาสตร์
 </button>
-
 <button class="list-button">
 ภาษาไทย
 </button>
-
 <button class="list-button">
 ภาษาอังกฤษ
 </button>
-
 <button class="list-button">
 คอมพิวเตอร์สำนักงาน
 </button>
-
 <button class="list-button">
 กฎหมายที่ประชาชนควรรู้
 </button>
-
 <button class="list-button">
 สังคม วัฒนธรรม และอาเซียน
 </button>
-
 <button class="list-button">
 งานสารบรรณ
 </button>
-
 <button class="list-button">
 ลักษณะที่ 54
 </button>
-
 </div>
-
 </section>
-
-
 <!-- MOCK -->
-
-<section
-id="mockPage"
-class="app-page"
->
-
+<section class="app-page" id="mockPage">
 <h2 class="page-heading">
 แบบทดสอบเสมือนจริง
 </h2>
-
 <p class="page-desc">
 เลือกสายงานที่ต้องการ
 </p>
-
 <div class="card">
-
 <button class="list-button">
 สายอำนวยการ
 </button>
-
 <button class="list-button">
 สายปราบปราม
 </button>
-
 <button class="list-button">
 สายพิสูจน์หลักฐาน
 </button>
-
 <button class="list-button">
 กองร้อยน้ำหวาน
 </button>
-
 <button class="list-button">
 พลร่ม
 </button>
-
 <button class="list-button">
 ตชด.
 </button>
-
 </div>
-
 </section>
-
-
 <!-- HISTORY -->
-
-<section
-id="historyPage"
-class="app-page"
->
-
+<section class="app-page" id="historyPage">
 <h2 class="page-heading">
 ประวัติการทำแบบทดสอบ
 </h2>
-
 <p class="page-desc">
 รายการแบบทดสอบที่เคยทำ
 </p>
-
 <div class="card placeholder">
 ยังไม่มีประวัติการทำแบบทดสอบ
 </div>
-
 </section>
-
-
 <!-- SCORE -->
-
-<section
-id="scorePage"
-class="app-page"
->
-
+<section class="app-page" id="scorePage">
 <h2 class="page-heading">
 ภาพรวมผลการทดสอบ
 </h2>
-
 <p class="page-desc">
 สรุปผลการทดสอบ คะแนน XP ระดับ และความคืบหน้า
 </p>
-
 <div class="grid-two">
-
 <div class="dashboard-card">
-
 <h3>คะแนนสะสม</h3>
-
-<div
-id="scoreValue"
-style="font-size:32px;font-weight:bold"
->
+<div id="scoreValue" style="font-size:32px;font-weight:bold">
 0
 </div>
-
 </div>
-
-
 <div class="dashboard-card">
-
 <h3>ระดับปัจจุบัน</h3>
-
-<div
-id="levelValue"
-style="font-size:22px;font-weight:bold"
->
+<div id="levelValue" style="font-size:22px;font-weight:bold">
 ผู้ทดลองสอบ • Lv.0
 </div>
-
 </div>
-
 </div>
-
 </section>
-
-
 <!-- PREMIUM -->
-
-<section
-id="premiumPage"
-class="app-page"
->
-
+<section class="app-page" id="premiumPage">
 <h2 class="page-heading">
 สถานะสมาชิก
 </h2>
-
 <p class="page-desc">
 ตรวจสอบสถานะและสิทธิ์ของบัญชีสมาชิก
 </p>
-
 <div class="card">
-
 <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
-  <div>
-    <div style="font-size:14px;color:#888;margin-bottom:6px;">สถานะปัจจุบัน</div>
-    <div id="membershipBadge" style="display:inline-block;padding:7px 12px;border-radius:999px;font-weight:700;background:#f2f2f2;color:#555;">
+<div>
+<div style="font-size:14px;color:#888;margin-bottom:6px;">สถานะปัจจุบัน</div>
+<div id="membershipBadge" style="display:inline-block;padding:7px 12px;border-radius:999px;font-weight:700;background:#f2f2f2;color:#555;">
       FREE
     </div>
-  </div>
-
-  <button
-    class="btn primary"
-    id="upgradePremiumBtn"
-    style="width:auto;min-width:210px;margin-top:0;"
-  >
+</div>
+<button class="btn primary" id="upgradePremiumBtn" style="width:auto;min-width:210px;margin-top:0;">
     อัปเกรดเป็น PREMIUM
   </button>
 </div>
-
 <div id="membershipFreeBox" style="margin-top:22px;">
-  <h3 style="margin-bottom:8px;">สมาชิก FREE</h3>
-  <p style="color:#777;line-height:1.7;margin-top:0;">
+<h3 style="margin-bottom:8px;">สมาชิก FREE</h3>
+<p style="color:#777;line-height:1.7;margin-top:0;">
     ใช้งานแบบทดสอบฟรีได้ตามสิทธิ์ของบัญชี
   </p>
-
-  <div style="margin-top:16px;line-height:1.9;">
-    <div>• แบบทดสอบฟรี</div>
-    <div>• บันทึกประวัติการทำแบบทดสอบ</div>
-    <div>• สะสมคะแนน XP และ Level</div>
-  </div>
+<div style="margin-top:16px;line-height:1.9;">
+<div>• แบบทดสอบฟรี</div>
+<div>• บันทึกประวัติการทำแบบทดสอบ</div>
+<div>• สะสมคะแนน XP และ Level</div>
 </div>
-
-<div id="membershipPremiumBox" class="hidden" style="margin-top:22px;">
-  <h3 style="margin-bottom:8px;">สมาชิก PREMIUM</h3>
-  <p style="color:#777;line-height:1.7;margin-top:0;">
+</div>
+<div class="hidden" id="membershipPremiumBox" style="margin-top:22px;">
+<h3 style="margin-bottom:8px;">สมาชิก PREMIUM</h3>
+<p style="color:#777;line-height:1.7;margin-top:0;">
     ปลดล็อกสิทธิ์ Premium ของบัญชีแล้ว
   </p>
-
-  <div style="margin-top:16px;line-height:1.9;">
-    <div>• แบบทดสอบ Premium</div>
-    <div>• ทำแบบทดสอบซ้ำได้</div>
-    <div>• เฉลยและคำอธิบาย</div>
-    <div>• เอกสารประกอบ PDF</div>
-  </div>
+<div style="margin-top:16px;line-height:1.9;">
+<div>• แบบทดสอบ Premium</div>
+<div>• ทำแบบทดสอบซ้ำได้</div>
+<div>• เฉลยและคำอธิบาย</div>
+<div>• เอกสารประกอบ PDF</div>
 </div>
-
 </div>
-
+</div>
 </section>
-
-
 <!-- MY INFO -->
-
-<section
-id="myInfoPage"
-class="app-page"
->
-
+<section class="app-page" id="myInfoPage">
 <h2 class="page-heading">
 ข้อมูลของฉัน
 </h2>
-
 <p class="page-desc">
 ข้อมูลบัญชีและโปรไฟล์สมาชิก
 </p>
-
-
 <div class="card">
-
 <div class="info-profile">
-
 <div class="info-avatar-wrap">
-
-<img
-id="myInfoAvatar"
-class="avatar"
-src="avatar20.png"
-alt="Avatar"
->
-
-<button
-id="showAvatarEditBtn"
-class="edit-round"
-type="button"
-aria-label="เปลี่ยนรูปโปรไฟล์"
->
-
-<svg viewBox="0 0 24 24">
-<path d="M12 20h9"></path>
-<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
-</svg>
-
-</button>
-
-</div>
-
-</div>
-
-
-<div class="info-list">
-
-
-<div class="info-row">
-
-<div class="info-label">
-ชื่อเล่น
-</div>
-
-<div
-id="myInfoNickname"
-class="info-value"
->
-สมาชิก KASORB
-</div>
-
-<button
-id="showNicknameEditBtn"
-class="edit-inline"
-type="button"
-aria-label="แก้ไขชื่อเล่น"
->
-
-<svg viewBox="0 0 24 24">
-<path d="M12 20h9"></path>
-<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
-</svg>
-
-</button>
-
-</div>
-
-
-<div class="info-row">
-
-<div class="info-label">
-อีเมล
-</div>
-
-<div
-id="myInfoEmail"
-class="info-value"
->
--
-</div>
-
-</div>
-
-
-<div class="info-row">
-
-<div class="info-label">
-ระดับ
-</div>
-
-<div
-id="myInfoRank"
-class="info-value"
->
-ผู้ทดลองสอบ • Lv.0
-</div>
-
-</div>
-
-
-<div class="info-row">
-
-<div class="info-label">
-สถานะ
-</div>
-
-<div
-id="myInfoPlan"
-class="info-value"
->
-สมาชิกทั่วไป
-</div>
-
-</div>
-
-<div class="info-row">
-
-<div class="info-label">
-คำคม/คติประจำตัว
-</div>
-
-<div
-id="myInfoQuote"
-class="info-value"
->
--
-</div>
-
-<button
-id="showQuoteEditBtn"
-class="edit-inline"
-type="button"
-aria-label="แก้ไขคำคม/คติประจำตัว"
->
-<svg viewBox="0 0 24 24">
+<img alt="Avatar" class="avatar" id="myInfoAvatar" src="avatar20.png"/>
+<button aria-label="เปลี่ยนรูปโปรไฟล์" class="edit-round" id="showAvatarEditBtn" type="button">
+<svg viewbox="0 0 24 24">
 <path d="M12 20h9"></path>
 <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
 </svg>
 </button>
-
 </div>
-
-</div>
-
-
-<div
-id="avatarEditBox"
-class="edit-box hidden"
->
-
+</div><div class="edit-box hidden" id="avatarEditBox">
 <h3>
 เปลี่ยนรูปโปรไฟล์
 </h3>
-
-<div
-id="accountAvatarGrid"
-class="avatar-grid"
-></div>
-
-<button
-class="btn outline"
-id="cancelAvatarEditBtn"
->
+<div class="avatar-grid" id="accountAvatarGrid"></div>
+<button class="btn outline" id="cancelAvatarEditBtn">
 ยกเลิก
 </button>
-
 </div>
-
-
-<div
-id="nicknameEditBox"
-class="edit-box hidden"
->
-
+<div class="info-list">
+<div class="info-row">
+<div class="info-label">
+ชื่อเล่น
+</div>
+<div class="info-value" id="myInfoNickname">
+สมาชิก KASORB
+</div>
+<button aria-label="แก้ไขชื่อเล่น" class="edit-inline" id="showNicknameEditBtn" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M12 20h9"></path>
+<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+</svg>
+</button>
+</div><div class="edit-box hidden" id="nicknameEditBox">
 <h3>
 เปลี่ยนชื่อเล่น
 </h3>
-
-<input
-id="nicknameInput"
-type="text"
-maxlength="20"
->
-
+<input id="nicknameInput" maxlength="20" type="text"/>
 <div class="notice">
 เมื่อยืนยันเปลี่ยนชื่อเล่นแล้ว จะไม่สามารถเปลี่ยนชื่อเล่นอีกได้เป็นเวลา 30 วัน
 </div>
-
-<button
-class="btn primary"
-id="changeNicknameBtn"
->
+<button class="btn primary" id="changeNicknameBtn">
 ยืนยันเปลี่ยนชื่อเล่น
 </button>
-
-<p
-id="nicknameStatus"
-class="small"
-></p>
-
-<button
-class="btn outline"
-id="cancelNicknameEditBtn"
->
+<p class="small" id="nicknameStatus"></p>
+<button class="btn outline" id="cancelNicknameEditBtn">
 ยกเลิก
 </button>
-
 </div>
-
-
-
-<div
-id="quoteEditBox"
-class="edit-box hidden"
->
-
+<div class="info-row">
+<div class="info-label">
+อีเมล
+</div>
+<div class="info-value" id="myInfoEmail">
+-
+</div>
+</div>
+<div class="info-row">
+<div class="info-label">
+ระดับ
+</div>
+<div class="rank-badge info-value" id="myInfoRank">
+ผู้ทดลองสอบ • Lv.0
+</div>
+</div>
+<div class="info-row">
+<div class="info-label">
+สถานะ
+</div>
+<div class="info-value" id="myInfoPlan">
+สมาชิกทั่วไป
+</div>
+</div>
+<div class="info-row">
+<div class="info-label">
+คำคม/คติประจำตัว
+</div>
+<div class="info-value" id="myInfoQuote">
+-
+</div>
+<button aria-label="แก้ไขคำคม/คติประจำตัว" class="edit-inline" id="showQuoteEditBtn" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M12 20h9"></path>
+<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+</svg>
+</button>
+</div><div class="edit-box hidden" id="quoteEditBox">
 <h3>
 แก้ไขคำคม/คติประจำตัว
 </h3>
-
-<input
-id="quoteInput"
-type="text"
-maxlength="50"
-placeholder="พิมพ์คำคมหรือคติประจำตัว"
->
-
+<input id="quoteInput" maxlength="50" placeholder="พิมพ์คำคมหรือคติประจำตัว" type="text"/>
 <p class="small">
 สูงสุด 50 ตัวอักษร
 </p>
-
-<button
-class="btn primary"
-id="changeQuoteBtn"
->
+<button class="btn primary" id="changeQuoteBtn">
 บันทึกคำคม/คติประจำตัว
 </button>
-
-<button
-class="btn outline"
-id="cancelQuoteEditBtn"
->
+<button class="btn outline" id="cancelQuoteEditBtn">
 ยกเลิก
 </button>
-
 </div>
+</div>
+
+
 
 <div style="margin-top:22px">
-
-<button
-class="btn secondary"
-id="resetPasswordBtn"
->
+<button class="btn secondary" id="resetPasswordBtn">
 เปลี่ยนรหัสผ่าน
 </button>
-
 </div>
-
 </div>
-
 </section>
-
-
 </main>
-
 </div>
-
 </div>
-
-
 <script type="module">
 
 import {
@@ -3546,6 +3162,5 @@ showAuth(
 );
 
 </script>
-
 </body>
 </html>
