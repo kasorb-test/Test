@@ -54,6 +54,7 @@ button,input{
 
 button{
   cursor:pointer;
+
 }
 
 .auth-main{
@@ -1214,9 +1215,7 @@ input{
   margin-left:auto !important;
   margin-right:0 !important;
 }
-.topbar-second-row{
-  grid-template-columns:minmax(0,1fr) 430px !important;
-  align-items:start !important;
+
 } 
 /* RIGHT SIDEBAR */
 .right-sidebar{
@@ -1230,6 +1229,17 @@ input{
 
 </style>
 
+  .topbar-second-row{
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:center !important;
+  width:100% !important;
+}
+
+.topbar-second-row .member-top{
+  margin-left:auto !important;
+  margin-right:0 !important;
+}
 </head>
 <body>
 
@@ -1417,11 +1427,6 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 </div>
 </div>
 <div class="topbar-second-row">
-<section class="today-news" aria-label="ข่าวสารวันนี้">
-<div class="today-news-title">ข่าวสารวันนี้</div>
-<div class="today-news-placeholder">พื้นที่สำหรับประกาศและข้อมูลอัปเดต</div>
-</section>
-
 
 </header>
 <main class="content">
