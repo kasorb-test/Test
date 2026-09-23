@@ -1207,6 +1207,15 @@ input{
 #kasorbToast.show{opacity:1;transform:translateY(0)}
 .save-status{min-height:18px;margin:7px 0 4px;color:#16834a;font-weight:700}
 #confirmAvatarEditBtn{margin-top:12px}
+#confirmAvatarEditBtn{margin-top:12px}
+
+/* USER INFO - RIGHT SIDE */
+.content > .member-top{
+  margin-left:auto !important;
+  margin-right:0 !important;
+}
+
+</style>
 </style>
 </head>
 <body>
@@ -1399,24 +1408,29 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <div class="today-news-title">ข่าวสารวันนี้</div>
 <div class="today-news-placeholder">พื้นที่สำหรับประกาศและข้อมูลอัปเดต</div>
 </section>
-<button class="member-top" id="topProfileBtn" type="button">
-<img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar20.png"/>
-<div class="top-member-text">
-<div class="top-name" id="topNickname">สมาชิก KASORB</div>
-<div class="top-rank" id="topRank">ผู้ทดลองสอบ • Lv.0</div>
-<div class="top-quote" id="topQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
-</div>
-<div class="top-progress">
-<div class="top-progress-row">
-<span>ฝึกแบบทดสอบถึงไหนแล้ว</span>
-<strong id="topProgressText">0%</strong>
-</div>
-<div class="top-progress-track"><div class="top-progress-fill" id="topProgressFill"></div></div>
-</div>
-</button>
+
 </div>
 </header>
 <main class="content">
+<button class="member-top" id="topProfileBtn" type="button">
+  <img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar01.png">
+
+  <div class="top-member-text">
+    <div class="top-name" id="topNickname">สมาชิก KASORB</div>
+    <div class="top-rank" id="topRank">ผู้ทดลองสอบ • Lv.0</div>
+    <div class="top-quote" id="topQuote">“ตั้งใจวันนี้ให้ดีที่สุด”</div>
+  </div>
+
+  <div class="top-progress">
+    <div class="top-progress-row">
+      <span>ความคืบหน้า</span>
+      <strong id="topProgressText">0%</strong>
+    </div>
+    <div class="top-progress-track">
+      <div class="top-progress-fill"></div>
+    </div>
+  </div>
+</button>
 <!-- HOME -->
 <section class="app-page active" id="homePage">
 <h2 class="page-heading">
