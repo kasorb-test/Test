@@ -1223,6 +1223,12 @@ input{
   padding:20px;
   box-sizing:border-box;
 }
+.content{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 320px !important;
+  gap:20px !important;
+  align-items:start !important;
+}
 </style>
 
 </head>
@@ -1420,7 +1426,10 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 </div>
 </header>
 <main class="content">
+<div class="right-sidebar">  
+
 <button class="member-top" id="topProfileBtn" type="button">
+</div>  
   <img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar01.png">
 
   <div class="top-member-text">
