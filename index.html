@@ -1225,14 +1225,16 @@ input{
 } 
 /* RIGHT SIDEBAR */
 .right-sidebar{
+  position:fixed;
+  top:0;
+  right:0;
   width:320px;
-  min-height:100vh;
+  height:100vh;
   background:#fff;
   border-left:1px solid #e9e9e9;
-  padding:20px;
   box-sizing:border-box;
+  z-index:20;
 }
-
 
   .topbar-second-row{
   display:flex !important;
@@ -1433,6 +1435,14 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 </div>
 </div>
 <!-- USER INFO TOP RIGHT -->  
+  
+  
+<div class="topbar-second-row">
+
+
+</header>
+<main class="content">
+<aside class="right-sidebar">
   <button class="member-top" id="topProfileBtn" type="button">
   <img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar01.png">
 
@@ -1444,7 +1454,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 
   <div class="top-progress">
     <div class="top-progress-row">
-      <span>ฝึกแบบทดสอบถึงไหนแล้ว</span>
+      <span>ความคืบหน้า</span>
       <strong id="topProgressText">0%</strong>
     </div>
 
@@ -1453,12 +1463,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
     </div>
   </div>
 </button>
-  
-<div class="topbar-second-row">
-
-
-</header>
-<main class="content">
+</aside>
 
   
 <!-- HOME -->
