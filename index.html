@@ -10,18 +10,21 @@
 
 :root{
 .leaderboard-item.rank-1{
-  background:linear-gradient(90deg,#fff3b0,#f7d774);
-  border-color:#e0bb45;
+  background:linear-gradient(90deg,#fff0a8,#efc232);
+  border-color:#d7a70e;
+  box-shadow:0 4px 12px rgba(215,167,14,.18);
 }
 
 .leaderboard-item.rank-2{
-  background:linear-gradient(90deg,#f7f7f7,#dedede);
-  border-color:#c8c8c8;
+  background:linear-gradient(90deg,#fbfbfb,#c8cdd3);
+  border-color:#a7adb4;
+  box-shadow:0 4px 12px rgba(120,128,138,.14);
 }
 
 .leaderboard-item.rank-3{
-  background:linear-gradient(90deg,#f4d4bd,#dca77d);
-  border-color:#c88a5c;
+  background:linear-gradient(90deg,#f7d0ae,#d9884b);
+  border-color:#b96a32;
+  box-shadow:0 4px 12px rgba(185,106,50,.16);
 }
 
 .leaderboard-item.rank-normal{
@@ -828,46 +831,47 @@ input{
   }
 }
 
-/* LEADERBOARD: สีเดียวกัน ไล่เข้มอันดับ 1 -> อ่อนอันดับ 10 */
-#leaderboardList > .leaderboard-item:nth-child(1){
-  background:linear-gradient(90deg,rgba(255,116,23,.42),rgba(255,116,23,.28));
-  border-color:rgba(255,116,23,.55);
+
+.top-caption-box{
+  display:flex;
+  align-items:center;
+  min-height:52px;
+  padding:10px 18px;
+  background:#fff;
+  border:1px solid #e9e9e9;
+  border-radius:14px;
+  box-shadow:0 5px 16px rgba(0,0,0,.05);
 }
-#leaderboardList > .leaderboard-item:nth-child(2){
-  background:linear-gradient(90deg,rgba(255,116,23,.36),rgba(255,116,23,.24));
-  border-color:rgba(255,116,23,.48);
+
+.top-caption-main{
+  color:#222;
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:.04em;
 }
-#leaderboardList > .leaderboard-item:nth-child(3){
-  background:linear-gradient(90deg,rgba(255,116,23,.31),rgba(255,116,23,.21));
-  border-color:rgba(255,116,23,.42);
+
+
+.menu-group.open > .group-toggle{
+  background:#fff0e4;
+  color:#e86208;
+  box-shadow:inset 3px 0 0 #ff7417;
 }
-#leaderboardList > .leaderboard-item:nth-child(4){
-  background:linear-gradient(90deg,rgba(255,116,23,.27),rgba(255,116,23,.18));
-  border-color:rgba(255,116,23,.36);
+
+.menu-group.open{
+  border-color:#ffd8bb;
 }
-#leaderboardList > .leaderboard-item:nth-child(5){
-  background:linear-gradient(90deg,rgba(255,116,23,.23),rgba(255,116,23,.15));
-  border-color:rgba(255,116,23,.31);
-}
-#leaderboardList > .leaderboard-item:nth-child(6){
-  background:linear-gradient(90deg,rgba(255,116,23,.19),rgba(255,116,23,.12));
-  border-color:rgba(255,116,23,.27);
-}
-#leaderboardList > .leaderboard-item:nth-child(7){
-  background:linear-gradient(90deg,rgba(255,116,23,.16),rgba(255,116,23,.10));
-  border-color:rgba(255,116,23,.23);
-}
-#leaderboardList > .leaderboard-item:nth-child(8){
-  background:linear-gradient(90deg,rgba(255,116,23,.13),rgba(255,116,23,.08));
-  border-color:rgba(255,116,23,.19);
-}
-#leaderboardList > .leaderboard-item:nth-child(9){
-  background:linear-gradient(90deg,rgba(255,116,23,.10),rgba(255,116,23,.06));
-  border-color:rgba(255,116,23,.15);
-}
-#leaderboardList > .leaderboard-item:nth-child(10){
-  background:linear-gradient(90deg,rgba(255,116,23,.07),rgba(255,116,23,.035));
-  border-color:rgba(255,116,23,.11);
+
+
+@media(max-width:800px){
+  .top-caption-box{
+    min-height:46px;
+    padding:8px 12px;
+  }
+
+  .top-caption-main{
+    font-size:14px;
+    letter-spacing:.02em;
+  }
 }
 
 </style>
@@ -1161,11 +1165,8 @@ type="button"
 ☰
 </button>
 
-<div
-id="topPageTitle"
-class="page-title"
->
-หน้าหลัก
+<div class="top-caption-box">
+  <div class="top-caption-main">I WANNA BE A POLICE OFFICER</div>
 </div>
 
 </div>
@@ -2538,13 +2539,6 @@ page.classList.remove("active")
 $(pageId)
 .classList
 .add("active");
-
-
-$("topPageTitle")
-.textContent=
-title;
-
-
 document
 .querySelectorAll(".nav-btn")
 .forEach(
