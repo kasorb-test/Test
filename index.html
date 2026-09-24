@@ -1257,7 +1257,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 </script>
 
 <!-- AUTH -->
-<div id="authShell">
+<div class="hidden" id="authShell">
 <main class="auth-main">
 <h1 class="brand-title">KASORB TEST</h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
@@ -3413,26 +3413,24 @@ $("authShell")
 .add("hidden");
 
 
-$("appShell")
-.classList
-.remove("hidden");
-
-
 try{
 
 await loadProfile(user);
-
-showAppPage(
-"homePage",
-"หน้าหลัก"
-);
-
 
 }catch(error){
 
 console.error(error);
 
 }
+
+$("appShell")
+.classList
+.remove("hidden");
+
+showAppPage(
+"homePage",
+"หน้าหลัก"
+);
 
 }
 
