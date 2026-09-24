@@ -2271,6 +2271,90 @@ input{
 }
 </style>
 
+
+<style id="kasorb-latest-all-fixes-v6">
+
+/* =========================================================
+   ทุกอุปกรณ์: ลดเฉพาะพื้นที่ว่างบน/ล่างของการ์ดแรงก์
+   ไม่ลดขนาดรูป/ตัวอักษร/องค์ประกอบ
+   ========================================================= */
+#leaderboardList .leaderboard-item{
+  padding-top:10px!important;
+  padding-bottom:10px!important;
+}
+#myLeaderboardRank > div[style*="display:flex"]{
+  padding-top:10px!important;
+  padding-bottom:10px!important;
+}
+
+/* =========================================================
+   มือถือ: คติเดิมไม่แตะ
+   แก้ชื่อใน "อันดับของฉัน" ไม่ให้มี ...
+   ========================================================= */
+@media(max-width:600px){
+  #myLeaderboardRank .rank-person-name{
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    max-width:none!important;
+  }
+
+  /* ลดเฉพาะพื้นที่ว่างขอบบน/ล่าง */
+  #leaderboardList .leaderboard-item,
+  #myLeaderboardRank > div[style*="display:flex"]{
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+}
+
+/* =========================================================
+   iPad แนวตั้ง: คติห่างจาก Lv/XP ขึ้น
+   คติแนวยาว ไม่ตัด ...
+   ========================================================= */
+@media(min-width:601px) and (max-width:900px){
+  #leaderboardList .leader-quote,
+  #myLeaderboardRank .leader-quote{
+    margin-top:6px!important;
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+    line-height:1.45!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    max-width:none!important;
+  }
+
+  #leaderboardList .leaderboard-item,
+  #myLeaderboardRank > div[style*="display:flex"]{
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+}
+
+/* =========================================================
+   iPad แนวนอน: หลักเดียวกัน
+   ========================================================= */
+@media(min-width:901px) and (max-width:1180px){
+  #leaderboardList .leader-quote,
+  #myLeaderboardRank .leader-quote{
+    margin-top:6px!important;
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+    line-height:1.45!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    max-width:none!important;
+  }
+
+  #leaderboardList .leaderboard-item,
+  #myLeaderboardRank > div[style*="display:flex"]{
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
