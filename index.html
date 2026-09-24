@@ -1814,6 +1814,70 @@ input{
 }
 </style>
 
+
+<style id="kasorb-balanced-final-v4">
+/* ===== กล่องข้อมูลบน: คติกลับมาใต้รูป ใช้แนวยาว ===== */
+.member-top .top-quote{
+  grid-column:1 / -1!important;
+  width:calc(100% - 18px)!important;
+  margin:-3px 0 0 18px!important;
+  padding:0!important;
+  text-align:left!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+  line-height:1.25!important;
+}
+
+/* Desktop: เพิ่มพื้นที่แนวยาว ลดโอกาสตกบรรทัด */
+@media(min-width:801px){
+  .member-top .top-quote{
+    font-size:12px!important;
+    width:calc(100% - 18px)!important;
+    margin-left:18px!important;
+  }
+}
+
+/* ===== Mobile leaderboard: กระชับระยะห่าง ===== */
+@media(max-width:800px){
+  .member-top .top-quote{
+    grid-column:1 / -1!important;
+    width:calc(100% - 16px)!important;
+    margin:-2px 0 0 16px!important;
+    font-size:12px!important;
+    line-height:1.25!important;
+  }
+
+  #leaderboardList .leaderboard-item,
+  #myLeaderboardRank > div[style*="display:flex"]{
+    row-gap:1px!important;
+    padding-top:11px!important;
+    padding-bottom:10px!important;
+  }
+
+  /* ยศ + ชื่อ ขึ้นเล็กน้อย */
+  #leaderboardList .rank-person-name,
+  #myLeaderboardRank .rank-person-name{
+    transform:translateY(-4px)!important;
+  }
+
+  /* Lv และ XP ขึ้นอีก */
+  #leaderboardList .rank-level,
+  #myLeaderboardRank .rank-level,
+  #leaderboardList .rank-xp,
+  #myLeaderboardRank .rank-xp{
+    transform:translateY(-6px)!important;
+  }
+
+  /* คติคงใต้รูป แต่ลดช่องว่างด้านบน */
+  #leaderboardList .leader-quote,
+  #myLeaderboardRank .leader-quote{
+    margin-top:-3px!important;
+    line-height:1.25!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
