@@ -2129,6 +2129,51 @@ input{
 }
 </style>
 
+
+<style id="kasorb-my-rank-mobile-name-fix">
+/* มือถือ: อันดับของฉัน — แสดงยศ+ชื่อเต็ม ไม่ใช้ ... */
+@media(max-width:600px){
+  #myLeaderboardRank .rank-person-name{
+    grid-column:3 / 6!important;
+    grid-row:1!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    font-size:10.5px!important;
+    line-height:1.25!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    transform:none!important;
+  }
+
+  /* ย้าย Lv / XP ลงแถวถัดไป เพื่อคืนพื้นที่ให้ชื่อ */
+  #myLeaderboardRank .rank-level{
+    grid-column:3 / 5!important;
+    grid-row:2!important;
+    text-align:left!important;
+  }
+  #myLeaderboardRank .rank-xp{
+    grid-column:5!important;
+    grid-row:2!important;
+    text-align:right!important;
+  }
+
+  /* คติลงอีกแถวตามเดิม */
+  #myLeaderboardRank .leader-quote{
+    grid-column:3 / 6!important;
+    grid-row:3!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  #myLeaderboardRank > div[style*="display:flex"]{
+    grid-template-rows:auto auto auto!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
