@@ -3531,11 +3531,19 @@ $("contactAdminBtn").onclick=()=>{
 };
 
 /* LOGOUT */
+$("logoutBtn").onclick = async () => {
+  try {
+    await signOut(auth);
 
-$("logoutBtn").onclick=async()=>{
-  await signOut(auth);
+    $("loginEmail").value = "";
+    $("loginPassword").value = "";
+
+    showAuth("loginPage");
+  } catch (error) {
+    console.error("Logout error:", error);
+    alert("ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง");
+  }
 };
-
 
 /* SIDEBAR GROUPS */
 
