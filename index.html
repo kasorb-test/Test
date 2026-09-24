@@ -2101,6 +2101,34 @@ input{
 }
 </style>
 
+
+<style id="kasorb-quote-spacing-thai-fix">
+/* คติในกล่องข้อมูล: เว้นจากรูปลงมาอีกเล็กน้อย */
+.member-top .top-quote{
+  transform:translateY(4px)!important;
+  margin-bottom:4px!important;
+}
+
+/* คติในกระดานแรงก์: เผื่อพื้นที่วรรณยุกต์ภาษาไทย */
+#leaderboardList .leader-quote,
+#myLeaderboardRank .leader-quote{
+  line-height:1.5!important;
+  padding-top:2px!important;
+  padding-bottom:2px!important;
+  overflow:visible!important;
+}
+
+/* รักษารูปแบบ responsive เดิม */
+@media(max-width:600px){
+  #leaderboardList .leader-quote,
+  #myLeaderboardRank .leader-quote{
+    line-height:1.45!important;
+    padding-top:2px!important;
+    padding-bottom:2px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
