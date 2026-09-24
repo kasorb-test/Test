@@ -4682,29 +4682,15 @@ showAppPage(
 
 }
 
-else{
+else {
+  currentUser = null;
+  currentData = null;
 
-currentUser=null;
+  document.getElementById("appShell").style.display = "none";
+  document.getElementById("authShell").style.display = "block";
 
-currentData=null;
-
-
-$("appShell")
-.classList
-.add("hidden");
-
-
-$("authShell")
-.classList
-.remove("hidden");
-
-
-showAuth(
-"loginPage"
-);
-
+  showAuth("loginPage");
 }
-
 }
 
 );
