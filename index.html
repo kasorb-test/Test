@@ -1111,7 +1111,7 @@ input{
   border-width:3px !important;
 }
 .top-name{
-  font-size:20px !important;
+  font-size:19px !important;
   padding-bottom:5px !important;
   margin-bottom:5px !important;
 }
@@ -1885,6 +1885,29 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <div class="info-value" id="myInfoEmail">
 -
 </div>
+</div>
+<div class="info-row">
+<div class="info-label">
+เพศ
+</div>
+<div class="info-value" id="myInfoGender">
+ไม่ระบุ
+</div>
+<button aria-label="แก้ไขเพศ" class="edit-inline" id="showGenderEditBtn" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M12 20h9"></path>
+<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+</svg>
+</button>
+</div><div class="edit-box hidden" id="genderEditBox">
+<h3>แก้ไขเพศ</h3>
+<select id="genderInput" class="input">
+<option value="male">ชาย</option>
+<option value="female">หญิง</option>
+<option value="unspecified">ไม่ระบุ</option>
+</select>
+<button class="btn primary" id="changeGenderBtn" type="button">บันทึกเพศ</button>
+<button class="btn outline" id="cancelGenderEditBtn" type="button">ยกเลิก</button>
 </div>
 <div class="info-row">
 <div class="info-label">
@@ -2952,6 +2975,13 @@ currentUser?.email
 "-";
 
 
+$("myInfoGender")
+.textContent=
+currentData?.gender === "female" ? "หญิง" :
+currentData?.gender === "male" ? "ชาย" :
+"ไม่ระบุ";
+
+
 $("myInfoRank")
 .textContent=
 rankText();
@@ -2980,6 +3010,11 @@ $("avatarEditBox")
 
 
 $("nicknameEditBox")
+.classList
+.add("hidden");
+
+
+$("genderEditBox")
 .classList
 .add("hidden");
 
@@ -3316,6 +3351,37 @@ alert(
 
 }
 
+};
+
+
+/* EDIT GENDER */
+
+$("showGenderEditBtn").onclick=()=>{
+  $("avatarEditBox").classList.add("hidden");
+  $("nicknameEditBox").classList.add("hidden");
+  $("quoteEditBox").classList.add("hidden");
+  $("genderInput").value=currentData?.gender||"unspecified";
+  $("genderEditBox").classList.toggle("hidden");
+};
+
+$("cancelGenderEditBtn").onclick=()=>{
+  $("genderEditBox").classList.add("hidden");
+};
+
+$("changeGenderBtn").onclick=async()=>{
+  if(!currentUser||!currentData) return;
+  const gender=$("genderInput").value||"unspecified";
+  try{
+    await updateDoc(doc(db,"users",currentUser.uid),{gender});
+    currentData.gender=gender;
+    renderProfile();
+    renderMyInfo();
+    $("genderEditBox").classList.add("hidden");
+    alert("บันทึกเพศเรียบร้อยแล้ว");
+  }catch(error){
+    console.error(error);
+    alert("ยังไม่สามารถบันทึกเพศได้");
+  }
 };
 
 
