@@ -1212,7 +1212,9 @@ input{
 .today-news{display:none !important;}
 .topbar{
   display:block !important;
-  position:relative !important;
+  position:sticky !important;
+  top:0 !important;
+  z-index:900 !important;
   padding:12px 24px 14px !important;
 }
 .topbar-second-row{
@@ -1238,6 +1240,57 @@ input{
   }
 }
 </style>
+
+<style id="kasorb-gender-rank-layout">
+.gender-register{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  margin:10px 0 14px;
+  padding:12px 14px;
+  border:1px solid #e4e8ee;
+  border-radius:12px;
+  background:#fff;
+}
+.gender-register .gender-label{font-weight:800;margin-right:2px}
+.gender-register label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.gender-register input[type="radio"]{width:17px;height:17px;margin:0}
+
+.rank-person{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+  flex:1 1 auto;
+}
+.rank-person-info{min-width:0}
+.rank-person-name{
+  font-weight:850;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:330px;
+}
+.rank-level{
+  flex:0 0 74px;
+  text-align:center;
+  font-weight:850;
+  white-space:nowrap;
+}
+.rank-xp{
+  flex:0 0 110px;
+  text-align:right;
+  font-weight:900;
+  white-space:nowrap;
+}
+@media(max-width:700px){
+  .rank-person-name{max-width:180px}
+  .rank-level{flex-basis:58px}
+  .rank-xp{flex-basis:86px;font-size:13px}
+}
+</style>
+
 </head>
 <body>
 
@@ -1288,7 +1341,13 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <h2>สมัครสมาชิก</h2>
 <input id="regEmail" placeholder="อีเมล" type="email"/>
 <input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password"/>
-<input id="regNickname" maxlength="20" placeholder="ชื่อเล่น" type="text"/>
+<input id="regNickname" maxlength="20" placeholder="ชื่อเล่น (ไม่เกิน 20 ตัวอักษร)" type="text"/>
+<div class="gender-register" aria-label="เพศ">
+  <span class="gender-label">เพศ</span>
+  <label><input type="radio" name="regGender" value="male"/> ชาย</label>
+  <label><input type="radio" name="regGender" value="female"/> หญิง</label>
+  <label><input type="radio" name="regGender" value="unspecified" checked/> ไม่ระบุ</label>
+</div>
 <input id="regQuote" maxlength="50" placeholder="คำคม / คำคม/คติประจำตัว (ไม่บังคับ)" type="text"/>
 <h3>เลือกรูปโปรไฟล์</h3>
 <div class="avatar-grid" id="registerAvatarGrid"></div>
@@ -1459,113 +1518,141 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <h3>อันดับผู้ทำคะแนนสะสมสูงสุด</h3>
 <p style="color:#777">Top 10 จาก XP สะสม</p>
 <div id="leaderboardList">
-<div class="leaderboard-item rank-1" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;font-size:20px;">1</strong>
-<img src="avatar01.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
-<div>
-<div style="font-weight:700;">Nink</div>
-<div style="font-size:13px;color:#666;">ส.ต.อ. • Lv.4</div>
-<div class="leader-quote">“พยายามวันนี้ เพื่อวันติดยศ”</div>
+<div class="leaderboard-item rank-1" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;font-size:20px;">1</strong>
+    <img src="avatar01.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">ส.ต.อ.หญิง Nink</div>
+      <div class="leader-quote">“พยายามวันนี้ เพื่อวันติดยศ”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.4</div>
+  <strong class="rank-xp">8,420 XP</strong>
 </div>
+<div class="leaderboard-item rank-2" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;font-size:20px;">2</strong>
+    <img src="avatar02.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">ส.ต.ท.หญิง Ploy</div>
+      <div class="leader-quote">“ค่อย ๆ ไป แต่ไม่หยุด”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.3</div>
+  <strong class="rank-xp">7,980 XP</strong>
 </div>
-<strong>8,420 XP</strong>
+<div class="leaderboard-item rank-3" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;font-size:20px;">3</strong>
+    <img src="avatar03.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">ส.ต.ต.หญิง Jane</div>
+      <div class="leader-quote">“ทำให้เต็มที่ในทุกข้อ”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.2</div>
+  <strong class="rank-xp">7,250 XP</strong>
 </div>
-<div class="leaderboard-item rank-2" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;font-size:20px;">2</strong>
-<img src="avatar02.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
-<div>
-<div style="font-weight:700;">Ploy</div>
-<div style="font-size:13px;color:#666;">ส.ต.ท. • Lv.3</div>
-<div class="leader-quote">“ค่อย ๆ ไป แต่ไม่หยุด”</div>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">4</strong>
+    <img src="avatar04.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต. Beam</div>
+      <div class="leader-quote">“เป้าหมายมีไว้ไปให้ถึง”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">6,900 XP</strong>
 </div>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">5</strong>
+    <img src="avatar05.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต.หญิง Mint</div>
+      <div class="leader-quote">“เก่งขึ้นทุกครั้งที่ลงมือทำ”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">6,520 XP</strong>
 </div>
-<strong>7,980 XP</strong>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">6</strong>
+    <img src="avatar06.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต. First</div>
+      <div class="leader-quote">“วินัยสำคัญกว่าแรงฮึด”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">6,100 XP</strong>
 </div>
-<div class="leaderboard-item rank-3" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;font-size:20px;">3</strong>
-<img src="avatar03.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
-<div>
-<div style="font-weight:700;">Jane</div>
-<div style="font-size:13px;color:#666;">ส.ต.ต. • Lv.2</div>
-<div class="leader-quote">“ทำให้เต็มที่ในทุกข้อ”</div>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">7</strong>
+    <img src="avatar07.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต. Film</div>
+      <div class="leader-quote">“วันนี้ต้องดีกว่าเมื่อวาน”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">5,860 XP</strong>
 </div>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">8</strong>
+    <img src="avatar08.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต. Ice</div>
+      <div class="leader-quote">“อ่านให้เข้าใจ ทำให้แม่น”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">5,500 XP</strong>
 </div>
-<strong>7,250 XP</strong>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">9</strong>
+    <img src="avatar09.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต. Bank</div>
+      <div class="leader-quote">“ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">5,120 XP</strong>
 </div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">4</strong>
-<img src="avatar04.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>Beam</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เป้าหมายมีไว้ไปให้ถึง”</div></div>
-</div>
-<strong>6,900 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">5</strong>
-<img src="avatar05.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>Mint</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“เก่งขึ้นทุกครั้งที่ลงมือทำ”</div></div>
-</div>
-<strong>6,520 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">6</strong>
-<img src="avatar06.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>First</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วินัยสำคัญกว่าแรงฮึด”</div></div>
-</div>
-<strong>6,100 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">7</strong>
-<img src="avatar07.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>Film</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“วันนี้ต้องดีกว่าเมื่อวาน”</div></div>
-</div>
-<strong>5,860 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">8</strong>
-<img src="avatar08.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>Ice</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“อ่านให้เข้าใจ ทำให้แม่น”</div></div>
-</div>
-<strong>5,500 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">9</strong>
-<img src="avatar09.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>Bank</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น”</div></div>
-</div>
-<strong>5,120 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-<div style="display:flex;align-items:center;gap:12px;">
-<strong style="width:28px;">10</strong>
-<img src="avatar10.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-<div><b>May</b><div style="font-size:13px;color:#777;">นสต. • Lv.1</div><div class="leader-quote">“ไม่หยุดจนกว่าจะสำเร็จ”</div></div>
-</div>
-<strong>4,850 XP</strong>
+<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person">
+    <strong style="width:28px;">10</strong>
+    <img src="avatar10.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info">
+      <div class="rank-person-name">นสต.หญิง May</div>
+      <div class="leader-quote">“ไม่หยุดจนกว่าจะสำเร็จ”</div>
+    </div>
+  </div>
+  <div class="rank-level">Lv.1</div>
+  <strong class="rank-xp">4,850 XP</strong>
 </div>
 </div>
 <div class="my-rank-box" id="myLeaderboardRank">
-<div class="my-rank-title">อันดับของฉัน</div>
-<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-<div style="display:flex;align-items:center;gap:12px;min-width:0;">
-<strong id="myRankNumber" style="width:42px;">—</strong>
-<img id="myRankAvatar" src="avatar20.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;"/>
-<div style="min-width:0;">
-<div id="myRankNickname" style="font-weight:700;">สมาชิก KASORB</div>
-<div id="myRankLevel" style="font-size:13px;color:#666;">ผู้ทดลองสอบ • Lv.0</div>
-<div class="leader-quote" id="myRankQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
-</div>
-</div>
-<strong id="myRankXp">0 XP</strong>
-</div>
+  <div class="my-rank-title">อันดับของฉัน</div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="rank-person">
+      <strong id="myRankNumber" style="width:42px;">—</strong>
+      <img id="myRankAvatar" src="avatar20.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;"/>
+      <div class="rank-person-info">
+        <div class="rank-person-name" id="myRankNickname">ผู้ทดลองสอบ สมาชิก KASORB</div>
+        <div class="leader-quote" id="myRankQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
+      </div>
+    </div>
+    <div class="rank-level" id="myRankLevel">Lv.0</div>
+    <strong class="rank-xp" id="myRankXp">0 XP</strong>
+  </div>
 </div>
 </div>
 <div class="system-stats">
@@ -2122,6 +2209,11 @@ $("regQuote")
 .value
 .trim();
 
+const gender=
+document.querySelector('input[name="regGender"]:checked')?.value
+||
+"unspecified";
+
 
 $("registerMsg")
 .textContent="";
@@ -2182,6 +2274,8 @@ email:email,
 nickname:nickname,
 
 quote:quote,
+
+gender:gender,
 
 avatar:selectedRegisterAvatar,
 
@@ -2613,6 +2707,30 @@ return ranks[safe];
 }
 
 
+function rankNameOnly(){
+
+if(currentData?.plan!=="premium"){
+  return "ผู้ทดลองสอบ";
+}
+
+const level=Number(currentData?.level||0);
+let rank=premiumRank(level);
+
+if(currentData?.gender==="female"){
+  rank += "หญิง";
+}
+
+return rank;
+}
+
+function levelText(){
+  const level=currentData?.plan==="premium"
+    ? Number(currentData?.level||0)
+    : 0;
+  return `Lv.${level}`;
+}
+
+
 function rankText(){
 
 if(
@@ -2682,6 +2800,9 @@ nickname:
 quote:
 "",
 
+gender:
+"unspecified",
+
 avatar:
 "avatar20.png",
 
@@ -2733,12 +2854,12 @@ avatar;
 
 $("topNickname")
 .textContent=
-nickname;
+`${rankNameOnly()} ${nickname}`;
 
 
 $("topRank")
 .textContent=
-rank;
+`${levelText()} • ${Number(currentData?.xp||0).toLocaleString()} XP`;
 
 
 const quote=
@@ -2755,8 +2876,8 @@ quote
 "";
 
 $("myRankAvatar").src=avatar;
-$("myRankNickname").textContent=nickname;
-$("myRankLevel").textContent=rank;
+$("myRankNickname").textContent=`${rankNameOnly()} ${nickname}`;
+$("myRankLevel").textContent=levelText();
 $("myRankQuote").textContent=quote ? `“${quote}”` : "";
 $("myRankXp").textContent=`${Number(currentData?.xp||0).toLocaleString()} XP`;
 
