@@ -2695,6 +2695,149 @@ input{
 }
 </style>
 
+
+<style id="kasorb-my-rank-true-match-v10">
+/* =========================================================
+   "อันดับของฉัน" — ให้แถวข้อมูลกว้าง/แนวเดียวกับ Top 10
+   ไม่มีกรอบขาวซ้อนด้านใน
+   ========================================================= */
+
+#myLeaderboardRank .my-rank-item{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+/* MOBILE: ใช้ระยะซ้าย-ขวาและคอลัมน์เดียวกับเพื่อน */
+@media(max-width:600px){
+  #myLeaderboardRank{
+    box-sizing:border-box!important;
+  }
+
+  #myLeaderboardRank .my-rank-item{
+    display:grid!important;
+    grid-template-columns:24px 38px minmax(0,1fr) 38px 62px!important;
+    grid-template-rows:auto auto!important;
+    align-items:center!important;
+    column-gap:5px!important;
+    row-gap:2px!important;
+
+    /* ไม่สร้าง inset card อีก */
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:5px 10px!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  #myLeaderboardRank .my-rank-item .rank-person,
+  #myLeaderboardRank .my-rank-item .rank-person-info{
+    display:contents!important;
+  }
+
+  #myLeaderboardRank #myRankNumber{
+    grid-column:1!important;
+    grid-row:1 / 3!important;
+    width:auto!important;
+    margin:0!important;
+    align-self:center!important;
+    justify-self:center!important;
+    font-size:14px!important;
+    line-height:1!important;
+  }
+
+  #myLeaderboardRank #myRankAvatar{
+    grid-column:2!important;
+    grid-row:1 / 3!important;
+    width:38px!important;
+    height:38px!important;
+    margin:0!important;
+    align-self:center!important;
+    justify-self:center!important;
+  }
+
+  #myLeaderboardRank #myRankNickname{
+    grid-column:3!important;
+    grid-row:1!important;
+    min-width:0!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    transform:none!important;
+    font-size:11px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  #myLeaderboardRank #myRankLevel{
+    grid-column:4!important;
+    grid-row:1!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    width:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    transform:none!important;
+    justify-self:center!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+  }
+
+  #myLeaderboardRank #myRankXp{
+    grid-column:5!important;
+    grid-row:1!important;
+    width:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    transform:none!important;
+    justify-self:end!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+  }
+
+  #myLeaderboardRank #myRankQuote{
+    grid-column:3 / 6!important;
+    grid-row:2!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:1px 0 0!important;
+    padding:2px 0!important;
+    transform:none!important;
+    font-size:9.5px!important;
+    line-height:1.45!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+
+/* iPad/desktop: เอากรอบซ้อนออกเช่นกัน แต่ไม่รื้อ layout ที่จัดไว้ */
+@media(min-width:601px){
+  #myLeaderboardRank .my-rank-item{
+    width:100%!important;
+    margin:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
