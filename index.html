@@ -2524,7 +2524,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <span>ติดต่อเรา</span>
 </span>
 </button>
-<button class="nav-btn logout-btn" id="logoutBtn" type="button" onclick="document.getElementById('logoutBtn').dispatchEvent(new CustomEvent('kasorbLogout'))">
+<button class="nav-btn logout-btn" id="logoutBtn" type="button">
 <span class="menu-inline">
 <svg aria-hidden="true" viewbox="0 0 24 24">
 <path d="M10 4H5v16h5"></path>
@@ -3531,10 +3531,19 @@ $("contactAdminBtn").onclick=()=>{
 };
 
 /* LOGOUT */
-$("logoutBtn").addEventListener("kasorbLogout", async () => {
+$("logoutBtn").addEventListener("click", async () => {
   try {
     await signOut(auth);
-    window.location.href = window.location.pathname;
+
+    $("appShell").classList.add("hidden");
+    $("authShell").classList.remove("hidden");
+    $("registerPage").classList.add("hidden");
+    $("loginPage").classList.remove("hidden");
+
+    $("loginEmail").value = "";
+    $("loginPassword").value = "";
+
+    window.scrollTo(0, 0);
   } catch (error) {
     console.error("Logout error:", error);
   }
