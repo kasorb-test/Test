@@ -3535,7 +3535,6 @@ $("logoutBtn").onclick = async () => {
   try {
     await signOut(auth);
     window.location.reload();
-  
   } catch (error) {
     console.error("Logout error:", error);
     alert("ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง");
@@ -4686,8 +4685,8 @@ else {
   currentUser = null;
   currentData = null;
 
-  document.getElementById("appShell").style.display = "none";
-  document.getElementById("authShell").style.display = "block";
+  $("appShell").classList.add("hidden");
+  $("authShell").classList.remove("hidden");
 
   showAuth("loginPage");
 }
