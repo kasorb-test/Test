@@ -2524,7 +2524,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <span>ติดต่อเรา</span>
 </span>
 </button>
-<button class="nav-btn logout-btn" id="logoutBtn" type="button">
+<button class="nav-btn logout-btn" id="logoutBtn" type="button" onclick="document.getElementById('logoutBtn').dispatchEvent(new CustomEvent('kasorbLogout'))">
 <span class="menu-inline">
 <svg aria-hidden="true" viewbox="0 0 24 24">
 <path d="M10 4H5v16h5"></path>
@@ -3531,15 +3531,14 @@ $("contactAdminBtn").onclick=()=>{
 };
 
 /* LOGOUT */
-$("logoutBtn").onclick = async () => {
+$("logoutBtn").addEventListener("kasorbLogout", async () => {
   try {
     await signOut(auth);
-    alert("ออกจากระบบสำเร็จ");
-    window.location.replace(window.location.pathname + "?logout=" + Date.now());
+    window.location.href = window.location.pathname;
   } catch (error) {
-    alert("ออกจากระบบไม่สำเร็จ: " + error.message);
+    console.error("Logout error:", error);
   }
-};
+});
   
 /* SIDEBAR GROUPS */
 
