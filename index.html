@@ -3534,13 +3534,13 @@ $("contactAdminBtn").onclick=()=>{
 $("logoutBtn").onclick = async () => {
   try {
     await signOut(auth);
-    window.location.reload();
+    alert("ออกจากระบบสำเร็จ");
+    window.location.replace(window.location.pathname + "?logout=" + Date.now());
   } catch (error) {
-    console.error("Logout error:", error);
-    alert("ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง");
+    alert("ออกจากระบบไม่สำเร็จ: " + error.message);
   }
 };
-
+  
 /* SIDEBAR GROUPS */
 
 document
