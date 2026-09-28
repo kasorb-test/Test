@@ -2357,11 +2357,15 @@ input{
 </style>
 
 <style id="kasorb-home-live">
-.home-row{
+.countdown-row{
   display:grid;
-  grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:16px;
-  margin-top:6px;
+  margin:6px 0 16px;
+}
+.countdown-card.alt{
+  background:linear-gradient(135deg,#1f3b73 0%,#16305f 55%,#0f2449 100%);
+  box-shadow:0 12px 28px rgba(22,48,95,.28);
 }
 .countdown-card{
   position:relative;
@@ -2460,7 +2464,7 @@ input{
 .stat-card{border-radius:18px}
 .stat-value{color:var(--orange);font-weight:900}
 @media(max-width:800px){
-  .home-row{grid-template-columns:1fr}
+  .countdown-row{grid-template-columns:1fr}
   .countdown-days{font-size:46px}
   .daily-choices{grid-template-columns:1fr}
 }
@@ -2736,19 +2740,12 @@ LINE OA @kasorb
 <p class="page-desc">
 ติดตามอันดับ ความคืบหน้า และสถิติการใช้งาน
 </p>
-<div class="home-row">
-<div class="countdown-card" id="countdownCard">
-<div class="countdown-label" id="countdownTitle">นับถอยหลังสู่วันสอบ</div>
-<div class="countdown-main"><span class="countdown-days" id="countdownDays">—</span><span class="countdown-unit">วัน</span></div>
-<div class="countdown-date" id="countdownDate">รอประกาศวันสอบ</div>
-<div class="countdown-cheer">ฝึกวันละนิด ติดยศได้แน่นอน 💪</div>
-</div>
+<div class="countdown-row" id="countdownRow"></div>
 <div class="news-card">
 <h3 class="home-card-title">📢 ข่าวสารและประกาศ</h3>
 <ul class="news-list" id="newsList">
 <li class="news-empty">ยังไม่มีประกาศใหม่</li>
 </ul>
-</div>
 </div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
@@ -4857,22 +4854,56 @@ function thaiDate(value){
   return d.toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"});
 }
 
+/* ค่าเริ่มต้น ใช้เมื่อแอดมินยังไม่ได้ตั้งค่าในหน้าแอดมิน */
+const defaultExams=[
+  {title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},
+  {title:"สายปราบปราม",date:"2027-01-17"}
+];
+
 function renderCountdown(home){
-  $("countdownTitle").textContent=home.examTitle
-    ? `นับถอยหลังสู่${home.examTitle}`
-    : "นับถอยหลังสู่วันสอบ";
-  if(!home.examDate){
-    $("countdownDays").textContent="—";
-    $("countdownDate").textContent="รอประกาศวันสอบ";
-    return;
-  }
-  const exam=new Date(`${home.examDate}T00:00:00`);
+  const row=$("countdownRow");
+  const exams=(Array.isArray(home.exams) && home.exams.some(e=>e && e.title))
+    ? home.exams.filter(e=>e && e.title).slice(0,2)
+    : defaultExams;
   const today=new Date(`${todayKey()}T00:00:00`);
-  const days=Math.round((exam-today)/86400000);
-  $("countdownDays").textContent=days>0 ? days.toLocaleString() : "0";
-  $("countdownDate").textContent=days>=0
-    ? `วันสอบ ${thaiDate(exam)}`
-    : `สอบไปแล้วเมื่อ ${thaiDate(exam)}`;
+  row.innerHTML="";
+  exams.forEach((item,index)=>{
+    const card=document.createElement("div");
+    card.className="countdown-card"+(index%2 ? " alt" : "");
+
+    const label=document.createElement("div");
+    label.className="countdown-label";
+    label.textContent=`นับถอยหลังสอบ${homeText(item.title)}`;
+
+    const main=document.createElement("div");
+    main.className="countdown-main";
+    const days=document.createElement("span");
+    days.className="countdown-days";
+    const unit=document.createElement("span");
+    unit.className="countdown-unit";
+    unit.textContent="วัน";
+    main.append(days,unit);
+
+    const date=document.createElement("div");
+    date.className="countdown-date";
+
+    const exam=item.date ? new Date(`${item.date}T00:00:00`) : null;
+    if(!exam || isNaN(exam)){
+      days.textContent="—";
+      date.textContent="รอประกาศวันสอบ";
+    }else{
+      const left=Math.round((exam-today)/86400000);
+      days.textContent=left>0 ? left.toLocaleString() : "0";
+      date.textContent=left>=0 ? `วันสอบ ${thaiDate(exam)}` : `สอบไปแล้วเมื่อ ${thaiDate(exam)}`;
+    }
+
+    const cheer=document.createElement("div");
+    cheer.className="countdown-cheer";
+    cheer.textContent="ฝึกวันละนิด ติดยศได้แน่นอน 💪";
+
+    card.append(label,main,date,cheer);
+    row.appendChild(card);
+  });
 }
 
 function renderNews(home){
