@@ -82,10 +82,14 @@ service cloud.firestore {
           )
         );
 
-      // แอดมินเปิด/ปิดสิทธิ์ premium
+      // แอดมินเลือกแพ็กเกจ: ฟรี / รายปี (มีวันหมดอายุ) / ตลอดชีพ
       allow update: if isAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["plan"])
-        && request.resource.data.plan in ["free", "premium"];
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(["plan", "planType", "premiumUntil"])
+        && request.resource.data.plan in ["free", "premium"]
+        && request.resource.data.get("planType", null) in [null, "yearly", "lifetime"]
+        && (request.resource.data.get("premiumUntil", null) == null
+            || request.resource.data.premiumUntil is string);
 
       allow delete: if false;
     }
