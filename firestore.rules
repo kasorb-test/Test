@@ -1,0 +1,79 @@
+rules_version = '2';
+
+// KASORB TEST — Firestore Security Rules
+// วางไฟล์นี้ใน Firebase Console > Firestore Database > Rules แล้วกด Publish
+//
+// - สมาชิกอ่าน/แก้ได้เฉพาะเอกสารของตัวเอง
+// - สมาชิกแก้ได้แค่ ชื่อเล่น คติ รูป เพศ (plan / xp / level / score / role แก้เองไม่ได้)
+// - ชื่อเล่นเปลี่ยนได้ทุก 30 วัน
+// - แอดมินอ่านรายชื่อทั้งหมด และเปิด/ปิดสิทธิ์ premium ได้
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "thananitwit@gmail.com";
+    }
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // ใช้ get() พร้อมค่าเริ่มต้น เผื่อเอกสารเก่าที่ไม่มีบางฟิลด์
+    function validProfileText(data) {
+      return data.get("nickname", "") is string
+        && data.get("nickname", "").size() > 0 && data.get("nickname", "").size() <= 20
+        && data.get("quote", "") is string && data.get("quote", "").size() <= 50
+        && data.get("gender", "unspecified") in ["male", "female", "unspecified"]
+        && data.get("avatar", "avatar20.png") is string
+        && data.get("avatar", "avatar20.png").matches("avatar[0-9]{2}[.]png");
+    }
+
+    match /users/{uid} {
+
+      allow read: if isOwner(uid) || isAdmin();
+
+      // สมัครสมาชิก: เริ่มต้นเป็นสมาชิกฟรีเสมอ
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly([
+             "email", "nickname", "quote", "gender", "avatar", "role", "plan",
+             "active", "level", "score", "xp", "nicknameChangedAt", "createdAt"
+           ])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == "student"
+        && request.resource.data.plan == "free"
+        && request.resource.data.active == false
+        && request.resource.data.level == 0
+        && request.resource.data.score == 0
+        && request.resource.data.xp == 0
+        && request.resource.data.nicknameChangedAt == null
+        && validProfileText(request.resource.data);
+
+      // สมาชิกแก้โปรไฟล์ตัวเอง
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar"])
+        && validProfileText(request.resource.data)
+        && (
+          !request.resource.data.diff(resource.data).affectedKeys()
+             .hasAny(["nickname", "nicknameChangedAt"])
+          || (
+            request.resource.data.diff(resource.data).affectedKeys().hasAll(["nickname", "nicknameChangedAt"])
+            && request.resource.data.nicknameChangedAt == request.time
+            && (
+              resource.data.get("nicknameChangedAt", null) == null
+              || request.time > resource.data.nicknameChangedAt + duration.value(30, "d")
+            )
+          )
+        );
+
+      // แอดมินเปิด/ปิดสิทธิ์ premium
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["plan"])
+        && request.resource.data.plan in ["free", "premium"];
+
+      allow delete: if false;
+    }
+  }
+}
