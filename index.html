@@ -2948,12 +2948,12 @@ LINE OA @kasorb
 <div class="stat-label">สมาชิกทั้งหมด</div>
 </div>
 <div class="stat-card">
-<div class="stat-value" id="statSubjects">—</div>
-<div class="stat-label">รายวิชา</div>
+<div class="stat-value" id="statOnline">—</div>
+<div class="stat-label">กำลังใช้งาน</div>
 </div>
 <div class="stat-card">
-<div class="stat-value" id="statCareers">—</div>
-<div class="stat-label">สายงานเสมือนจริง</div>
+<div class="stat-value" id="statTestsToday">—</div>
+<div class="stat-label">ทำแบบทดสอบแล้ววันนี้</div>
 </div>
 </div>
 </section>
@@ -3275,7 +3275,11 @@ getDoc,
 setDoc,
 updateDoc,
 serverTimestamp,
-Timestamp
+Timestamp,
+collection,
+query,
+where,
+getCountFromServer
 }
 from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -5050,8 +5054,54 @@ function renderStats(home){
   const num=v=>Number.isFinite(Number(v)) && Number(v)>0 ? Number(v).toLocaleString() : "—";
   $("statQuestions").textContent=num(home.totalQuestions);
   $("statMembers").textContent=num(home.members);
-  $("statSubjects").textContent=document.querySelectorAll("#subjectPage .list-button").length;
-  $("statCareers").textContent=document.querySelectorAll("#mockPage .list-button").length;
+  /* ยังไม่มีระบบทำข้อสอบ จึงเป็น 0 จนกว่าจะเชื่อมกับระบบข้อสอบ */
+  const testsToday=home.testsToday && home.testsToday.date===todayKey()
+    ? Number(home.testsToday.count)||0
+    : 0;
+  $("statTestsToday").textContent=testsToday.toLocaleString();
+  loadOnlineCount();
+}
+
+/* กำลังใช้งาน: สมาชิกที่เปิดเว็บภายใน 10 นาทีล่าสุด (ส่งสัญญาณทุก 5 นาที) */
+const ONLINE_WINDOW_MS=10*60*1000;
+const HEARTBEAT_MS=5*60*1000;
+let heartbeatTimer=null;
+
+async function sendHeartbeat(){
+  if(!currentUser || document.visibilityState==="hidden") return;
+  try{
+    await setDoc(doc(db,"presence",currentUser.uid),{lastSeen:serverTimestamp()});
+  }catch(error){
+    console.error(error);
+  }
+}
+
+function startPresence(){
+  stopPresence();
+  sendHeartbeat();
+  heartbeatTimer=setInterval(sendHeartbeat,HEARTBEAT_MS);
+}
+
+function stopPresence(){
+  if(heartbeatTimer) clearInterval(heartbeatTimer);
+  heartbeatTimer=null;
+}
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible") sendHeartbeat();
+});
+
+async function loadOnlineCount(){
+  try{
+    const since=Timestamp.fromMillis(Date.now()-ONLINE_WINDOW_MS);
+    const snap=await getCountFromServer(
+      query(collection(db,"presence"),where("lastSeen",">",since))
+    );
+    /* อย่างน้อยนับตัวเองด้วย เผื่อสัญญาณแรกยังบันทึกไม่เสร็จ */
+    $("statOnline").textContent=Math.max(1,snap.data().count).toLocaleString();
+  }catch(error){
+    console.error(error);
+  }
 }
 
 async function loadHome(){
@@ -5110,11 +5160,13 @@ showAppPage(
 "หน้าหลัก"
 );
 
+startPresence();
 loadHome();
 
 }
 
 else {
+  stopPresence();
   currentUser = null;
   currentData = null;
 
