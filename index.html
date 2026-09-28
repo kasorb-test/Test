@@ -5024,8 +5024,8 @@ function renderDaily(home){
     result.textContent="";
     const head=document.createElement("b");
     head.textContent=index===correct
-      ? `ถูกต้อง เฉลยข้อ ${choiceLabel(correct)}`
-      : `ยังไม่ถูก เฉลยข้อ ${choiceLabel(correct)}`;
+      ? `ถูกต้อง ตอบข้อ ${choiceLabel(correct)}`
+      : `ยังไม่ถูก ตอบข้อ ${choiceLabel(correct)}`;
     if(index!==correct) head.className="wrong";
     result.appendChild(head);
     if(daily.explanation){
