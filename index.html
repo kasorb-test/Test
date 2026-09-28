@@ -2427,75 +2427,83 @@ input{
 .news-empty{color:#999}
 .daily-card{
   margin-top:16px;
-  padding:20px 24px 22px;
-  border:1px solid #f1ece6;
-  background:linear-gradient(180deg,#fffaf5 0%,#fff 60%);
-  box-shadow:0 6px 20px rgba(0,0,0,.04);
+  padding:22px 26px;
+  border:0;
+  border-left:5px solid var(--orange);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.05);
 }
 .daily-head{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:baseline;
   gap:10px;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
-.daily-title{margin:0;font-size:17px;color:#1e293b}
-.daily-badge{
-  padding:4px 11px;
-  border-radius:999px;
-  background:#fff0e4;
-  color:#e86208;
-  font-size:12px;
+.daily-title{
+  margin:0;
+  font-size:13px;
   font-weight:800;
-  white-space:nowrap;
+  letter-spacing:.06em;
+  color:var(--orange);
 }
+.daily-date{font-size:12px;color:#999;white-space:nowrap}
 .daily-question{
   font-size:16px;
   font-weight:700;
   line-height:1.75;
-  margin:0 0 8px;
+  margin:0 0 6px;
   color:#222;
 }
 .daily-choices{display:flex;flex-direction:column}
 .daily-choice{
   display:flex;
-  align-items:baseline;
-  gap:10px;
-  width:calc(100% + 20px);
+  align-items:center;
+  gap:14px;
+  width:100%;
   text-align:left;
-  padding:8px 10px;
-  margin:0 -10px;
+  padding:11px 0;
   border:0;
-  border-radius:10px;
+  border-bottom:1px solid #f1e9df;
+  border-radius:0;
   background:transparent;
   font-size:15px;
-  line-height:1.6;
+  line-height:1.55;
   color:#333;
-  transition:background .15s,color .15s;
+  transition:color .15s;
 }
+.daily-choice:last-child{border-bottom:0}
 .daily-choice .choice-letter{
-  flex:0 0 auto;
-  min-width:20px;
+  flex:0 0 26px;
+  width:26px;
+  height:26px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1.5px solid #d6d6d6;
+  font-size:13px;
   font-weight:800;
-  color:#999;
+  color:#777;
+  transition:all .15s;
 }
-.daily-choice:hover:not(:disabled){background:#fff3e8;color:#c55309}
-.daily-choice:hover:not(:disabled) .choice-letter{color:var(--orange)}
-.daily-choice:disabled{cursor:default;color:#9aa0a6}
-.daily-choice.correct{color:#15803d;font-weight:700;background:#effaf3}
-.daily-choice.correct .choice-letter{color:#15803d}
-.daily-choice.correct::after{content:"คำตอบที่ถูก";margin-left:auto;font-size:12px;font-weight:800}
-.daily-choice.wrong{color:#c62828;background:#fff1f1}
-.daily-choice.wrong .choice-letter{color:#c62828}
-.daily-choice.wrong::after{content:"คำตอบของคุณ";margin-left:auto;font-size:12px;font-weight:800}
+.daily-choice:hover:not(:disabled){color:#c55309}
+.daily-choice:hover:not(:disabled) .choice-letter{border-color:var(--orange);color:var(--orange)}
+.daily-choice:disabled{cursor:default;color:#aaa;opacity:1}
+.daily-choice.correct{color:#15803d;font-weight:700}
+.daily-choice.correct .choice-letter{background:#15803d;border-color:#15803d;color:#fff}
+.daily-choice.wrong{color:#c62828}
+.daily-choice.wrong .choice-letter{background:#c62828;border-color:#c62828;color:#fff}
 .daily-result{
-  margin-top:12px;
+  margin-top:10px;
   padding-top:12px;
-  border-top:1px dashed #eadfd6;
+  border-top:1px solid #f0f0f0;
   font-size:14px;
   line-height:1.65;
   color:#555;
 }
+.daily-result b{color:#15803d}
+.daily-result b.wrong{color:#c62828}
 .stat-card{border-radius:18px}
 .stat-value{color:var(--orange);font-weight:900}
 @media(max-width:800px){
@@ -2784,7 +2792,7 @@ LINE OA @kasorb
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
 <h3 class="daily-title">ข้อสอบประจำวัน</h3>
-<span class="daily-badge" id="dailyDate"></span>
+<span class="daily-date" id="dailyDate"></span>
 </div>
 <div class="daily-body">
 <div class="daily-question" id="dailyQuestion">กำลังโหลดข้อสอบประจำวัน…</div>
@@ -4974,7 +4982,7 @@ function renderDaily(home){
   const daily=home.daily;
   const choicesBox=$("dailyChoices");
   const result=$("dailyResult");
-  $("dailyDate").textContent=new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short"});
+  $("dailyDate").textContent=new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
   choicesBox.innerHTML="";
   result.classList.add("hidden");
 
@@ -4988,13 +4996,15 @@ function renderDaily(home){
   let saved=null;
   try{ saved=localStorage.getItem(storeKey); }catch(e){}
 
+  const choiceLabel=i=>daily.english ? "ABCDE"[i] : String(i+1);
+
   const buttons=daily.choices.map((choice,index)=>{
     const btn=document.createElement("button");
     btn.type="button";
     btn.className="daily-choice";
     const letter=document.createElement("span");
     letter.className="choice-letter";
-    letter.textContent=(daily.english ? "ABCDE"[index] : String(index+1))+".";
+    letter.textContent=choiceLabel(index);
     const text=document.createElement("span");
     text.textContent=homeText(choice);
     btn.append(letter,text);
@@ -5011,8 +5021,16 @@ function renderDaily(home){
       else if(i===index) b.classList.add("wrong");
     });
     result.classList.remove("hidden");
-    result.textContent=(index===correct ? "ถูกต้อง เก่งมาก" : "ยังไม่ถูก ลองดูคำอธิบาย")
-      + (daily.explanation ? ` — ${homeText(daily.explanation)}` : "");
+    result.textContent="";
+    const head=document.createElement("b");
+    head.textContent=index===correct
+      ? `ถูกต้อง เฉลยข้อ ${choiceLabel(correct)}`
+      : `ยังไม่ถูก เฉลยข้อ ${choiceLabel(correct)}`;
+    if(index!==correct) head.className="wrong";
+    result.appendChild(head);
+    if(daily.explanation){
+      result.appendChild(document.createTextNode(` — ${homeText(daily.explanation)}`));
+    }
     try{ localStorage.setItem(storeKey,String(index)); }catch(e){}
   }
 
