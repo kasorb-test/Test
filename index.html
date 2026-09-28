@@ -9,6 +9,14 @@
 *{box-sizing:border-box}
 
 :root{
+  --orange:#ff7417;
+  --bg:#f6f6f6;
+  --border:#e7e7e7;
+  --text:#222;
+  --muted:#777;
+  --sidebar:230px;
+}
+
 .leaderboard-item.rank-1{
   background:linear-gradient(90deg,#fff0a8,#efc232);
   border-color:#d7a70e;
@@ -30,13 +38,6 @@
 .leaderboard-item.rank-normal{
   background:#fff;
   border-color:#eee;
-}
-  --orange:#ff7417;
-  --bg:#f6f6f6;
-  --border:#e7e7e7;
-  --text:#222;
-  --muted:#777;
-  --sidebar:230px;
 }
 
 body{
@@ -3080,6 +3081,9 @@ let currentUser=null;
 
 let currentData=null;
 
+/* ระหว่างสมัครสมาชิก รอให้บันทึกโปรไฟล์เสร็จก่อนโหลดข้อมูล */
+let pendingRegistration=null;
+
 /* สมาชิกใหม่ที่ไม่กดเลือกรูป ใช้ avatar20 */
 let selectedRegisterAvatar="avatar20.png";
 let selectedAccountAvatar=null;
@@ -3335,6 +3339,9 @@ return;
 }
 
 
+let finishRegistration;
+pendingRegistration=new Promise(r=>finishRegistration=r);
+
 try{
 
 const result=
@@ -3413,6 +3420,11 @@ $("registerMsg")
 "สมัครสมาชิกไม่สำเร็จ";
 
 }
+
+}finally{
+
+pendingRegistration=null;
+finishRegistration();
 
 }
 
@@ -3527,7 +3539,7 @@ alert(
 /* CONTACT ADMIN */
 
 $("contactAdminBtn").onclick=()=>{
-  window.location.href="fb-messenger://user-thread/kasorb";
+  window.open("https://m.me/kasorb","_blank");
 };
 
 /* LOGOUT */
@@ -3814,7 +3826,7 @@ if(currentData?.plan!=="premium"){
 const level=Number(currentData?.level||0);
 let rank=premiumRank(level);
 
-if(currentData?.gender==="female"){
+if(currentData?.gender==="female" && level>0){
   rank += "หญิง";
 }
 
@@ -3855,7 +3867,7 @@ function planText(){
 
 return currentData?.plan==="premium"
 ?
-"สถานะสมาชิก"
+"สมาชิก PREMIUM"
 :
 "สมาชิกทั่วไป";
 
@@ -4091,6 +4103,11 @@ $("nicknameEditBox")
 
 
 $("quoteEditBox")
+.classList
+.add("hidden");
+
+
+$("genderEditBox")
 .classList
 .add("hidden");
 
@@ -4644,8 +4661,7 @@ $("upgradePremiumBtn")
 .onclick=
 ()=>{
 
-window.location.href=
-"fb-messenger://user-thread/kasorb";
+window.open("https://m.me/kasorb","_blank");
 
 };
 
@@ -4669,6 +4685,10 @@ $("authShell")
 
 
 try{
+
+if(pendingRegistration){
+await pendingRegistration;
+}
 
 await loadProfile(user);
 
