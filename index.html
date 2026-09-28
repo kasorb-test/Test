@@ -2503,7 +2503,6 @@ input{
   color:#555;
 }
 .daily-result b{color:#15803d}
-.daily-result b.wrong{color:#c62828}
 .stat-card{border-radius:18px}
 .stat-value{color:var(--orange);font-weight:900}
 @media(max-width:800px){
@@ -4978,8 +4977,21 @@ function renderNews(home){
   });
 }
 
+/* ข้อสอบประจำวันเริ่มต้น ใช้เมื่อแอดมินยังไม่ได้ตั้งค่า */
+const defaultDaily={
+  question:"กฎหมายสูงสุดของประเทศไทย คือข้อใด",
+  choices:[
+    "รัฐธรรมนูญแห่งราชอาณาจักรไทย",
+    "ประมวลกฎหมายอาญา",
+    "ประมวลกฎหมายแพ่งและพาณิชย์",
+    "พระราชบัญญัติ"
+  ],
+  answer:0,
+  explanation:"รัฐธรรมนูญแห่งราชอาณาจักรไทย พุทธศักราช 2560 มาตรา 5 บัญญัติว่า รัฐธรรมนูญเป็นกฎหมายสูงสุดของประเทศ บทบัญญัติของกฎหมาย กฎ หรือข้อบังคับ หรือการกระทำใด ขัดหรือแย้งต่อรัฐธรรมนูญ บทบัญญัติหรือการกระทำนั้นเป็นอันใช้บังคับมิได้"
+};
+
 function renderDaily(home){
-  const daily=home.daily;
+  const daily=(home.daily && home.daily.question) ? home.daily : defaultDaily;
   const choicesBox=$("dailyChoices");
   const result=$("dailyResult");
   $("dailyDate").textContent=new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
@@ -5023,10 +5035,7 @@ function renderDaily(home){
     result.classList.remove("hidden");
     result.textContent="";
     const head=document.createElement("b");
-    head.textContent=index===correct
-      ? `ถูกต้อง ตอบข้อ ${choiceLabel(correct)}`
-      : `ยังไม่ถูก ตอบข้อ ${choiceLabel(correct)}`;
-    if(index!==correct) head.className="wrong";
+    head.textContent=`ตอบ ${choiceLabel(correct)}. ${homeText(daily.choices[correct]||"")}`;
     result.appendChild(head);
     if(daily.explanation){
       result.appendChild(document.createTextNode(` — ${homeText(daily.explanation)}`));
