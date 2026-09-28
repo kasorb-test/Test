@@ -2356,6 +2356,40 @@ input{
 }
 </style>
 
+<style id="kasorb-contact-menu">
+/* ติดต่อเรา: เมนูย่อยในแถบล่าง ให้หน้าตาเหมือนปุ่มแถบล่างเดิม */
+.sidebar-bottom .contact-group{
+  margin:4px 0;
+  border:0;
+  box-shadow:none;
+  background:transparent;
+  border-radius:11px;
+}
+.sidebar-bottom .contact-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.sidebar-bottom .contact-toggle .group-chevron{
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.sidebar-bottom .contact-group .submenu{
+  border-top:0;
+  background:transparent;
+  padding:0 4px 4px;
+}
+.contact-link{
+  display:block;
+  text-decoration:none;
+}
+</style>
+
 </head>
 <body>
 
@@ -2516,7 +2550,8 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 </div>
 </div>
 <div class="sidebar-bottom">
-<button class="nav-btn" id="contactAdminBtn" type="button">
+<div class="menu-group contact-group" data-group="contact">
+<button class="nav-btn contact-toggle" data-toggle-group="contact" id="contactAdminBtn" type="button">
 <span class="menu-inline">
 <svg aria-hidden="true" viewbox="0 0 24 24">
 <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path>
@@ -2524,7 +2559,19 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 </svg>
 <span>ติดต่อเรา</span>
 </span>
+<svg aria-hidden="true" class="group-chevron" viewbox="0 0 24 24">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
 </button>
+<div class="submenu">
+<a class="nav-btn contact-link" href="https://m.me/kasorb" rel="noopener" target="_blank">
+แชทเพจ Facebook
+</a>
+<a class="nav-btn contact-link" href="https://line.me/R/ti/p/@kasorb" rel="noopener" target="_blank">
+LINE OA @kasorb
+</a>
+</div>
+</div>
 <button class="nav-btn logout-btn" id="logoutBtn" type="button">
 <span class="menu-inline">
 <svg aria-hidden="true" viewbox="0 0 24 24">
@@ -3536,11 +3583,7 @@ alert(
 };
 
 
-/* CONTACT ADMIN */
-
-$("contactAdminBtn").onclick=()=>{
-  window.open("https://m.me/kasorb","_blank");
-};
+/* CONTACT ADMIN: เมนูย่อยเป็นลิงก์ Facebook / LINE OA โดยตรง */
 
 /* LOGOUT */
 $("logoutBtn").addEventListener("click", async () => {
