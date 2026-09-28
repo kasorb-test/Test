@@ -2356,6 +2356,161 @@ input{
 }
 </style>
 
+<style id="kasorb-home-live">
+.countdown-row{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin:6px 0 16px;
+}
+.countdown-card.alt{
+  background:linear-gradient(135deg,#1f3b73 0%,#16305f 55%,#0f2449 100%);
+  box-shadow:0 12px 28px rgba(22,48,95,.28);
+}
+.countdown-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  padding:22px 22px 20px;
+  color:#fff;
+  background:linear-gradient(135deg,#ff8a2b 0%,#ff6a00 55%,#e2520a 100%);
+  box-shadow:0 12px 28px rgba(255,106,0,.28);
+}
+.countdown-card::after{
+  content:"";
+  position:absolute;
+  right:-40px;top:-40px;
+  width:160px;height:160px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+}
+.countdown-label{font-size:14px;font-weight:700;opacity:.95}
+.countdown-main{display:flex;align-items:baseline;gap:8px;margin:6px 0 2px}
+.countdown-days{font-size:56px;font-weight:900;line-height:1}
+.countdown-unit{font-size:18px;font-weight:800}
+.countdown-date{font-size:13px;font-weight:600;opacity:.92}
+.countdown-cheer{
+  margin-top:14px;
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  font-size:13px;
+  font-weight:700;
+}
+.news-card,.daily-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px 22px;
+}
+.home-card-title{margin:0 0 10px;font-size:17px}
+.news-list{list-style:none;margin:0;padding:0}
+.news-list li{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:10px 0;
+  border-bottom:1px dashed #eee;
+  font-size:14px;
+  line-height:1.55;
+}
+.news-list li:last-child{border-bottom:0}
+.news-list .news-dot{
+  flex:0 0 8px;
+  height:8px;
+  margin-top:7px;
+  border-radius:50%;
+  background:var(--orange);
+}
+.news-list .news-date{display:block;color:#999;font-size:12px}
+.news-empty{color:#999}
+.daily-card{
+  margin-top:16px;
+  padding:22px 26px;
+  border:0;
+  border-left:5px solid var(--orange);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.05);
+}
+.daily-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:10px;
+}
+.daily-title{
+  margin:0;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--orange);
+}
+.daily-date{font-size:12px;color:#999;white-space:nowrap}
+.daily-question{
+  font-size:16px;
+  font-weight:700;
+  line-height:1.75;
+  margin:0 0 6px;
+  color:#222;
+}
+.daily-choices{display:flex;flex-direction:column}
+.daily-choice{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  width:100%;
+  text-align:left;
+  padding:11px 0;
+  border:0;
+  border-bottom:1px solid #f1e9df;
+  border-radius:0;
+  background:transparent;
+  font-size:15px;
+  line-height:1.55;
+  color:#333;
+  transition:color .15s;
+}
+.daily-choice:last-child{border-bottom:0}
+.daily-choice .choice-letter{
+  flex:0 0 26px;
+  width:26px;
+  height:26px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1.5px solid #d6d6d6;
+  font-size:13px;
+  font-weight:800;
+  color:#777;
+  transition:all .15s;
+}
+.daily-choice:hover:not(:disabled){color:#c55309}
+.daily-choice:hover:not(:disabled) .choice-letter{border-color:var(--orange);color:var(--orange)}
+.daily-choice:disabled{cursor:default;color:#aaa;opacity:1}
+.daily-choice.correct{color:#15803d;font-weight:700}
+.daily-choice.correct .choice-letter{background:#15803d;border-color:#15803d;color:#fff}
+.daily-choice.wrong{color:#c62828}
+.daily-choice.wrong .choice-letter{background:#c62828;border-color:#c62828;color:#fff}
+.daily-result{
+  margin-top:10px;
+  padding-top:12px;
+  border-top:1px solid #f0f0f0;
+  font-size:14px;
+  line-height:1.65;
+  color:#555;
+}
+.daily-result b{color:#15803d}
+.stat-card{border-radius:18px}
+.stat-value{color:var(--orange);font-weight:900}
+@media(max-width:800px){
+  .countdown-row{grid-template-columns:1fr}
+  .countdown-days{font-size:46px}
+}
+</style>
+
 <style id="kasorb-contact-menu">
 /* ติดต่อเรา: เมนูย่อยในแถบล่าง ให้หน้าตาเหมือนปุ่มแถบล่างเดิม */
 .sidebar-bottom .contact-group{
@@ -2626,6 +2781,24 @@ LINE OA @kasorb
 <p class="page-desc">
 ติดตามอันดับ ความคืบหน้า และสถิติการใช้งาน
 </p>
+<div class="countdown-row" id="countdownRow"></div>
+<div class="news-card">
+<h3 class="home-card-title">ข่าวสารและประกาศ</h3>
+<ul class="news-list" id="newsList">
+<li class="news-empty">ยังไม่มีประกาศใหม่</li>
+</ul>
+</div>
+<div class="daily-card" id="dailyCard">
+<div class="daily-head">
+<h3 class="daily-title">ข้อสอบประจำวัน</h3>
+<span class="daily-date" id="dailyDate"></span>
+</div>
+<div class="daily-body">
+<div class="daily-question" id="dailyQuestion">กำลังโหลดข้อสอบประจำวัน…</div>
+<div class="daily-choices" id="dailyChoices"></div>
+<div class="daily-result hidden" id="dailyResult"></div>
+</div>
+</div>
 <div class="dashboard-card" style="margin-top:18px">
 <h3>อันดับผู้ทำคะแนนสะสมสูงสุด</h3>
 <p style="color:#777">Top 10 จาก XP สะสม</p>
@@ -2775,12 +2948,12 @@ LINE OA @kasorb
 <div class="stat-label">สมาชิกทั้งหมด</div>
 </div>
 <div class="stat-card">
-<div class="stat-value" id="statOnline">—</div>
-<div class="stat-label">กำลังใช้งาน</div>
+<div class="stat-value" id="statSubjects">—</div>
+<div class="stat-label">รายวิชา</div>
 </div>
 <div class="stat-card">
-<div class="stat-value" id="statTestsToday">—</div>
-<div class="stat-label">ทำแบบทดสอบแล้ววันนี้</div>
+<div class="stat-value" id="statCareers">—</div>
+<div class="stat-label">สายงานเสมือนจริง</div>
 </div>
 </div>
 </section>
@@ -4709,6 +4882,193 @@ window.open("https://m.me/kasorb","_blank");
 };
 
 
+/* HOME: วันสอบ ข่าวสาร ข้อสอบประจำวัน สถิติ (แอดมินแก้ได้ที่ admin.html) */
+
+const homeText=v=>String(v??"");
+
+function todayKey(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function thaiDate(value){
+  const d=new Date(value);
+  if(isNaN(d)) return "";
+  return d.toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"});
+}
+
+/* ค่าเริ่มต้น ใช้เมื่อแอดมินยังไม่ได้ตั้งค่าในหน้าแอดมิน */
+const defaultExams=[
+  {title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},
+  {title:"สายปราบปราม",date:"2027-01-17"}
+];
+
+function renderCountdown(home){
+  const row=$("countdownRow");
+  const exams=(Array.isArray(home.exams) && home.exams.some(e=>e && e.title))
+    ? home.exams.filter(e=>e && e.title).slice(0,2)
+    : defaultExams;
+  const today=new Date(`${todayKey()}T00:00:00`);
+  row.innerHTML="";
+  exams.forEach((item,index)=>{
+    const card=document.createElement("div");
+    card.className="countdown-card"+(index%2 ? " alt" : "");
+
+    const label=document.createElement("div");
+    label.className="countdown-label";
+    label.textContent=`นับถอยหลังสอบ${homeText(item.title)}`;
+
+    const main=document.createElement("div");
+    main.className="countdown-main";
+    const days=document.createElement("span");
+    days.className="countdown-days";
+    const unit=document.createElement("span");
+    unit.className="countdown-unit";
+    unit.textContent="วัน";
+    main.append(days,unit);
+
+    const date=document.createElement("div");
+    date.className="countdown-date";
+
+    const exam=item.date ? new Date(`${item.date}T00:00:00`) : null;
+    if(!exam || isNaN(exam)){
+      days.textContent="—";
+      date.textContent="รอประกาศวันสอบ";
+    }else{
+      const left=Math.round((exam-today)/86400000);
+      days.textContent=left>0 ? left.toLocaleString() : "0";
+      date.textContent=left>=0 ? `วันสอบ ${thaiDate(exam)}` : `สอบไปแล้วเมื่อ ${thaiDate(exam)}`;
+    }
+
+    const cheer=document.createElement("div");
+    cheer.className="countdown-cheer";
+    cheer.textContent="ฝึกวันละนิด ติดยศได้แน่นอน";
+
+    card.append(label,main,date,cheer);
+    row.appendChild(card);
+  });
+}
+
+function renderNews(home){
+  const list=$("newsList");
+  const items=Array.isArray(home.news) ? home.news.filter(n=>n && n.text) : [];
+  list.innerHTML="";
+  if(!items.length){
+    const li=document.createElement("li");
+    li.className="news-empty";
+    li.textContent="ยังไม่มีประกาศใหม่";
+    list.appendChild(li);
+    return;
+  }
+  items.slice(0,5).forEach(n=>{
+    const li=document.createElement("li");
+    const dot=document.createElement("span");
+    dot.className="news-dot";
+    const body=document.createElement("div");
+    body.textContent=homeText(n.text);
+    if(n.date){
+      const date=document.createElement("span");
+      date.className="news-date";
+      date.textContent=thaiDate(n.date);
+      body.appendChild(date);
+    }
+    li.append(dot,body);
+    list.appendChild(li);
+  });
+}
+
+/* ข้อสอบประจำวันเริ่มต้น ใช้เมื่อแอดมินยังไม่ได้ตั้งค่า */
+const defaultDaily={
+  question:"กฎหมายสูงสุดของประเทศไทย คือข้อใด",
+  choices:[
+    "รัฐธรรมนูญแห่งราชอาณาจักรไทย",
+    "ประมวลกฎหมายอาญา",
+    "ประมวลกฎหมายแพ่งและพาณิชย์",
+    "พระราชบัญญัติ"
+  ],
+  answer:0,
+  explanation:"รัฐธรรมนูญแห่งราชอาณาจักรไทย พุทธศักราช 2560 มาตรา 5 บัญญัติว่า รัฐธรรมนูญเป็นกฎหมายสูงสุดของประเทศ บทบัญญัติของกฎหมาย กฎ หรือข้อบังคับ หรือการกระทำใด ขัดหรือแย้งต่อรัฐธรรมนูญ บทบัญญัติหรือการกระทำนั้นเป็นอันใช้บังคับมิได้"
+};
+
+function renderDaily(home){
+  const daily=(home.daily && home.daily.question) ? home.daily : defaultDaily;
+  const choicesBox=$("dailyChoices");
+  const result=$("dailyResult");
+  $("dailyDate").textContent=new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
+  choicesBox.innerHTML="";
+  result.classList.add("hidden");
+
+  if(!daily || !daily.question || !Array.isArray(daily.choices) || daily.choices.length<2){
+    $("dailyQuestion").textContent="ข้อสอบประจำวันจะมาเร็ว ๆ นี้ ติดตามได้ทุกวัน!";
+    return;
+  }
+
+  $("dailyQuestion").textContent=homeText(daily.question);
+  const storeKey=`kasorbDaily:${todayKey()}:${homeText(daily.question).slice(0,40)}`;
+  let saved=null;
+  try{ saved=localStorage.getItem(storeKey); }catch(e){}
+
+  const choiceLabel=i=>daily.english ? "ABCDE"[i] : String(i+1);
+
+  const buttons=daily.choices.map((choice,index)=>{
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="daily-choice";
+    const letter=document.createElement("span");
+    letter.className="choice-letter";
+    letter.textContent=choiceLabel(index);
+    const text=document.createElement("span");
+    text.textContent=homeText(choice);
+    btn.append(letter,text);
+    btn.onclick=()=>answer(index);
+    choicesBox.appendChild(btn);
+    return btn;
+  });
+
+  function answer(index){
+    const correct=Number(daily.answer);
+    buttons.forEach((b,i)=>{
+      b.disabled=true;
+      if(i===correct) b.classList.add("correct");
+      else if(i===index) b.classList.add("wrong");
+    });
+    result.classList.remove("hidden");
+    result.textContent="";
+    const head=document.createElement("b");
+    head.textContent=`ตอบ ${choiceLabel(correct)}. ${homeText(daily.choices[correct]||"")}`;
+    result.appendChild(head);
+    if(daily.explanation){
+      result.appendChild(document.createTextNode(` — ${homeText(daily.explanation)}`));
+    }
+    try{ localStorage.setItem(storeKey,String(index)); }catch(e){}
+  }
+
+  if(saved!==null && saved!=="") answer(Number(saved));
+}
+
+function renderStats(home){
+  const num=v=>Number.isFinite(Number(v)) && Number(v)>0 ? Number(v).toLocaleString() : "—";
+  $("statQuestions").textContent=num(home.totalQuestions);
+  $("statMembers").textContent=num(home.members);
+  $("statSubjects").textContent=document.querySelectorAll("#subjectPage .list-button").length;
+  $("statCareers").textContent=document.querySelectorAll("#mockPage .list-button").length;
+}
+
+async function loadHome(){
+  let home={};
+  try{
+    const snap=await getDoc(doc(db,"site","home"));
+    if(snap.exists()) home=snap.data();
+  }catch(error){
+    console.error(error);
+  }
+  renderCountdown(home);
+  renderNews(home);
+  renderDaily(home);
+  renderStats(home);
+}
+
+
 /* AUTH STATE */
 
 onAuthStateChanged(
@@ -4749,6 +5109,8 @@ showAppPage(
 "homePage",
 "หน้าหลัก"
 );
+
+loadHome();
 
 }
 
