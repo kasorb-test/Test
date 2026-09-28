@@ -2484,10 +2484,10 @@ input{
 .daily-choice:disabled{cursor:default;color:#9aa0a6}
 .daily-choice.correct{color:#15803d;font-weight:700;background:#effaf3}
 .daily-choice.correct .choice-letter{color:#15803d}
-.daily-choice.correct::after{content:"✓";margin-left:auto;font-weight:900}
+.daily-choice.correct::after{content:"คำตอบที่ถูก";margin-left:auto;font-size:12px;font-weight:800}
 .daily-choice.wrong{color:#c62828;background:#fff1f1}
 .daily-choice.wrong .choice-letter{color:#c62828}
-.daily-choice.wrong::after{content:"✗";margin-left:auto;font-weight:900}
+.daily-choice.wrong::after{content:"คำตอบของคุณ";margin-left:auto;font-size:12px;font-weight:800}
 .daily-result{
   margin-top:12px;
   padding-top:12px;
@@ -2776,14 +2776,14 @@ LINE OA @kasorb
 </p>
 <div class="countdown-row" id="countdownRow"></div>
 <div class="news-card">
-<h3 class="home-card-title">📢 ข่าวสารและประกาศ</h3>
+<h3 class="home-card-title">ข่าวสารและประกาศ</h3>
 <ul class="news-list" id="newsList">
 <li class="news-empty">ยังไม่มีประกาศใหม่</li>
 </ul>
 </div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
-<h3 class="daily-title">🎯 ข้อสอบประจำวัน</h3>
+<h3 class="daily-title">ข้อสอบประจำวัน</h3>
 <span class="daily-badge" id="dailyDate"></span>
 </div>
 <div class="daily-body">
@@ -4935,7 +4935,7 @@ function renderCountdown(home){
 
     const cheer=document.createElement("div");
     cheer.className="countdown-cheer";
-    cheer.textContent="ฝึกวันละนิด ติดยศได้แน่นอน 💪";
+    cheer.textContent="ฝึกวันละนิด ติดยศได้แน่นอน";
 
     card.append(label,main,date,cheer);
     row.appendChild(card);
@@ -5011,7 +5011,7 @@ function renderDaily(home){
       else if(i===index) b.classList.add("wrong");
     });
     result.classList.remove("hidden");
-    result.textContent=(index===correct ? "✅ ถูกต้อง! เก่งมาก" : "❌ ยังไม่ถูก ลองดูคำอธิบาย")
+    result.textContent=(index===correct ? "ถูกต้อง เก่งมาก" : "ยังไม่ถูก ลองดูคำอธิบาย")
       + (daily.explanation ? ` — ${homeText(daily.explanation)}` : "");
     try{ localStorage.setItem(storeKey,String(index)); }catch(e){}
   }
