@@ -3089,7 +3089,7 @@ LINE OA @kasorb
 </div>
 <div class="hidden" id="membershipPremiumBox" style="margin-top:22px;">
 <h3 style="margin-bottom:8px;">สมาชิก PREMIUM</h3>
-<p style="color:#777;line-height:1.7;margin-top:0;">
+<p id="membershipPremiumNote" style="color:#777;line-height:1.7;margin-top:0;">
     ปลดล็อกสิทธิ์ Premium ของบัญชีแล้ว
   </p>
 <div style="margin-top:16px;line-height:1.9;">
@@ -4117,6 +4117,19 @@ snap.exists()
 currentData=
 snap.data();
 
+/* แพ็กเกจรายปีที่หมดอายุแล้ว ให้กลับเป็นสมาชิกฟรี */
+if(
+currentData.plan==="premium"
+&&
+currentData.planType==="yearly"
+&&
+currentData.premiumUntil
+&&
+currentData.premiumUntil<todayKey()
+){
+currentData.plan="free";
+}
+
 }else{
 
 currentData={
@@ -4873,6 +4886,14 @@ $("upgradePremiumBtn")
 "hidden",
 isPremium
 );
+
+$("membershipPremiumNote")
+.textContent=
+currentData?.planType==="yearly" && currentData?.premiumUntil
+?
+`แพ็กเกจรายปี ใช้ได้ถึง ${thaiDate(`${currentData.premiumUntil}T00:00:00`)}`
+:
+"แพ็กเกจตลอดชีพ ใช้ได้ไม่มีวันหมดอายุ";
 
 }
 
