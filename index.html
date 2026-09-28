@@ -2427,97 +2427,74 @@ input{
 .news-empty{color:#999}
 .daily-card{
   margin-top:16px;
-  padding:0;
-  overflow:hidden;
-  border:2px solid transparent;
-  background:
-    linear-gradient(#fff,#fff) padding-box,
-    linear-gradient(135deg,#ffb36b,#ff7417 45%,#1f3b73) border-box;
-  box-shadow:0 10px 26px rgba(255,116,23,.12);
+  padding:20px 24px 22px;
+  border:1px solid #f1ece6;
+  background:linear-gradient(180deg,#fffaf5 0%,#fff 60%);
+  box-shadow:0 6px 20px rgba(0,0,0,.04);
 }
 .daily-head{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  padding:16px 20px;
-  background:linear-gradient(90deg,#fff4ea,#fffaf5);
-  border-bottom:1px solid #ffe2c9;
-}
-.daily-head-left{display:flex;align-items:center;gap:12px}
-.daily-icon{
-  display:grid;
-  place-items:center;
-  width:42px;height:42px;
-  border-radius:12px;
-  background:#fff;
-  box-shadow:0 3px 10px rgba(255,116,23,.18);
-  font-size:22px;
+  margin-bottom:12px;
 }
 .daily-title{margin:0;font-size:17px;color:#1e293b}
-.daily-sub{font-size:12px;color:#8a7766;margin-top:2px}
 .daily-badge{
-  padding:5px 12px;
+  padding:4px 11px;
   border-radius:999px;
-  background:var(--orange);
-  color:#fff;
+  background:#fff0e4;
+  color:#e86208;
   font-size:12px;
   font-weight:800;
   white-space:nowrap;
 }
-.daily-body{padding:18px 20px 20px}
 .daily-question{
   font-size:16px;
   font-weight:700;
-  line-height:1.7;
-  margin:0 0 14px;
-  padding:12px 14px;
-  border-left:4px solid var(--orange);
-  border-radius:0 10px 10px 0;
-  background:#fafafa;
+  line-height:1.75;
+  margin:0 0 8px;
+  color:#222;
 }
-.daily-choices{display:flex;flex-direction:column;gap:10px}
+.daily-choices{display:flex;flex-direction:column}
 .daily-choice{
   display:flex;
-  align-items:center;
-  gap:12px;
-  width:100%;
+  align-items:baseline;
+  gap:10px;
+  width:calc(100% + 20px);
   text-align:left;
-  padding:11px 14px;
-  border:1.5px solid #e8e8e8;
-  border-radius:12px;
-  background:#fff;
+  padding:8px 10px;
+  margin:0 -10px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
   font-size:15px;
-  line-height:1.45;
+  line-height:1.6;
   color:#333;
-  transition:border-color .15s,background .15s,transform .15s;
+  transition:background .15s,color .15s;
 }
 .daily-choice .choice-letter{
-  flex:0 0 30px;
-  height:30px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  background:#f1f3f5;
-  color:#555;
+  flex:0 0 auto;
+  min-width:20px;
   font-weight:800;
-  font-size:14px;
+  color:#999;
 }
-.daily-choice:hover:not(:disabled){border-color:var(--orange);background:#fff8f2;transform:translateX(3px)}
-.daily-choice:hover:not(:disabled) .choice-letter{background:var(--orange);color:#fff}
-.daily-choice:disabled{cursor:default;color:#999}
-.daily-choice.correct{border-color:#22a55b;background:#eafaf0;color:#136b3a;font-weight:700}
-.daily-choice.correct .choice-letter{background:#22a55b;color:#fff}
-.daily-choice.wrong{border-color:#e5484d;background:#fdecec;color:#a4262c}
-.daily-choice.wrong .choice-letter{background:#e5484d;color:#fff}
+.daily-choice:hover:not(:disabled){background:#fff3e8;color:#c55309}
+.daily-choice:hover:not(:disabled) .choice-letter{color:var(--orange)}
+.daily-choice:disabled{cursor:default;color:#9aa0a6}
+.daily-choice.correct{color:#15803d;font-weight:700;background:#effaf3}
+.daily-choice.correct .choice-letter{color:#15803d}
+.daily-choice.correct::after{content:"✓";margin-left:auto;font-weight:900}
+.daily-choice.wrong{color:#c62828;background:#fff1f1}
+.daily-choice.wrong .choice-letter{color:#c62828}
+.daily-choice.wrong::after{content:"✗";margin-left:auto;font-weight:900}
 .daily-result{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:12px;
-  background:#f6f8fa;
-  border:1px dashed #d8dee4;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px dashed #eadfd6;
   font-size:14px;
-  line-height:1.6;
+  line-height:1.65;
+  color:#555;
 }
 .stat-card{border-radius:18px}
 .stat-value{color:var(--orange);font-weight:900}
@@ -2806,13 +2783,7 @@ LINE OA @kasorb
 </div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
-<div class="daily-head-left">
-<span class="daily-icon">🎯</span>
-<div>
-<h3 class="daily-title">ข้อสอบประจำวัน</h3>
-<div class="daily-sub">ตอบวันละข้อ ฝึกสมองทุกวัน</div>
-</div>
-</div>
+<h3 class="daily-title">🎯 ข้อสอบประจำวัน</h3>
 <span class="daily-badge" id="dailyDate"></span>
 </div>
 <div class="daily-body">
@@ -5023,7 +4994,7 @@ function renderDaily(home){
     btn.className="daily-choice";
     const letter=document.createElement("span");
     letter.className="choice-letter";
-    letter.textContent=["ก","ข","ค","ง","จ"][index]||index+1;
+    letter.textContent=(daily.english ? "ABCDE"[index] : String(index+1))+".";
     const text=document.createElement("span");
     text.textContent=homeText(choice);
     btn.append(letter,text);
