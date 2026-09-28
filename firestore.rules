@@ -30,6 +30,12 @@ service cloud.firestore {
         && data.get("avatar", "avatar20.png").matches("avatar[0-9]{2}[.]png");
     }
 
+    // ข้อมูลหน้าหลัก (วันสอบ ข่าวสาร ข้อสอบประจำวัน สถิติ) — ทุกคนอ่านได้ แอดมินแก้ได้
+    match /site/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /users/{uid} {
 
       allow read: if isOwner(uid) || isAdmin();
