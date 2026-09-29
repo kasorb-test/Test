@@ -727,6 +727,8 @@ input{
 .install-step ol{margin:6px 0 0;padding-left:20px}
 .install-note{margin:4px 0 14px;font-size:13px;color:#666}
 .install-box .btn{width:100%}
+/* คำว่า TEST ในกรอบสีกรมท่า เหมือนไอคอนแอป */
+.brand-test{display:inline-block;padding:1px .45em 2px;border-radius:999px;background:#16305f;color:#fff!important;font-size:.82em!important;letter-spacing:.08em;line-height:1.25;vertical-align:.08em;margin-left:.1em}
 /* ปุ่มกลับหน้าหลัก */
 .back-home{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:9px 16px 9px 14px;border:1px solid #f1d9c6;border-radius:999px;background:#fff;color:#e86208;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(20,34,60,.05)}
 .back-home::before{content:"";width:8px;height:8px;border:solid currentColor;border-width:0 0 2.5px 2.5px;transform:rotate(45deg)}
@@ -2799,7 +2801,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <!-- AUTH -->
 <div class="hidden" id="authShell">
 <main class="auth-main">
-<h1 class="brand-title">KASORB TEST</h1>
+<h1 class="brand-title">KASORB <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
 <section class="card" id="loginPage">
 <h2>เข้าสู่ระบบ</h2>
@@ -2852,7 +2854,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <div class="hidden" id="appShell">
 <aside class="sidebar" id="sidebar">
 <div class="sidebar-brand">
-<strong>KASORB TEST</strong>
+<strong>KASORB <span class="brand-test">TEST</span></strong>
 <span>ระบบฝึกทำแบบทดสอบออนไลน์</span>
 </div>
 <div class="sidebar-menu">
