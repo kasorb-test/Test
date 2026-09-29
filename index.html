@@ -5,6 +5,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <title>KASORB TEST</title>
+<!-- ติดตั้งลงหน้าจอมือถือ (PWA) -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#ff6a00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KASORB TEST">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <!-- ฟอนต์ศรีราชา สำหรับกล่องข้อความทักทายด้านบน -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -709,6 +718,15 @@ input{
 .avatar-choice.selected{
   border-color:var(--orange);
 }
+/* ติดตั้งลงหน้าจอ */
+.install-help{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45)}
+.install-help.hidden{display:none}
+.install-box{width:100%;max-width:420px;max-height:90vh;overflow:auto;padding:22px 22px 18px;border-radius:18px;background:#fff;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.install-box h3{margin:0 0 12px;font-size:18px;color:#e86208}
+.install-step{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:#fff6ef;font-size:14px;line-height:1.6}
+.install-step ol{margin:6px 0 0;padding-left:20px}
+.install-note{margin:4px 0 14px;font-size:13px;color:#666}
+.install-box .btn{width:100%}
 /* ปุ่มกลับหน้าหลัก */
 .back-home{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:9px 16px 9px 14px;border:1px solid #f1d9c6;border-radius:999px;background:#fff;color:#e86208;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(20,34,60,.05)}
 .back-home::before{content:"";width:8px;height:8px;border:solid currentColor;border-width:0 0 2.5px 2.5px;transform:rotate(45deg)}
@@ -2942,6 +2960,16 @@ LINE OA @kasorb
 </a>
 </div>
 </div>
+<button class="nav-btn install-btn hidden" id="installBtn" type="button">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<rect x="6" y="2" width="12" height="20" rx="2"></rect>
+<path d="M12 7v7"></path>
+<path d="M9 11l3 3 3-3"></path>
+</svg>
+<span>ติดตั้งลงหน้าจอ</span>
+</span>
+</button>
 <button class="nav-btn logout-btn" id="logoutBtn" type="button">
 <span class="menu-inline">
 <svg aria-hidden="true" viewbox="0 0 24 24">
@@ -4156,6 +4184,31 @@ renderMembershipStatus();
 
 }
 
+
+/* ติดตั้งลงหน้าจอ (PWA): ซ่อนปุ่มเมื่อเปิดจากไอคอนบนหน้าจออยู่แล้ว */
+(()=>{
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js").catch(e=>console.error(e));
+  }
+  const btn=$("installBtn"), help=$("installHelp");
+  const standalone=window.matchMedia("(display-mode: standalone)").matches || navigator.standalone===true;
+  let promptEvent=null;
+  if(!standalone) btn.classList.remove("hidden");
+  window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); promptEvent=e; });
+  window.addEventListener("appinstalled",()=>btn.classList.add("hidden"));
+  btn.onclick=async()=>{
+    closeSidebar();
+    if(promptEvent){
+      promptEvent.prompt();
+      try{ await promptEvent.userChoice; }catch(e){}
+      promptEvent=null;
+      return;
+    }
+    help.classList.remove("hidden");
+  };
+  $("installHelpClose").onclick=()=>help.classList.add("hidden");
+  help.onclick=e=>{ if(e.target===help) help.classList.add("hidden"); };
+})();
 
 /* แถบด้านบน: เลื่อนลงแล้วย่อ เลื่อนกลับขึ้นบนสุดแล้วขยาย (เว้นระยะไว้ไม่ให้กระพริบ) */
 (()=>{
@@ -5719,5 +5772,16 @@ else {
 );
 
 </script>
+<div class="install-help hidden" id="installHelp" role="dialog" aria-modal="true" aria-labelledby="installHelpTitle">
+<div class="install-box">
+<h3 id="installHelpTitle">ติดตั้ง KASORB TEST ลงหน้าจอ</h3>
+<div class="install-step"><b>iPhone / iPad (Safari)</b>
+<ol><li>กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศรชี้ขึ้น) ด้านล่างหรือด้านบนของจอ</li><li>เลื่อนลงแล้วกด “เพิ่มไปยังหน้าจอโฮม”</li><li>กด “เพิ่ม”</li></ol></div>
+<div class="install-step"><b>Android (Chrome)</b>
+<ol><li>กดปุ่มจุดสามจุด มุมขวาบน</li><li>กด “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”</li></ol></div>
+<p class="install-note">หลังติดตั้ง จะมีไอคอน KASORB TEST บนหน้าจอ กดเปิดได้เหมือนแอป</p>
+<button class="btn primary" id="installHelpClose" type="button">เข้าใจแล้ว</button>
+</div>
+</div>
 </body>
 </html>
