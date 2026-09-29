@@ -2970,6 +2970,10 @@ body:not(.review-mode) .rvbar{display:none}
 .as-frac b+b{border-top:2.5px solid currentColor;padding-top:2px;width:100%;text-align:center}
 .as-all{flex-direction:column;justify-content:center;gap:0;text-align:center}
 .as-all .as-frac b{color:#fff;font-size:30px}
+.as-c span{min-height:34px;font-size:13px;line-height:1.35}
+.as-got{margin:8px auto 0;min-width:64px;padding:6px 12px;border:2px solid #cbd5e1;border-radius:12px;background:#fff;font-size:28px;font-weight:900;line-height:1.2;color:#0f172a;text-align:center;display:inline-block}
+.as-p .as-got{margin:0}
+.as-all .as-got{background:rgba(255,255,255,.95);border-color:transparent;color:#c2410c;font-size:32px}
 /* ธีมกรมท่า */
 .asheet.navy .as-head{background:linear-gradient(120deg,#27477f,#16305f 60%,#0f2449)}
 .asheet.navy .as-lbl{color:#16305f}
@@ -6267,7 +6271,7 @@ function renderResult(){
   renderAnswerSheet();
 }
 /* กระดาษคำตอบแบบกระดาษสอบจริง: 25 ข้อต่อคอลัมน์บนจอใหญ่ จอแคบลดจำนวนคอลัมน์ */
-const SEC_SHORT=["ความสามารถทั่วไป","ไทย","คอม","สารบรรณ","กฎหมาย","อังกฤษ"];
+const SEC_SHORT=["ความสามารถทั่วไป","ภาษาไทย","คอมพิวเตอร์","ระเบียบงานสารบรรณ","กฎหมายที่ประชาชนควรรู้","ภาษาอังกฤษ"];
 function renderAnswerSheet(){
   const r=lastResult;if(!r) return;
   const n=r.items.length,W=window.innerWidth;
@@ -6286,7 +6290,7 @@ function renderAnswerSheet(){
   const secs=(r.meta.sections||[]).map((x,i)=>{let c=0;for(let q=x.from;q<=x.to;q++){const it=r.items[q-1];if(it&&r.ans[q-1]===it.a)c++;}return {name:SEC_SHORT[i]||x.name,c,t:x.to-x.from+1};});
   const sum=(a,b)=>secs.slice(a,b).reduce((o,x)=>({c:o.c+x.c,t:o.t+x.t}),{c:0,t:0});
   const pass=t=>Math.ceil(t*0.6);
-  const part=(p,title,sub)=>`<div class="as-p${p.c>=pass(p.t)?" ok":""}"><span>${title}<small>${sub} · ผ่าน ${pass(p.t)}</small><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":"ยังไม่ผ่าน"}</em></span><div class="as-frac"><b>${p.c}</b><b>${p.t}</b></div></div>`;
+  const part=(p,title,sub)=>`<div class="as-p${p.c>=pass(p.t)?" ok":""}"><span>${title} (${p.t})<small>${sub} · ผ่าน ${pass(p.t)}</small><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":"ยังไม่ผ่าน"}</em></span><div class="as-got">${p.c}</div></div>`;
   const pct=Math.round(r.correct/n*100);
   const setNo=(r.meta.title.match(/ชุดที่\s*(\d+)/)||[])[1]||"";
   $("rSheet").innerHTML=`<div class="as-head"><div class="as-logo"><b>กะสอบ</b><i>TEST</i></div>
@@ -6296,9 +6300,9 @@ function renderAnswerSheet(){
     <div class="as-lbl"><span>กระดาษคำตอบ</span><div class="as-leg"><span><i style="background:#16a34a;border-color:#16a34a"></i>ตอบถูก</span><span><i style="background:#dc2626;border-color:#dc2626"></i>ตอบผิด</span></div></div>
     <div class="as-grid">${grid}</div>
     ${secs.length?`<div class="as-sum"><div class="as-lbl"><span>สรุปคะแนน</span></div>
-      <div class="as-cards">${secs.map(x=>`<div class="as-c"><span>${escHtml(x.name)}</span><div class="as-frac"><b>${x.c}</b><b>${x.t}</b></div></div>`).join("")}</div>
+      <div class="as-cards">${secs.map((x,i)=>`<div class="as-c"><span>${i+1}. ${escHtml(x.name)} (${x.t})</span><div class="as-got">${x.c}</div></div>`).join("")}</div>
       <div class="as-tot">${part(sum(0,2),"ภาคความรู้ทั่วไป","2 วิชา")}${secs.length>2?part(sum(2,secs.length),"ภาคความรู้เฉพาะตำแหน่ง",`${secs.length-2} วิชา`):""}
-      <div class="as-all"><span>คะแนนรวม</span><div class="as-frac"><b>${r.correct}</b><b>${n}</b></div></div></div></div>`:""}
+      <div class="as-all"><span>คะแนนรวม (${n})</span><div class="as-got">${r.correct}</div></div></div></div>`:""}
     <div class="as-foot">"I WANNA BE A POLICE OFFICER"</div></div>`;
 }
 let sheetW=window.innerWidth;
