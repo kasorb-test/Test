@@ -67,8 +67,19 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "today"])
         && validProfileText(request.resource.data)
+        // วันนี้ทำข้อสอบไปกี่ข้อ: {date: "YYYY-MM-DD", count: 0-2000}
+        && (
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(["today"])
+          || (
+            request.resource.data.today.keys().hasOnly(["date", "count"])
+            && request.resource.data.today.date is string
+            && request.resource.data.today.count is int
+            && request.resource.data.today.count >= 0
+            && request.resource.data.today.count <= 2000
+          )
+        )
         && (
           !request.resource.data.diff(resource.data).affectedKeys()
              .hasAny(["nickname", "nicknameChangedAt"])
