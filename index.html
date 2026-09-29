@@ -18,6 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sriracha&amp;display=swap" rel="stylesheet">
+<!-- ฟอนต์ Mitr เฉพาะคำว่า กะสอบ (เหมือนไอคอนแอป) -->
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@600&amp;text=%E0%B8%81%E0%B8%B0%E0%B8%AA%E0%B8%AD%E0%B8%9A&amp;display=swap" rel="stylesheet">
 <!-- ฟอนต์สารบรรณ สำหรับข้อสอบทุกข้อ -->
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>
@@ -727,6 +729,31 @@ input{
 .install-step ol{margin:6px 0 0;padding-left:20px}
 .install-note{margin:4px 0 14px;font-size:13px;color:#666}
 .install-box .btn{width:100%}
+/* ชื่อ กะสอบ ฟอนต์ Mitr ตัวหนา เหมือนไอคอนแอป */
+.brand-name{font-family:"Mitr",Arial,sans-serif;font-weight:600;letter-spacing:0}
+.sidebar-brand .brand-name{display:inline;margin:0;color:var(--orange);font-size:1.12em;white-space:nowrap}
+.brand-title .brand-name{font-size:1.08em}
+.sidebar-brand strong{white-space:nowrap}
+/* ชื่อเว็บในกรอบส้มแบบไอคอนแอป: กะสอบ สีขาว + TEST กรอบน้ำเงิน */
+.sidebar-brand strong,.brand-title{
+  position:relative;overflow:hidden;
+  display:inline-flex;align-items:center;gap:.35em;
+  padding:.38em .75em .42em;
+  border-radius:16px;
+  background:linear-gradient(135deg,#ff8a2b 0%,#ff6a00 55%,#e2520a 100%);
+  box-shadow:0 6px 16px rgba(226,82,10,.25);
+}
+.sidebar-brand strong::after,.brand-title::after{
+  content:"";position:absolute;right:-1.6em;top:-2em;width:3.6em;height:3.6em;border-radius:50%;
+  background:rgba(255,255,255,.14);pointer-events:none;
+}
+.sidebar-brand strong .brand-name,.brand-title .brand-name{color:#fff!important;text-shadow:0 2px 5px rgba(120,40,0,.25);position:relative;z-index:1}
+.sidebar-brand strong .brand-test,.brand-title .brand-test{position:relative;z-index:1;margin-left:0}
+.sidebar-brand span:not(.brand-name):not(.brand-test){display:block;margin-top:8px}
+.brand-title{margin-bottom:12px}
+/* หน้าเข้าสู่ระบบ: ชื่อเว็บและคำอธิบายอยู่กึ่งกลาง ให้บาลานซ์กับกล่องเข้าสู่ระบบ */
+.auth-main .brand-title{display:flex;width:fit-content;margin-left:auto;margin-right:auto}
+.auth-main .subtitle{text-align:center}
 /* คำว่า TEST ในกรอบสีกรมท่า เหมือนไอคอนแอป */
 .brand-test{display:inline-block;padding:1px .45em 2px;border-radius:999px;background:#16305f;color:#fff!important;font-size:.82em!important;letter-spacing:.08em;line-height:1.25;vertical-align:.08em;margin-left:.1em}
 /* ปุ่มกลับหน้าหลัก */
@@ -2801,7 +2828,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <!-- AUTH -->
 <div class="hidden" id="authShell">
 <main class="auth-main">
-<h1 class="brand-title">KASORB <span class="brand-test">TEST</span></h1>
+<h1 class="brand-title"><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
 <section class="card" id="loginPage">
 <h2>เข้าสู่ระบบ</h2>
@@ -2854,7 +2881,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <div class="hidden" id="appShell">
 <aside class="sidebar" id="sidebar">
 <div class="sidebar-brand">
-<strong>KASORB <span class="brand-test">TEST</span></strong>
+<strong><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></strong>
 <span>ระบบฝึกทำแบบทดสอบออนไลน์</span>
 </div>
 <div class="sidebar-menu">
