@@ -2963,6 +2963,13 @@ body:not(.review-mode) .rvbar{display:none}
  .as-body{padding:16px 12px 18px}.as-grid{padding:10px 2px}.as-col{padding:0 4px}
  .as-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.as-tot{grid-template-columns:1fr}
 }
+/* คะแนน: ตัวเลขบน = ได้ ล่าง = เต็ม ขนาดเท่ากัน */
+.as-c{text-align:center}
+.as-frac{display:inline-flex;flex-direction:column;align-items:center;margin-top:6px;min-width:56px}
+.as-frac b{display:block;font-size:26px;line-height:1.25;font-weight:900;color:#0f172a}
+.as-frac b+b{border-top:2.5px solid currentColor;padding-top:2px;width:100%;text-align:center}
+.as-all{flex-direction:column;justify-content:center;gap:0;text-align:center}
+.as-all .as-frac b{color:#fff;font-size:30px}
 /* ธีมกรมท่า */
 .asheet.navy .as-head{background:linear-gradient(120deg,#27477f,#16305f 60%,#0f2449)}
 .asheet.navy .as-lbl{color:#16305f}
@@ -6279,7 +6286,7 @@ function renderAnswerSheet(){
   const secs=(r.meta.sections||[]).map((x,i)=>{let c=0;for(let q=x.from;q<=x.to;q++){const it=r.items[q-1];if(it&&r.ans[q-1]===it.a)c++;}return {name:SEC_SHORT[i]||x.name,c,t:x.to-x.from+1};});
   const sum=(a,b)=>secs.slice(a,b).reduce((o,x)=>({c:o.c+x.c,t:o.t+x.t}),{c:0,t:0});
   const pass=t=>Math.ceil(t*0.6);
-  const part=(p,title,sub)=>`<div class="as-p${p.c>=pass(p.t)?" ok":""}"><span>${title}<small>${sub} · ผ่าน ${pass(p.t)}</small><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":"ยังไม่ผ่าน"}</em></span><b>${p.c}<small> / ${p.t}</small></b></div>`;
+  const part=(p,title,sub)=>`<div class="as-p${p.c>=pass(p.t)?" ok":""}"><span>${title}<small>${sub} · ผ่าน ${pass(p.t)}</small><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":"ยังไม่ผ่าน"}</em></span><div class="as-frac"><b>${p.c}</b><b>${p.t}</b></div></div>`;
   const pct=Math.round(r.correct/n*100);
   const setNo=(r.meta.title.match(/ชุดที่\s*(\d+)/)||[])[1]||"";
   $("rSheet").innerHTML=`<div class="as-head"><div class="as-logo"><b>กะสอบ</b><i>TEST</i></div>
@@ -6289,9 +6296,9 @@ function renderAnswerSheet(){
     <div class="as-lbl"><span>กระดาษคำตอบ</span><div class="as-leg"><span><i style="background:#16a34a;border-color:#16a34a"></i>ตอบถูก</span><span><i style="background:#dc2626;border-color:#dc2626"></i>ตอบผิด</span></div></div>
     <div class="as-grid">${grid}</div>
     ${secs.length?`<div class="as-sum"><div class="as-lbl"><span>สรุปคะแนน</span></div>
-      <div class="as-cards">${secs.map(x=>`<div class="as-c${x.c>=pass(x.t)?" good":""}"><span>${escHtml(x.name)}</span><b>${x.c}<small> / ${x.t}</small></b><div class="as-bar"><i style="width:${Math.round(x.c/x.t*100)}%"></i></div></div>`).join("")}</div>
+      <div class="as-cards">${secs.map(x=>`<div class="as-c"><span>${escHtml(x.name)}</span><div class="as-frac"><b>${x.c}</b><b>${x.t}</b></div></div>`).join("")}</div>
       <div class="as-tot">${part(sum(0,2),"ภาคความรู้ทั่วไป","2 วิชา")}${secs.length>2?part(sum(2,secs.length),"ภาคความรู้เฉพาะตำแหน่ง",`${secs.length-2} วิชา`):""}
-      <div class="as-all"><div class="as-ring" style="--p:${pct}"><div>${pct}%</div></div><div><span>คะแนนรวม</span><b>${r.correct}<small> / ${n}</small></b></div></div></div></div>`:""}
+      <div class="as-all"><span>คะแนนรวม</span><div class="as-frac"><b>${r.correct}</b><b>${n}</b></div></div></div></div>`:""}
     <div class="as-foot">"I WANNA BE A POLICE OFFICER"</div></div>`;
 }
 let sheetW=window.innerWidth;
