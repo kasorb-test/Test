@@ -2511,6 +2511,111 @@ input{
 }
 </style>
 
+<style id="kasorb-hero-bar">
+/* ส่วนหัวแบบแบนเนอร์สีส้ม: คำขวัญ + คำทักทาย ซ้าย, การ์ดโปรไฟล์ (มีคติ) ขวา */
+.hb{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:22px 26px;
+  background:linear-gradient(120deg,#ff8a2b 0%,#ff6a00 60%,#e2520a 100%);
+  color:#fff;
+}
+.hb::after{
+  content:"";
+  position:absolute;
+  right:-70px;top:-90px;
+  width:280px;height:280px;
+  border-radius:50%;
+  background:rgba(255,255,255,.1);
+  pointer-events:none;
+}
+.hb-burger{
+  display:none;
+  flex:0 0 40px;
+  width:40px;height:40px;
+  border:0;
+  border-radius:11px;
+  background:rgba(255,255,255,.2);
+  color:#fff;
+  place-items:center;
+  position:relative;
+  z-index:1;
+}
+.hb-burger i,.hb-burger i::before,.hb-burger i::after{
+  display:block;width:18px;height:2px;border-radius:2px;background:currentColor;position:relative;
+}
+.hb-burger i::before,.hb-burger i::after{content:"";position:absolute;left:0}
+.hb-burger i::before{top:-6px}
+.hb-burger i::after{top:6px}
+.hb-text{flex:1;min-width:0;position:relative;z-index:1}
+.hb-slogan{font-size:13px;font-weight:800;letter-spacing:.12em;opacity:.92}
+.hb-hi{font-size:24px;font-weight:900;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-card{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:center;
+  column-gap:14px;
+  width:380px;
+  max-width:100%;
+  padding:12px 16px;
+  border:0;
+  border-radius:16px;
+  background:#fff;
+  color:#222;
+  text-align:left;
+  box-shadow:0 10px 24px rgba(0,0,0,.14);
+  cursor:pointer;
+}
+.hb-av{
+  flex:0 0 58px;
+  width:58px;height:58px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.14);
+  background:#fde7da;
+}
+.hb-info{flex:1;min-width:0}
+.hb-name{font-size:15px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-lv{font-size:12px;font-weight:700;color:#e86208;margin:2px 0 6px}
+.hb-lv b{color:#15803d}
+.hb-bar{height:6px;border-radius:99px;background:#eceff3;overflow:hidden}
+.hb-bar div{height:100%;width:0;border-radius:99px;background:var(--orange);transition:width .3s}
+/* คติ: แถวของตัวเอง เต็มความกว้างการ์ด ขึ้นบรรทัดใหม่ได้ ไม่ตัดท้าย */
+.hb-quote{
+  grid-column:1 / -1;
+  margin-top:10px;
+  padding:6px 0 6px 12px;
+  border-left:3px solid var(--orange);
+  font-size:14px;
+  font-weight:700;
+  line-height:1.55;
+  color:#16305f;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.hb-quote:empty{display:none}
+@media(min-width:801px) and (max-width:1100px){
+  .hb{flex-wrap:wrap;gap:14px;padding:18px 22px}
+  .hb-text{flex:1 1 100%}
+  .hb-card{flex:1 1 100%;width:auto}
+}
+@media(max-width:800px){
+  .hb{flex-wrap:wrap;gap:12px;padding:14px}
+  .hb-burger{display:grid}
+  .hb-text{flex:1 1 calc(100% - 60px)}
+  .hb-slogan{font-size:11px}
+  .hb-hi{font-size:19px}
+  .hb-card{flex:1 1 100%;width:auto;padding:10px 12px}
+  .hb-av{flex-basis:46px;width:46px;height:46px}
+}
+</style>
+
 <style id="kasorb-contact-menu">
 /* ติดต่อเรา: เมนูย่อยในแถบล่าง ให้หน้าตาเหมือนปุ่มแถบล่างเดิม */
 .sidebar-bottom .contact-group{
@@ -2741,36 +2846,21 @@ LINE OA @kasorb
 </aside>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="app-main">
-<header class="topbar">
-<div class="topbar-left">
-<button class="menu-toggle" id="menuToggle" type="button">
-☰
+<header class="hb">
+<button aria-label="เปิดเมนู" class="hb-burger" id="menuToggle" type="button"><i></i></button>
+<div class="hb-text">
+<div class="hb-slogan">I WANNA BE A POLICE OFFICER</div>
+<div class="hb-hi" id="heroHello">สวัสดี</div>
+</div>
+<button class="hb-card" id="topProfileBtn" type="button">
+<img alt="รูปโปรไฟล์" class="hb-av" id="topAvatar" src="avatar20.png"/>
+<div class="hb-info">
+<div class="hb-name" id="topNickname">สมาชิก KASORB</div>
+<div class="hb-lv"><span id="topRank">Lv.0 • 0 XP</span> · ความคืบหน้า <b id="topProgressText">0%</b></div>
+<div class="hb-bar"><div id="topProgressFill"></div></div>
+</div>
+<div class="hb-quote" id="topQuote"></div>
 </button>
-<div class="top-caption-box">
-<div class="top-caption-main">I WANNA BE A POLICE OFFICER</div>
-</div>
-</div>
-<div class="topbar-second-row">
-<section class="today-news" aria-label="ข่าวสารวันนี้">
-<div class="today-news-title">ข่าวสารวันนี้</div>
-<div class="today-news-placeholder">พื้นที่สำหรับประกาศและข้อมูลอัปเดต</div>
-</section>
-<button class="member-top" id="topProfileBtn" type="button">
-<img alt="Avatar" class="top-avatar" id="topAvatar" src="avatar20.png"/>
-<div class="top-member-text">
-<div class="top-name" id="topNickname">สมาชิก KASORB</div>
-<div class="top-rank" id="topRank">ผู้ทดลองสอบ • Lv.0</div>
-</div>
-<div class="top-quote" id="topQuote">“ตั้งใจทำวันนี้ให้ดีที่สุด”</div>
-<div class="top-progress">
-<div class="top-progress-row">
-<span>ฝึกแบบทดสอบถึงไหนแล้ว</span>
-<strong id="topProgressText">0%</strong>
-</div>
-<div class="top-progress-track"><div class="top-progress-fill" id="topProgressFill"></div></div>
-</div>
-</button>
-</div>
 </header>
 <main class="content">
 <!-- HOME -->
@@ -4203,6 +4293,10 @@ $("topNickname")
 $("topRank")
 .textContent=
 `${levelText()} • ${Number(currentData?.xp||0).toLocaleString()} XP`;
+
+$("heroHello")
+.textContent=
+`สวัสดี ${nickname}`;
 
 
 const quote=
