@@ -5,10 +5,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <title>KASORB TEST</title>
-<!-- ฟอนต์ศรีราชา เฉพาะตัวอักษรในคำขวัญ (ไฟล์เล็ก) -->
+<!-- ฟอนต์ศรีราชา สำหรับกล่องข้อความทักทายด้านบน -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sriracha&amp;text=I%20WANBEPOLICFR&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sriracha&amp;display=swap" rel="stylesheet">
 <!-- ฟอนต์สารบรรณ สำหรับข้อสอบทุกข้อ -->
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>
@@ -2687,7 +2687,13 @@ input{
 /* ล็อกแถบด้านบนไว้เสมอ เลื่อนลงแล้วย่อเหลือแถบบาง (ซ่อนคำขวัญ บรรทัดวันนี้ และคติ) */
 .hb{position:sticky;top:0;z-index:60;transition:padding .2s}
 /* คำขวัญใช้ฟอนต์ศรีราชา + กรอบกระจกใสรอบข้อความทักทาย */
-.hb-slogan{font-family:"Sriracha",cursive;font-size:17px;font-weight:400;letter-spacing:.05em;opacity:1}
+.hb-text,.hb-text *{font-family:"Sriracha",cursive;font-weight:400}
+.hb-text .hb-hi{font-size:27px;text-shadow:0 2px 6px rgba(120,40,0,.25)}
+.hb-text .hb-today{font-size:15px}
+@media(max-width:1100px){.hb-text .hb-hi{font-size:22px}.hb-text .hb-today{font-size:14px}}
+.hb.mini .hb-text .hb-hi{font-size:21px}
+/* คำขวัญสีดำมีเงา ให้ดูนูนมีมิติ */
+.hb-slogan{font-size:18px;letter-spacing:.05em;opacity:1;color:#141414;text-shadow:0 1px 0 rgba(255,255,255,.45),0 2px 0 rgba(255,255,255,.18),0 4px 8px rgba(0,0,0,.35)}
 .hb-text{padding:12px 18px;border:1px solid rgba(255,255,255,.55);border-radius:18px;background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 @media(min-width:1101px){.hb{justify-content:space-between}.hb-text{flex:0 1 auto}}
 @media(max-width:800px){.hb-slogan{font-size:14px}.hb-text{padding:10px 14px}}
