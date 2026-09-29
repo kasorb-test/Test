@@ -2556,9 +2556,10 @@ input{
 .hb-card{
   position:relative;
   z-index:1;
-  display:flex;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
   align-items:center;
-  gap:14px;
+  column-gap:14px;
   width:380px;
   max-width:100%;
   padding:12px 16px;
@@ -2585,19 +2586,24 @@ input{
 .hb-lv b{color:#15803d}
 .hb-bar{height:6px;border-radius:99px;background:#eceff3;overflow:hidden}
 .hb-bar div{height:100%;width:0;border-radius:99px;background:var(--orange);transition:width .3s}
+/* คติ: แถวของตัวเอง เต็มความกว้างการ์ด ขึ้นบรรทัดใหม่ได้ ไม่ตัดท้าย */
 .hb-quote{
-  margin-top:7px;
-  font-size:12.5px;
-  line-height:1.5;
-  color:#6b5a4c;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  grid-column:1 / -1;
+  margin-top:10px;
+  padding:6px 0 6px 12px;
+  border-left:3px solid var(--orange);
+  font-size:14px;
+  font-weight:700;
+  line-height:1.55;
+  color:#c55309;
+  white-space:normal;
+  overflow-wrap:anywhere;
 }
 .hb-quote:empty{display:none}
 @media(min-width:801px) and (max-width:1100px){
-  .hb-card{width:330px}
-  .hb-slogan{font-size:11.5px;letter-spacing:.05em;white-space:nowrap}
+  .hb{flex-wrap:wrap;gap:14px;padding:18px 22px}
+  .hb-text{flex:1 1 100%}
+  .hb-card{flex:1 1 100%;width:auto}
 }
 @media(max-width:800px){
   .hb{flex-wrap:wrap;gap:12px;padding:14px}
@@ -2852,8 +2858,8 @@ LINE OA @kasorb
 <div class="hb-name" id="topNickname">สมาชิก KASORB</div>
 <div class="hb-lv"><span id="topRank">Lv.0 • 0 XP</span> · ความคืบหน้า <b id="topProgressText">0%</b></div>
 <div class="hb-bar"><div id="topProgressFill"></div></div>
-<div class="hb-quote" id="topQuote"></div>
 </div>
+<div class="hb-quote" id="topQuote"></div>
 </button>
 </header>
 <main class="content">
