@@ -2693,7 +2693,11 @@ input{
 @media(max-width:1100px){.hb-text .hb-hi{font-size:22px}.hb-text .hb-today{font-size:14px}}
 .hb.mini .hb-text .hb-hi{font-size:21px}
 /* "สวัสดี ชื่อ" แล้วต่อด้วย "วันนี้คุณ…" บรรทัดเดียวกัน จอแคบค่อยขึ้นบรรทัดใหม่ */
-.hb-line{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;row-gap:4px;margin-top:4px}
+.hb-line{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;row-gap:0;margin-top:2px}
+/* ลดระยะห่างระหว่างบรรทัด (ฟอนต์ศรีราชาบรรทัดสูง) */
+.hb-text{line-height:1.5}
+.hb-text .hb-today{row-gap:6px}
+.hb-text .hb-count{padding-top:3px;padding-bottom:3px}
 .hb-line .hb-hi{flex:0 1 auto;min-width:0;margin-top:0}
 .hb-line .hb-today{margin-top:0}
 /* คำขวัญสีดำมีเงา ให้ดูนูนมีมิติ */
