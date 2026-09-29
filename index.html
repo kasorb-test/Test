@@ -701,6 +701,13 @@ input{
 .avatar-choice.selected{
   border-color:var(--orange);
 }
+/* อัปโหลดรูปของตัวเอง */
+.photo-up{display:flex;align-items:center;gap:14px;margin:12px 0 4px}
+.photo-tile{flex:0 0 72px;width:72px;height:72px;padding:3px;border:2px dashed #f0b58a;border-radius:13px;background:#fff8f2;color:#e86208;font-size:12px;font-weight:800;line-height:1.3;cursor:pointer}
+.photo-tile.selected{border:3px solid var(--orange)}
+.photo-tile img{display:block;width:100%;height:100%;object-fit:cover;border-radius:10px}
+.photo-tile img.hidden,.photo-tile span.hidden{display:none}
+.photo-note{margin:0;color:#888}
 
 .avatar-choice img{
   display:block;
@@ -1199,6 +1206,20 @@ input{
   #accountAvatarGrid .avatar-choice{
     width:64px !important;
     height:64px !important;
+  }
+}
+/* จอมือถือแคบ: ย่อรูปให้พอดี 5 คอลัมน์ ไม่ล้นขอบ */
+@media(max-width:480px){
+  #registerAvatarGrid,
+  #accountAvatarGrid{
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+  #registerAvatarGrid .avatar-choice,
+  #accountAvatarGrid .avatar-choice{
+    width:100% !important;
+    height:auto !important;
+    aspect-ratio:1;
   }
 }
 
@@ -3249,6 +3270,14 @@ LINE OA @kasorb
 <h3>
 เปลี่ยนรูปโปรไฟล์
 </h3>
+<div class="photo-up">
+<button type="button" class="photo-tile" id="photoTile" aria-label="อัปโหลดรูปของฉัน">
+<img alt="" class="hidden" id="photoPreview"/>
+<span id="photoTileText">อัปโหลด<br/>รูปของฉัน</span>
+</button>
+<input accept="image/*" class="hidden" id="photoInput" type="file"/>
+<p class="small photo-note">อัปโหลดรูปของตัวเอง หรือเลือกรูปการ์ตูนด้านล่าง</p>
+</div>
 <div class="avatar-grid" id="accountAvatarGrid"></div>
 <button class="btn primary" id="confirmAvatarEditBtn" type="button">ยืนยันการเปลี่ยนรูป</button>
 <p class="small save-status" id="avatarSaveStatus"></p>
@@ -3437,6 +3466,37 @@ let pendingRegistration=null;
 /* สมาชิกใหม่ที่ไม่กดเลือกรูป ใช้ avatar20 */
 let selectedRegisterAvatar="avatar20.png";
 let selectedAccountAvatar=null;
+/* รูปที่นักเรียนอัปโหลด เก็บเป็นรูป JPEG ขนาดเล็กในข้อมูลสมาชิก (ไม่ใช้ Storage) */
+const PHOTO_SIZE=160;
+const PHOTO_MAX_CHARS=60000;
+const isPhotoData=v=>typeof v==="string" && v.length<=PHOTO_MAX_CHARS && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(v);
+let pendingPhoto=null;
+/* รูปโปรไฟล์ที่ใช้แสดง: รูปที่อัปโหลดก่อน ถ้าไม่มีใช้รูปการ์ตูน */
+function avatarSrc(data=currentData){
+  return isPhotoData(data?.photo) ? data.photo : (data?.avatar || "avatar20.png");
+}
+/* ย่อรูปเป็นสี่เหลี่ยมจัตุรัส ตัดตรงกลาง แล้วบีบอัดจนเล็กพอ */
+async function shrinkPhoto(file){
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await new Promise((ok,fail)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=fail;i.src=url;});
+    const side=Math.min(img.naturalWidth,img.naturalHeight);
+    if(!side) throw new Error("empty image");
+    const c=document.createElement("canvas");
+    c.width=c.height=PHOTO_SIZE;
+    const g=c.getContext("2d");
+    g.fillStyle="#fff";
+    g.fillRect(0,0,PHOTO_SIZE,PHOTO_SIZE);
+    g.drawImage(img,(img.naturalWidth-side)/2,(img.naturalHeight-side)/2,side,side,0,0,PHOTO_SIZE,PHOTO_SIZE);
+    for(const q of [0.85,0.7,0.55,0.4]){
+      const data=c.toDataURL("image/jpeg",q);
+      if(isPhotoData(data)) return data;
+    }
+    throw new Error("image too large");
+  }finally{
+    URL.revokeObjectURL(url);
+  }
+}
 
 
 const avatarFiles=
@@ -3595,6 +3655,8 @@ selectedRegisterAvatar=file;
 return;
 }
 selectedAccountAvatar=file;
+pendingPhoto=null;
+$("photoTile").classList.remove("selected");
 const avatarStatus=$("avatarSaveStatus");
 if(avatarStatus){avatarStatus.textContent="เลือกรูปแล้ว กด “ยืนยันการเปลี่ยนรูป” เพื่อบันทึก";}
 
@@ -4299,10 +4361,7 @@ renderMembershipStatus();
 
 function renderProfile(){
 
-const avatar=
-currentData?.avatar
-||
-"avatar20.png";
+const avatar=avatarSrc();
 
 
 const nickname=
@@ -4394,10 +4453,7 @@ avatar;
 
 function renderMyInfo(){
 
-const avatar=
-currentData?.avatar
-||
-"avatar20.png";
+const avatar=avatarSrc();
 
 
 const nickname=
@@ -4492,17 +4548,31 @@ $("avatarEditBox")
 .classList
 .toggle("hidden");
 
+/* แสดงรูปที่อัปโหลดไว้แล้วในช่องอัปโหลด */
+const saved=isPhotoData(currentData?.photo) ? currentData.photo : "";
+pendingPhoto=null;
+$("photoTile").classList.remove("selected");
+$("photoPreview").src=saved;
+$("photoPreview").classList.toggle("hidden",!saved);
+$("photoTileText").classList.toggle("hidden",!!saved);
+
 };
 
 
 $("confirmAvatarEditBtn")
 .onclick=
 async()=>{
-if(!currentUser || !selectedAccountAvatar){return;}
+if(!currentUser || (!selectedAccountAvatar && !pendingPhoto)){return;}
 const status=$("avatarSaveStatus");
+/* เลือกรูปการ์ตูน = ลบรูปที่อัปโหลดไว้ */
+const change=pendingPhoto
+  ? {photo:pendingPhoto}
+  : {avatar:selectedAccountAvatar,photo:""};
 try{
-await updateDoc(doc(db,"users",currentUser.uid),{avatar:selectedAccountAvatar});
-currentData.avatar=selectedAccountAvatar;
+await updateDoc(doc(db,"users",currentUser.uid),change);
+Object.assign(currentData,change);
+pendingPhoto=null;
+selectedAccountAvatar=null;
 renderProfile();
 if(status){
 status.textContent="บันทึกแล้ว";
@@ -4524,6 +4594,35 @@ $("avatarEditBox")
 .classList
 .add("hidden");
 
+};
+
+
+$("photoTile").onclick=()=>$("photoInput").click();
+$("photoInput").onchange=async()=>{
+  const file=$("photoInput").files[0];
+  $("photoInput").value="";
+  if(!file) return;
+  const status=$("avatarSaveStatus");
+  if(!/^image\//.test(file.type)){
+    if(status) status.textContent="กรุณาเลือกไฟล์รูปภาพ";
+    return;
+  }
+  if(status) status.textContent="กำลังเตรียมรูป…";
+  try{
+    pendingPhoto=await shrinkPhoto(file);
+  }catch(error){
+    console.error(error);
+    pendingPhoto=null;
+    if(status) status.textContent="ใช้รูปนี้ไม่ได้ กรุณาเลือกรูปอื่น";
+    return;
+  }
+  selectedAccountAvatar=null;
+  $("accountAvatarGrid").querySelectorAll(".avatar-choice").forEach(x=>x.classList.remove("selected"));
+  $("photoPreview").src=pendingPhoto;
+  $("photoPreview").classList.remove("hidden");
+  $("photoTileText").classList.add("hidden");
+  $("photoTile").classList.add("selected");
+  if(status) status.textContent="เลือกรูปแล้ว กด “ยืนยันการเปลี่ยนรูป” เพื่อบันทึก";
 };
 
 
