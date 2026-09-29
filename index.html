@@ -2969,6 +2969,7 @@ body:not(.review-mode) .rvbar{display:none}
 .as-frac b{display:block;font-size:26px;line-height:1.25;font-weight:900;color:#0f172a}
 .as-frac b+b{border-top:2.5px solid currentColor;padding-top:2px;width:100%;text-align:center}
 .as-all{flex-direction:column;justify-content:center;gap:0;text-align:center}
+.as-all.as-ringbox{flex-direction:row;justify-content:flex-start;gap:14px;text-align:left}
 .as-all .as-frac b{color:#fff;font-size:30px}
 .as-c span{min-height:34px;font-size:13px;line-height:1.35}
 .as-got{margin:8px auto 0;min-width:64px;padding:6px 12px;border:2px solid #cbd5e1;border-radius:12px;background:#fff;font-size:28px;font-weight:900;line-height:1.2;color:#0f172a;text-align:center;display:inline-block}
@@ -6302,7 +6303,7 @@ function renderAnswerSheet(){
     ${secs.length?`<div class="as-sum"><div class="as-lbl"><span>สรุปคะแนน</span></div>
       <div class="as-cards">${secs.map((x,i)=>`<div class="as-c"><span>${i+1}. ${escHtml(x.name)} (${x.t})</span><div class="as-got">${x.c}</div></div>`).join("")}</div>
       <div class="as-tot">${part(sum(0,2),"ภาคความรู้ทั่วไป","2 วิชา")}${secs.length>2?part(sum(2,secs.length),"ภาคความรู้เฉพาะตำแหน่ง",`${secs.length-2} วิชา`):""}
-      <div class="as-all"><span>คะแนนรวม (${n})</span><div class="as-got">${r.correct}</div></div></div></div>`:""}
+      <div class="as-all as-ringbox"><div class="as-ring" style="--p:${pct}"><div>${pct}%</div></div><div><span>คะแนนรวม</span><b>${r.correct}<small> / ${n}</small></b></div></div></div></div>`:""}
     <div class="as-foot">"I WANNA BE A POLICE OFFICER"</div></div>`;
 }
 let sheetW=window.innerWidth;
