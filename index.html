@@ -4062,8 +4062,16 @@ $("topProfileBtn")
 
 /*/* PROGRESS + SCORE + XP */
 
+/* จำนวนข้อสอบทั้งหมดในเว็บ (โหลดจากหน้าหลัก) */
+let siteTotalQuestions=0;
+const answeredCount=()=>Number.isFinite(currentData?.answered) ? Math.max(0,currentData.answered) : null;
+
+/* ความคืบหน้า = ข้อที่ทำแล้ว (ไม่นับซ้ำ) / ข้อสอบทั้งหมด เพิ่มข้อสอบแล้วเปอร์เซ็นต์ลดลงได้ */
 function progressPercent(){
-  const value=Number(currentData?.progressPercent||0);
+  const done=answeredCount();
+  const value=done!==null && siteTotalQuestions>0
+    ? Math.floor(done/siteTotalQuestions*100)
+    : Number(currentData?.progressPercent||0);
   return Math.max(0,Math.min(100,value));
 }
 
@@ -4119,6 +4127,16 @@ const LEVEL_RULES=[
   [70,92000],[80,105000],[85,115000],[90,125000],[95,140000],
   [98,155000],[100,180000]
 ];
+/*
+  เลเวลปัจจุบัน คิดใหม่ทุกครั้งจากเปอร์เซ็นต์และ XP ตอนนี้
+  ถ้าแอดมินเพิ่มข้อสอบจนเปอร์เซ็นต์ต่ำกว่าเกณฑ์ ยศลดลงตามตาราง
+*/
+function currentLevel(){
+  if(currentData?.plan!=="premium") return 0;
+  const done=answeredCount();
+  if(done!==null && siteTotalQuestions>0) return levelFor(done,siteTotalQuestions,currentData?.xp);
+  return Math.max(0,Math.min(MAX_LEVEL,Math.floor(Number(currentData?.level)||0)));
+}
 /* ตั้งแต่ นสต. ขึ้นไปเป็นยศตำรวจ ผู้หญิงต่อท้ายว่า "หญิง" */
 const FIRST_POLICE_LEVEL=4;
 const MAX_LEVEL=PREMIUM_RANKS.length-1;
@@ -4149,7 +4167,7 @@ if(currentData?.plan!=="premium"){
   return "ผู้ทดลองสอบ";
 }
 
-const level=Math.max(0,Math.min(MAX_LEVEL,Math.floor(Number(currentData?.level)||0)));
+const level=currentLevel();
 let rank=premiumRank(level);
 
 if(currentData?.gender==="female" && level>=FIRST_POLICE_LEVEL){
@@ -4161,7 +4179,7 @@ return rank;
 
 function levelText(){
   const level=currentData?.plan==="premium"
-    ? Math.max(0,Math.min(MAX_LEVEL,Math.floor(Number(currentData?.level)||0)))
+    ? currentLevel()
     : 0;
   return `Lv.${level}`;
 }
@@ -4179,7 +4197,7 @@ return "ผู้ทดลองสอบ • Lv.0";
 
 
 const level=
-Math.max(0,Math.min(MAX_LEVEL,Math.floor(Number(currentData?.level)||0)));
+currentLevel();
 
 
 return `${premiumRank(level)} • Lv.${level}`;
@@ -5320,6 +5338,8 @@ async function loadHome(){
   }catch(error){
     console.error(error);
   }
+  siteTotalQuestions=Math.max(0,Number(home.totalQuestions)||0);
+  if(currentData) renderProfile();
   renderCountdown(home);
   renderNews(home);
   renderDaily(home);
