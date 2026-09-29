@@ -4083,11 +4083,15 @@ function xpForAnswer(correct,attempt){
 /* RANK */
 
 /*
-  ยศตามเลเวล (สมาชิกพรีเมียม) รวม 15 ขั้น Lv.0 - Lv.14
+  ยศตามเลเวล รวม 19 ขั้น Lv.0 - Lv.18
   สมาชิกฟรีแสดงเป็น "ผู้ทดลองสอบ" Lv.0 เสมอ
-  Lv.1 เริ่มเมื่อทำข้อสอบข้อแรกในระบบพรีเมียม
+  สมาชิกพรีเมียมขึ้นเลเวลเมื่อผ่านทั้ง 2 เงื่อนไข:
+  - ทำแล้วขั้นต่ำ (% ของข้อสอบทั้งหมดในเว็บ นับข้อที่ไม่ซ้ำ)
+  - XP สะสมขั้นต่ำ
+  Lv.1 เริ่มเมื่อทำข้อสอบข้อแรก
 */
 const PREMIUM_RANKS=[
+  "ผู้ทดลองสอบ",
   "ผู้สมัครสอบ",
   "ผู้เข้าสอบ",
   "ผู้สอบผ่าน",
@@ -4102,11 +4106,36 @@ const PREMIUM_RANKS=[
   "ร.ต.อ.",
   "พ.ต.ต.",
   "พ.ต.ท.",
-  "พ.ต.อ."
+  "พ.ต.อ.",
+  "พล.ต.ต.",
+  "พล.ต.ท.",
+  "พล.ต.อ."
+];
+/* [ทำแล้วขั้นต่ำ %, XP ขั้นต่ำ] ของแต่ละเลเวล (Lv.1 ใช้เงื่อนไขทำข้อแรกแทน) */
+const LEVEL_RULES=[
+  [0,0],[0,0],
+  [5,5000],[10,10000],[15,18000],[20,25000],[25,32000],
+  [30,40000],[35,48000],[40,56000],[50,68000],[60,80000],
+  [70,92000],[80,105000],[85,115000],[90,125000],[95,140000],
+  [98,155000],[100,180000]
 ];
 /* ตั้งแต่ นสต. ขึ้นไปเป็นยศตำรวจ ผู้หญิงต่อท้ายว่า "หญิง" */
-const FIRST_POLICE_LEVEL=3;
+const FIRST_POLICE_LEVEL=4;
 const MAX_LEVEL=PREMIUM_RANKS.length-1;
+
+/* answered = จำนวนข้อที่เคยทำ (ไม่นับซ้ำ), total = จำนวนข้อสอบทั้งหมดในเว็บ */
+function levelFor(answered,total,xp){
+  const done=Math.max(0,Number(answered)||0);
+  if(done<1) return 0;
+  const percent=done/Math.max(1,Number(total)||0)*100;
+  const points=Math.max(0,Number(xp)||0);
+  let level=1;
+  for(let lv=2;lv<=MAX_LEVEL;lv++){
+    const [minPercent,minXp]=LEVEL_RULES[lv];
+    if(percent>=minPercent && points>=minXp) level=lv; else break;
+  }
+  return level;
+}
 
 function premiumRank(level){
   const safe=Math.max(0,Math.min(MAX_LEVEL,Math.floor(Number(level)||0)));
