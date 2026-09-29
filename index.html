@@ -3037,9 +3037,9 @@ body:not(.review-mode) .rvbar{display:none}
 .asheet.navy .as-all{background:linear-gradient(120deg,#ff8a2b,#e2520a)}
 .asheet.navy .as-ring{background:conic-gradient(#16305f calc(var(--p)*1%),rgba(255,255,255,.3) 0)}
 .asheet.navy .as-ring div{background:#f0701c}
-/* หน้าหลัก: ไม่แสดงเลเวลในกระดานอันดับ ผู้เยี่ยมชมไม่มี "อันดับของฉัน" */
-#homePage .rank-level{display:none!important}
-#homePage .rank-xp{margin-left:auto}
+/* ผู้เยี่ยมชม: กระดานอันดับไม่แสดงเลเวล และไม่มี "อันดับของฉัน" (เข้าสู่ระบบแล้วจึงเห็น) */
+body.guest #homePage .rank-level{display:none!important}
+body.guest #homePage .rank-xp{margin-left:auto}
 body.guest #homePage .my-rank-title,body.guest #homePage .my-rank-title + .leaderboard-item{display:none!important}
 /* ผู้เยี่ยมชม */
 .hb-guest{display:none}
