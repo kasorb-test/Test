@@ -2901,8 +2901,8 @@ body.xhide #xPaper,body.xhide .omr{filter:blur(14px)}
 .rv .exp{margin-top:10px;padding:12px 14px;border-left:4px solid #ff6a00;border-radius:0 12px 12px 0;background:#fffaf6;font-size:17px;line-height:1.7;color:#000;white-space:pre-line}
 .rv .exp b.h{display:block;margin-bottom:4px;color:#c2410c;font-family:Arial,"Noto Sans Thai",sans-serif;font-size:14px}
 .rv .exp img{display:block;max-width:100%;height:auto;margin-top:6px;pointer-events:none}
-.rv .wm{position:absolute;inset:0;pointer-events:none;z-index:1}
-.rvbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px;font:700 12px Arial,"Noto Sans Thai",sans-serif;color:#c55309;text-align:center;background:rgba(255,246,239,.97);border-top:1px solid #f7d9c2;letter-spacing:.02em}
+.rv .wm{position:absolute;inset:0;pointer-events:none;z-index:1;background-repeat:space}
+.rvbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:700 12px Arial,"Noto Sans Thai",sans-serif;color:#c55309;text-align:center;background:rgba(255,246,239,.97);border-top:1px solid #f7d9c2;letter-spacing:.02em}
 body:not(.review-mode) .rvbar{display:none}
 </style>
 <style id="kasorb-answer-sheet">
@@ -5620,6 +5620,9 @@ function renderNews(home){
     if(img){
       slide.classList.add("img");
       slide.style.backgroundImage=`url("${img}")`;
+    }else if(/^[0-9a-f]{16,40}$/.test(n.imageKey||"")){
+      // รูปข่าวที่แอดมินอัปโหลดจากเครื่อง เก็บใน siteImg
+      getDoc(doc(db,"siteImg",n.imageKey)).then(d=>{const src=d.exists()?d.data().d:"";if(/^data:image\/(png|jpeg|webp);base64,/.test(src)){slide.classList.add("img");slide.style.backgroundImage=`url("${src}")`}}).catch(e=>console.error(e));
     }
     const body=document.createElement("div");
     body.className="ns-body";
@@ -6372,7 +6375,8 @@ function renderReview(){
     else exp.appendChild(distText(it.exp||"-"));
     box.appendChild(exp);paper.appendChild(box);
   });
-  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><g transform='rotate(-20 120 65)' font-family='Arial' fill='rgba(0,0,0,0.05)' font-weight='700'><text x='40' y='70' font-size='14'>${code.replace("#","%23")}</text></g></svg>`;
+  /* ลายน้ำ: รหัสอยู่กลางช่อง และวางซ้ำเฉพาะช่องที่เต็ม (repeat: space) ไม่ให้ตัวเลขถูกตัดที่ขอบซ้ายขวา */
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='150' height='110'><text x='75' y='60' text-anchor='middle' transform='rotate(-20 75 55)' font-family='Arial' fill='rgba(0,0,0,0.05)' font-weight='700' font-size='13'>${code.replace("#","%23")}</text></svg>`;
   const wm=document.createElement("div");wm.className="wm";wm.style.backgroundImage=`url("data:image/svg+xml;utf8,${svg}")`;paper.appendChild(wm);
   watchImgs(paper);
   $("rvBar").textContent=`KASORB TEST · ห้ามเผยแพร่ · สมาชิก ${code}`;
