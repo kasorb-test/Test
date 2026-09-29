@@ -3397,7 +3397,8 @@ Timestamp,
 collection,
 query,
 where,
-getCountFromServer
+getCountFromServer,
+onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -5289,6 +5290,120 @@ async function loadHome(){
 }
 
 
+/* อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง เปลี่ยนเครื่องเองได้ทุก 30 วัน */
+const ADMIN_EMAIL="thananitwit@gmail.com";
+const MAX_DEVICES=2;
+const SWAP_DAYS=30;
+let deviceWatch=null;
+
+function deviceId(){
+  let id=null;
+  try{ id=localStorage.getItem("kasorbDeviceId"); }catch(e){}
+  if(!id){
+    id=(crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2)).replace(/-/g,"");
+    try{ localStorage.setItem("kasorbDeviceId",id); }catch(e){}
+  }
+  return id;
+}
+
+function deviceName(){
+  const ua=navigator.userAgent;
+  const touchMac=/Macintosh/.test(ua) && navigator.maxTouchPoints>1;
+  const kind=/iPad/.test(ua)||touchMac ? "iPad"
+    : /iPhone/.test(ua) ? "iPhone"
+    : /Android/.test(ua) ? (/Mobile/.test(ua) ? "มือถือ Android" : "แท็บเล็ต Android")
+    : /Windows/.test(ua) ? "คอม Windows"
+    : /Macintosh/.test(ua) ? "Mac"
+    : /Linux/.test(ua) ? "คอมพิวเตอร์"
+    : "อุปกรณ์อื่น";
+  const browser=/Edg\//.test(ua) ? "Edge"
+    : /CriOS|Chrome\//.test(ua) ? "Chrome"
+    : /FxiOS|Firefox\//.test(ua) ? "Firefox"
+    : /Safari\//.test(ua) ? "Safari"
+    : "";
+  return browser ? `${kind} · ${browser}` : kind;
+}
+
+function stopDeviceWatch(){
+  if(deviceWatch) deviceWatch();
+  deviceWatch=null;
+}
+
+function kickOut(message){
+  stopDeviceWatch();
+  signOut(auth).catch(()=>{});
+  $("loginMsg").textContent=message;
+  alert(message);
+}
+
+/* คืนค่า true ถ้าเครื่องนี้ใช้งานได้ */
+async function claimDevice(user){
+  if((user.email||"").toLowerCase()===ADMIN_EMAIL) return true;
+  const me=deviceId();
+  const ref=doc(db,"devices",user.uid);
+  let data=null;
+  try{
+    const snap=await getDoc(ref);
+    data=snap.exists() ? snap.data() : null;
+  }catch(error){
+    /* อ่านไม่ได้ (เช่น ยังไม่ได้ Publish rules) ไม่บล็อกการใช้งาน */
+    console.error(error);
+    return true;
+  }
+
+  const ids={...(data?.ids||{})};
+  const entry={name:deviceName(),addedAt:serverTimestamp()};
+  let update;
+
+  if(ids[me]){
+    update={active:me,activeAt:serverTimestamp()};
+  }else if(Object.keys(ids).length<MAX_DEVICES){
+    update={[`ids.${me}`]:entry,active:me,activeAt:serverTimestamp()};
+    if(!data) update={ids:{[me]:entry},active:me,activeAt:serverTimestamp()};
+  }else{
+    const last=data?.lastSwapAt?.toDate ? data.lastSwapAt.toDate() : null;
+    const canSwap=!last || (Date.now()-last.getTime())>SWAP_DAYS*86400000;
+    if(!canSwap){
+      const next=new Date(last.getTime()+SWAP_DAYS*86400000);
+      kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว และเปลี่ยนเครื่องไปแล้วในรอบนี้ เปลี่ยนได้อีกครั้ง ${next.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})} หรือติดต่อแอดมินเพื่อรีเซ็ต`);
+      return false;
+    }
+    /* แทนที่เครื่องที่ไม่ได้ใช้งานอยู่ */
+    const oldId=Object.keys(ids).find(id=>id!==data.active) || Object.keys(ids)[0];
+    const oldName=ids[oldId]?.name || "เครื่องเดิม";
+    if(!confirm(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว\nต้องการใช้เครื่องนี้แทน "${oldName}" หรือไม่?\n(เปลี่ยนเครื่องเองได้ทุก ${SWAP_DAYS} วัน)`)){
+      kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว ติดต่อแอดมินหากต้องการเปลี่ยนเครื่อง`);
+      return false;
+    }
+    delete ids[oldId];
+    ids[me]=entry;
+    update={ids,active:me,activeAt:serverTimestamp(),lastSwapAt:serverTimestamp()};
+  }
+
+  try{
+    if(data) await updateDoc(ref,update);
+    else await setDoc(ref,update);
+  }catch(error){
+    console.error(error);
+    return true;
+  }
+
+  /* เครื่องอื่นเข้าสู่ระบบ ให้เครื่องนี้ออกจากระบบ */
+  stopDeviceWatch();
+  deviceWatch=onSnapshot(ref,snap=>{
+    const d=snap.data();
+    if(!d){
+      kickOut("แอดมินรีเซ็ตอุปกรณ์ของบัญชีนี้แล้ว กรุณาเข้าสู่ระบบใหม่");
+      return;
+    }
+    if(d.active && d.active!==me){
+      kickOut("บัญชีนี้เข้าสู่ระบบจากเครื่องอื่น จึงออกจากระบบในเครื่องนี้");
+    }
+  },error=>console.error(error));
+  return true;
+}
+
+
 /* AUTH STATE */
 
 onAuthStateChanged(
@@ -5311,6 +5426,10 @@ try{
 
 if(pendingRegistration){
 await pendingRegistration;
+}
+
+if(!(await claimDevice(user))){
+return;
 }
 
 await loadProfile(user);
@@ -5337,6 +5456,7 @@ loadHome();
 
 else {
   stopPresence();
+  stopDeviceWatch();
   currentUser = null;
   currentData = null;
 
