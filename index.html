@@ -5134,9 +5134,6 @@ function todayCount(){
 
 function renderToday(){
   const count=todayCount();
-  $("heroTodayAsk").textContent=count>0
-    ? "วันนี้คุณทำข้อสอบแล้ว"
-    : "วันนี้คุณทำข้อสอบแล้วหรือยัง?";
   $("heroTodayCount").textContent=`วันนี้ทำไปแล้ว ${count.toLocaleString()} ข้อ`;
   $("heroTodayCount").classList.toggle("done",count>0);
 }
