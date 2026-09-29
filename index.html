@@ -2839,7 +2839,7 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 #examPage>.xbar{max-width:none;padding-left:max(18px,calc((100vw - 1180px)/2 + 18px));padding-right:max(18px,calc((100vw - 1180px)/2 + 18px))}
 .xback{flex:0 0 38px;width:38px;height:38px;border:0;border-radius:11px;background:#f4f4f4;position:relative;cursor:pointer}
 .xback::before{content:"";position:absolute;left:15px;top:14px;width:9px;height:9px;border:solid #333;border-width:0 0 2.5px 2.5px;transform:rotate(45deg)}
-.xttl{min-width:0;margin-right:auto}.xttl b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xttl span{font-size:12px;color:#888;white-space:nowrap}
+.xttl{min-width:0;margin-right:auto}.xttl b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xttl span{font-size:12px;color:#888;white-space:nowrap}.xttl{flex:1 1 0;overflow:hidden}.xttl span{display:block;overflow:hidden;text-overflow:ellipsis}#xSheetBtn{margin-right:-6px}@media(max-width:480px){.xbar{gap:8px}#xSheetBtn{margin-right:-4px;padding:7px 9px;font-size:12px}.xtimer{padding:7px 11px;font-size:14px}}.xttl i{font-style:normal}.chips span.over{background:#c62828;color:#fff}.xover{position:sticky;top:60px;z-index:29;margin:0;padding:8px 16px;background:#fdecec;color:#c62828;font-weight:800;font-size:13px;text-align:center;font-family:inherit}@media(max-width:380px){.xbar{padding-left:12px;padding-right:12px;gap:7px}.xttl .xlg{display:none}#xSheetBtn{padding:7px 8px}.xtimer{padding:7px 10px}}
 .xtimer{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:linear-gradient(120deg,#ff8a2b,#ff6a00);color:#fff;font-weight:900;font-size:15px;font-variant-numeric:tabular-nums;box-shadow:0 3px 10px rgba(255,106,0,.25)}
 .xtimer.low{background:#c62828;box-shadow:0 3px 10px rgba(198,40,40,.3)}
 .xsheetbtn{display:none;white-space:nowrap;padding:8px 10px;border-radius:10px;border:1px solid #f1d9c6;background:#fff6ef;color:#e86208;font-weight:800;font-size:13px}
@@ -3467,6 +3467,7 @@ LINE OA @kasorb
 <span class="xtimer" id="xTimer">00:00</span>
 </div>
 <div class="xprog"><i id="xProg"></i></div>
+<div class="xover hidden" id="xOver">เกินกำหนดเวลาแล้ว ทำต่อได้จนกว่าจะกดส่งคำตอบ</div>
 <div class="xwrap">
 <div><div class="xpaper exam-text" id="xPaper"></div><button class="xsend" id="xSend" type="button">ส่งคำตอบ</button></div>
 <aside class="xside"><div class="omr" id="xOmr"></div><p class="xhint">กดวงกลมเพื่อฝนคำตอบ หรือกดเลขข้อเพื่อไปยังข้อนั้น</p><button class="xsend" id="xSend2" type="button">ส่งคำตอบ</button></aside>
@@ -6112,12 +6113,6 @@ async function startExam(id){
   }
   let saved=null;
   try{saved=JSON.parse(localStorage.getItem(sessKey(id))||"null")}catch(e){}
-  const limit=(Number(meta.minutes)||items.length)*60000;
-  if(saved && Date.now()-saved.startedAt>=limit){
-    // หมดเวลาไปแล้วระหว่างที่ปิดหน้าเว็บ: ส่งคำตอบที่ทำไว้ให้อัตโนมัติ
-    exam={meta,items,ans:saved.ans||[],startedAt:saved.startedAt};
-    await submitExam(true);return;
-  }
   exam={meta,items,ans:(saved&&saved.ans)||Array(items.length).fill(-1),startedAt:saved?saved.startedAt:Date.now()};
   saveSession();
   renderExam();
@@ -6183,17 +6178,18 @@ function paintAnswers(only){
     document.querySelectorAll(`.omr .o[data-i="${i}"]`).forEach(b=>b.classList.toggle("f",+b.dataset.k===exam.ans[i]));
   });
   const done=exam.ans.filter(a=>a>=0).length,total=exam.items.length;
-  $("xCount").textContent=`ตอบแล้ว ${done} / ${total} ข้อ`;
+  $("xCount").innerHTML=`<i class="xlg">ตอบแล้ว </i>${done}/${total} ข้อ`;
   document.querySelectorAll(".omrc").forEach(e=>e.textContent=`ตอบแล้ว ${done}/${total}`);
   $("xProg").style.width=`${Math.round(done/total*100)}%`;
 }
 function tickTimer(){
   if(!exam) return;
-  const left=Math.max(0,(Number(exam.meta.minutes)||exam.items.length)*60000-(Date.now()-exam.startedAt));
-  const s=Math.ceil(left/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
-  $("xTimer").textContent=(h?`${h}:${String(m).padStart(2,"0")}`:String(m).padStart(2,"0"))+":"+String(sec).padStart(2,"0");
+  /* หมดเวลาแล้วยังทำต่อได้จนกว่าจะกดส่ง: นับเวลาที่เกินเป็น +เวลา และแจ้งเตือน */
+  const left=(Number(exam.meta.minutes)||exam.items.length)*60000-(Date.now()-exam.startedAt),over=left<=0;
+  const s=over?Math.floor(-left/1000):Math.ceil(left/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
+  $("xTimer").textContent=(over?"+":"")+(h?`${h}:${String(m).padStart(2,"0")}`:String(m).padStart(2,"0"))+":"+String(sec).padStart(2,"0");
   $("xTimer").classList.toggle("low",left<=5*60000);
-  if(left<=0){clearInterval(exam.tick);submitExam(true);}
+  $("xOver").classList.toggle("hidden",!over);
 }
 function leaveExamMode(){
   if(exam&&exam.tick) clearInterval(exam.tick);
@@ -6201,7 +6197,7 @@ function leaveExamMode(){
   $("xShield").classList.add("hidden");
 }
 $("xQuit").onclick=()=>{
-  if(!confirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ และเวลายังเดินต่อ กลับมาทำต่อได้ถ้ายังไม่หมดเวลา")) return;
+  if(!confirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ กลับมาทำต่อได้จนกว่าจะกดส่งคำตอบ (เวลายังนับต่อ)")) return;
   const t=currentTrack;leaveExamMode();exam=null;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
 };
 $("xSheetBtn").onclick=()=>document.body.classList.add("xsheet");
@@ -6234,7 +6230,7 @@ async function submitExam(auto){
   if(!auto && blank && !confirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`)) return;
   if(!auto && !blank && !confirm("ส่งคำตอบใช่หรือไม่?")) return;
   leaveExamMode();
-  const secs=Math.min(Math.round((Date.now()-exam.startedAt)/1000),(Number(meta.minutes)||items.length)*60);
+  const secs=Math.round((Date.now()-exam.startedAt)/1000);
   const prog=await loadProgress(true);
   let correct=0,gained=0,answered=0;
   const bySec={};
@@ -6269,13 +6265,13 @@ async function submitExam(auto){
   renderResult();
   showAppPage("resultPage","ผลการทดสอบ");
 }
-const fmtTime=s=>`${Math.floor(s/60)} นาที ${s%60} วินาที`;
+const fmtTime=s=>(s>=3600?`${Math.floor(s/3600)} ชม. `:"")+`${Math.floor(s%3600/60)} นาที ${s%60} วินาที`;
 function renderResult(){
   const r=lastResult,t=r.items.length,pct=Math.round(r.correct/t*100);
   $("rCard").innerHTML=`${r.saveErr?'<div class="rwarn">บันทึกผลไม่สำเร็จ ผลนี้ยังไม่ถูกนับ XP กรุณาแจ้งแอดมิน</div>':""}
     <h2>${escHtml(r.meta.title)}</h2><div class="big">${r.correct}<small> / ${t} คะแนน</small></div>
     <div>ได้ ${pct}% · ตอบ ${r.answered} ข้อ · ไม่ได้ตอบ ${t-r.answered} ข้อ</div>
-    <div class="chips"><span>+${r.gained.toLocaleString()} XP</span><span>ใช้เวลา ${fmtTime(r.secs)}</span></div>`;
+    <div class="chips"><span>+${r.gained.toLocaleString()} XP</span><span>ใช้เวลา ${fmtTime(r.secs)}</span>${r.secs>(Number(r.meta.minutes)||t)*60?`<span class="over">เกินกำหนด ${fmtTime(r.secs-(Number(r.meta.minutes)||t)*60)}</span>`:""}</div>`;
   renderAnswerSheet();
 }
 /* กระดาษคำตอบแบบกระดาษสอบจริง: 25 ข้อต่อคอลัมน์บนจอใหญ่ จอแคบลดจำนวนคอลัมน์ */
