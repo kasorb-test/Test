@@ -5290,10 +5290,9 @@ async function loadHome(){
 }
 
 
-/* อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง เปลี่ยนเครื่องเองได้ทุก 30 วัน */
+/* อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง เปลี่ยนเครื่องต้องให้แอดมินรีเซ็ต */
 const ADMIN_EMAIL="thananitwit@gmail.com";
 const MAX_DEVICES=2;
-const SWAP_DAYS=30;
 let deviceWatch=null;
 
 function deviceId(){
@@ -5361,23 +5360,8 @@ async function claimDevice(user){
     update={[`ids.${me}`]:entry,active:me,activeAt:serverTimestamp()};
     if(!data) update={ids:{[me]:entry},active:me,activeAt:serverTimestamp()};
   }else{
-    const last=data?.lastSwapAt?.toDate ? data.lastSwapAt.toDate() : null;
-    const canSwap=!last || (Date.now()-last.getTime())>SWAP_DAYS*86400000;
-    if(!canSwap){
-      const next=new Date(last.getTime()+SWAP_DAYS*86400000);
-      kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว และเปลี่ยนเครื่องไปแล้วในรอบนี้ เปลี่ยนได้อีกครั้ง ${next.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})} หรือติดต่อแอดมินเพื่อรีเซ็ต`);
-      return false;
-    }
-    /* แทนที่เครื่องที่ไม่ได้ใช้งานอยู่ */
-    const oldId=Object.keys(ids).find(id=>id!==data.active) || Object.keys(ids)[0];
-    const oldName=ids[oldId]?.name || "เครื่องเดิม";
-    if(!confirm(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว\nต้องการใช้เครื่องนี้แทน "${oldName}" หรือไม่?\n(เปลี่ยนเครื่องเองได้ทุก ${SWAP_DAYS} วัน)`)){
-      kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว ติดต่อแอดมินหากต้องการเปลี่ยนเครื่อง`);
-      return false;
-    }
-    delete ids[oldId];
-    ids[me]=entry;
-    update={ids,active:me,activeAt:serverTimestamp(),lastSwapAt:serverTimestamp()};
+    kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว หากต้องการเข้าระบบ กรุณาติดต่อแอดมิน`);
+    return false;
   }
 
   try{
