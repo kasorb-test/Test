@@ -2932,9 +2932,8 @@ body:not(.review-mode) .rvbar{display:none}
 .as-r.end{border-bottom:1.5px solid #e9a27a;margin-bottom:3px;padding-bottom:4px}
 .as-r b{text-align:right;padding-right:5px;font-size:12.5px;font-weight:700;color:#c2410c}
 .as-r i{justify-self:center;width:20px;height:20px;border:1.3px solid #e8956a;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;color:#e8956a;line-height:1;background:#fff}
-.as-r i.f{background:#1f2937;border-color:#1f2937;color:#1f2937}
-.as-r i.f.no{background:#dc2626;border-color:#dc2626;color:#dc2626}
-.as-r i.key{box-shadow:0 0 0 2.5px #22c55e}
+.as-r i.ok{background:#16a34a;border-color:#16a34a;color:#16a34a}
+.as-r i.no{background:#dc2626;border-color:#dc2626;color:#dc2626}
 .as-sum{margin-top:22px}
 .as-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 .as-c{padding:12px 12px 10px;border-radius:14px;background:#f8fafc;border:1px solid #eef1f5}
@@ -2964,6 +2963,19 @@ body:not(.review-mode) .rvbar{display:none}
  .as-body{padding:16px 12px 18px}.as-grid{padding:10px 2px}.as-col{padding:0 4px}
  .as-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.as-tot{grid-template-columns:1fr}
 }
+/* ธีมกรมท่า */
+.asheet.navy .as-head{background:linear-gradient(120deg,#27477f,#16305f 60%,#0f2449)}
+.asheet.navy .as-lbl{color:#16305f}
+.asheet.navy .as-grid{background:#f5f8fd;border-color:#c5d3ea}
+.asheet.navy .as-col{border-left-color:#cfdaec}
+.asheet.navy .as-hd{color:#16305f;border-bottom-color:#c5d3ea}
+.asheet.navy .as-r.end{border-bottom-color:#8ea4c9}
+.asheet.navy .as-r b{color:#16305f}
+.asheet.navy .as-r i:not(.ok):not(.no){border-color:#8ea4c9;color:#7b8fb3}
+.asheet.navy .as-bar i{background:linear-gradient(90deg,#3b5ea0,#16305f)}
+.asheet.navy .as-all{background:linear-gradient(120deg,#ff8a2b,#e2520a)}
+.asheet.navy .as-ring{background:conic-gradient(#16305f calc(var(--p)*1%),rgba(255,255,255,.3) 0)}
+.asheet.navy .as-ring div{background:#f0701c}
 </style>
 </head>
 <body>
@@ -6260,7 +6272,7 @@ function renderAnswerSheet(){
     let rows="";
     for(let i=c*per;i<Math.min(n,(c+1)*per);i++){
       const it=r.items[i],a=r.ans[i];
-      rows+=`<div class="as-r${ends.has(it.n)?" end":""}"><b>${it.n}</b>${[0,1,2,3].map(k=>`<i class="${k===a?"f"+(a!==it.a?" no":""):""}${k===it.a?" key":""}">${k+1}</i>`).join("")}</div>`;
+      rows+=`<div class="as-r${ends.has(it.n)?" end":""}"><b>${it.n}</b>${[0,1,2,3].map(k=>`<i class="${k===a?(a===it.a?"ok":"no"):""}">${k+1}</i>`).join("")}</div>`;
     }
     grid+=`<div class="as-col"><div class="as-hd"><span></span><span><i>A</i><i>ก</i></span><span><i>B</i><i>ข</i></span><span><i>C</i><i>ค</i></span><span><i>D</i><i>ง</i></span></div>${rows}</div>`;
   }
@@ -6274,7 +6286,7 @@ function renderAnswerSheet(){
     <div class="as-ht"><small>ANSWER SHEET</small><h3>${escHtml(r.meta.title)}</h3>
     <div class="as-info"><span>${escHtml(currentData?.nickname||"")} <b>${escHtml(codeOfData(currentData))}</b></span>${setNo?`<span>ชุดที่ <b>${escHtml(setNo)}</b></span>`:""}<span>${new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</span><span>ใช้เวลา <b>${fmtTime(r.secs)}</b></span></div></div></div>
     <div class="as-body">
-    <div class="as-lbl"><span>กระดาษคำตอบ</span><div class="as-leg"><span><i style="background:#1f2937;border-color:#1f2937"></i>ตอบถูก</span><span><i style="background:#dc2626;border-color:#dc2626"></i>ตอบผิด</span><span><i style="box-shadow:0 0 0 2.5px #22c55e"></i>เฉลย</span></div></div>
+    <div class="as-lbl"><span>กระดาษคำตอบ</span><div class="as-leg"><span><i style="background:#16a34a;border-color:#16a34a"></i>ตอบถูก</span><span><i style="background:#dc2626;border-color:#dc2626"></i>ตอบผิด</span></div></div>
     <div class="as-grid">${grid}</div>
     ${secs.length?`<div class="as-sum"><div class="as-lbl"><span>สรุปคะแนน</span></div>
       <div class="as-cards">${secs.map(x=>`<div class="as-c${x.c>=pass(x.t)?" good":""}"><span>${escHtml(x.name)}</span><b>${x.c}<small> / ${x.t}</small></b><div class="as-bar"><i style="width:${Math.round(x.c/x.t*100)}%"></i></div></div>`).join("")}</div>
