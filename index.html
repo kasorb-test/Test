@@ -3084,6 +3084,11 @@ body:not(.review-mode) .rvbar{display:none}
 .tn-panel button,.tn-panel a{display:block;width:100%;padding:11px 14px;border:0;border-radius:10px;background:none;color:#16305f;font:700 14px/1.3 inherit;text-align:left;text-decoration:none;cursor:pointer}
 .tn-panel button:hover,.tn-panel a:hover{background:#fff3ea;color:#e86208}
 .tn-panel button.active{background:#fff1e6;color:#e86208}
+.tn-panel .tn-out{color:#c62828;border-top:1px solid #f1f1f1;border-radius:0 0 10px 10px;margin-top:4px}
+/* มือถือ: เมนูด้านบนแทนปุ่มเปิดแถบซ้าย และลดช่องว่างใต้เมนู */
+@media(max-width:760px){.hb .hb-burger{display:none!important}.hb{row-gap:8px!important;padding-top:10px!important;padding-bottom:12px!important}.topnav{margin:0}}
+/* มือถือ: ข้อสอบประจำวันตัวเล็กลง */
+@media(max-width:600px){#dailyCard{padding:14px 16px}#dailyCard .daily-question{font-size:15.5px;line-height:1.55}#dailyCard .daily-choice{font-size:14.5px;padding-top:8px;padding-bottom:8px;line-height:1.45}#dailyCard .choice-letter{width:22px;height:22px;min-width:22px;font-size:11px}#dailyCard .daily-result{font-size:14px}}
 body.exam-mode .topnav{display:none}
 @media(max-width:760px){.tn-item{padding:6px 10px;font-size:12.5px}.tn-item .lg{display:none}.tn-item .sm{display:inline}}@media(max-width:560px){.topnav{gap:4px;overflow:visible}.tn-item{flex:1 1 0;min-width:0;flex-direction:column;justify-content:center;gap:2px;padding:6px 2px 5px;border-radius:12px;font-size:11.5px}.tn-item svg{display:none}.tn-item svg.ti{display:block;width:18px;height:18px}.tn-item span{overflow:hidden;text-overflow:ellipsis;max-width:100%}}
 .uidlg{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);animation:uidIn .15s ease-out}
@@ -4070,6 +4075,14 @@ function openTopMenu(btn){
     else{el.type="button";el.classList.toggle("active",src.classList.contains("active"));el.onclick=()=>{closeTopMenu();showAppPage(src.dataset.page,src.dataset.title)}}
     panel.appendChild(el);
   });
+  /* บัญชีของฉัน: รวมปุ่มติดตั้งลงหน้าจอและออกจากระบบไว้ด้วย (มือถือไม่มีปุ่มเปิดแถบซ้ายแล้ว) */
+  if(key==="account"){
+    [["installBtn","ติดตั้งลงหน้าจอ"],["logoutBtn","ออกจากระบบ"]].forEach(([id,label])=>{
+      const src=$(id);if(!src||src.classList.contains("hidden")||getComputedStyle(src).display==="none")return;
+      const el=document.createElement("button");el.type="button";el.textContent=label;if(id==="logoutBtn")el.className="tn-out";
+      el.onclick=()=>{closeTopMenu();src.click()};panel.appendChild(el);
+    });
+  }
   btn.classList.add("open");panel.classList.remove("hidden");tnY=window.scrollY;
   const r=btn.getBoundingClientRect(),w=panel.offsetWidth;
   panel.style.top=(r.bottom+6)+"px";
