@@ -59,7 +59,7 @@
 .erow .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
 .erow select,.erow input{width:auto;margin:0;padding:8px 10px}
 .erow input{width:74px}
-.erow .del{width:auto;margin:0;padding:8px 12px;background:#fdecec;color:#c62828;font-size:13px}
+.erow .del{width:auto;margin:0;padding:8px 12px;background:#fdecec;color:#c62828;font-size:13px}.erow .t span{display:inline}.erow .ren{width:auto;margin:0 0 0 10px;padding:3px 10px;border-radius:999px;background:#eef2fa;color:#16305f;font-size:12px;vertical-align:1px}
 @media(max-width:760px){.erow{grid-template-columns:1fr}.erow .ctl{justify-content:flex-start}}
 .mno{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#16305f;letter-spacing:.03em}
 </style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>ใส่ข้อสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แก้วันสอบ ข่าวสาร และข้อสอบประจำวัน แล้วกดบันทึก</p>
@@ -244,7 +244,7 @@ $("impGo").onclick=async()=>{
       for(const key of imgKeys){k++;$("impMsg").textContent=`กำลังนำเข้า ${d.title}… รูป ${k}/${imgKeys.length}`;await setDoc(doc(db,"examImg",key),{exam:d.id,d:imgs[key]})}
       for(const key of oldKeys.filter(x=>!imgKeys.includes(x))){try{await deleteDoc(doc(db,"examImg",key))}catch(e){}}
       await setDoc(doc(db,"examItems",d.id),{items,imgs:imgKeys,updatedAt:new Date().toISOString()});
-      await setDoc(doc(db,"exams",d.id),{title:d.title,kind:d.kind||"mock",track:d.track||[],tier:old?.tier||d.tier||"premium",
+      await setDoc(doc(db,"exams",d.id),{title:old?.title||d.title,kind:d.kind||"mock",track:d.track||[],tier:old?.tier||d.tier||"premium",
         minutes:old?.minutes||d.minutes||Math.max(1,items.length),count:items.length,sections:d.sections||[],order:d.order??99,keys,keyVersion,updatedAt:new Date().toISOString()});
       done++;
     }
@@ -269,18 +269,26 @@ function renderExams(){
   const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
   $("examTotal").textContent=examSets.length?`${examSets.length} ชุด · ${total.toLocaleString()} ข้อ`:"";
   if(!examSets.length){$("examList").innerHTML='<p class="muted">ยังไม่มีชุดข้อสอบ</p>';return}
-  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span>${e.count} ข้อ</span></div><div class="ctl">
+  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span>${e.count} ข้อ</span><button type="button" class="ren" data-id="${esc(e.id)}">แก้ชื่อ</button></div><div class="ctl">
   <select data-id="${esc(e.id)}" class="tier"><option value="premium"${e.tier!=="free"?" selected":""}>พรีเมียม</option><option value="free"${e.tier==="free"?" selected":""}>ฟรี</option></select>
   <label style="margin:0;font-size:13px;color:#666">เวลา <input data-id="${esc(e.id)}" class="mins" type="number" min="1" max="600" value="${Number(e.minutes)||e.count}"> นาที</label>
   <button type="button" class="del" data-id="${esc(e.id)}">ลบ</button></div></div>`).join("");
   document.querySelectorAll("#examList .tier").forEach(el=>el.onchange=()=>saveExamMeta(el.dataset.id,{tier:el.value}));
   document.querySelectorAll("#examList .mins").forEach(el=>el.onchange=()=>{const v=Math.min(600,Math.max(1,Math.round(Number(el.value)||0)));el.value=v;saveExamMeta(el.dataset.id,{minutes:v})});
   document.querySelectorAll("#examList .del").forEach(el=>el.onclick=()=>deleteExam(el.dataset.id));
+  document.querySelectorAll("#examList .ren").forEach(el=>el.onclick=()=>renameExam(el.dataset.id));
 }
 async function saveExamMeta(id,data){
   const e=examSets.find(x=>x.id===id);
   try{await updateDoc(doc(db,"exams",id),data);Object.assign(e,data);$("impMsg").className="ok";$("impMsg").textContent=`บันทึกแล้ว: ${e.title}`}
   catch(err){$("impMsg").className="err";$("impMsg").textContent=`บันทึกไม่สำเร็จ (${err.code||err.message})`;renderExams()}
+}
+async function renameExam(id){
+  const e=examSets.find(x=>x.id===id);if(!e)return;
+  const t=prompt("ชื่อชุดข้อสอบใหม่",e.title);if(t==null)return;
+  const title=t.trim().slice(0,80);if(!title||title===e.title)return;
+  const was=e.title;await saveExamMeta(id,{title});
+  if(e.title===title){$("impMsg").textContent=`เปลี่ยนชื่อแล้ว: ${was} → ${title}`;renderExams()}
 }
 async function deleteExam(id){
   const e=examSets.find(x=>x.id===id);if(!e)return;
