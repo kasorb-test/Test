@@ -5293,6 +5293,7 @@ async function loadHome(){
 /* อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง เปลี่ยนเครื่องต้องให้แอดมินรีเซ็ต */
 const ADMIN_EMAIL="thananitwit@gmail.com";
 const MAX_DEVICES=2;
+const OTHER_DEVICE_MSG="บัญชีนี้เข้าสู่ระบบจากเครื่องอื่น จึงออกจากระบบในเครื่องนี้";
 let deviceWatch=null;
 
 function deviceId(){
@@ -5377,15 +5378,15 @@ async function claimDevice(user){
   deviceWatch=onSnapshot(ref,snap=>{
     const d=snap.data();
     if(!d){
-      kickOut("แอดมินรีเซ็ตอุปกรณ์ของบัญชีนี้แล้ว กรุณาเข้าสู่ระบบใหม่");
+      kickOut(OTHER_DEVICE_MSG);
       return;
     }
     if(!(d.ids && d.ids[me])){
-      kickOut("แอดมินลบเครื่องนี้ออกจากบัญชีแล้ว กรุณาเข้าสู่ระบบใหม่");
+      kickOut(OTHER_DEVICE_MSG);
       return;
     }
     if(d.active && d.active!==me){
-      kickOut("บัญชีนี้เข้าสู่ระบบจากเครื่องอื่น จึงออกจากระบบในเครื่องนี้");
+      kickOut(OTHER_DEVICE_MSG);
     }
   },error=>console.error(error));
   return true;
