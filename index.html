@@ -614,7 +614,15 @@ input{
 .bd .c{width:70px;height:70px;margin:0 auto 6px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:900;border:5px solid}
 .bd span{display:block;font-size:12.5px;font-weight:700;color:#374151;line-height:1.3}
 .bd em{font-style:normal;font-size:11.5px;color:#9ca3af}
-.bd.gA .c{border-color:#15803d;color:#15803d;background:#f0fdf4}.bd.gB .c{border-color:#e86208;color:#c2410c;background:#fff7ed}.bd.gC .c{border-color:#c62828;color:#c62828;background:#fef2f2}
+.bd.g1 .c{border-color:#dc2626;color:#b91c1c;background:#fef2f2}
+.bd.g2 .c{border-color:#eab308;color:#854d0e;background:#fefce8}
+.bd.g3 .c{border-color:#f97316;color:#c2410c;background:#fff7ed}
+.bd.g4 .c{border-color:#ec4899;color:#be185d;background:#fdf2f8}
+.bd.g5 .c{border-color:#0ea5e9;color:#0369a1;background:#f0f9ff}
+.bd.g6 .c{border-color:#16a34a;color:#15803d;background:#f0fdf4}
+.glg{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-bottom:4px}
+.glg>span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.glg i{display:inline-block;width:11px;height:11px;border-radius:50%;border:3px solid;box-sizing:border-box}
+.glg i.g1{border-color:#dc2626}.glg i.g2{border-color:#eab308}.glg i.g3{border-color:#f97316}.glg i.g4{border-color:#ec4899}.glg i.g5{border-color:#0ea5e9}.glg i.g6{border-color:#16a34a}
 /* ประวัติ + ภาพรวม */
 .hrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 14px;align-items:center;padding:14px 16px;margin:0 0 10px;border:1px solid #eee;border-radius:16px;background:#fff;box-shadow:0 4px 14px rgba(20,34,60,.05)}
 .hrow .hl b{display:block;font-size:15px;line-height:1.45}
@@ -6643,6 +6651,8 @@ async function openAttempt(a,btn){
 }
 
 /* ===== ภาพรวมผลการทดสอบ: บันไดยศ + เงื่อนไขเลื่อนยศ + ผลรายวิชา ===== */
+/* สีตามช่วงคะแนน: 0-10 แดง · 11-30 เหลือง · 31-40 ส้ม · 41-59 ชมพู · 60-80 ฟ้า · 81-100 เขียว */
+const pctGrade=p=>p<=10?"g1":p<=30?"g2":p<=40?"g3":p<60?"g4":p<=80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
@@ -6672,10 +6682,10 @@ async function renderOverview(){
   /* ผลรายวิชา รวมทุกครั้งที่ทำ */
   const subj={};
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{subj[k]=subj[k]||{c:0,t:0};subj[k].c+=Number(v.c)||0;subj[k].t+=Number(v.t)||0}));
-  const badges=Object.entries(subj).filter(([,v])=>v.t>0).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=p>=60?"gA":p>=40?"gB":"gC";return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ</em></div>`}).join("");
+  const badges=Object.entries(subj).filter(([,v])=>v.t>0).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ</em></div>`}).join("");
   box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
-    <div class="ovc"><h3>ผลรายวิชา</h3>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px">เขียว 60% ขึ้นไป · ส้ม 40-59% · แดง ต่ำกว่า 40% (รวมทุกครั้งที่ทำ ${list.length} ครั้ง)</p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
+    <div class="ovc"><h3>ผลรายวิชา</h3>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-10%"],["g2","11-30%"],["g3","31-40%"],["g4","41-59%"],["g5","60-80%"],["g6","81-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span>รวมทุกครั้งที่ทำ ${list.length} ครั้ง</p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
 $("rReview").onclick=()=>renderReview();
