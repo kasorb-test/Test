@@ -5178,7 +5178,8 @@ function renderDaily(home){
   }
 
   $("dailyQuestion").textContent=homeText(daily.question);
-  const storeKey=`kasorbDaily:${todayKey()}:${homeText(daily.question).slice(0,40)}`;
+  /* จำแยกตามบัญชี: บัญชีอื่นในเครื่องเดียวกันต้องตอบเองได้ */
+  const storeKey=`kasorbDaily:${currentUser?.uid||"guest"}:${todayKey()}:${homeText(daily.question).slice(0,40)}`;
   let saved=null;
   try{ saved=localStorage.getItem(storeKey); }catch(e){}
 
