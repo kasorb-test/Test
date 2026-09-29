@@ -50,7 +50,8 @@ service cloud.firestore {
       return d.keys().hasOnly(["ids", "active", "activeAt", "lastSwapAt"])
         && d.ids is map
         && d.ids.keys().size() >= 1 && d.ids.keys().size() <= 2
-        && d.active in d.ids.keys();
+        // active = เครื่องที่ล็อกอินล่าสุด (null หลังแอดมินลบเครื่องที่ใช้งานอยู่)
+        && (d.get("active", null) == null || d.active in d.ids.keys());
     }
 
     match /devices/{uid} {
@@ -59,7 +60,8 @@ service cloud.firestore {
       // เจ้าของสลับเครื่องที่ใช้งาน หรือเพิ่มเครื่องที่ 2 ได้ แต่ลบ/แทนที่เครื่องเดิมไม่ได้
       allow update: if isOwner(uid) && validDevices(request.resource.data)
         && request.resource.data.ids.keys().hasAll(resource.data.ids.keys());
-      // แอดมินรีเซ็ตเครื่องได้
+      // แอดมินลบบางเครื่อง หรือลบทั้งหมดได้
+      allow update: if isAdmin() && validDevices(request.resource.data);
       allow delete: if isAdmin();
     }
 
