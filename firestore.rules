@@ -45,6 +45,17 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // รูปข่าวที่แอดมินอัปโหลด — ทุกคนอ่านได้ แอดมินเพิ่ม/ลบได้
+    match /siteImg/{key} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && (request.resource == null
+            || (request.resource.data.keys().hasOnly(["d"])
+                && request.resource.data.d is string
+                && request.resource.data.d.size() <= 750000
+                && request.resource.data.d.matches("data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+")));
+    }
+
     // สถานะออนไลน์ สำหรับนับ "กำลังใช้งาน" — สมาชิกเขียนได้เฉพาะของตัวเอง เก็บแค่เวลาล่าสุด
     match /presence/{uid} {
       allow read: if request.auth != null;

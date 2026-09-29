@@ -26,6 +26,15 @@
 .mt th{top:calc(var(--mtopH,62px) + var(--stickH,0px))}
 }
 .nrow{position:relative;margin:10px 0;padding:12px 14px;border:1px solid #eee;border-radius:12px;background:#fcfcfc}.nrow b{display:block;margin-bottom:4px;color:#e86208;font-size:13px}.nrow label{margin-top:8px}.nrow .ndel{position:absolute;right:10px;top:8px;width:auto;margin:0;padding:5px 10px;background:#fdecec;color:#c62828;font-size:13px}.nadd{width:auto;background:#fff2e8;color:#e86208}
+.hsec{margin:16px 0 0;padding:4px 16px 16px;border:1px solid #eee;border-radius:14px}
+.hsec h3{margin:14px 0 6px}
+.hsave{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px}.hsave button{width:auto;margin:0;padding:11px 18px}
+.hsave span{font-size:14px;font-weight:700;color:#15803d}.hsave span.err{color:#c62828}
+.nimg{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0}
+.nimg .pick{display:inline-block;padding:9px 14px;border-radius:9px;background:#eef2fa;color:#16305f;font-weight:700;font-size:13px;cursor:pointer}
+.nimg button{width:auto;margin:0;padding:9px 12px;font-size:13px;background:#fdecec;color:#c62828}
+.nimg img{display:block;width:100%;max-width:360px;aspect-ratio:16/7;object-fit:cover;border-radius:10px;border:1px solid #eee}
+.nimg .or{font-size:12px;color:#888;width:100%}
 .uph{width:34px;height:34px;margin-right:8px;vertical-align:middle;border-radius:50%;object-fit:cover;border:1px solid #eee}.rm-photo{margin-left:8px!important;vertical-align:middle;width:auto;margin:0;padding:3px 8px;border-radius:8px;background:#fdecec;color:#c62828;font-size:12px;font-weight:700}
 /* โลโก้แบบไอคอนแอปแอดมิน: กรอบกรมท่า กะสอบ สีขาว + ADMIN กรอบส้ม */
 .logo{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:.35em;padding:.38em .75em .42em;border-radius:16px;background:linear-gradient(135deg,#27477f 0%,#16305f 55%,#0f2449 100%);box-shadow:0 6px 16px rgba(22,48,95,.28);font-size:20px;line-height:1.2;white-space:nowrap}
@@ -121,19 +130,21 @@
 .ferr{color:#c62828;font-weight:700;font-size:14px;margin:8px 0 0}
 @media(max-width:760px){.xtop{margin:-20px -14px 0;padding:10px 14px}.xpaper{padding:2px 12px 14px}.xq{padding-right:0;margin-top:34px}.qtools{top:12px}.xset .row3{grid-template-columns:1fr}}
 #shell .content{min-width:0}.mno{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#16305f;letter-spacing:.03em}
-</style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>แบบทดสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แก้วันสอบ ข่าวสาร และข้อสอบประจำวัน แล้วกดบันทึก</p>
+</style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>แบบทดสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แต่ละส่วนมีปุ่มบันทึกของตัวเอง แก้ส่วนไหนก็กดบันทึกเฉพาะส่วนนั้น</p><div class="hsec">
 <h3>การ์ดนับถอยหลัง</h3>
 <div class="row"><div><label>การ์ดที่ 1: สายงาน</label><input id="exam0Title"></div><div><label>วันสอบ</label><input id="exam0Date" type="date"></div></div>
 <div class="row"><div><label>การ์ดที่ 2: สายงาน</label><input id="exam1Title"></div><div><label>วันสอบ</label><input id="exam1Date" type="date"></div></div>
 <label>จำนวนข้อสอบทั้งหมดในเว็บ</label><input id="totalQuestions" type="number" readonly style="background:#f6f6f6;color:#777"><p class="muted" style="margin:-4px 0 10px;font-size:13px">นับให้อัตโนมัติจากหน้า "แบบทดสอบ"</p>
-<h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน ลิงก์รูปและลิงก์ข่าวต้องขึ้นต้นด้วย https://</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
-<h3>ข้อสอบประจำวัน</h3>
+<div class="hsave"><button type="button" id="saveCount">บันทึกการ์ดนับถอยหลัง</button><span id="countMsg"></span></div></div>
+<div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
+<div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
+<div class="hsec"><h3>ข้อสอบประจำวัน</h3>
 <label>คำถาม</label><textarea id="dailyQ"></textarea>
 <label style="font-weight:400"><input id="dailyEng" type="checkbox" style="width:auto"> ข้อสอบภาษาอังกฤษ (ตัวเลือกเป็น A B C D แทน 1 2 3 4)</label>
 <div class="row"><div><label>ตัวเลือก 1</label><input id="dailyC0"></div><div><label>ตัวเลือก 2</label><input id="dailyC1"></div><div><label>ตัวเลือก 3</label><input id="dailyC2"></div><div><label>ตัวเลือก 4</label><input id="dailyC3"></div></div>
 <label>ข้อที่ถูก</label><select id="dailyAns"><option value="0">ตัวเลือก 1</option><option value="1">ตัวเลือก 2</option><option value="2">ตัวเลือก 3</option><option value="3">ตัวเลือก 4</option></select>
 <label>คำอธิบายเฉลย (ไม่บังคับ)</label><textarea id="dailyExp"></textarea>
-<button id="saveHome">บันทึกหน้าหลัก</button><p id="homeMsg"></p></div>
+<div class="hsave"><button type="button" id="saveDaily">บันทึกข้อสอบประจำวัน</button><span id="dailyMsg"></span></div></div><p id="homeMsg"></p></div>
 <div id="panel" class="card page" data-page="members"><h2>สมาชิก</h2><p class="muted">หลังลูกค้าชำระเงิน เลือกแพ็กเกจ แล้วกด บันทึก ที่แถวของคนนั้น (รายปีนับ 1 ปีจากวันที่เลือก แก้วันได้)</p>
 <div class="stick"><div id="tabs" class="tabs"><button type="button" data-f="all" class="on">ทั้งหมด <b>0</b></button><button type="button" data-f="free">ฟรี <b>0</b></button><button type="button" data-f="yearly">รายปี <b>0</b></button><button type="button" data-f="lifetime">ตลอดชีพ <b>0</b></button></div>
 <input id="q" type="search" placeholder="ค้นหาอีเมล ชื่อเล่น หรือรหัสสมาชิก"><p id="umsg" class="ok"></p></div>
@@ -259,12 +270,59 @@ function showShell(on){$("boot").classList.add("hide");document.querySelector("m
 onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
 async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
 /* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
-function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>ลิงก์รูป (ไม่บังคับ)</label><input class="ni" placeholder="https://..."><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".ni").value=n.image||"";r.querySelector(".nl").value=n.link||"";r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
+function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
+/* รูปข่าว: อัปโหลดจากเครื่อง (ย่อรูปแล้วเก็บใน siteImg) หรือใส่ลิงก์รูปแบบเดิม */
+const siteImgCache=new Map();
+function siteImg(k){if(!siteImgCache.has(k))siteImgCache.set(k,getDoc(doc(db,"siteImg",k)).then(s=>s.exists()?s.data().d:"").catch(()=>{siteImgCache.delete(k);return ""}));return siteImgCache.get(k)}
+function drawNewsImg(r){
+  const box=r.querySelector(".nimg"),v=r._img;
+  box.innerHTML=`${v?'<img alt="">':""}<label class="pick">${v?"เปลี่ยนรูป":"อัปโหลดรูปจากเครื่อง"}<input type="file" accept="image/png,image/jpeg,image/webp" hidden></label>${v?'<button type="button">ลบรูป</button>':""}<details class="or"><summary>หรือใส่ลิงก์รูป</summary><input class="ni" placeholder="https://..." value="${esc(v?.url||"")}"></details>`;
+  const im=box.querySelector("img");
+  if(im){if(v.key)siteImg(v.key).then(d=>{if(/^data:image\//.test(d))im.src=d});else im.src=v.url}
+  box.querySelector("button")?.addEventListener("click",()=>{r._img=null;drawNewsImg(r)});
+  box.querySelector(".ni").onchange=e=>{const u=e.target.value.trim();r._img=u?{url:u}:null;drawNewsImg(r)};
+  box.querySelector("input[type=file]").onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    const pick=box.querySelector(".pick");pick.textContent="กำลังอัปโหลด…";
+    try{const d=await newsImgData(f);const k=await sha24(d);await setDoc(doc(db,"siteImg",k),{d});siteImgCache.set(k,Promise.resolve(d));r._img={key:k};drawNewsImg(r);$("newsMsg").className="";$("newsMsg").textContent='อัปโหลดรูปแล้ว กด "บันทึกข่าวสาร" เพื่อใช้รูปนี้'}
+    catch(err){$("newsMsg").className="err";$("newsMsg").textContent=err.code==="permission-denied"?"อัปโหลดไม่ได้ ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว":(err.message||"อัปโหลดไม่สำเร็จ");drawNewsImg(r)}
+  };
+}
+async function newsImgData(f){
+  if(!/^image\/(png|jpeg|webp)$/.test(f.type)) throw new Error("ใช้ได้เฉพาะรูป .jpg .png .webp");
+  const url=URL.createObjectURL(f),im=new Image();
+  try{await new Promise((ok,bad)=>{im.onload=ok;im.onerror=bad;im.src=url})}catch(e){throw new Error("เปิดรูปไม่ได้")}
+  let w=im.naturalWidth,h=im.naturalHeight;if(w>1280){h=Math.round(h*1280/w);w=1280}
+  const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);URL.revokeObjectURL(url);
+  let d="";for(const q of [.82,.72,.6,.5]){d=c.toDataURL("image/jpeg",q);if(d.length<=700000)break}
+  if(d.length>700000) throw new Error("รูปใหญ่เกินไป กรุณาย่อรูปก่อน");
+  return d;
+}
+async function sha24(d){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(d));return [...new Uint8Array(b)].slice(0,12).map(x=>x.toString(16).padStart(2,"0")).join("")}
 function numberNews(){const rows=[...$("newsRows").children];rows.forEach((r,i)=>r.querySelector("b").textContent="ข่าวที่ "+(i+1));$("newsAdd").style.display=rows.length>=10?"none":""}
 function setNewsRows(list){$("newsRows").innerHTML="";(list.length?list:[{}]).slice(0,10).forEach(newsRow)}
-function readNewsRows(){return[...$("newsRows").children].map(r=>{const n={text:r.querySelector(".nt").value.trim()},i=r.querySelector(".ni").value.trim(),l=r.querySelector(".nl").value.trim();if(i)n.image=i;if(l)n.link=l;return n}).filter(n=>n.text).slice(0,10)}
+function readNewsRows(){return[...$("newsRows").children].map(r=>{const n={text:r.querySelector(".nt").value.trim()},l=r.querySelector(".nl").value.trim();if(r._img?.key)n.imageKey=r._img.key;else if(r._img?.url)n.image=r._img.url;if(l)n.link=l;return n}).filter(n=>n.text).slice(0,10)}
 $("newsAdd").onclick=()=>newsRow();setNewsRows([]);
-$("saveHome").onclick=async()=>{const old=await getDoc(doc(db,"site","home")).then(s=>s.exists()?s.data():{}).catch(()=>({}));const oldDates=new Map((old.news||[]).map(n=>[n.text,n.date]));const today=new Date().toISOString().slice(0,10);const news=readNewsRows().map(n=>({...n,date:oldDates.get(n.text)||today}));const badUrl=news.find(n=>[n.image,n.link].some(u=>u&&!/^https:\/\/\S+$/.test(u)));if(badUrl){$("homeMsg").className="err";$("homeMsg").textContent="ลิงก์ต้องขึ้นต้นด้วย https:// (ข่าว: "+badUrl.text+")";return}const choices=[0,1,2,3].map(i=>$("dailyC"+i).value.trim()).filter(Boolean);try{await setDoc(doc(db,"site","home"),{exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title),news,daily:{question:$("dailyQ").value.trim(),choices,answer:Math.min(Number($("dailyAns").value),Math.max(choices.length-1,0)),explanation:$("dailyExp").value.trim(),english:$("dailyEng").checked},updatedAt:new Date().toISOString()},{merge:true});$("homeMsg").className="ok";$("homeMsg").textContent="บันทึกแล้ว"}catch(e){$("homeMsg").className="";$("homeMsg").textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)"}};
+/* หน้าหลัก: บันทึกแยกทีละส่วน (merge เฉพาะฟิลด์ของส่วนนั้น) */
+async function saveHomePart(data,msgId){
+  const m=$(msgId);m.className="";m.textContent="กำลังบันทึก…";
+  try{await setDoc(doc(db,"site","home"),{...data,updatedAt:new Date().toISOString()},{merge:true});m.textContent="บันทึกแล้ว";return true}
+  catch(e){m.className="err";m.textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)";return false}
+}
+$("saveCount").onclick=()=>saveHomePart({exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title)},"countMsg");
+$("saveNews").onclick=async()=>{
+  const old=await getDoc(doc(db,"site","home")).then(s=>s.exists()?s.data():{}).catch(()=>({}));
+  const oldDates=new Map((old.news||[]).map(n=>[n.text,n.date]));const today=new Date().toISOString().slice(0,10);
+  const news=readNewsRows().map(n=>({...n,date:oldDates.get(n.text)||today}));
+  const badUrl=news.find(n=>[n.image,n.link].some(u=>u&&!/^https:\/\/\S+$/.test(u)));
+  if(badUrl){$("newsMsg").className="err";$("newsMsg").textContent="ลิงก์ต้องขึ้นต้นด้วย https:// (ข่าว: "+badUrl.text+")";return}
+  if(await saveHomePart({news},"newsMsg")){
+    /* ลบรูปข่าวที่ไม่ได้ใช้แล้ว */
+    const used=new Set(news.map(n=>n.imageKey).filter(Boolean));
+    for(const k of new Set((old.news||[]).map(n=>n.imageKey).filter(k=>k&&!used.has(k)))){try{await deleteDoc(doc(db,"siteImg",k))}catch(e){}}
+  }
+};
+$("saveDaily").onclick=()=>{const choices=[0,1,2,3].map(i=>$("dailyC"+i).value.trim()).filter(Boolean);return saveHomePart({daily:{question:$("dailyQ").value.trim(),choices,answer:Math.min(Number($("dailyAns").value),Math.max(choices.length-1,0)),explanation:$("dailyExp").value.trim(),english:$("dailyEng").checked}},"dailyMsg")};
 
 /* ===== ข้อสอบ: exams/{id} (ข้อมูลชุด) + examItems/{id} (ข้อสอบ เฉลย คำอธิบาย) + examImg/{key} (รูป) ===== */
 const TRACKS=[["amnuay","สายอำนวยการ"],["prab","สายปราบปราม"],["pisut","สายพิสูจน์หลักฐาน"],["namwan","กองร้อยน้ำหวาน"],["plrom","พลร่ม"],["tcd","ตชด."]];
