@@ -92,6 +92,16 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get("plan", "free") == "premium";
     }
 
+    // ตัวนับรหัสสมาชิก KST00001: เพิ่มทีละ 1 พร้อมกับบันทึกเลขในบัญชีของตัวเองเท่านั้น
+    match /counters/member {
+      allow read: if request.auth != null;
+      allow create, update: if isAdmin()
+        || (request.auth != null
+            && request.resource.data.keys().hasOnly(["n"])
+            && request.resource.data.n == (resource == null ? 0 : resource.data.get("n", 0)) + 1
+            && getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.get("memberNo", 0) == request.resource.data.n);
+    }
+
     // ชุดข้อสอบ: ทุกคนที่ล็อกอินเห็นรายชื่อชุด แอดมินเพิ่ม/แก้/ลบ
     match /exams/{id} {
       allow read: if request.auth != null;
@@ -158,7 +168,15 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo"])
+        // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberNo"])
+            || (resource.data.get("memberNo", null) == null
+                && request.resource.data.memberNo is int
+                && getAfter(/databases/$(database)/documents/counters/member).data.n == request.resource.data.memberNo
+                && (exists(/databases/$(database)/documents/counters/member)
+                      ? get(/databases/$(database)/documents/counters/member).data.n + 1
+                      : 1) == request.resource.data.memberNo))
         // XP เพิ่มได้ครั้งละไม่เกิน 1 ชุด (150 ข้อ x 40) และลดได้เมื่อแก้เฉลย, จำนวนข้อที่ทำแล้วไม่เกิน 20,000
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["xp"])
             || (request.resource.data.xp is int && request.resource.data.xp >= 0
@@ -203,6 +221,11 @@ service cloud.firestore {
         && request.resource.data.get("planType", null) in [null, "yearly", "lifetime"]
         && (request.resource.data.get("premiumUntil", null) == null
             || request.resource.data.premiumUntil is string);
+
+      // แอดมินออกรหัสสมาชิกให้สมาชิกเดิม
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["memberNo"])
+        && request.resource.data.memberNo is int && request.resource.data.memberNo > 0;
 
       // แอดมินลบรูปที่ไม่เหมาะสม (กลับไปใช้รูปการ์ตูน)
       allow update: if isAdmin()
