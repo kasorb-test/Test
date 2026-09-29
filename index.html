@@ -3064,6 +3064,9 @@ body.exam-mode .topnav{display:none}
 .uidlg .act button{min-width:96px;margin:0;padding:11px 18px;border:0;border-radius:12px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;width:auto}
 .uidlg .ok{background:#ff6a00;color:#fff}.uidlg .ok.danger{background:#c62828}
 .uidlg .no{background:#f1f3f6;color:#374151}
+.uidlg .act.col{flex-direction:column}.uidlg .act.col button{width:100%;text-align:left;padding:12px 16px}
+.uidlg .act.col button small{display:block;margin-top:2px;font-size:12.5px;font-weight:600;opacity:.8}
+.uidlg .red{background:#fdecec;color:#c62828}
 /* ผู้เยี่ยมชม: กระดานอันดับไม่แสดงเลเวล และไม่มี "อันดับของฉัน" (เข้าสู่ระบบแล้วจึงเห็น) */
 body.guest #homePage .rank-level{display:none!important}
 body.guest #homePage .rank-xp{margin-left:auto}
@@ -3132,6 +3135,19 @@ function dlg(message,opt){
   });
 }
 window.uiAlert=m=>dlg(m,{ok:"ตกลง"});
+/* เลือกได้หลายทาง: ปุ่มเรียงลงมา คืนค่า value ของปุ่มที่กด (กด Esc = ปุ่มสุดท้าย) */
+window.uiChoose=(message,choices)=>new Promise(res=>{
+  const wrap=document.createElement("div");wrap.className="uidlg";wrap.setAttribute("role","dialog");
+  const box=document.createElement("div");box.className="box";
+  const p=document.createElement("p");p.className="msg";p.textContent=message;box.appendChild(p);
+  const act=document.createElement("div");act.className="act col";
+  const done=v=>{wrap.remove();document.removeEventListener("keydown",key,true);res(v)};
+  choices.forEach(c=>{const b=document.createElement("button");b.type="button";b.className=c.cls||"no";b.innerHTML=c.label;b.onclick=()=>done(c.value);act.appendChild(b)});
+  box.appendChild(act);wrap.appendChild(box);document.body.appendChild(wrap);
+  const key=e=>{if(e.key==="Escape"){e.preventDefault();done(choices[choices.length-1].value)}};
+  document.addEventListener("keydown",key,true);
+  setTimeout(()=>act.querySelector("button").focus(),30);
+});
 window.uiConfirm=(m,o)=>dlg(m,{ok:(o&&o.ok)||"ตกลง",cancel:(o&&o.cancel)||"ยกเลิก",danger:o&&o.danger});
 window.uiPrompt=(m,v)=>dlg(m,{ok:"บันทึก",cancel:"ยกเลิก",input:v??""});
 window.alert=m=>{uiAlert(m)};
@@ -6419,7 +6435,16 @@ function leaveExamMode(){
   $("xShield").classList.add("hidden");
 }
 $("xQuit").onclick=async()=>{
-  if(!await uiConfirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ กลับมาทำต่อได้จนกว่าจะกดส่งคำตอบ (เวลายังนับต่อ)",{ok:"ออกจากข้อสอบ",cancel:"กลับไปทำต่อ"})) return;
+  const pick=await uiChoose("ออกจากข้อสอบตอนนี้?",[
+    {value:"stay",cls:"ok",label:"กลับไปทำต่อ<small>อยู่ในหน้าข้อสอบนี้ต่อ</small>"},
+    {value:"keep",cls:"no",label:"ออก แล้วกลับมาทำต่อภายหลัง<small>คำตอบที่ทำไว้ถูกเก็บไว้ เวลายังนับต่อ</small>"},
+    {value:"reset",cls:"red",label:"ออก แล้วเริ่มใหม่<small>ลบคำตอบที่ทำไว้ ครั้งหน้าเริ่มใหม่ทั้งหมด</small>"}]);
+  if(pick==="stay"||!pick) return;
+  if(pick==="reset"){
+    const n=exam.ans.filter(x=>x>=0).length;
+    if(n&&!await uiConfirm(`ลบคำตอบที่ทำไว้ ${n} ข้อ แล้วเริ่มใหม่ใช่หรือไม่?\nลบแล้วกู้คืนไม่ได้`,{ok:"ลบและเริ่มใหม่",cancel:"กลับไปทำต่อ",danger:true})) return;
+    try{localStorage.removeItem(sessKey(exam.meta.id))}catch(e){}
+  }
   const t=currentTrack;leaveExamMode();exam=null;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
 };
 $("xSheetBtn").onclick=()=>document.body.classList.add("xsheet");
