@@ -88,17 +88,17 @@
 .xsec span{flex:1}.xsec button{width:auto;margin:0;padding:4px 10px;border-radius:999px;background:#fff;color:#c2410c;font-size:12px}
 .xi{position:relative;padding:18px 0;border-bottom:1px dashed #e8e0d8;scroll-margin-top:120px}
 .xi.hl{animation:hl 1.6s}@keyframes hl{from{background:#fff1e6}to{background:transparent}}
-.xq{margin:0 0 10px;font-size:19px;font-weight:700;line-height:1.7;color:#000;white-space:pre-line;padding-right:118px}
+.xq{margin:0 0 10px;font-size:16px;font-weight:600;line-height:1.65;color:#000;white-space:pre-line;padding-right:118px}
 .xq em{font-style:normal;margin-right:6px}
 .xopts{display:grid;gap:4px}.xopts.row{grid-template-columns:repeat(4,1fr)}
-.xc{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:10px;font-size:18px;line-height:1.55;color:#000}
-.xc b{flex:0 0 26px;height:26px;border-radius:50%;border:1.5px solid #000;display:grid;place-items:center;font-weight:600;font-size:14px}
+.xc{display:flex;gap:10px;align-items:center;padding:7px 8px;border-radius:10px;font-size:15.5px;line-height:1.55;color:#000}.xc .t{flex:1;min-width:0}.xq,.xpass,.exp,.xc{text-align:justify}.z{font-size:0}
+.xc b{flex:0 0 23px;height:23px;border-radius:50%;border:1.5px solid #000;display:grid;place-items:center;font-weight:600;font-size:12.5px}
 .xc.ok{background:#e7f6ec}.xc.ok b{background:#15803d;border-color:#15803d;color:#fff}
-.xpass{margin:16px 0 0;padding:14px 16px;border:1px solid #e8e0d8;border-radius:12px;background:#fcfcfc;white-space:pre-line;font-size:17px;line-height:1.7;color:#000}
+.xpass{margin:16px 0 0;padding:14px 16px;border:1px solid #e8e0d8;border-radius:12px;background:#fcfcfc;white-space:pre-line;font-size:15px;line-height:1.7;color:#000}
 .xpass b.g{display:block;font-family:system-ui;font-size:13px;color:#c2410c}
 .xi img,.xpass img,.exp img{display:block;max-width:100%;height:auto;margin:6px 0}
 .eimg:not([src]){min-height:80px;width:100%;border-radius:10px;background:#f3f3f3}
-.exp{margin-top:10px;padding:12px 14px;border-left:4px solid #ff6a00;border-radius:0 12px 12px 0;background:#fffaf6;font-size:17px;line-height:1.7;color:#000;white-space:pre-line}
+.exp{margin-top:10px;padding:12px 14px;border-left:4px solid #ff6a00;border-radius:0 12px 12px 0;background:#fffaf6;font-size:15px;line-height:1.7;color:#000;white-space:pre-line}
 .exp b.h{display:block;margin-bottom:4px;color:#c2410c;font-family:system-ui;font-size:14px}
 .qtools{position:absolute;top:18px;right:0;display:flex;gap:6px}
 .qtools button{width:auto;margin:0;padding:6px 12px;border-radius:9px;font-size:13px;font-family:system-ui}
@@ -401,6 +401,9 @@ function getImg(v){
   if(!imgCache.has(v)) imgCache.set(v,getDoc(doc(db,"examImg",v)).then(s=>s.exists()?s.data().d:"").catch(()=>{imgCache.delete(v);return ""}));
   return imgCache.get(v);
 }
+/* ตัดคำไทยแล้วคั่นด้วยช่องว่างขนาด 0 ให้จัดแบบกระจายเต็มบรรทัดเหมือนหน้านักเรียน */
+const thaiSeg="Segmenter" in Intl?new Intl.Segmenter("th",{granularity:"word"}):null;
+function dist(text){text=String(text??"");if(!thaiSeg||!/[\u0E00-\u0E7F]/.test(text))return esc(text);let out="",first=true;for(const {segment} of thaiSeg.segment(text)){if(!first&&!/^\s/.test(segment))out+='<span class="z"> </span>';out+=esc(segment);first=/\s$/.test(segment)}return out}
 const imgTag=v=>`<img class="eimg" data-k="${esc(v)}" alt="">`;
 function loadImgs(root){return Promise.all([...root.querySelectorAll("img.eimg:not([src])")].map(el=>getImg(el.dataset.k).then(src=>{if(!/^data:image\/(png|jpeg);base64,/.test(src)){el.alt="โหลดรูปไม่ได้";return}el.src=src;return el.decode().catch(()=>{})})))}
 function edStatus(t,bad){$("exSt").textContent=t;$("exSt").className="st"+(bad?" err":"")}
@@ -471,15 +474,15 @@ async function saveSet(){
 
 function qView(it){
   const lab=k=>it.eng?"abcd"[k]:String(k+1),im=isImgKey(it.img)||/^data:/.test(it.img||"");
-  const q=im?imgTag(it.img):`<p class="xq"><em>${it.n}.</em>${esc(it.q)}</p>`;
-  const opts=it.c.map((c,k)=>`<div class="xc${k===it.a?" ok":""}"><b>${lab(k)}</b>${im?"":esc(c)}</div>`).join("");
+  const q=im?imgTag(it.img):`<p class="xq"><em>${it.n}.</em>${dist(it.q)}</p>`;
+  const opts=it.c.map((c,k)=>`<div class="xc${k===it.a?" ok":""}"><b>${lab(k)}</b>${im?"":`<span class="t">${dist(c)}</span>`}</div>`).join("");
   const eim=it.expImg?imgTag(it.expImg):"";
   return `${im?`<p class="xq" style="margin-bottom:0"><em>${it.n}.</em></p>`:""}${q}<div class="xopts${im?" row":""}">${opts}</div>
-  <div class="exp"><b class="h">เฉลยข้อ ${lab(it.a)} · คำอธิบาย</b>${eim||esc(it.exp||"-")}</div>
+  <div class="exp"><b class="h">เฉลยข้อ ${lab(it.a)} · คำอธิบาย</b>${eim||dist(it.exp||"-")}</div>
   <div class="qtools"><button type="button" class="ed" data-a="edit" data-n="${it.n}">แก้ไข</button><button type="button" class="rm" data-a="del" data-n="${it.n}">ลบ</button></div>`;
 }
 function passView(it){
-  const body=it.passageImg?imgTag(it.passageImg):esc(it.passage||"");
+  const body=it.passageImg?imgTag(it.passageImg):dist(it.passage||"");
   return `<div class="xpass"><b class="g">ใช้ตอบข้อ ${it.group[0]}-${it.group[1]}</b>${body}</div>`;
 }
 function imgPick(field,label,note){
