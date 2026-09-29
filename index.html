@@ -590,6 +590,36 @@ input{
   margin:8px 0;
 }
 
+/* ประวัติ + ภาพรวม */
+.hrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 14px;align-items:center;padding:14px 16px;margin:0 0 10px;border:1px solid #eee;border-radius:16px;background:#fff;box-shadow:0 4px 14px rgba(20,34,60,.05)}
+.hrow .hl b{display:block;font-size:15px;line-height:1.45}
+.hrow .hl span{display:block;margin-top:3px;font-size:12.5px;color:#777;line-height:1.5}
+.hrow .hl .mode{display:inline-block;margin:4px 0 0;padding:2px 9px;border-radius:999px;background:#fff1e6;color:#c2410c;font-size:12px;font-weight:700}
+.hrow .hl .mode.full{background:#eef2fa;color:#16305f}
+.hrow .hs{text-align:right;white-space:nowrap}
+.hrow .hs b{display:block;font-size:20px;color:#16305f}.hrow .hs b small{font-size:13px;color:#888;font-weight:600}
+.hrow .hs span{font-size:12.5px;font-weight:800;color:#15803d}.hrow .hs span.lo{color:#c62828}
+.hrow .hs em{display:block;font-style:normal;font-size:12px;color:#e86208;font-weight:700}
+.hrow .hv{padding:10px 14px;border:0;border-radius:11px;background:#16305f;color:#fff;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
+@media(max-width:600px){.hrow{grid-template-columns:minmax(0,1fr) auto}.hrow .hv{grid-column:1/-1;width:100%}}
+.hmore{display:block;margin:6px auto 0;padding:10px 18px;border:1px solid #f1d9c6;border-radius:11px;background:#fff6ef;color:#e86208;font-weight:800;cursor:pointer}
+.ovg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+@media(max-width:900px){.ovg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ovt{padding:16px;border-radius:16px;background:#fff;border:1px solid #eee;box-shadow:0 4px 14px rgba(20,34,60,.05)}
+.ovt span{display:block;font-size:12.5px;color:#888;font-weight:700}
+.ovt b{display:block;margin-top:4px;font-size:22px;color:#16305f;line-height:1.3}
+.ovt b small{font-size:13px;color:#888;font-weight:600}
+.ovt em{display:block;margin-top:2px;font-style:normal;font-size:12px;color:#777}
+.ovc{padding:18px;margin-bottom:14px;border-radius:16px;background:#fff;border:1px solid #eee;box-shadow:0 4px 14px rgba(20,34,60,.05)}
+.ovc h3{margin:0 0 12px;font-size:16px;color:#16305f}
+.ovc .note{font-size:13px;color:#777;margin:0}
+.meter{margin:10px 0}
+.meter .ml{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;font-weight:700;color:#333}
+.meter .ml em{font-style:normal;color:#777;font-weight:600;white-space:nowrap}
+.meter .mb{height:9px;margin-top:5px;border-radius:999px;background:#f0f0f0;overflow:hidden}
+.meter .mb i{display:block;height:100%;border-radius:999px;background:#ff6a00}
+.meter.ok .mb i{background:#15803d}.meter.lo .mb i{background:#c62828}
+.ovlink{padding:0;border:0;background:none;color:#e86208;font-weight:800;cursor:pointer;font-size:14px}
 .placeholder{
   padding:32px;
   text-align:center;
@@ -3502,38 +3532,15 @@ LINE OA @kasorb
 </section>
 <!-- HISTORY -->
 <section class="app-page" id="historyPage">
-<h2 class="page-heading">
-ประวัติการทำแบบทดสอบ
-</h2>
-<p class="page-desc">
-รายการแบบทดสอบที่เคยทำ
-</p>
-<div class="card placeholder">
-ยังไม่มีประวัติการทำแบบทดสอบ
-</div>
+<h2 class="page-heading">ประวัติการทำแบบทดสอบ</h2>
+<p class="page-desc">แบบทดสอบที่เคยทำ ล่าสุดอยู่บนสุด กด "ดูผล" เพื่อเปิดกระดาษคำตอบและเฉลย</p>
+<div id="histList"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- SCORE -->
 <section class="app-page" id="scorePage">
-<h2 class="page-heading">
-ภาพรวมผลการทดสอบ
-</h2>
-<p class="page-desc">
-สรุปผลการทดสอบ คะแนน XP ระดับ และความคืบหน้า
-</p>
-<div class="grid-two">
-<div class="dashboard-card">
-<h3>คะแนนสะสม</h3>
-<div id="scoreValue" style="font-size:32px;font-weight:bold">
-0
-</div>
-</div>
-<div class="dashboard-card">
-<h3>ระดับปัจจุบัน</h3>
-<div id="levelValue" style="font-size:22px;font-weight:bold">
-ผู้ทดลองสอบ • Lv.0
-</div>
-</div>
-</div>
+<h2 class="page-heading">ภาพรวมผลการทดสอบ</h2>
+<p class="page-desc">สรุป XP ยศ ความคืบหน้า และคะแนนรายวิชา</p>
+<div id="ovBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- PREMIUM -->
 <section class="app-page" id="premiumPage">
@@ -4394,6 +4401,8 @@ page.classList.remove("active")
 $(pageId)
 .classList
 .add("active");
+if(pageId==="historyPage") renderHistory();
+if(pageId==="scorePage") renderOverview();
 document
 .querySelectorAll(".nav-btn")
 .forEach(
@@ -4831,16 +4840,7 @@ $("topProgressFill")
 `${progress}%`;
 
 
-$("scoreValue")
-.textContent=
-Number(
-currentData?.score||0
-);
-
-
-$("levelValue")
-.textContent=
-rank;
+if(document.getElementById("scorePage")?.classList.contains("active")) renderOverview();
 
 
 if(
@@ -6327,11 +6327,12 @@ async function submitExam(auto){
     await updateDoc(doc(db,"users",currentUser.uid),{xp,answered:unique});
     currentData.xp=xp;currentData.answered=unique;
     if(answered) await addTodayCount(answered);
-    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,...(pickSecs?{parts:pickSecs}:{}),at:serverTimestamp()});
+    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,...(pickSecs?{parts:pickSecs}:{}),bySec,at:serverTimestamp()});
   }catch(e){console.error(e);saveErr=true;}
   try{localStorage.removeItem(sessKey(meta.id))}catch(e){}
   renderProfile();
   lastResult={meta,items,ans,correct,gained,answered,secs,bySec,saveErr,pickSecs,minutes};
+  attemptsCache=null;
   exam=null;
   renderResult();
   showAppPage("resultPage","ผลการทดสอบ");
@@ -6384,7 +6385,96 @@ function renderAnswerSheet(){
 let sheetW=window.innerWidth;
 window.addEventListener("resize",()=>{if(Math.abs(window.innerWidth-sheetW)>40&&$("resultPage").classList.contains("active")){sheetW=window.innerWidth;renderAnswerSheet();}});
 
-$("rBack").onclick=()=>{const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
+$("rBack").onclick=()=>{if(lastResult?.from==="history"){showAppPage("historyPage","ประวัติการทำแบบทดสอบ");return}const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
+
+/* ===== ประวัติการทำแบบทดสอบ ===== */
+let attemptsCache=null,histShown=20;
+async function loadAttempts(force){
+  if(attemptsCache&&!force) return attemptsCache;
+  const snap=await getDocs(query(collection(db,"users",currentUser.uid,"attempts"),orderBy("at","desc"),limit(200)));
+  attemptsCache=[];snap.forEach(d=>attemptsCache.push({id:d.id,...d.data()}));
+  return attemptsCache;
+}
+const atDate=a=>a.at&&a.at.toDate?a.at.toDate():null;
+const fmtWhen=d=>d?d.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"2-digit"})+" "+d.toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"})+" น.":"";
+async function renderHistory(){
+  const box=$("histList");
+  if(!currentUser) return;
+  let list,cat=[];
+  try{[list,cat]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}
+  catch(e){console.error(e);box.innerHTML='<div class="card placeholder">โหลดประวัติไม่ได้ กรุณาลองใหม่อีกครั้ง</div>';return}
+  if(!list.length){box.innerHTML='<div class="card placeholder">ยังไม่มีประวัติการทำแบบทดสอบ<br><small>ไปที่ "แบบทดสอบเสมือนจริง" เพื่อเริ่มทำชุดแรก</small></div>';return}
+  box.innerHTML="";
+  list.slice(0,histShown).forEach(a=>{
+    const meta=cat.find(e=>e.id===a.exam);
+    const title=meta?.title||a.title||"แบบทดสอบ";   // ใช้ชื่อชุดล่าสุด ถ้าแอดมินเปลี่ยนชื่อภายหลัง
+    const t=Number(a.total)||0,c=Number(a.correct)||0,pct=t?Math.round(c/t*100):0;
+    const parts=Array.isArray(a.parts)&&meta?a.parts.map(i=>shortSec((meta.sections[i]||{}).name||"")).filter(Boolean):null;
+    const el=document.createElement("div");el.className="hrow";
+    el.innerHTML=`<div class="hl"><b>${escHtml(title)}</b><span>${escHtml(fmtWhen(atDate(a)))}${a.secs?` · ใช้เวลา ${escHtml(fmtTime(Number(a.secs)||0))}`:""}</span>
+      <span class="mode${a.parts?"":" full"}">${a.parts?`เฉพาะวิชา: ${escHtml((parts||[]).join(", ")||a.parts.length+" วิชา")}`:"ทำครบทั้งชุด"}</span></div>
+      <div class="hs"><b>${c}<small> / ${t}</small></b><span class="${pct<60?"lo":""}">${pct}%</span><em>+${(Number(a.xp)||0).toLocaleString()} XP</em></div>
+      <button type="button" class="hv">ดูผล</button>`;
+    el.querySelector(".hv").onclick=()=>openAttempt(a,el.querySelector(".hv"));
+    box.appendChild(el);
+  });
+  if(list.length>histShown){const m=document.createElement("button");m.type="button";m.className="hmore";m.textContent=`ดูเพิ่ม (อีก ${list.length-histShown} รายการ)`;m.onclick=()=>{histShown+=20;renderHistory()};box.appendChild(m)}
+}
+/* เปิดผลสอบเก่าอีกครั้ง: โหลดข้อสอบของชุดนั้น แล้วแสดงกระดาษคำตอบและเฉลยเหมือนตอนส่ง */
+async function openAttempt(a,btn){
+  const meta=(await loadCatalog()).find(e=>e.id===a.exam);
+  if(!meta){alert("ชุดข้อสอบนี้ถูกลบออกจากเว็บแล้ว");return}
+  btn.disabled=true;btn.textContent="กำลังเปิด…";
+  try{
+    const snap=await getDoc(doc(db,"examItems",a.exam));
+    let items=snap.exists()?snap.data().items||[]:[];
+    if(Array.isArray(a.parts)) items=items.filter(it=>a.parts.includes(secOf(meta,it)));
+    if(!Array.isArray(a.ans)||items.length!==a.ans.length){alert("ข้อสอบชุดนี้มีการเพิ่มหรือลบข้อหลังจากที่ทำ จึงเปิดกระดาษคำตอบเดิมไม่ได้");return}
+    const correct=items.reduce((n,it,i)=>n+(a.ans[i]===it.a?1:0),0);
+    lastResult={meta,items,ans:a.ans,correct,gained:Number(a.xp)||0,answered:Number(a.answered)||0,secs:Number(a.secs)||0,saveErr:false,
+      pickSecs:Array.isArray(a.parts)?a.parts:null,minutes:Array.isArray(a.parts)?secMinutes(meta,items.length):(Number(meta.minutes)||items.length),from:"history"};
+    renderResult();showAppPage("resultPage","ผลการทดสอบ");window.scrollTo(0,0);
+  }catch(e){console.error(e);if(e.code==="permission-denied")showUpgrade();else alert("เปิดผลสอบไม่ได้ กรุณาลองใหม่อีกครั้ง")}
+  finally{btn.disabled=false;btn.textContent="ดูผล"}
+}
+
+/* ===== ภาพรวมผลการทดสอบ ===== */
+async function renderOverview(){
+  const box=$("ovBox");if(!currentUser) return;
+  let list=[];
+  try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
+  const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
+  const premium=currentData?.plan==="premium",lv=currentLevel();
+  const sumC=list.reduce((n,a)=>n+(Number(a.correct)||0),0),sumT=list.reduce((n,a)=>n+(Number(a.total)||0),0);
+  const avg=sumT?Math.round(sumC/sumT*100):0;
+  const meter=(label,val,max,right,cls)=>`<div class="meter ${cls||""}"><div class="ml"><span>${label}</span><em>${right}</em></div><div class="mb"><i style="width:${Math.max(0,Math.min(100,max?val/max*100:0))}%"></i></div></div>`;
+  /* เลเวลถัดไป: ต้องผ่านทั้ง % ที่ทำแล้ว และ XP */
+  let next="";
+  if(!premium) next=`<p class="note">สมาชิกฟรีอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุดฟรีได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
+  else if(lv>=MAX_LEVEL) next=`<p class="note">ถึงยศสูงสุดแล้ว</p>`;
+  else{
+    const nl=lv+1,[needPct,needXp]=nl<=1?[0,0]:LEVEL_RULES[nl];
+    const name=premiumRank(nl)+(currentData?.gender==="female"&&nl>0?"หญิง":"");
+    next=nl===1?`<p class="note">ทำข้อสอบข้อแรกเพื่อขึ้น Lv.1 ${escHtml(name)}</p>`
+      :`<p class="note" style="margin-bottom:6px">Lv.${nl} ${escHtml(name)} ต้องผ่านทั้ง 2 เงื่อนไข</p>
+       ${meter("ทำข้อสอบแล้ว",pct,needPct,`${pct}% / ${needPct}%`,pct>=needPct?"ok":"")}
+       ${meter("XP สะสม",xp,needXp,`${xp.toLocaleString()} / ${needXp.toLocaleString()}`,xp>=needXp?"ok":"")}`;
+  }
+  /* คะแนนรายวิชา รวมทุกครั้งที่ทำ */
+  const subj={};
+  list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{subj[k]=subj[k]||{c:0,t:0};subj[k].c+=Number(v.c)||0;subj[k].t+=Number(v.t)||0}));
+  const subjRows=Object.entries(subj).filter(([,v])=>v.t>0).map(([k,v])=>{const p=Math.round(v.c/v.t*100);return meter(escHtml(k),v.c,v.t,`${v.c}/${v.t} ข้อ · ${p}%`,p>=60?"ok":"lo")}).join("");
+  box.innerHTML=`<div class="ovg">
+    <div class="ovt"><span>XP สะสม</span><b>${xp.toLocaleString()}</b></div>
+    <div class="ovt"><span>ยศปัจจุบัน</span><b>${escHtml(rankNameOnly())}</b><em>${levelText()}</em></div>
+    <div class="ovt"><span>ความคืบหน้า</span><b>${pct}%</b><em>ทำแล้ว ${done.toLocaleString()} / ${total.toLocaleString()} ข้อ</em></div>
+    <div class="ovt"><span>ทำแบบทดสอบ</span><b>${list.length} <small>ครั้ง</small></b><em>${sumT?`ตอบถูกเฉลี่ย ${avg}%`:"ยังไม่เคยทำ"}</em></div></div>
+    <div class="ovc"><h3>เลื่อนยศครั้งถัดไป</h3>${next}</div>
+    <div class="ovc"><h3>คะแนนรายวิชา</h3>${subjRows||'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปคะแนนแต่ละวิชาให้ (เขียว = ถึงเกณฑ์ 60%)</p>'}</div>
+    <div class="ovc"><h3>ทำล่าสุด</h3>${list.length?list.slice(0,5).map(a=>{const t=Number(a.total)||0,c=Number(a.correct)||0,p=t?Math.round(c/t*100):0;return meter(`${escHtml((loadCatalogSync(a.exam)||{}).title||a.title||"")} <small style="color:#999;font-weight:600">${escHtml(fmtWhen(atDate(a)))}</small>`,c,t,`${c}/${t} · ${p}%`,p>=60?"ok":"lo")}).join("")+'<button type="button" class="ovlink" id="ovHist">ดูประวัติทั้งหมด</button>':'<p class="note">ยังไม่มีประวัติการทำแบบทดสอบ</p>'}</div>`;
+  $("ovHist")?.addEventListener("click",()=>showAppPage("historyPage","ประวัติการทำแบบทดสอบ"));
+}
+const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
 $("rReview").onclick=()=>renderReview();
 
 /* ===== เฉลย: มีลายน้ำรหัสสมาชิก ===== */
