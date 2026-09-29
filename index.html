@@ -2600,10 +2600,14 @@ input{
   overflow-wrap:anywhere;
 }
 .hb-quote:empty{display:none}
+/* iPad / จอกลาง: การ์ดยังอยู่ขวา แคบลงเล็กน้อย คติขึ้นบรรทัดใหม่ได้ */
 @media(min-width:801px) and (max-width:1100px){
-  .hb{flex-wrap:wrap;gap:14px;padding:18px 22px}
-  .hb-text{flex:1 1 100%}
-  .hb-card{flex:1 1 100%;width:auto}
+  .hb{gap:14px;padding:18px 20px}
+  .hb-slogan{font-size:11px;letter-spacing:.06em}
+  .hb-hi{font-size:21px;white-space:normal}
+  .hb-card{flex:0 0 330px;width:330px;padding:11px 14px}
+  .hb-av{flex-basis:50px;width:50px;height:50px}
+  .hb-quote{font-size:13.5px}
 }
 @media(max-width:800px){
   .hb{flex-wrap:wrap;gap:12px;padding:14px}
