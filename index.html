@@ -2807,6 +2807,104 @@ input{
 }
 </style>
 
+
+<style id="kasorb-exam">
+/* ===== ระบบข้อสอบ ===== */
+.track-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.track{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:18px;border:1px solid #f1e3d6;border-radius:16px;background:#fff;text-align:left;cursor:pointer;box-shadow:0 4px 14px rgba(20,34,60,.05)}
+.track b{font-size:16px;color:#222}.track span{font-size:13px;color:#888}
+.track.has{border-color:#ffc9a3}.track.has span{color:#e86208;font-weight:700}
+.track:disabled{cursor:default;opacity:.6}
+.set-back{margin:0 0 12px;padding:8px 14px;border:1px solid #f1d9c6;border-radius:999px;background:#fff;color:#e86208;font-weight:800}
+.set-list{display:grid;gap:12px}
+.setc{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:center;padding:16px 18px;border:1px solid #eee;border-radius:16px;background:#fff;box-shadow:0 4px 14px rgba(20,34,60,.05)}
+.setc h4{margin:0 0 4px;font-size:16px}
+.setc .meta{font-size:13px;color:#777}
+.setc .best{margin-top:4px;font-size:13px;color:#15803d;font-weight:700}
+.tier{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;vertical-align:2px}
+.tier.pm{background:#16305f;color:#fff}.tier.fr{background:#e7f6ec;color:#15803d}
+.setc .go{padding:11px 18px;border:0;border-radius:12px;background:#ff6a00;color:#fff;font-weight:800;white-space:nowrap}
+.setc .go.lock{background:#eef1f6;color:#16305f}
+@media(max-width:600px){.setc{grid-template-columns:1fr}.setc .go{width:100%}}
+
+/* โหมดทำข้อสอบ: ซ่อนเมนูและแถบด้านบนของเว็บ */
+body.exam-mode .sidebar,body.exam-mode .hb,body.exam-mode .menu-toggle{display:none!important}
+body.exam-mode .app-main{margin-left:0!important}
+body.exam-mode .content{padding:0!important;max-width:none!important}
+body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+@media print{body.exam-mode,body.review-mode{display:none!important}}
+#examPage{background:#f6f6f6;min-height:100vh}
+.xbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;max-width:1180px;margin:0 auto;padding:10px 18px;background:#fff}
+#examPage .xbar{box-shadow:none}
+#examPage>.xbar{max-width:none;padding-left:max(18px,calc((100vw - 1180px)/2 + 18px));padding-right:max(18px,calc((100vw - 1180px)/2 + 18px))}
+.xback{flex:0 0 38px;width:38px;height:38px;border:0;border-radius:11px;background:#f4f4f4;position:relative;cursor:pointer}
+.xback::before{content:"";position:absolute;left:15px;top:14px;width:9px;height:9px;border:solid #333;border-width:0 0 2.5px 2.5px;transform:rotate(45deg)}
+.xttl{min-width:0;margin-right:auto}.xttl b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xttl span{font-size:12px;color:#888;white-space:nowrap}
+.xtimer{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:linear-gradient(120deg,#ff8a2b,#ff6a00);color:#fff;font-weight:900;font-size:15px;font-variant-numeric:tabular-nums;box-shadow:0 3px 10px rgba(255,106,0,.25)}
+.xtimer.low{background:#c62828;box-shadow:0 3px 10px rgba(198,40,40,.3)}
+.xsheetbtn{display:none;white-space:nowrap;padding:8px 10px;border-radius:10px;border:1px solid #f1d9c6;background:#fff6ef;color:#e86208;font-weight:800;font-size:13px}
+.xprog{position:sticky;top:58px;z-index:29;height:5px;background:#eee;border-bottom:3px solid #ff6a00}.xprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff8a2b,#ff6a00);transition:width .2s}
+.xwrap{max-width:1180px;margin:0 auto;padding:18px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.xpaper{background:#fff;border-radius:18px;padding:4px 24px 20px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.xsec{margin:18px 0 0;padding:8px 12px;border-radius:10px;background:#fff6ef;color:#c2410c;font-weight:800;font-size:14px;font-family:Arial,"Noto Sans Thai",sans-serif}
+.xpass{margin:16px 0 0;padding:14px 16px;border:1px solid #e8e0d8;border-radius:12px;background:#fcfcfc;white-space:pre-line;font-size:17px;line-height:1.7;color:#000}
+.xpass img,.xi img{display:block;max-width:100%;height:auto;margin:6px 0;pointer-events:none}
+.eimg:not(.ok){min-height:90px;width:100%;border-radius:10px;background:linear-gradient(90deg,#f3f3f3,#fafafa,#f3f3f3)}
+.xi{padding:18px 0;border-bottom:1px dashed #e8e0d8;scroll-margin-top:90px}
+.xq{margin:0 0 10px;font-size:19px;font-weight:700;line-height:1.7;color:#000;white-space:pre-line}.xq em{font-style:normal;margin-right:6px}
+.xopts{display:grid;gap:4px}
+.xopts.row{grid-template-columns:repeat(4,1fr)}
+.xc{display:flex;gap:10px;align-items:center;width:100%;padding:9px 10px;border:0;border-radius:10px;background:transparent;font-family:var(--exam-font);font-size:18px;line-height:1.55;text-align:left;color:#000;cursor:pointer}
+.xc b{flex:0 0 26px;height:26px;border-radius:50%;border:1.5px solid #000;display:grid;place-items:center;font-weight:600;font-size:14px}
+.xc.sel{background:#f2f2f2}.xc.sel b{background:#000;color:#fff}
+.xsend{display:block;width:100%;margin:18px 0 0;padding:15px;border:0;border-radius:12px;background:#ff6a00;color:#fff;font-weight:800;font-size:16px;cursor:pointer}
+.xside{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;background:#fff;border-radius:18px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.xside .xsend{margin-top:12px}
+.xhint{margin:8px 0 0;font-size:12px;color:#888}
+.omr{background:#fffdf8;border:1.5px solid #e9a27a;border-radius:6px;padding:10px 10px 8px;font-family:var(--exam-font)}
+.omr .hd{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #e9a27a;padding:0 2px 6px;margin-bottom:6px;color:#c2410c;font-weight:700;font-size:13px}
+.omr .cols{display:grid;grid-template-columns:1fr 1fr;column-gap:8px}.omr .cols>div{min-width:0}
+.omr .r{display:flex;align-items:center;gap:4px;padding:3px 2px;border-bottom:1px dotted #f1c9ad}
+.omr .r:nth-child(5n+1){border-bottom:1.5px solid #e9a27a}
+.omr .n{flex:0 0 26px;text-align:right;font-weight:700;font-size:13px;color:#c2410c;margin-right:2px;cursor:pointer}
+.omr .o{flex:0 0 19px;width:19px;height:19px;border-radius:50%;border:1.3px solid #e07a45;display:grid;place-items:center;font-size:11px;color:#e07a45;line-height:1;cursor:pointer;padding:0;background:transparent}
+.omr .o.f{background:#111;border-color:#111;color:#111}
+.omr .lab{display:flex;gap:4px;padding:0 2px 4px 32px;font-size:11px;color:#c2410c;font-weight:700}.omr .lab span{width:19px;text-align:center}
+.xdrawer{display:none}
+.xshield{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.xshield.hidden{display:none}
+.xshield>div{max-width:360px;text-align:center;display:grid;gap:10px}.xshield b{font-size:20px;color:#16305f}.xshield span{color:#666}
+body.xhide #xPaper,body.xhide .omr{filter:blur(14px)}
+@media(max-width:900px){
+ .xwrap{grid-template-columns:1fr;padding:12px}.xside{display:none}.xpaper{padding:2px 16px 16px}
+ .xq{font-size:18px}.xsheetbtn{display:inline-block}
+ .xopts.row{grid-template-columns:repeat(4,1fr)}
+ body.xsheet .xdrawer{display:block;position:fixed;inset:0;z-index:40;background:rgba(15,23,42,.4)}
+ .xdbox{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:16px 14px 18px;max-height:75vh;overflow:auto}
+ .xdbox .omr .cols{grid-template-columns:1fr 1fr}
+}
+/* ผลสอบ */
+.rcard{margin:0 0 16px;padding:24px;border-radius:20px;background:linear-gradient(120deg,#ff8a2b,#ff6a00 60%,#e2520a);color:#fff;box-shadow:0 10px 26px rgba(226,82,10,.25)}
+.rcard h2{margin:0 0 4px;font-size:18px}.rcard .big{font-size:46px;font-weight:900;line-height:1.1;margin:10px 0 4px}.rcard .big small{font-size:20px;opacity:.9}
+.rcard .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.rcard .chips span{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.2);font-weight:800;font-size:13px}
+.rsec table{width:100%;border-collapse:collapse;font-size:14px}.rsec th,.rsec td{padding:10px 8px;border-bottom:1px solid #f0f0f0;text-align:left}.rsec td.n{text-align:right;font-weight:800}
+.rsec .bar{height:6px;border-radius:9px;background:#eee;overflow:hidden;margin-top:4px}.rsec .bar i{display:block;height:100%;background:#ff6a00}
+.rbtns{display:grid;gap:10px;margin-top:16px}
+.rwarn{margin:0 0 12px;padding:10px 14px;border-radius:12px;background:#fff4e5;color:#b45309;font-size:13px;font-weight:700}
+/* เฉลย */
+.rv{position:relative;overflow:hidden;margin-bottom:46px}
+.rv .xc{cursor:default}
+.rv .xc.ok{background:#e7f6ec}.rv .xc.ok b{background:#15803d;border-color:#15803d;color:#fff}
+.rv .xc.no{background:#fdecec}.rv .xc.no b{background:#c62828;border-color:#c62828;color:#fff}
+.rv .res{display:inline-block;margin:6px 0 0;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;font-family:Arial,"Noto Sans Thai",sans-serif}
+.rv .res.ok{background:#e7f6ec;color:#15803d}.rv .res.no{background:#fdecec;color:#c62828}.rv .res.skip{background:#f1f1f1;color:#666}
+.rv .exp{margin-top:10px;padding:12px 14px;border-left:4px solid #ff6a00;border-radius:0 12px 12px 0;background:#fffaf6;font-size:17px;line-height:1.7;color:#000;white-space:pre-line}
+.rv .exp b.h{display:block;margin-bottom:4px;color:#c2410c;font-family:Arial,"Noto Sans Thai",sans-serif;font-size:14px}
+.rv .exp img{display:block;max-width:100%;height:auto;margin-top:6px;pointer-events:none}
+.rv .wm{position:absolute;inset:0;pointer-events:none;z-index:1}
+.rvbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px;font:700 12px Arial,"Noto Sans Thai",sans-serif;color:#c55309;text-align:center;background:rgba(255,246,239,.97);border-top:1px solid #f7d9c2;letter-spacing:.02em}
+body:not(.review-mode) .rvbar{display:none}
+</style>
 </head>
 <body>
 
@@ -3260,29 +3358,43 @@ LINE OA @kasorb
 <h2 class="page-heading">
 แบบทดสอบเสมือนจริง
 </h2>
-<p class="page-desc">
+<p class="page-desc" id="mockDesc">
 เลือกสายงานที่ต้องการ
 </p>
-<div class="card">
-<button class="list-button">
-สายอำนวยการ
-</button>
-<button class="list-button">
-สายปราบปราม
-</button>
-<button class="list-button">
-สายพิสูจน์หลักฐาน
-</button>
-<button class="list-button">
-กองร้อยน้ำหวาน
-</button>
-<button class="list-button">
-พลร่ม
-</button>
-<button class="list-button">
-ตชด.
-</button>
+<div class="track-grid" id="trackGrid"></div>
+<div class="hidden" id="setListBox">
+<button class="set-back" id="setBack" type="button">เลือกสายงานอื่น</button>
+<div class="set-list" id="setList"></div>
 </div>
+</section>
+<!-- EXAM -->
+<section class="app-page" id="examPage">
+<div class="xbar" id="xbar">
+<button aria-label="ออกจากข้อสอบ" class="xback" id="xQuit" type="button"></button>
+<div class="xttl"><b id="xTitle"></b><span id="xCount">ตอบแล้ว 0 / 0 ข้อ</span></div>
+<button class="xsheetbtn" id="xSheetBtn" type="button">กระดาษคำตอบ</button>
+<span class="xtimer" id="xTimer">00:00</span>
+</div>
+<div class="xprog"><i id="xProg"></i></div>
+<div class="xwrap">
+<div><div class="xpaper exam-text" id="xPaper"></div><button class="xsend" id="xSend" type="button">ส่งคำตอบ</button></div>
+<aside class="xside"><div class="omr" id="xOmr"></div><p class="xhint">กดวงกลมเพื่อฝนคำตอบ หรือกดเลขข้อเพื่อไปยังข้อนั้น</p><button class="xsend" id="xSend2" type="button">ส่งคำตอบ</button></aside>
+</div>
+<div class="xdrawer" id="xDrawer"><div class="xdbox"><div class="omr" id="xOmr2"></div><button class="xsend" id="xSend3" type="button">ส่งคำตอบ</button></div></div>
+<div class="xshield hidden" id="xShield"><div><b>ข้อสอบถูกซ่อนไว้</b><span>ระหว่างสอบห้ามออกจากหน้านี้ หรือแคปหน้าจอ</span><button class="btn primary" id="xShieldBtn" type="button">กลับมาทำข้อสอบ</button></div></div>
+</section>
+<!-- RESULT -->
+<section class="app-page" id="resultPage">
+<div class="rcard" id="rCard"></div>
+<div class="card rsec" id="rSec"></div>
+<div class="rbtns"><button class="btn primary" id="rReview" type="button">ดูเฉลยและคำอธิบาย</button><button class="btn outline" id="rBack" type="button">กลับไปหน้าชุดข้อสอบ</button></div>
+</section>
+<!-- REVIEW -->
+<section class="app-page" id="reviewPage">
+<h2 class="page-heading" id="rvTitle">เฉลย</h2>
+<p class="page-desc" id="rvDesc"></p>
+<div class="xpaper exam-text rv" id="rvPaper"></div>
+<div class="rvbar" id="rvBar"></div>
 </section>
 <!-- HISTORY -->
 <section class="app-page" id="historyPage">
@@ -3551,7 +3663,11 @@ collection,
 query,
 where,
 getCountFromServer,
-onSnapshot
+onSnapshot,
+getDocs,
+addDoc,
+orderBy,
+limit
 }
 from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -4193,6 +4309,8 @@ if(parentGroup){
 
 closeSidebar();
 window.scrollTo(0,0);
+if(pageId!=="reviewPage") document.body.classList.remove("review-mode");
+if(pageId==="mockPage") renderMockPage();
 
 
 if(
@@ -4254,7 +4372,7 @@ renderMembershipStatus();
 
 /* ปุ่มกลับหน้าหลัก บนทุกหน้าที่ไม่ใช่หน้าหลัก */
 document
-.querySelectorAll(".app-page:not(#homePage)")
+.querySelectorAll(".app-page:not(#homePage):not(#examPage)")
 .forEach(page=>{
   const back=document.createElement("button");
   back.type="button";
@@ -5744,6 +5862,340 @@ async function claimDevice(user){
     }
   },error=>console.error(error));
   return true;
+}
+
+
+/* ===== ระบบข้อสอบ ===== */
+const TRACKS=[
+  ["amnuay","สายอำนวยการ"],["prab","สายปราบปราม"],["pisut","สายพิสูจน์หลักฐาน"],
+  ["namwan","กองร้อยน้ำหวาน"],["plrom","พลร่ม"],["tcd","ตชด."]
+];
+const escHtml=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+/* รูปข้อสอบเก็บใน Firestore (examImg) ตามสิทธิ์ของชุด: โหลดเมื่อเลื่อนมาใกล้ แล้วจำไว้ */
+const imgSrc=k=>/^[0-9a-f]{16,40}$/.test(k||"") ? k : "";
+const imgCache=new Map();
+function fetchImg(key){
+  if(!imgCache.has(key)) imgCache.set(key,getDoc(doc(db,"examImg",key)).then(s=>s.exists()?s.data().d:"").catch(e=>{console.error(e);imgCache.delete(key);return ""}));
+  return imgCache.get(key);
+}
+const imgObserver="IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){imgObserver.unobserve(e.target);loadImgEl(e.target)}}),{rootMargin:"600px 0px"}) : null;
+function loadImgEl(el){
+  fetchImg(el.dataset.k).then(src=>{if(/^data:image\/(png|jpeg);base64,/.test(src)){el.srcset=src+" 1.7x";el.classList.add("ok")}else el.alt="โหลดรูปไม่ได้"});
+}
+function examImg(key,alt){
+  return `<img class="eimg" alt="${escHtml(alt||"")}" data-k="${key}" draggable="false">`;
+}
+function watchImgs(root){
+  root.querySelectorAll("img.eimg:not(.w)").forEach(el=>{el.classList.add("w");imgObserver?imgObserver.observe(el):loadImgEl(el)});
+}
+let examCatalog=null, examProgress=null, currentTrack=null;
+
+/* รหัสสมาชิก (ใช้เป็นลายน้ำหน้าเฉลย ไม่เปิดเผยอีเมล) แอดมินคำนวณแบบเดียวกันเพื่อค้นหา */
+function memberCode(uid){
+  let h=2166136261>>>0;
+  for(const ch of String(uid||"")){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0;}
+  const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789";let s="";
+  for(let i=0;i<5;i++){s+=A[h%A.length];h=(Math.floor(h/A.length)^Math.imul(h,31+i))>>>0;}
+  return "#"+s;
+}
+const isPremium=()=>currentData?.plan==="premium";
+const canTake=e=>e && (e.tier==="free" || isPremium());
+
+async function loadCatalog(force){
+  if(examCatalog && !force) return examCatalog;
+  const snap=await getDocs(collection(db,"exams"));
+  examCatalog=[];snap.forEach(d=>examCatalog.push({id:d.id,...d.data()}));
+  examCatalog.sort((a,b)=>(a.order??99)-(b.order??99)||String(a.title).localeCompare(String(b.title)));
+  return examCatalog;
+}
+async function loadProgress(force){
+  if(examProgress && !force) return examProgress;
+  try{
+    const snap=await getDoc(doc(db,"progress",currentUser.uid));
+    examProgress=snap.exists()?snap.data():{};
+  }catch(e){console.error(e);examProgress={};}
+  examProgress.h=examProgress.h||{};examProgress.best=examProgress.best||{};
+  return examProgress;
+}
+
+/* หน้าแบบทดสอบเสมือนจริง: เลือกสายงาน > เลือกชุด */
+let mockToken=0;
+async function renderMockPage(){
+  const my=++mockToken;currentTrack=null;
+  const grid=$("trackGrid");
+  $("setListBox").classList.add("hidden");grid.classList.remove("hidden");
+  $("mockDesc").textContent="เลือกสายงานที่ต้องการ";
+  grid.innerHTML='<p class="small">กำลังโหลด…</p>';
+  let list=[];
+  try{list=await loadCatalog(true);}catch(e){console.error(e);if(my===mockToken)grid.innerHTML='<div class="card placeholder">โหลดชุดข้อสอบไม่ได้ กรุณาลองใหม่อีกครั้ง</div>';return;}
+  if(my!==mockToken) return;
+  grid.innerHTML="";
+  TRACKS.forEach(([id,name])=>{
+    const n=list.filter(e=>e.kind!=="subject" && (e.track||[]).includes(id)).length;
+    const b=document.createElement("button");b.type="button";b.className="track"+(n?" has":"");
+    b.innerHTML=`<b>${escHtml(name)}</b><span>${n?`${n} ชุด`:"เร็ว ๆ นี้"}</span>`;
+    b.disabled=!n;b.onclick=()=>openTrack(id);grid.appendChild(b);
+  });
+}
+async function openTrack(id){
+  const my=++mockToken;currentTrack=id;
+  const name=(TRACKS.find(t=>t[0]===id)||[])[1]||"";
+  $("mockDesc").textContent=name;
+  $("trackGrid").classList.add("hidden");$("setListBox").classList.remove("hidden");
+  const box=$("setList");box.innerHTML='<p class="small">กำลังโหลด…</p>';
+  const [list,prog]=await Promise.all([loadCatalog(),loadProgress()]);
+  if(my!==mockToken) return;
+  box.innerHTML="";
+  list.filter(e=>e.kind!=="subject" && (e.track||[]).includes(id)).forEach(e=>{
+    const best=prog.best[e.id];
+    const el=document.createElement("div");el.className="setc";
+    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"ฟรี":"พรีเมียม"}</span></h4>
+      <div class="meta">${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที</div>
+      ${best?`<div class="best">ทำแล้ว ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}</div>
+      <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำข้อสอบ"):"สำหรับสมาชิกพรีเมียม"}</button>`;
+    el.querySelector(".go").onclick=()=>canTake(e)?startExam(e.id):showUpgrade();
+    box.appendChild(el);
+  });
+  window.scrollTo(0,0);
+}
+$("setBack").onclick=()=>renderMockPage();
+function showUpgrade(){
+  alert("ชุดนี้สำหรับสมาชิกพรีเมียม\nติดต่อแอดมินทางแชทเพจหรือ LINE @kasorb เพื่ออัปเกรด");
+}
+
+/* ===== ทำข้อสอบ ===== */
+let exam=null;   // {meta, items, ans[], startedAt, tick}
+const sessKey=id=>`kasorbExam:${currentUser?.uid}:${id}`;
+function hasSession(id){try{return !!localStorage.getItem(sessKey(id))}catch(e){return false}}
+function saveSession(){
+  if(!exam) return;
+  try{localStorage.setItem(sessKey(exam.meta.id),JSON.stringify({startedAt:exam.startedAt,ans:exam.ans}))}catch(e){}
+}
+async function startExam(id){
+  const meta=(await loadCatalog()).find(e=>e.id===id);
+  if(!canTake(meta)){showUpgrade();return;}
+  let items;
+  try{
+    const snap=await getDoc(doc(db,"examItems",id));
+    if(!snap.exists()) throw new Error("missing");
+    items=snap.data().items||[];
+  }catch(e){
+    console.error(e);
+    if(e.code==="permission-denied") showUpgrade(); else alert("โหลดข้อสอบไม่ได้ กรุณาลองใหม่อีกครั้ง");
+    return;
+  }
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem(sessKey(id))||"null")}catch(e){}
+  const limit=(Number(meta.minutes)||items.length)*60000;
+  if(saved && Date.now()-saved.startedAt>=limit){
+    // หมดเวลาไปแล้วระหว่างที่ปิดหน้าเว็บ: ส่งคำตอบที่ทำไว้ให้อัตโนมัติ
+    exam={meta,items,ans:saved.ans||[],startedAt:saved.startedAt};
+    await submitExam(true);return;
+  }
+  exam={meta,items,ans:(saved&&saved.ans)||Array(items.length).fill(-1),startedAt:saved?saved.startedAt:Date.now()};
+  saveSession();
+  renderExam();
+  document.body.classList.add("exam-mode");
+  showAppPage("examPage","ทำข้อสอบ");
+  exam.tick=setInterval(tickTimer,1000);tickTimer();
+}
+function secName(meta,n){
+  const s=(meta.sections||[]).find(x=>n>=x.from&&n<=x.to);return s?s.name:"";
+}
+function renderExam(){
+  const {meta,items}=exam;
+  $("xTitle").textContent=meta.title;
+  const paper=$("xPaper");paper.innerHTML="";
+  let lastSec="";
+  items.forEach((it,i)=>{
+    const sn=secName(meta,it.n);
+    if(sn && sn!==lastSec){const h=document.createElement("div");h.className="xsec";h.textContent=sn;paper.appendChild(h);lastSec=sn;}
+    if(it.group && it.group[0]===it.n){
+      const p=document.createElement("div");p.className="xpass";
+      const im=imgSrc(it.passageImg);
+      if(im){p.innerHTML=examImg(im,"")}else p.textContent=it.passage||"";
+      if(it.group) p.insertAdjacentHTML("afterbegin",`<b style="display:block;font-family:Arial;font-size:13px;color:#c2410c">ใช้ตอบข้อ ${it.group[0]}-${it.group[1]}</b>`);
+      paper.appendChild(p);
+    }
+    const box=document.createElement("div");box.className="xi";box.id="xq"+i;
+    const im=imgSrc(it.img);
+    if(im) box.innerHTML=examImg(im,"ข้อ "+it.n);
+    else{const q=document.createElement("p");q.className="xq";q.innerHTML=`<em>${it.n}.</em>`;q.appendChild(document.createTextNode(it.q||""));box.appendChild(q);}
+    const opts=document.createElement("div");opts.className="xopts"+(im?" row":"");
+    it.c.forEach((c,k)=>{
+      const b=document.createElement("button");b.type="button";b.className="xc";b.dataset.i=i;b.dataset.k=k;
+      const lab=it.eng?"abcd"[k]:String(k+1);
+      b.innerHTML=`<b>${lab}</b>`;
+      if(!im) b.appendChild(document.createTextNode(c));
+      b.onclick=()=>choose(i,k);
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);paper.appendChild(box);
+  });
+  renderOmr();paintAnswers();watchImgs(paper);
+}
+function renderOmr(){
+  const n=exam.items.length,half=Math.ceil(n/2);
+  const row=i=>`<div class="r"><span class="n" data-go="${i}">${exam.items[i].n}</span>${[0,1,2,3].map(k=>`<button type="button" class="o" data-i="${i}" data-k="${k}">${k+1}</button>`).join("")}</div>`;
+  const col=(a,b)=>`<div><div class="lab"><span>1</span><span>2</span><span>3</span><span>4</span></div>${Array.from({length:b-a},(_,j)=>row(a+j)).join("")}</div>`;
+  const html=`<div class="hd"><span>กระดาษคำตอบ</span><span class="omrc"></span></div><div class="cols">${col(0,half)}${col(half,n)}</div>`;
+  ["xOmr","xOmr2"].forEach(id=>{
+    const el=$(id);el.innerHTML=html;
+    el.querySelectorAll(".o").forEach(b=>b.onclick=()=>choose(+b.dataset.i,+b.dataset.k));
+    el.querySelectorAll(".n").forEach(b=>b.onclick=()=>{document.body.classList.remove("xsheet");$("xq"+b.dataset.go).scrollIntoView({behavior:"smooth",block:"start"});});
+  });
+}
+function choose(i,k){
+  if(!exam) return;
+  exam.ans[i]=k;saveSession();paintAnswers(i);
+}
+function paintAnswers(only){
+  const idx=only===undefined?exam.items.map((_,i)=>i):[only];
+  idx.forEach(i=>{
+    document.querySelectorAll(`#xq${i} .xc`).forEach(b=>b.classList.toggle("sel",+b.dataset.k===exam.ans[i]));
+    document.querySelectorAll(`.omr .o[data-i="${i}"]`).forEach(b=>b.classList.toggle("f",+b.dataset.k===exam.ans[i]));
+  });
+  const done=exam.ans.filter(a=>a>=0).length,total=exam.items.length;
+  $("xCount").textContent=`ตอบแล้ว ${done} / ${total} ข้อ`;
+  document.querySelectorAll(".omrc").forEach(e=>e.textContent=`ตอบแล้ว ${done}/${total}`);
+  $("xProg").style.width=`${Math.round(done/total*100)}%`;
+}
+function tickTimer(){
+  if(!exam) return;
+  const left=Math.max(0,(Number(exam.meta.minutes)||exam.items.length)*60000-(Date.now()-exam.startedAt));
+  const s=Math.ceil(left/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
+  $("xTimer").textContent=(h?`${h}:${String(m).padStart(2,"0")}`:String(m).padStart(2,"0"))+":"+String(sec).padStart(2,"0");
+  $("xTimer").classList.toggle("low",left<=5*60000);
+  if(left<=0){clearInterval(exam.tick);submitExam(true);}
+}
+function leaveExamMode(){
+  if(exam&&exam.tick) clearInterval(exam.tick);
+  document.body.classList.remove("exam-mode","xsheet","xhide");
+  $("xShield").classList.add("hidden");
+}
+$("xQuit").onclick=()=>{
+  if(!confirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ และเวลายังเดินต่อ กลับมาทำต่อได้ถ้ายังไม่หมดเวลา")) return;
+  const t=currentTrack;leaveExamMode();exam=null;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
+};
+$("xSheetBtn").onclick=()=>document.body.classList.add("xsheet");
+$("xDrawer").onclick=e=>{if(e.target===$("xDrawer"))document.body.classList.remove("xsheet")};
+["xSend","xSend2","xSend3"].forEach(id=>$(id).onclick=()=>submitExam(false));
+
+/* กันคัดลอกและกันแคปหน้าจอ (เท่าที่เว็บทำได้) */
+const guarded=()=>document.body.classList.contains("exam-mode")||document.body.classList.contains("review-mode");
+["copy","cut","contextmenu","dragstart","selectstart"].forEach(t=>document.addEventListener(t,e=>{if(guarded())e.preventDefault()}));
+function hideExam(){
+  if(!document.body.classList.contains("exam-mode")) return;
+  document.body.classList.add("xhide");$("xShield").classList.remove("hidden");
+}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)hideExam()});
+window.addEventListener("blur",hideExam);
+document.addEventListener("keyup",e=>{
+  if(e.key==="PrintScreen"&&guarded()){
+    hideExam();
+    try{navigator.clipboard&&navigator.clipboard.writeText("")}catch(err){}
+  }
+});
+$("xShieldBtn").onclick=()=>{document.body.classList.remove("xhide");$("xShield").classList.add("hidden")};
+
+/* ===== ส่งคำตอบ: ตรวจ คิด XP บันทึกผล ===== */
+let lastResult=null;
+async function submitExam(auto){
+  if(!exam) return;
+  const {meta,items,ans}=exam;
+  const blank=ans.filter(a=>!(a>=0)).length;
+  if(!auto && blank && !confirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`)) return;
+  if(!auto && !blank && !confirm("ส่งคำตอบใช่หรือไม่?")) return;
+  leaveExamMode();
+  const secs=Math.min(Math.round((Date.now()-exam.startedAt)/1000),(Number(meta.minutes)||items.length)*60);
+  const prog=await loadProgress(true);
+  let correct=0,gained=0,answered=0;
+  const bySec={};
+  items.forEach((it,i)=>{
+    const a=ans[i],ok=a===it.a,sn=secName(meta,it.n)||"อื่น ๆ";
+    bySec[sn]=bySec[sn]||{c:0,t:0};bySec[sn].t++;
+    if(ok){correct++;bySec[sn].c++;}
+    if(a>=0){
+      answered++;
+      const qid=`${meta.id}:${it.n}`,hist=prog.h[qid]||[];
+      if(ok) gained+=xpForAnswer(true,hist.length+1);
+      prog.h[qid]=hist.concat(a).slice(-20);
+    }
+  });
+  const best=prog.best[meta.id]||{s:0,t:items.length,n:0};
+  prog.best[meta.id]={s:Math.max(best.s,correct),t:items.length,n:(best.n||0)+1};
+  prog.keyVer=prog.keyVer||{};prog.keyVer[meta.id]=meta.keyVersion||1;
+  const unique=Object.keys(prog.h).length;
+  let saveErr=false;
+  try{
+    await setDoc(doc(db,"progress",currentUser.uid),{h:prog.h,best:prog.best,keyVer:prog.keyVer,updatedAt:serverTimestamp()});
+    const xp=(Number(currentData.xp)||0)+gained;
+    await updateDoc(doc(db,"users",currentUser.uid),{xp,answered:unique});
+    currentData.xp=xp;currentData.answered=unique;
+    if(answered) await addTodayCount(answered);
+    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,at:serverTimestamp()});
+  }catch(e){console.error(e);saveErr=true;}
+  try{localStorage.removeItem(sessKey(meta.id))}catch(e){}
+  renderProfile();
+  lastResult={meta,items,ans,correct,gained,answered,secs,bySec,saveErr};
+  exam=null;
+  renderResult();
+  showAppPage("resultPage","ผลการทดสอบ");
+}
+const fmtTime=s=>`${Math.floor(s/60)} นาที ${s%60} วินาที`;
+function renderResult(){
+  const r=lastResult,t=r.items.length,pct=Math.round(r.correct/t*100);
+  $("rCard").innerHTML=`${r.saveErr?'<div class="rwarn">บันทึกผลไม่สำเร็จ ผลนี้ยังไม่ถูกนับ XP กรุณาแจ้งแอดมิน</div>':""}
+    <h2>${escHtml(r.meta.title)}</h2><div class="big">${r.correct}<small> / ${t} คะแนน</small></div>
+    <div>ได้ ${pct}% · ตอบ ${r.answered} ข้อ · ไม่ได้ตอบ ${t-r.answered} ข้อ</div>
+    <div class="chips"><span>+${r.gained.toLocaleString()} XP</span><span>ใช้เวลา ${fmtTime(r.secs)}</span></div>`;
+  $("rSec").innerHTML=`<h3 style="margin:0 0 8px">คะแนนแยกตามวิชา</h3><table><thead><tr><th>วิชา</th><th style="text-align:right">คะแนน</th></tr></thead><tbody>${
+    Object.entries(r.bySec).map(([n,v])=>`<tr><td>${escHtml(n)}<div class="bar"><i style="width:${Math.round(v.c/v.t*100)}%"></i></div></td><td class="n">${v.c}/${v.t}</td></tr>`).join("")}</tbody></table>`;
+}
+$("rBack").onclick=()=>{const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
+$("rReview").onclick=()=>renderReview();
+
+/* ===== เฉลย: มีลายน้ำรหัสสมาชิก ===== */
+function renderReview(){
+  const r=lastResult;if(!r) return;
+  const code=memberCode(currentUser.uid);
+  $("rvTitle").textContent="เฉลย "+r.meta.title;
+  $("rvDesc").textContent=`ได้ ${r.correct}/${r.items.length} คะแนน`;
+  const paper=$("rvPaper");paper.innerHTML="";
+  let lastSec="";
+  r.items.forEach((it,i)=>{
+    const sn=secName(r.meta,it.n);
+    if(sn&&sn!==lastSec){const h=document.createElement("div");h.className="xsec";h.textContent=sn;paper.appendChild(h);lastSec=sn;}
+    if(it.group&&it.group[0]===it.n){
+      const p=document.createElement("div");p.className="xpass";const im=imgSrc(it.passageImg);
+      if(im)p.innerHTML=examImg(im,"");else p.textContent=it.passage||"";
+      paper.appendChild(p);
+    }
+    const a=r.ans[i],ok=a===it.a;
+    const box=document.createElement("div");box.className="xi";
+    const im=imgSrc(it.img);
+    if(im) box.innerHTML=examImg(im,"ข้อ "+it.n);
+    else{const q=document.createElement("p");q.className="xq";q.innerHTML=`<em>${it.n}.</em>`;q.appendChild(document.createTextNode(it.q||""));box.appendChild(q);}
+    const opts=document.createElement("div");opts.className="xopts"+(im?" row":"");
+    it.c.forEach((c,k)=>{
+      const b=document.createElement("div");b.className="xc"+(k===it.a?" ok":(k===a?" no":""));
+      b.innerHTML=`<b>${it.eng?"abcd"[k]:k+1}</b>`;if(!im)b.appendChild(document.createTextNode(c));opts.appendChild(b);
+    });
+    box.appendChild(opts);
+    box.insertAdjacentHTML("beforeend",`<span class="res ${a<0?"skip":ok?"ok":"no"}">${a<0?"ไม่ได้ตอบ":ok?"ตอบถูก":"ตอบผิด"} · เฉลยข้อ ${it.eng?"abcd"[it.a]:it.a+1}</span>`);
+    const exp=document.createElement("div");exp.className="exp";
+    exp.innerHTML='<b class="h">คำอธิบาย</b>';
+    const eim=imgSrc(it.expImg);
+    if(eim) exp.insertAdjacentHTML("beforeend",examImg(eim,""));
+    else exp.appendChild(document.createTextNode(it.exp||"-"));
+    box.appendChild(exp);paper.appendChild(box);
+  });
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><g transform='rotate(-20 120 65)' font-family='Arial' fill='rgba(0,0,0,0.05)' font-weight='700'><text x='40' y='70' font-size='14'>${code.replace("#","%23")}</text></g></svg>`;
+  const wm=document.createElement("div");wm.className="wm";wm.style.backgroundImage=`url("data:image/svg+xml;utf8,${svg}")`;paper.appendChild(wm);
+  watchImgs(paper);
+  $("rvBar").textContent=`KASORB TEST · ห้ามเผยแพร่ · สมาชิก ${code}`;
+  document.body.classList.add("review-mode");
+  showAppPage("reviewPage","เฉลย");
 }
 
 

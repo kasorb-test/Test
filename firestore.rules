@@ -87,7 +87,55 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    function isPremium() {
+      return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get("plan", "free") == "premium";
+    }
+
+    // ชุดข้อสอบ: ทุกคนที่ล็อกอินเห็นรายชื่อชุด แอดมินเพิ่ม/แก้/ลบ
+    match /exams/{id} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+
+    // ตัวข้อสอบ เฉลย คำอธิบาย: ชุดฟรีทุกคนเปิดได้ ชุดพรีเมียมเฉพาะสมาชิกพรีเมียม
+    match /examItems/{id} {
+      allow read: if isAdmin()
+        || (request.auth != null
+            && (get(/databases/$(database)/documents/exams/$(id)).data.get("tier", "premium") == "free"
+                || isPremium()));
+      allow write: if isAdmin();
+    }
+
+    // รูปประกอบข้อสอบและคำอธิบาย: สิทธิ์เดียวกับตัวข้อสอบของชุดนั้น
+    match /examImg/{key} {
+      allow read: if isAdmin()
+        || (request.auth != null
+            && (get(/databases/$(database)/documents/exams/$(resource.data.exam)).data.get("tier", "premium") == "free"
+                || isPremium()));
+      allow write: if isAdmin();
+    }
+
+    // ประวัติคำตอบรายข้อ (ใช้คิด XP และความคืบหน้า): เจ้าของเท่านั้น
+    match /progress/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(["h", "best", "keyVer", "updatedAt"])
+        && request.resource.data.h is map
+        && request.resource.data.best is map;
+    }
+
     match /users/{uid} {
+
+      // ประวัติการทำข้อสอบแต่ละครั้ง
+      match /attempts/{aid} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid)
+          && request.resource.data.total is int
+          && request.resource.data.correct is int
+          && request.resource.data.correct <= request.resource.data.total;
+      }
+
 
       allow read: if isOwner(uid) || isAdmin();
 
@@ -110,7 +158,14 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered"])
+        // XP เพิ่มได้ครั้งละไม่เกิน 1 ชุด (150 ข้อ x 40) และลดได้เมื่อแก้เฉลย, จำนวนข้อที่ทำแล้วไม่เกิน 20,000
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["xp"])
+            || (request.resource.data.xp is int && request.resource.data.xp >= 0
+                && request.resource.data.xp <= resource.data.get("xp", 0) + 6000))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["answered"])
+            || (request.resource.data.answered is int && request.resource.data.answered >= 0
+                && request.resource.data.answered <= 20000))
         && validProfileText(request.resource.data)
         // วันนี้ทำข้อสอบไปกี่ข้อ: {date: "YYYY-MM-DD", count: 0-2000}
         // daily / dailyChoice: ข้อสอบประจำวันที่ตอบแล้ว (กันนับซ้ำเมื่อเปิดหลายเครื่อง)
