@@ -6651,8 +6651,8 @@ async function openAttempt(a,btn){
 }
 
 /* ===== ภาพรวมผลการทดสอบ: บันไดยศ + เงื่อนไขเลื่อนยศ + ผลรายวิชา ===== */
-/* สีตามช่วงคะแนน: 0-10 แดง · 11-30 เหลือง · 31-40 ส้ม · 41-59 ชมพู · 60-80 ฟ้า · 81-100 เขียว */
-const pctGrade=p=>p<=10?"g1":p<=30?"g2":p<=40?"g3":p<60?"g4":p<=80?"g5":"g6";
+/* สีตามช่วงคะแนน: 0-29 แดง · 30-59 เหลือง · 60-79 ฟ้า · 80-100 เขียว */
+const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
@@ -6685,7 +6685,7 @@ async function renderOverview(){
   const badges=Object.entries(subj).filter(([,v])=>v.t>0).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ</em></div>`}).join("");
   box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
-    <div class="ovc"><h3>ผลรายวิชา</h3>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-10%"],["g2","11-30%"],["g3","31-40%"],["g4","41-59%"],["g5","60-80%"],["g6","81-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span>รวมทุกครั้งที่ทำ ${list.length} ครั้ง</p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
+    <div class="ovc"><h3>ผลรายวิชา</h3>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span>รวมทุกครั้งที่ทำ ${list.length} ครั้ง</p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
 $("rReview").onclick=()=>renderReview();
