@@ -1,0 +1,16 @@
+{
+  "id": "admin.html",
+  "name": "กะสอบ แอดมิน",
+  "short_name": "แอดมิน",
+  "description": "หน้าผู้ดูแลระบบ KASORB TEST",
+  "lang": "th",
+  "start_url": "admin.html",
+  "scope": "admin.html",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#16305f",
+  "icons": [
+    { "src": "admin-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "admin-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
