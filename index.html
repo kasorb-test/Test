@@ -3037,6 +3037,20 @@ body:not(.review-mode) .rvbar{display:none}
 .asheet.navy .as-all{background:linear-gradient(120deg,#ff8a2b,#e2520a)}
 .asheet.navy .as-ring{background:conic-gradient(#16305f calc(var(--p)*1%),rgba(255,255,255,.3) 0)}
 .asheet.navy .as-ring div{background:#f0701c}
+/* ผู้เยี่ยมชม */
+.hb-guest{display:none}
+body.guest .hb-card,body.guest .logout-btn,body.guest .hb-count{display:none!important}
+body.guest .hb-guest{display:flex;flex-direction:column;gap:4px;flex:0 0 330px;padding:12px 14px;border-radius:18px;background:#fff;box-shadow:0 8px 22px rgba(20,34,60,.12);color:#16305f}
+body.guest .hb-guest b{font-size:15px}
+body.guest .hb-guest span{font-size:12.5px;color:#666;line-height:1.45}
+body.guest .hb-guest div{display:flex;gap:8px;margin-top:4px}
+body.guest .hb-guest button{flex:1;padding:9px 10px;border:0;border-radius:11px;background:#ff6a00;color:#fff;font-weight:800;font-size:13.5px;cursor:pointer;font-family:inherit}
+body.guest .hb-guest button.reg{background:#16305f}
+@media(max-width:760px){body.guest .hb-guest{flex:1 1 100%}}
+body:not(.on-home).guest .hb .hb-guest{flex:1 1 auto;margin-left:auto;max-width:380px}
+#authShell.over{position:fixed;inset:0;z-index:200;overflow:auto;background:#f6f6f6}
+.auth-close{display:inline-block;margin:0 0 8px;padding:9px 14px;border:1px solid #f1d9c6;border-radius:11px;background:#fff6ef;color:#e86208;font-weight:800;cursor:pointer;font-family:inherit}
+.auth-why{margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#fff1e6;color:#c2410c;font-weight:700;font-size:14px;text-align:center}
 /* กล่องทักทาย I WANNA BE... แสดงเฉพาะหน้าหลัก */
 body:not(.on-home) .hb .hb-text{display:none}body:not(.on-home) .hb{flex-wrap:nowrap;align-items:center}body:not(.on-home) .hb .hb-card{flex:0 1 380px;margin-left:auto;min-width:0}@media(max-width:760px){body:not(.on-home) .hb .hb-card{flex:1 1 auto}}
 /* ช่องวิชาในสรุปคะแนน: กระดาษส้มใช้สีกรมโปร่งแสง กระดาษกรมใช้สีส้มโปร่งแสง */
@@ -3082,6 +3096,8 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <!-- AUTH -->
 <div class="hidden" id="authShell">
 <main class="auth-main">
+<button type="button" class="auth-close hidden" id="authClose">&lsaquo; กลับหน้าแรก</button>
+<p class="auth-why hidden" id="authWhy">เข้าสู่ระบบหรือสมัครสมาชิกก่อน เพื่อใช้งานส่วนนี้</p>
 <h1 class="brand-title"><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
 <section class="card" id="loginPage">
@@ -3288,6 +3304,7 @@ LINE OA @kasorb
 </div>
 <div class="hb-quote" id="topQuote"></div>
 </button>
+<div class="hb-guest" id="guestBox"><b>ยังไม่ได้เข้าสู่ระบบ</b><span>เข้าสู่ระบบเพื่อทำแบบทดสอบ เก็บ XP และเลื่อนยศ</span><div><button type="button" id="guestLoginBtn">เข้าสู่ระบบ</button><button type="button" id="guestRegBtn" class="reg">สมัครสมาชิก</button></div></div>
 </header>
 <main class="content">
 <!-- HOME -->
@@ -3889,6 +3906,32 @@ id=>document.getElementById(id);
 
 /* LOGIN / REGISTER */
 
+/* ===== ผู้เยี่ยมชม: เปิดลิงก์แล้วเห็นหน้าแรกได้เลย เข้าสู่ระบบเมื่อจะใช้งาน ===== */
+let pendingPage=null;
+function enterGuest(){
+  document.body.classList.add("guest");
+  $("authShell").classList.add("hidden");
+  $("appShell").classList.remove("hidden");
+  $("heroHello").textContent="สวัสดี";
+  $("topQuote").textContent="";
+  showAppPage("homePage","หน้าหลัก");
+  loadHome();
+}
+function openLogin(pageId,title,register){
+  pendingPage=pageId?{id:pageId,title}:null;
+  $("authWhy").classList.toggle("hidden",!pageId);
+  $("authClose").classList.remove("hidden");
+  $("loginMsg").textContent="";
+  showAuth(register?"registerPage":"loginPage");
+  $("authShell").classList.add("over");
+  $("authShell").classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+function closeLogin(){
+  pendingPage=null;
+  $("authShell").classList.add("hidden");
+  $("authShell").classList.remove("over");
+}
 function showAuth(page){
 
 $("loginPage")
@@ -3905,6 +3948,10 @@ $(page)
 
 }
 
+
+$("authClose").onclick=closeLogin;
+$("guestLoginBtn").onclick=()=>openLogin(null,null);
+$("guestRegBtn").onclick=()=>openLogin(null,null,true);
 
 $("goRegisterBtn")
 .onclick=
@@ -4331,11 +4378,6 @@ $("logoutBtn").addEventListener("click", async () => {
   try {
     await signOut(auth);
 
-    $("appShell").classList.add("hidden");
-    $("authShell").classList.remove("hidden");
-    $("registerPage").classList.add("hidden");
-    $("loginPage").classList.remove("hidden");
-
     $("loginEmail").value = "";
     $("loginPassword").value = "";
 
@@ -4412,6 +4454,8 @@ function showAppPage(
 pageId,
 title
 ){
+/* ยังไม่เข้าสู่ระบบ: ดูได้เฉพาะหน้าหลัก หน้าอื่นให้เข้าสู่ระบบก่อน แล้วค่อยพาไปหน้านั้น */
+if(!currentUser && pageId!=="homePage"){ openLogin(pageId,title); return; }
 
 document
 .querySelectorAll(".app-page")
@@ -5941,8 +5985,9 @@ function stopDeviceWatch(){
 function kickOut(message){
   stopDeviceWatch();
   signOut(auth).catch(()=>{});
-  $("loginMsg").textContent=message;
   alert(message);
+  openLogin(null,null);
+  $("loginMsg").textContent=message;
 }
 
 /* คืนค่า true ถ้าเครื่องนี้ใช้งานได้ */
@@ -6585,10 +6630,12 @@ console.error(error);
 $("appShell")
 .classList
 .remove("hidden");
+document.body.classList.remove("guest");
 
+const go=pendingPage;pendingPage=null;
 showAppPage(
-"homePage",
-"หน้าหลัก"
+go?go.id:"homePage",
+go?go.title:"หน้าหลัก"
 );
 
 startPresence();
@@ -6602,11 +6649,7 @@ else {
   stopDeviceWatch();
   currentUser = null;
   currentData = null;
-
-  $("appShell").classList.add("hidden");
-  $("authShell").classList.remove("hidden");
-
-  showAuth("loginPage");
+  enterGuest();
 }
 }
 
