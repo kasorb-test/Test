@@ -4827,7 +4827,7 @@ $("myInfoNickname")
 nickname;
 
 
-$("myInfoMemberNo").textContent=memberCodeOf(currentData?.memberNo)||"กำลังออกรหัส…";
+$("myInfoMemberNo").textContent=codeOfData(currentData)||"กำลังออกรหัส…";
 
 $("myInfoEmail")
 .textContent=
@@ -5961,24 +5961,35 @@ function watchImgs(root){
 }
 let examCatalog=null, examProgress=null, currentTrack=null;
 
-/* รหัสสมาชิก KST00001 เรียงตามลำดับการสมัคร (ใช้เป็นลายน้ำหน้าเฉลย ไม่เปิดเผยอีเมล) */
-const memberCodeOf=no=>Number.isInteger(no)&&no>0 ? "KST"+String(no).padStart(5,"0") : "";
-function memberCode(){ return memberCodeOf(currentData?.memberNo) || "KST-----"; }
+/*
+  รหัสสมาชิก เช่น #69092900001 = วันที่สมัคร (ปี พ.ศ. 2 หลัก เดือน วัน) + ลำดับสมาชิก 5 หลัก นับต่อกันทั้งเว็บ
+  ใช้เป็นลายน้ำหน้าเฉลย ไม่เปิดเผยอีเมล
+*/
+function thaiYmd(ms){
+  const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms));
+  const g=t=>p.find(x=>x.type===t).value;
+  return String((Number(g("year"))+543)%100).padStart(2,"0")+g("month")+g("day");
+}
+const toMs=v=>v&&typeof v.toMillis==="function"?v.toMillis():(v&&v.seconds?v.seconds*1000:(Date.parse(v)||0));
+const memberCodeOf=(no,date)=>Number.isInteger(no)&&no>0&&/^\d{6}$/.test(date||"") ? "#"+date+String(no).padStart(5,"0") : "";
+const codeOfData=d=>memberCodeOf(d?.memberNo,d?.memberDate);
+function memberCode(){ return codeOfData(currentData) || "#-----------"; }
 /* ออกรหัสสมาชิกให้บัญชีที่ยังไม่มี: เพิ่มตัวนับกลางและบันทึกเลขในบัญชีพร้อมกัน (กันเลขซ้ำ) */
 async function ensureMemberNo(){
-  if(!currentUser || !currentData || Number.isInteger(currentData.memberNo)) return;
+  if(!currentUser || !currentData || (Number.isInteger(currentData.memberNo) && currentData.memberDate)) return;
   if((currentUser.email||"").toLowerCase()===ADMIN_EMAIL) return;
   try{
     const no=await runTransaction(db,async tx=>{
       const cref=doc(db,"counters","member"),uref=doc(db,"users",currentUser.uid);
       const [c,u]=await Promise.all([tx.get(cref),tx.get(uref)]);
-      if(u.exists() && Number.isInteger(u.data().memberNo)) return u.data().memberNo;
+      if(u.exists() && Number.isInteger(u.data().memberNo)) return {next:u.data().memberNo,date:u.data().memberDate};
       const next=(c.exists()?Number(c.data().n)||0:0)+1;
+      const date=thaiYmd(toMs(u.exists()&&u.data().createdAt)||Date.now());
       tx.set(cref,{n:next});
-      tx.update(uref,{memberNo:next});
-      return next;
+      tx.update(uref,{memberNo:next,memberDate:date});
+      return {next,date};
     });
-    currentData.memberNo=no;
+    if(no&&no.next){currentData.memberNo=no.next;currentData.memberDate=no.date;}
     if($("myInfoPage").classList.contains("active")) renderMyInfo();
   }catch(e){console.error(e);}
 }
@@ -6261,7 +6272,7 @@ function renderAnswerSheet(){
   const setNo=(r.meta.title.match(/ชุดที่\s*(\d+)/)||[])[1]||"";
   $("rSheet").innerHTML=`<div class="as-head"><div class="as-logo"><b>กะสอบ</b><i>TEST</i></div>
     <div class="as-ht"><small>ANSWER SHEET</small><h3>${escHtml(r.meta.title)}</h3>
-    <div class="as-info"><span>${escHtml(currentData?.nickname||"")} <b>${escHtml(memberCodeOf(currentData?.memberNo))}</b></span>${setNo?`<span>ชุดที่ <b>${escHtml(setNo)}</b></span>`:""}<span>${new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</span><span>ใช้เวลา <b>${fmtTime(r.secs)}</b></span></div></div></div>
+    <div class="as-info"><span>${escHtml(currentData?.nickname||"")} <b>${escHtml(codeOfData(currentData))}</b></span>${setNo?`<span>ชุดที่ <b>${escHtml(setNo)}</b></span>`:""}<span>${new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</span><span>ใช้เวลา <b>${fmtTime(r.secs)}</b></span></div></div></div>
     <div class="as-body">
     <div class="as-lbl"><span>กระดาษคำตอบ</span><div class="as-leg"><span><i style="background:#1f2937;border-color:#1f2937"></i>ตอบถูก</span><span><i style="background:#dc2626;border-color:#dc2626"></i>ตอบผิด</span><span><i style="box-shadow:0 0 0 2.5px #22c55e"></i>เฉลย</span></div></div>
     <div class="as-grid">${grid}</div>
@@ -6312,7 +6323,7 @@ function renderReview(){
     else exp.appendChild(document.createTextNode(it.exp||"-"));
     box.appendChild(exp);paper.appendChild(box);
   });
-  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><g transform='rotate(-20 120 65)' font-family='Arial' fill='rgba(0,0,0,0.05)' font-weight='700'><text x='40' y='70' font-size='14'>${code}</text></g></svg>`;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><g transform='rotate(-20 120 65)' font-family='Arial' fill='rgba(0,0,0,0.05)' font-weight='700'><text x='40' y='70' font-size='14'>${code.replace("#","%23")}</text></g></svg>`;
   const wm=document.createElement("div");wm.className="wm";wm.style.backgroundImage=`url("data:image/svg+xml;utf8,${svg}")`;paper.appendChild(wm);
   watchImgs(paper);
   $("rvBar").textContent=`KASORB TEST · ห้ามเผยแพร่ · สมาชิก ${code}`;

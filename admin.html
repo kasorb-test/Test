@@ -77,7 +77,7 @@
 <button id="saveHome">บันทึกหน้าหลัก</button><p id="homeMsg"></p></div>
 <div id="panel" class="card page" data-page="members"><h2>สมาชิก</h2><p class="muted">หลังลูกค้าชำระเงิน เลือกแพ็กเกจ แล้วกด บันทึก ที่แถวของคนนั้น (รายปีนับ 1 ปีจากวันที่เลือก แก้วันได้)</p>
 <div class="stick"><div id="tabs" class="tabs"><button type="button" data-f="all" class="on">ทั้งหมด <b>0</b></button><button type="button" data-f="free">ฟรี <b>0</b></button><button type="button" data-f="yearly">รายปี <b>0</b></button><button type="button" data-f="lifetime">ตลอดชีพ <b>0</b></button></div>
-<input id="q" type="search" placeholder="ค้นหาอีเมล ชื่อเล่น หรือรหัสสมาชิก (KST…)"><p id="umsg" class="ok"></p></div>
+<input id="q" type="search" placeholder="ค้นหาอีเมล ชื่อเล่น หรือรหัสสมาชิก"><p id="umsg" class="ok"></p></div>
 <div id="users"></div></div><div id="devicesCard" class="card page" data-page="devices"><h2>อุปกรณ์</h2><p class="muted">สมาชิก 1 คนผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง ถ้านักเรียนติดต่อมาว่าเข้าเครื่องใหม่ไม่ได้ กด ลบ ที่เครื่องที่ไม่ใช้แล้ว (หรือ ลบทั้งหมด) แล้วเครื่องที่ล็อกอินครั้งถัดไปจะถูกผูกใหม่</p><div class="stick"><input id="dq" type="search" placeholder="ค้นหาอีเมลหรือชื่อเล่น"><p id="dmsg" class="ok"></p></div><div id="devList"><p class="muted">กำลังโหลด…</p></div></div><div id="examsCard" class="card page" data-page="exams"><h2>ใส่ข้อสอบ</h2><p class="muted">นำเข้าชุดข้อสอบจากไฟล์ .json ที่เตรียมไว้ (เลือกได้หลายไฟล์พร้อมกัน) แล้วตั้งค่าฟรี / พรีเมียม และเวลาสอบของแต่ละชุด</p>
 <div class="imp"><label class="impbtn">เลือกไฟล์ข้อสอบ (.json)<input id="examFiles" type="file" accept=".json,application/json" multiple hidden></label><div id="impList"></div><button type="button" id="impGo" class="hide">นำเข้าข้อสอบ</button><p id="impMsg"></p></div>
 <h3 style="margin-top:22px">ชุดข้อสอบในเว็บ <span id="examTotal" class="muted" style="font-weight:600;font-size:14px"></span></h3><div id="examList"><p class="muted">กำลังโหลด…</p></div></div></section></div>
@@ -109,7 +109,7 @@ const q=$("q").value.trim().toLowerCase();
 const counts={all:members.length,free:0,yearly:0,lifetime:0};
 members.forEach(u=>counts[groupOf(u)]++);
 document.querySelectorAll("#tabs button").forEach(t=>{t.classList.toggle("on",t.dataset.f===filter);t.querySelector("b").textContent=counts[t.dataset.f]});
-const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)||codeOf(u).toLowerCase().includes(q.replace(/^#/,""))));
+const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)||codeOf(u).includes(q.replace(/^#/,""))));
 if(!members.length){$("users").innerHTML='<p class="muted">ยังไม่มีสมาชิก</p>';return}
 if(!list.length){$("users").innerHTML='<p class="muted">ไม่พบสมาชิก</p>';return}
 $("users").innerHTML=`<table class="mt"><thead><tr><th>ชื่อเล่น</th><th class="col-mail">อีเมล</th><th>แพ็กเกจ</th><th></th></tr></thead><tbody>${list.map(u=>{const w=wantOf(u);const id=esc(u.id);
@@ -290,19 +290,20 @@ async function deleteExam(id){
   catch(err){$("impMsg").className="err";$("impMsg").textContent=`ลบไม่สำเร็จ (${err.code||err.message})`}
 }
 
-/* รหัสสมาชิก KST00001 ตามลำดับการสมัคร */
-function codeOf(u){return Number.isInteger(u.memberNo)&&u.memberNo>0?"KST"+String(u.memberNo).padStart(5,"0"):""}
+function thaiYmd(ms){const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms));const g=t=>p.find(x=>x.type===t).value;return String((Number(g("year"))+543)%100).padStart(2,"0")+g("month")+g("day")}
+/* รหัสสมาชิก #วันที่สมัคร(ปีพ.ศ.2หลัก+เดือน+วัน)+ลำดับ5หลัก เช่น #69092900001 */
+function codeOf(u){return Number.isInteger(u.memberNo)&&u.memberNo>0&&/^\d{6}$/.test(u.memberDate||"")?"#"+u.memberDate+String(u.memberNo).padStart(5,"0"):""}
 const tsOf=v=>v&&typeof v.toMillis==="function"?v.toMillis():(v&&v.seconds?v.seconds*1000:(Date.parse(v)||0));
 /* สมาชิกเดิมที่ยังไม่มีรหัส: ออกรหัสให้ตามวันที่สมัคร (เก่าสุดได้เลขน้อยสุด) */
 async function backfillMemberNo(){
-  const todo=members.filter(u=>!Number.isInteger(u.memberNo)).sort((a,b)=>tsOf(a.createdAt)-tsOf(b.createdAt));
+  const todo=members.filter(u=>!Number.isInteger(u.memberNo)||!u.memberDate).sort((a,b)=>tsOf(a.createdAt)-tsOf(b.createdAt));
   if(!todo.length) return;
   try{
     await runTransaction(db,async tx=>{
       const cref=doc(db,"counters","member");const c=await tx.get(cref);
       const snaps=await Promise.all(todo.map(u=>tx.get(doc(db,"users",u.id))));
       let n=c.exists()?Number(c.data().n)||0:0;
-      snaps.forEach((sn,i)=>{if(sn.exists()&&!Number.isInteger(sn.data().memberNo)){n++;tx.update(doc(db,"users",todo[i].id),{memberNo:n});todo[i].memberNo=n}else if(sn.exists())todo[i].memberNo=sn.data().memberNo});
+      snaps.forEach((sn,i)=>{if(!sn.exists())return;const d=sn.data(),date=d.memberDate||thaiYmd(tsOf(d.createdAt)||Date.now());if(!Number.isInteger(d.memberNo)){n++;tx.update(doc(db,"users",todo[i].id),{memberNo:n,memberDate:date});todo[i].memberNo=n}else{if(!d.memberDate)tx.update(doc(db,"users",todo[i].id),{memberDate:date});todo[i].memberNo=d.memberNo}todo[i].memberDate=date});
       tx.set(cref,{n});
     });
     members.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9));renderMembers();

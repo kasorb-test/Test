@@ -92,7 +92,7 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get("plan", "free") == "premium";
     }
 
-    // ตัวนับรหัสสมาชิก KST00001: เพิ่มทีละ 1 พร้อมกับบันทึกเลขในบัญชีของตัวเองเท่านั้น
+    // ตัวนับลำดับสมาชิก (รหัส #วันที่สมัคร+ลำดับ): เพิ่มทีละ 1 พร้อมกับบันทึกเลขในบัญชีของตัวเองเท่านั้น
     match /counters/member {
       allow read: if request.auth != null;
       allow create, update: if isAdmin()
@@ -168,8 +168,12 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
+            || (request.resource.data.memberDate is string
+                && request.resource.data.memberDate.matches("[0-9]{6}")
+                && resource.data.get("memberDate", null) == null))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberNo"])
             || (resource.data.get("memberNo", null) == null
                 && request.resource.data.memberNo is int
@@ -224,8 +228,9 @@ service cloud.firestore {
 
       // แอดมินออกรหัสสมาชิกให้สมาชิกเดิม
       allow update: if isAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["memberNo"])
-        && request.resource.data.memberNo is int && request.resource.data.memberNo > 0;
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["memberNo", "memberDate"])
+        && request.resource.data.get("memberNo", 1) is int && request.resource.data.get("memberNo", 1) > 0
+        && request.resource.data.get("memberDate", "000000").matches("[0-9]{6}");
 
       // แอดมินลบรูปที่ไม่เหมาะสม (กลับไปใช้รูปการ์ตูน)
       allow update: if isAdmin()
