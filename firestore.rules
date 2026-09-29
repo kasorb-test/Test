@@ -44,6 +44,32 @@ service cloud.firestore {
         && request.resource.data.lastSeen == request.time;
     }
 
+    // อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง (active) เปลี่ยนเครื่องเองได้ทุก 30 วัน
+    function validDevices(d) {
+      return d.keys().hasOnly(["ids", "active", "activeAt", "lastSwapAt"])
+        && d.ids is map
+        && d.ids.keys().size() >= 1 && d.ids.keys().size() <= 2
+        && d.active in d.ids.keys();
+    }
+
+    match /devices/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid) && validDevices(request.resource.data)
+        && !request.resource.data.keys().hasAny(["lastSwapAt"]);
+      allow update: if isOwner(uid) && validDevices(request.resource.data)
+        && (
+          // ไม่ลบเครื่องเดิม (แค่สลับเครื่องที่ใช้งาน หรือเพิ่มเครื่องที่ 2)
+          (request.resource.data.ids.keys().hasAll(resource.data.ids.keys())
+            && request.resource.data.get("lastSwapAt", null) == resource.data.get("lastSwapAt", null))
+          // เปลี่ยนเครื่อง: ทำได้ทุก 30 วัน
+          || (request.resource.data.lastSwapAt == request.time
+            && (resource.data.get("lastSwapAt", null) == null
+                || request.time > resource.data.lastSwapAt + duration.value(30, "d")))
+        );
+      // แอดมินรีเซ็ตเครื่องได้
+      allow delete: if isAdmin();
+    }
+
     match /users/{uid} {
 
       allow read: if isOwner(uid) || isAdmin();
