@@ -4854,6 +4854,7 @@ function premiumRank(level){
 }
 
 
+const DEFAULT_QUOTE="ตั้งใจทำวันนี้ให้ดีที่สุด";
 function rankNameOnly(){
 
 if(currentData?.plan!=="premium"){
@@ -5024,10 +5025,11 @@ $("heroHello")
 renderToday();
 
 
+/* แถบข้อมูลสมาชิกต้องมีคติเสมอ: ยังไม่ได้ตั้งคติ ใช้คติเริ่มต้น */
 const quote=
-currentData?.quote
+String(currentData?.quote||"").trim()
 ||
-"";
+DEFAULT_QUOTE;
 
 $("topQuote")
 .textContent=
