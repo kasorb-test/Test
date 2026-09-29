@@ -3037,6 +3037,11 @@ body:not(.review-mode) .rvbar{display:none}
 .asheet.navy .as-all{background:linear-gradient(120deg,#ff8a2b,#e2520a)}
 .asheet.navy .as-ring{background:conic-gradient(#16305f calc(var(--p)*1%),rgba(255,255,255,.3) 0)}
 .asheet.navy .as-ring div{background:#f0701c}
+/* ช่องวิชาในสรุปคะแนน: กระดาษส้มใช้สีกรมโปร่งแสง กระดาษกรมใช้สีส้มโปร่งแสง */
+.asheet .as-cards .as-c{background:rgba(22,48,95,.07);border-color:rgba(22,48,95,.18)}
+.asheet .as-cards .as-c span{color:#16305f;border-bottom-color:rgba(22,48,95,.22)}
+.asheet.navy .as-cards .as-c{background:rgba(255,106,0,.08);border-color:rgba(255,106,0,.28)}
+.asheet.navy .as-cards .as-c span{color:#b4470c;border-bottom-color:rgba(255,106,0,.3)}
 /* มือถือ: การ์ดสรุปคะแนนแบบเดิม แต่ย่อให้เล็กลง เห็นครบในหน้าจอเดียว */
 @media(max-width:600px){
 .as-sum{margin-top:16px}
