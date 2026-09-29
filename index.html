@@ -590,6 +590,31 @@ input{
   margin:8px 0;
 }
 
+/* ภาพรวม: บันไดยศ */
+.ovl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media(max-width:760px){.ovl{grid-template-columns:1fr}}
+.ladder{position:relative;padding-left:34px}
+.ladder:before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:4px;border-radius:4px;background:#e5e7eb}
+.lstep{position:relative;display:flex;align-items:center;gap:12px;padding:10px 12px;margin:0 0 8px;border-radius:14px;background:#fafafa;color:#9ca3af}
+.lstep:before{content:"";position:absolute;left:-27px;top:50%;margin-top:-10px;width:14px;height:14px;border-radius:50%;background:#e5e7eb;border:3px solid #fff}
+.lstep b{font-size:15px}.lstep small{margin-left:auto;font-size:12px;font-weight:700;white-space:nowrap}
+.lstep.done{color:#16305f;background:#eef2fa}.lstep.done:before{background:#16305f}
+.lstep.now{color:#fff;background:linear-gradient(120deg,#ff8a2b,#e2520a);box-shadow:0 8px 20px rgba(226,82,10,.28);padding:14px 12px}
+.lstep.now:before{left:-31px;margin-top:-14px;width:22px;height:22px;background:#ff6a00;border-color:#ffd9c2}
+.lstep.now span{display:block;font-size:12.5px;opacity:.92}
+.lstep .lav{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:2px solid #fff;flex:0 0 auto}
+.lstep.next{color:#c2410c;background:#fff7ed;border:1.5px dashed #fdba74}.lstep.next:before{background:#fdba74}
+.lgap{margin:-2px 0 6px;padding-left:4px;color:#bbb;font-weight:900;letter-spacing:3px}
+.nx{display:flex;gap:10px;flex-wrap:wrap}
+.nx div{flex:1 1 180px;padding:12px 14px;border-radius:14px;border:2px solid #e5e7eb}
+.nx div.ok{border-color:#86efac;background:#f0fdf4}
+.nx span{display:block;font-size:12.5px;color:#6b7280}.nx b{font-size:17px;color:#111827}
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 10px}
+.bd{text-align:center}
+.bd .c{width:70px;height:70px;margin:0 auto 6px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:900;border:5px solid}
+.bd span{display:block;font-size:12.5px;font-weight:700;color:#374151;line-height:1.3}
+.bd em{font-style:normal;font-size:11.5px;color:#9ca3af}
+.bd.gA .c{border-color:#15803d;color:#15803d;background:#f0fdf4}.bd.gB .c{border-color:#e86208;color:#c2410c;background:#fff7ed}.bd.gC .c{border-color:#c62828;color:#c62828;background:#fef2f2}
 /* ประวัติ + ภาพรวม */
 .hrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 14px;align-items:center;padding:14px 16px;margin:0 0 10px;border:1px solid #eee;border-radius:16px;background:#fff;box-shadow:0 4px 14px rgba(20,34,60,.05)}
 .hrow .hl b{display:block;font-size:15px;line-height:1.45}
@@ -6617,41 +6642,40 @@ async function openAttempt(a,btn){
   finally{btn.disabled=false;btn.textContent="ดูผล"}
 }
 
-/* ===== ภาพรวมผลการทดสอบ ===== */
+/* ===== ภาพรวมผลการทดสอบ: บันไดยศ + เงื่อนไขเลื่อนยศ + ผลรายวิชา ===== */
+function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
   let list=[];
   try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
   const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
   const premium=currentData?.plan==="premium",lv=currentLevel();
-  const sumC=list.reduce((n,a)=>n+(Number(a.correct)||0),0),sumT=list.reduce((n,a)=>n+(Number(a.total)||0),0);
-  const avg=sumT?Math.round(sumC/sumT*100):0;
-  const meter=(label,val,max,right,cls)=>`<div class="meter ${cls||""}"><div class="ml"><span>${label}</span><em>${right}</em></div><div class="mb"><i style="width:${Math.max(0,Math.min(100,max?val/max*100:0))}%"></i></div></div>`;
-  /* เลเวลถัดไป: ต้องผ่านทั้ง % ที่ทำแล้ว และ XP */
-  let next="";
+  /* บันไดยศ: เรียงจากสูงลงต่ำ แสดง 2 ขั้นถัดไป ขั้นปัจจุบัน ขั้นก่อนหน้า และยศสูงสุด */
+  const steps=[];
+  const hi=Math.min(MAX_LEVEL,lv+2),lo=Math.max(0,lv-1);
+  if(hi<MAX_LEVEL){steps.push(`<div class="lstep"><b>Lv.${MAX_LEVEL} ${escHtml(rankLabel(MAX_LEVEL))}</b><small>ยศสูงสุด</small></div>`);if(hi<MAX_LEVEL-1)steps.push('<div class="lgap">&middot; &middot; &middot;</div>')}
+  for(let l=hi;l>=lo;l--){
+    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":`อีก ${l-lv} ขั้น`}</small></div>`);
+    else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
+    else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
+  }
+  /* เงื่อนไขเลื่อนยศ */
+  let next;
   if(!premium) next=`<p class="note">สมาชิกฟรีอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุดฟรีได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
   else if(lv>=MAX_LEVEL) next=`<p class="note">ถึงยศสูงสุดแล้ว</p>`;
+  else if(lv===0) next=`<div class="nx"><div><span>ทำข้อสอบข้อแรก</span><b>ยังไม่เริ่ม</b></div></div>`;
   else{
-    const nl=lv+1,[needPct,needXp]=nl<=1?[0,0]:LEVEL_RULES[nl];
-    const name=premiumRank(nl)+(currentData?.gender==="female"&&nl>0?"หญิง":"");
-    next=nl===1?`<p class="note">ทำข้อสอบข้อแรกเพื่อขึ้น Lv.1 ${escHtml(name)}</p>`
-      :`<p class="note" style="margin-bottom:6px">Lv.${nl} ${escHtml(name)} ต้องผ่านทั้ง 2 เงื่อนไข</p>
-       ${meter("ทำข้อสอบแล้ว",pct,needPct,`${pct}% / ${needPct}%`,pct>=needPct?"ok":"")}
-       ${meter("XP สะสม",xp,needXp,`${xp.toLocaleString()} / ${needXp.toLocaleString()}`,xp>=needXp?"ok":"")}`;
+    const nl=lv+1,[needPct,needXp]=LEVEL_RULES[nl],okP=pct>=needPct,okX=xp>=needXp;
+    next=`<div class="nx"><div class="${okP?"ok":""}"><span>ทำข้อสอบแล้ว (ต้อง ${needPct}%)</span><b>${pct}% ${okP?"ผ่านแล้ว":`ขาดอีก ${needPct-pct}%`}</b></div>
+      <div class="${okX?"ok":""}"><span>XP (ต้อง ${needXp.toLocaleString()})</span><b>${xp.toLocaleString()} ${okX?"ผ่านแล้ว":`ขาด ${(needXp-xp).toLocaleString()}`}</b></div></div>`;
   }
-  /* คะแนนรายวิชา รวมทุกครั้งที่ทำ */
+  /* ผลรายวิชา รวมทุกครั้งที่ทำ */
   const subj={};
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{subj[k]=subj[k]||{c:0,t:0};subj[k].c+=Number(v.c)||0;subj[k].t+=Number(v.t)||0}));
-  const subjRows=Object.entries(subj).filter(([,v])=>v.t>0).map(([k,v])=>{const p=Math.round(v.c/v.t*100);return meter(escHtml(k),v.c,v.t,`${v.c}/${v.t} ข้อ · ${p}%`,p>=60?"ok":"lo")}).join("");
-  box.innerHTML=`<div class="ovg">
-    <div class="ovt"><span>XP สะสม</span><b>${xp.toLocaleString()}</b></div>
-    <div class="ovt"><span>ยศปัจจุบัน</span><b>${escHtml(rankNameOnly())}</b><em>${levelText()}</em></div>
-    <div class="ovt"><span>ความคืบหน้า</span><b>${pct}%</b><em>ทำแล้ว ${done.toLocaleString()} / ${total.toLocaleString()} ข้อ</em></div>
-    <div class="ovt"><span>ทำแบบทดสอบ</span><b>${list.length} <small>ครั้ง</small></b><em>${sumT?`ตอบถูกเฉลี่ย ${avg}%`:"ยังไม่เคยทำ"}</em></div></div>
-    <div class="ovc"><h3>เลื่อนยศครั้งถัดไป</h3>${next}</div>
-    <div class="ovc"><h3>คะแนนรายวิชา</h3>${subjRows||'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปคะแนนแต่ละวิชาให้ (เขียว = ถึงเกณฑ์ 60%)</p>'}</div>
-    <div class="ovc"><h3>ทำล่าสุด</h3>${list.length?list.slice(0,5).map(a=>{const t=Number(a.total)||0,c=Number(a.correct)||0,p=t?Math.round(c/t*100):0;return meter(`${escHtml((loadCatalogSync(a.exam)||{}).title||a.title||"")} <small style="color:#999;font-weight:600">${escHtml(fmtWhen(atDate(a)))}</small>`,c,t,`${c}/${t} · ${p}%`,p>=60?"ok":"lo")}).join("")+'<button type="button" class="ovlink" id="ovHist">ดูประวัติทั้งหมด</button>':'<p class="note">ยังไม่มีประวัติการทำแบบทดสอบ</p>'}</div>`;
-  $("ovHist")?.addEventListener("click",()=>showAppPage("historyPage","ประวัติการทำแบบทดสอบ"));
+  const badges=Object.entries(subj).filter(([,v])=>v.t>0).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=p>=60?"gA":p>=40?"gB":"gC";return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ</em></div>`}).join("");
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
+    <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
+    <div class="ovc"><h3>ผลรายวิชา</h3>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px">เขียว 60% ขึ้นไป · ส้ม 40-59% · แดง ต่ำกว่า 40% (รวมทุกครั้งที่ทำ ${list.length} ครั้ง)</p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
 $("rReview").onclick=()=>renderReview();
