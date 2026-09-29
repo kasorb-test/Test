@@ -18,6 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sriracha&amp;display=swap" rel="stylesheet">
+<!-- ฟอนต์ Mitr เฉพาะคำว่า กะสอบ (เหมือนไอคอนแอป) -->
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@600&amp;text=%E0%B8%81%E0%B8%B0%E0%B8%AA%E0%B8%AD%E0%B8%9A&amp;display=swap" rel="stylesheet">
 <!-- ฟอนต์สารบรรณ สำหรับข้อสอบทุกข้อ -->
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>
@@ -727,6 +729,11 @@ input{
 .install-step ol{margin:6px 0 0;padding-left:20px}
 .install-note{margin:4px 0 14px;font-size:13px;color:#666}
 .install-box .btn{width:100%}
+/* ชื่อ กะสอบ ฟอนต์ Mitr ตัวหนา เหมือนไอคอนแอป */
+.brand-name{font-family:"Mitr",Arial,sans-serif;font-weight:600;letter-spacing:0}
+.sidebar-brand .brand-name{display:inline;margin:0;color:var(--orange);font-size:1.12em;white-space:nowrap}
+.brand-title .brand-name{font-size:1.08em}
+.sidebar-brand strong{white-space:nowrap}
 /* คำว่า TEST ในกรอบสีกรมท่า เหมือนไอคอนแอป */
 .brand-test{display:inline-block;padding:1px .45em 2px;border-radius:999px;background:#16305f;color:#fff!important;font-size:.82em!important;letter-spacing:.08em;line-height:1.25;vertical-align:.08em;margin-left:.1em}
 /* ปุ่มกลับหน้าหลัก */
@@ -2801,7 +2808,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <!-- AUTH -->
 <div class="hidden" id="authShell">
 <main class="auth-main">
-<h1 class="brand-title">KASORB <span class="brand-test">TEST</span></h1>
+<h1 class="brand-title"><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
 <section class="card" id="loginPage">
 <h2>เข้าสู่ระบบ</h2>
@@ -2854,7 +2861,7 @@ timer=setTimeout(()=>toast.classList.remove("show"),2200);
 <div class="hidden" id="appShell">
 <aside class="sidebar" id="sidebar">
 <div class="sidebar-brand">
-<strong>KASORB <span class="brand-test">TEST</span></strong>
+<strong><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></strong>
 <span>ระบบฝึกทำแบบทดสอบออนไลน์</span>
 </div>
 <div class="sidebar-menu">
