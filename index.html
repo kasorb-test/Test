@@ -2553,6 +2553,25 @@ input{
 .hb-text{flex:1;min-width:0;position:relative;z-index:1}
 .hb-slogan{font-size:13px;font-weight:800;letter-spacing:.12em;opacity:.92}
 .hb-hi{font-size:24px;font-weight:900;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-today{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px 10px;
+  margin-top:8px;
+  font-size:14px;
+  font-weight:700;
+}
+.hb-count{
+  padding:4px 11px;
+  border-radius:999px;
+  background:#fff;
+  color:#16305f;
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.hb-count.done{background:#16305f;color:#fff}
 .hb-card{
   position:relative;
   z-index:1;
@@ -2615,6 +2634,7 @@ input{
   .hb-text{flex:1 1 calc(100% - 60px)}
   .hb-slogan{font-size:11px}
   .hb-hi{font-size:19px}
+  .hb-today{font-size:13px;margin-top:6px}
   .hb-card{flex:1 1 100%;width:auto;padding:10px 12px}
   .hb-av{flex-basis:46px;width:46px;height:46px}
 }
@@ -2855,6 +2875,10 @@ LINE OA @kasorb
 <div class="hb-text">
 <div class="hb-slogan">I WANNA BE A POLICE OFFICER</div>
 <div class="hb-hi" id="heroHello">สวัสดี</div>
+<div class="hb-today">
+<span id="heroTodayAsk">วันนี้คุณทำข้อสอบแล้วหรือยัง?</span>
+<span class="hb-count" id="heroTodayCount">วันนี้ทำไปแล้ว 0 ข้อ</span>
+</div>
 </div>
 <button class="hb-card" id="topProfileBtn" type="button">
 <img alt="รูปโปรไฟล์" class="hb-av" id="topAvatar" src="avatar20.png"/>
@@ -4302,6 +4326,8 @@ $("heroHello")
 .textContent=
 `สวัสดี ${nickname}`;
 
+renderToday();
+
 
 const quote=
 currentData?.quote
@@ -5100,6 +5126,30 @@ function renderNews(home){
   });
 }
 
+/* วันนี้ทำข้อสอบไปกี่ข้อ (นับเฉพาะวันนั้น ขึ้นวันใหม่เริ่ม 0) */
+function todayCount(){
+  const t=currentData?.today;
+  return t && t.date===todayKey() ? Number(t.count)||0 : 0;
+}
+
+function renderToday(){
+  const count=todayCount();
+  $("heroTodayCount").textContent=`วันนี้ทำไปแล้ว ${count.toLocaleString()} ข้อ`;
+  $("heroTodayCount").classList.toggle("done",count>0);
+}
+
+async function addTodayCount(n){
+  if(!currentUser || !currentData) return;
+  const today={date:todayKey(),count:todayCount()+n};
+  currentData.today=today;
+  renderToday();
+  try{
+    await updateDoc(doc(db,"users",currentUser.uid),{today});
+  }catch(error){
+    console.error(error);
+  }
+}
+
 /* ข้อสอบประจำวันเริ่มต้น ใช้เมื่อแอดมินยังไม่ได้ตั้งค่า */
 const defaultDaily={
   question:"กฎหมายสูงสุดของประเทศไทย คือข้อใด",
@@ -5143,12 +5193,12 @@ function renderDaily(home){
     const text=document.createElement("span");
     text.textContent=homeText(choice);
     btn.append(letter,text);
-    btn.onclick=()=>answer(index);
+    btn.onclick=()=>answer(index,true);
     choicesBox.appendChild(btn);
     return btn;
   });
 
-  function answer(index){
+  function answer(index,fresh){
     const correct=Number(daily.answer);
     buttons.forEach((b,i)=>{
       b.disabled=true;
@@ -5164,6 +5214,7 @@ function renderDaily(home){
       result.appendChild(document.createTextNode(` — ${homeText(daily.explanation)}`));
     }
     try{ localStorage.setItem(storeKey,String(index)); }catch(e){}
+    if(fresh) addTodayCount(1);
   }
 
   if(saved!==null && saved!=="") answer(Number(saved));
