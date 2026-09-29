@@ -48,11 +48,25 @@
 .istep{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:#f2f5fb;font-size:14px;line-height:1.6}
 .istep ol{margin:6px 0 0;padding-left:20px}
 .ibox button{width:100%}
+/* ใส่ข้อสอบ */
+.imp{margin-top:12px;padding:14px;border:2px dashed #f1d0b5;border-radius:14px;background:#fffaf5}
+.impbtn{display:inline-block;padding:11px 16px;border-radius:11px;background:#ff6a00;color:#fff;font-weight:800;cursor:pointer}
+.irow{display:flex;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff;border:1px solid #f1e3d6;font-size:14px}
+.irow b{display:block}.irow .bad{color:#c62828;font-weight:700}.irow .good{color:#15803d;font-weight:700}
+#impGo{margin-top:12px}
+.erow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.erow .t b{display:block;font-size:15px}.erow .t span{font-size:13px;color:#888}
+.erow .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+.erow select,.erow input{width:auto;margin:0;padding:8px 10px}
+.erow input{width:74px}
+.erow .del{width:auto;margin:0;padding:8px 12px;background:#fdecec;color:#c62828;font-size:13px}
+@media(max-width:760px){.erow{grid-template-columns:1fr}.erow .ctl{justify-content:flex-start}}
+.mno{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#16305f;letter-spacing:.03em}
 </style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>ใส่ข้อสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แก้วันสอบ ข่าวสาร และข้อสอบประจำวัน แล้วกดบันทึก</p>
 <h3>การ์ดนับถอยหลัง</h3>
 <div class="row"><div><label>การ์ดที่ 1: สายงาน</label><input id="exam0Title"></div><div><label>วันสอบ</label><input id="exam0Date" type="date"></div></div>
 <div class="row"><div><label>การ์ดที่ 2: สายงาน</label><input id="exam1Title"></div><div><label>วันสอบ</label><input id="exam1Date" type="date"></div></div>
-<label>จำนวนข้อสอบทั้งหมดในเว็บ</label><input id="totalQuestions" type="number" min="0">
+<label>จำนวนข้อสอบทั้งหมดในเว็บ</label><input id="totalQuestions" type="number" readonly style="background:#f6f6f6;color:#777"><p class="muted" style="margin:-4px 0 10px;font-size:13px">นับให้อัตโนมัติจากหน้า "ใส่ข้อสอบ"</p>
 <h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน ลิงก์รูปและลิงก์ข่าวต้องขึ้นต้นด้วย https://</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
 <h3>ข้อสอบประจำวัน</h3>
 <label>คำถาม</label><textarea id="dailyQ"></textarea>
@@ -63,9 +77,11 @@
 <button id="saveHome">บันทึกหน้าหลัก</button><p id="homeMsg"></p></div>
 <div id="panel" class="card page" data-page="members"><h2>สมาชิก</h2><p class="muted">หลังลูกค้าชำระเงิน เลือกแพ็กเกจ แล้วกด บันทึก ที่แถวของคนนั้น (รายปีนับ 1 ปีจากวันที่เลือก แก้วันได้)</p>
 <div class="stick"><div id="tabs" class="tabs"><button type="button" data-f="all" class="on">ทั้งหมด <b>0</b></button><button type="button" data-f="free">ฟรี <b>0</b></button><button type="button" data-f="yearly">รายปี <b>0</b></button><button type="button" data-f="lifetime">ตลอดชีพ <b>0</b></button></div>
-<input id="q" type="search" placeholder="ค้นหาอีเมลหรือชื่อเล่น"><p id="umsg" class="ok"></p></div>
-<div id="users"></div></div><div id="devicesCard" class="card page" data-page="devices"><h2>อุปกรณ์</h2><p class="muted">สมาชิก 1 คนผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง ถ้านักเรียนติดต่อมาว่าเข้าเครื่องใหม่ไม่ได้ กด ลบ ที่เครื่องที่ไม่ใช้แล้ว (หรือ ลบทั้งหมด) แล้วเครื่องที่ล็อกอินครั้งถัดไปจะถูกผูกใหม่</p><div class="stick"><input id="dq" type="search" placeholder="ค้นหาอีเมลหรือชื่อเล่น"><p id="dmsg" class="ok"></p></div><div id="devList"><p class="muted">กำลังโหลด…</p></div></div><div id="examsCard" class="card page" data-page="exams"><h2>ใส่ข้อสอบ</h2><p class="muted">หน้านี้จะใช้เพิ่มและแก้ไขข้อสอบ แยกตามวิชาและชุดข้อสอบ</p><div class="soon">ยังไม่เปิดใช้งาน<br><span>จะเปิดใช้งานเมื่อระบบทำข้อสอบพร้อม</span></div></div></section></div>
-<script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";import{getFirestore,collection,getDocs,doc,updateDoc,getDoc,setDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";const firebaseConfig={apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",authDomain:"kasorb-test-ad000.firebaseapp.com",projectId:"kasorb-test-ad000",storageBucket:"kasorb-test-ad000.firebasestorage.app",messagingSenderId:"999267444865",appId:"1:999267444865:web:5509772cd5f94af768c580"};/* แยกการล็อกอินของแอดมินจากหน้าเว็บหลัก (ตั้งชื่อ app ต่างกัน ระบบจะจำ session แยกกัน) */
+<input id="q" type="search" placeholder="ค้นหาอีเมล ชื่อเล่น หรือรหัสสมาชิก"><p id="umsg" class="ok"></p></div>
+<div id="users"></div></div><div id="devicesCard" class="card page" data-page="devices"><h2>อุปกรณ์</h2><p class="muted">สมาชิก 1 คนผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง ถ้านักเรียนติดต่อมาว่าเข้าเครื่องใหม่ไม่ได้ กด ลบ ที่เครื่องที่ไม่ใช้แล้ว (หรือ ลบทั้งหมด) แล้วเครื่องที่ล็อกอินครั้งถัดไปจะถูกผูกใหม่</p><div class="stick"><input id="dq" type="search" placeholder="ค้นหาอีเมลหรือชื่อเล่น"><p id="dmsg" class="ok"></p></div><div id="devList"><p class="muted">กำลังโหลด…</p></div></div><div id="examsCard" class="card page" data-page="exams"><h2>ใส่ข้อสอบ</h2><p class="muted">นำเข้าชุดข้อสอบจากไฟล์ .json ที่เตรียมไว้ (เลือกได้หลายไฟล์พร้อมกัน) แล้วตั้งค่าฟรี / พรีเมียม และเวลาสอบของแต่ละชุด</p>
+<div class="imp"><label class="impbtn">เลือกไฟล์ข้อสอบ (.json)<input id="examFiles" type="file" accept=".json,application/json" multiple hidden></label><div id="impList"></div><button type="button" id="impGo" class="hide">นำเข้าข้อสอบ</button><p id="impMsg"></p></div>
+<h3 style="margin-top:22px">ชุดข้อสอบในเว็บ <span id="examTotal" class="muted" style="font-weight:600;font-size:14px"></span></h3><div id="examList"><p class="muted">กำลังโหลด…</p></div></div></section></div>
+<script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";import{getFirestore,collection,getDocs,doc,updateDoc,getDoc,setDoc,deleteDoc,runTransaction}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";const firebaseConfig={apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",authDomain:"kasorb-test-ad000.firebaseapp.com",projectId:"kasorb-test-ad000",storageBucket:"kasorb-test-ad000.firebasestorage.app",messagingSenderId:"999267444865",appId:"1:999267444865:web:5509772cd5f94af768c580"};/* แยกการล็อกอินของแอดมินจากหน้าเว็บหลัก (ตั้งชื่อ app ต่างกัน ระบบจะจำ session แยกกัน) */
 const app=initializeApp(firebaseConfig,"kasorb-admin"),auth=getAuth(app),db=getFirestore(app),$=x=>document.getElementById(x),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 const ADMIN="thananitwit@gmail.com";
 const say=(t,cls)=>{$("msg").textContent=t;$("msg").className=cls||""};
@@ -93,13 +109,13 @@ const q=$("q").value.trim().toLowerCase();
 const counts={all:members.length,free:0,yearly:0,lifetime:0};
 members.forEach(u=>counts[groupOf(u)]++);
 document.querySelectorAll("#tabs button").forEach(t=>{t.classList.toggle("on",t.dataset.f===filter);t.querySelector("b").textContent=counts[t.dataset.f]});
-const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)));
+const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)||codeOf(u).includes(q.replace(/^#/,""))));
 if(!members.length){$("users").innerHTML='<p class="muted">ยังไม่มีสมาชิก</p>';return}
 if(!list.length){$("users").innerHTML='<p class="muted">ไม่พบสมาชิก</p>';return}
 $("users").innerHTML=`<table class="mt"><thead><tr><th>ชื่อเล่น</th><th class="col-mail">อีเมล</th><th>แพ็กเกจ</th><th></th></tr></thead><tbody>${list.map(u=>{const w=wantOf(u);const id=esc(u.id);
 const note=w.changed?`<div class="exp pend-note">ยังไม่ได้บันทึก${w.v==="yearly"?"":` — จะเปลี่ยนเป็น${PLANS.find(p=>p[0]===w.v)[1]}`}</div>`:"";
 const info=w.v==="yearly"?`<div class="exp yearly">${w.changed?"ใช้ได้ถึง":"หมดอายุ"} <input type="date" class="until" data-id="${id}" value="${esc(w.until)}"></div>`:(w.changed?"":`<div class="exp ${w.v}">${planNote(u)}</div>`);
-return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
+return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}<span class="mno">${esc(codeOf(u)||"ยังไม่มีรหัส")}</span>${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
 const find=id=>members.find(x=>x.id===id);
 document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{const u=find(b.parentElement.dataset.id);if(u)setPending(u,b.dataset.v)});
 document.querySelectorAll(".until").forEach(i=>i.onchange=()=>{const u=find(i.dataset.id);if(u&&i.value)setPending(u,"yearly",i.value)});
@@ -148,7 +164,7 @@ async function resetDevices(id){const u=members.find(x=>x.id===id);if(!u)return;
 if(!confirm(`ยืนยันลบอุปกรณ์ทั้งหมดของ ${who}\nเครื่องที่ผูกไว้ทั้งหมดจะถูกลบ และเครื่องที่กำลังใช้งานอยู่จะออกจากระบบ\nใช่หรือไม่?`))return;
 try{await deleteDoc(doc(db,"devices",id));devices.delete(id);renderDevices();$("dmsg").className="ok";$("dmsg").textContent=`ลบอุปกรณ์ทั้งหมดของ ${who} แล้ว`}catch(e){$("dmsg").className="";$("dmsg").textContent=`รีเซ็ตไม่สำเร็จ (${e.code||e.message})`}}
 $("dq").oninput=renderDevices;
-async function load(){try{let s=await getDocs(collection(db,"users")),a=[];s.forEach(d=>{let u=d.data();if(u.role!=="admin"&&(u.email||"").toLowerCase()!==ADMIN)a.push({id:d.id,...u})});a.sort((x,y)=>(x.email||"").localeCompare(y.email||""));members=a;setDoc(doc(db,"site","home"),{members:a.length},{merge:true}).catch(()=>{});renderMembers();loadDevices()}catch(e){$("users").textContent="โหลดรายชื่อไม่ได้"}}
+async function load(){try{let s=await getDocs(collection(db,"users")),a=[];s.forEach(d=>{let u=d.data();if(u.role!=="admin"&&(u.email||"").toLowerCase()!==ADMIN)a.push({id:d.id,...u})});a.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9)||(x.email||"").localeCompare(y.email||""));members=a;setDoc(doc(db,"site","home"),{members:a.length},{merge:true}).catch(()=>{});renderMembers();loadDevices();backfillMemberNo()}catch(e){$("users").textContent="โหลดรายชื่อไม่ได้"}}
 function goPage(name){if(!document.querySelector(`.page[data-page="${name}"]`))name="home";document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.dataset.page===name));document.querySelectorAll(".side-nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===name));try{localStorage.setItem("kasorbAdminPage",name)}catch(e){}if(name==="devices"&&members.length)loadDevices();window.scrollTo(0,0);measureSticky()}
 document.querySelectorAll(".side-nav button").forEach(b=>b.onclick=()=>{goPage(b.dataset.go);menu(false)});
 /* มือถือ: เปิด/ปิดเมนูด้านซ้าย */
@@ -167,7 +183,7 @@ function measureSticky(){const mt=document.querySelector(".mtop");document.docum
 addEventListener("resize",measureSticky);
 if(window.ResizeObserver){const ro=new ResizeObserver(measureSticky);document.querySelectorAll(".stick").forEach(el=>ro.observe(el))}
 function showShell(on){$("boot").classList.add("hide");document.querySelector("main").classList.toggle("hide",on);$("shell").classList.toggle("hide",!on);document.body.classList.toggle("in",on)}
-onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome()});
+onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
 async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
 /* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
 function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>ลิงก์รูป (ไม่บังคับ)</label><input class="ni" placeholder="https://..."><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".ni").value=n.image||"";r.querySelector(".nl").value=n.link||"";r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
@@ -175,6 +191,123 @@ function numberNews(){const rows=[...$("newsRows").children];rows.forEach((r,i)=
 function setNewsRows(list){$("newsRows").innerHTML="";(list.length?list:[{}]).slice(0,10).forEach(newsRow)}
 function readNewsRows(){return[...$("newsRows").children].map(r=>{const n={text:r.querySelector(".nt").value.trim()},i=r.querySelector(".ni").value.trim(),l=r.querySelector(".nl").value.trim();if(i)n.image=i;if(l)n.link=l;return n}).filter(n=>n.text).slice(0,10)}
 $("newsAdd").onclick=()=>newsRow();setNewsRows([]);
-$("saveHome").onclick=async()=>{const old=await getDoc(doc(db,"site","home")).then(s=>s.exists()?s.data():{}).catch(()=>({}));const oldDates=new Map((old.news||[]).map(n=>[n.text,n.date]));const today=new Date().toISOString().slice(0,10);const news=readNewsRows().map(n=>({...n,date:oldDates.get(n.text)||today}));const badUrl=news.find(n=>[n.image,n.link].some(u=>u&&!/^https:\/\/\S+$/.test(u)));if(badUrl){$("homeMsg").className="err";$("homeMsg").textContent="ลิงก์ต้องขึ้นต้นด้วย https:// (ข่าว: "+badUrl.text+")";return}const choices=[0,1,2,3].map(i=>$("dailyC"+i).value.trim()).filter(Boolean);try{await setDoc(doc(db,"site","home"),{exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title),totalQuestions:Number($("totalQuestions").value)||0,news,daily:{question:$("dailyQ").value.trim(),choices,answer:Math.min(Number($("dailyAns").value),Math.max(choices.length-1,0)),explanation:$("dailyExp").value.trim(),english:$("dailyEng").checked},updatedAt:new Date().toISOString()},{merge:true});$("homeMsg").className="ok";$("homeMsg").textContent="บันทึกแล้ว"}catch(e){$("homeMsg").className="";$("homeMsg").textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)"}};
+$("saveHome").onclick=async()=>{const old=await getDoc(doc(db,"site","home")).then(s=>s.exists()?s.data():{}).catch(()=>({}));const oldDates=new Map((old.news||[]).map(n=>[n.text,n.date]));const today=new Date().toISOString().slice(0,10);const news=readNewsRows().map(n=>({...n,date:oldDates.get(n.text)||today}));const badUrl=news.find(n=>[n.image,n.link].some(u=>u&&!/^https:\/\/\S+$/.test(u)));if(badUrl){$("homeMsg").className="err";$("homeMsg").textContent="ลิงก์ต้องขึ้นต้นด้วย https:// (ข่าว: "+badUrl.text+")";return}const choices=[0,1,2,3].map(i=>$("dailyC"+i).value.trim()).filter(Boolean);try{await setDoc(doc(db,"site","home"),{exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title),news,daily:{question:$("dailyQ").value.trim(),choices,answer:Math.min(Number($("dailyAns").value),Math.max(choices.length-1,0)),explanation:$("dailyExp").value.trim(),english:$("dailyEng").checked},updatedAt:new Date().toISOString()},{merge:true});$("homeMsg").className="ok";$("homeMsg").textContent="บันทึกแล้ว"}catch(e){$("homeMsg").className="";$("homeMsg").textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)"}};
+
+/* ใส่ข้อสอบ: นำเข้าไฟล์ .json เป็น exams/{id} (ข้อมูลชุด) + examItems/{id} (ข้อสอบ เฉลย คำอธิบาย) */
+let pendingExams=[];
+function checkExam(d){
+  const errs=[];
+  if(!d||typeof d!=="object") return ["ไฟล์ไม่ถูกต้อง"];
+  if(!/^[a-z0-9_-]{2,40}$/i.test(d.id||"")) errs.push("ไม่มีรหัสชุด (id)");
+  if(!d.title) errs.push("ไม่มีชื่อชุด");
+  const items=Array.isArray(d.items)?d.items:[];
+  if(!items.length) errs.push("ไม่มีข้อสอบ");
+  items.forEach((it,i)=>{
+    if(!Array.isArray(it.c)||it.c.length!==4) errs.push(`ข้อ ${i+1}: ตัวเลือกไม่ครบ 4`);
+    if(!(Number.isInteger(it.a)&&it.a>=0&&it.a<4)) errs.push(`ข้อ ${i+1}: ไม่มีเฉลย`);
+  });
+  return errs.slice(0,5);
+}
+$("examFiles").onchange=async()=>{
+  pendingExams=[];$("impMsg").textContent="";
+  const files=[...$("examFiles").files];
+  for(const f of files){
+    let d=null,errs=[];
+    try{d=JSON.parse(await f.text());errs=checkExam(d)}catch(e){errs=["อ่านไฟล์ไม่ได้"]}
+    pendingExams.push({name:f.name,d,errs});
+  }
+  $("impList").innerHTML=pendingExams.map(p=>`<div class="irow"><div><b>${esc(p.d?.title||p.name)}</b><span class="muted">${p.d?.items?.length||0} ข้อ · ${p.d?.tier==="free"?"ฟรี":"พรีเมียม"}</span></div><div class="${p.errs.length?"bad":"good"}">${p.errs.length?esc(p.errs.join(", ")):"พร้อมนำเข้า"}</div></div>`).join("");
+  $("impGo").classList.toggle("hide",!pendingExams.some(p=>!p.errs.length));
+  $("examFiles").value="";
+};
+$("impGo").onclick=async()=>{
+  const ok=pendingExams.filter(p=>!p.errs.length);
+  if(!ok.length) return;
+  const exist=ok.filter(p=>examSets.some(e=>e.id===p.d.id));
+  if(exist.length&&!confirm(`มีชุดเดิมอยู่แล้ว ${exist.length} ชุด (${exist.map(p=>p.d.title).join(", ")})\nนำเข้าทับของเดิมใช่หรือไม่?`)) return;
+  $("impGo").disabled=true;$("impMsg").className="ok";
+  let done=0;
+  try{
+    for(const p of ok){
+      const d=p.d,old=examSets.find(e=>e.id===d.id);
+      $("impMsg").textContent=`กำลังนำเข้า ${d.title}…`;
+      const items=d.items.map((it,i)=>({n:it.n||i+1,sec:it.sec??0,q:String(it.q||""),c:it.c.map(String),a:it.a,exp:String(it.exp||""),eng:!!it.eng,
+        ...(it.img?{img:it.img}:{}),...(it.expImg?{expImg:it.expImg}:{}),...(it.passage?{passage:it.passage}:{}),...(it.passageImg?{passageImg:it.passageImg}:{}),...(it.group?{group:it.group}:{}),...(it.fig?{fig:true}:{})}));
+      const keys=items.map(it=>it.a).join("");
+      const keyVersion=old?(old.keys===keys?old.keyVersion||1:(old.keyVersion||1)+1):1;
+      /* รูปประกอบข้อสอบ/คำอธิบาย: เก็บใน examImg (อ่านได้ตามสิทธิ์ของชุด) ไม่เก็บในเว็บที่ใครก็เปิดได้ */
+      const imgs=d.images&&typeof d.images==="object"?d.images:{};
+      const imgKeys=Object.keys(imgs).filter(k=>/^[0-9a-f]{16,40}$/.test(k)&&/^data:image\/(png|jpeg);base64,/.test(imgs[k]));
+      let oldKeys=[];
+      if(old){try{const o=await getDoc(doc(db,"examItems",d.id));oldKeys=(o.exists()&&o.data().imgs)||[]}catch(e){}}
+      let k=0;
+      for(const key of imgKeys){k++;$("impMsg").textContent=`กำลังนำเข้า ${d.title}… รูป ${k}/${imgKeys.length}`;await setDoc(doc(db,"examImg",key),{exam:d.id,d:imgs[key]})}
+      for(const key of oldKeys.filter(x=>!imgKeys.includes(x))){try{await deleteDoc(doc(db,"examImg",key))}catch(e){}}
+      await setDoc(doc(db,"examItems",d.id),{items,imgs:imgKeys,updatedAt:new Date().toISOString()});
+      await setDoc(doc(db,"exams",d.id),{title:d.title,kind:d.kind||"mock",track:d.track||[],tier:old?.tier||d.tier||"premium",
+        minutes:old?.minutes||d.minutes||Math.max(1,items.length),count:items.length,sections:d.sections||[],order:d.order??99,keys,keyVersion,updatedAt:new Date().toISOString()});
+      done++;
+    }
+    $("impMsg").textContent=`นำเข้าแล้ว ${done} ชุด`;
+    pendingExams=[];$("impList").innerHTML="";$("impGo").classList.add("hide");
+    await loadExams();
+  }catch(e){$("impMsg").className="err";$("impMsg").textContent=`นำเข้าไม่สำเร็จ (${e.code||e.message}) นำเข้าแล้ว ${done} ชุด — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+  $("impGo").disabled=false;
+};
+let examSets=[];
+async function loadExams(){
+  try{
+    const s=await getDocs(collection(db,"exams"));examSets=[];s.forEach(d=>examSets.push({id:d.id,...d.data()}));
+    examSets.sort((a,b)=>(a.order??99)-(b.order??99)||String(a.title).localeCompare(String(b.title)));
+    renderExams();
+    const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
+    $("totalQuestions").value=total;
+    setDoc(doc(db,"site","home"),{totalQuestions:total},{merge:true}).catch(()=>{});
+  }catch(e){$("examList").innerHTML=`<p class="err">โหลดชุดข้อสอบไม่ได้ (${esc(e.code||e.message)}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว</p>`}
+}
+function renderExams(){
+  const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
+  $("examTotal").textContent=examSets.length?`${examSets.length} ชุด · ${total.toLocaleString()} ข้อ`:"";
+  if(!examSets.length){$("examList").innerHTML='<p class="muted">ยังไม่มีชุดข้อสอบ</p>';return}
+  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span>${e.count} ข้อ</span></div><div class="ctl">
+  <select data-id="${esc(e.id)}" class="tier"><option value="premium"${e.tier!=="free"?" selected":""}>พรีเมียม</option><option value="free"${e.tier==="free"?" selected":""}>ฟรี</option></select>
+  <label style="margin:0;font-size:13px;color:#666">เวลา <input data-id="${esc(e.id)}" class="mins" type="number" min="1" max="600" value="${Number(e.minutes)||e.count}"> นาที</label>
+  <button type="button" class="del" data-id="${esc(e.id)}">ลบ</button></div></div>`).join("");
+  document.querySelectorAll("#examList .tier").forEach(el=>el.onchange=()=>saveExamMeta(el.dataset.id,{tier:el.value}));
+  document.querySelectorAll("#examList .mins").forEach(el=>el.onchange=()=>{const v=Math.min(600,Math.max(1,Math.round(Number(el.value)||0)));el.value=v;saveExamMeta(el.dataset.id,{minutes:v})});
+  document.querySelectorAll("#examList .del").forEach(el=>el.onclick=()=>deleteExam(el.dataset.id));
+}
+async function saveExamMeta(id,data){
+  const e=examSets.find(x=>x.id===id);
+  try{await updateDoc(doc(db,"exams",id),data);Object.assign(e,data);$("impMsg").className="ok";$("impMsg").textContent=`บันทึกแล้ว: ${e.title}`}
+  catch(err){$("impMsg").className="err";$("impMsg").textContent=`บันทึกไม่สำเร็จ (${err.code||err.message})`;renderExams()}
+}
+async function deleteExam(id){
+  const e=examSets.find(x=>x.id===id);if(!e)return;
+  if(!confirm(`ยืนยันลบ "${e.title}" (${e.count} ข้อ)\nนักเรียนจะทำชุดนี้ไม่ได้อีก\nใช่หรือไม่?`))return;
+  try{try{const o=await getDoc(doc(db,"examItems",id));for(const key of (o.exists()&&o.data().imgs)||[]) await deleteDoc(doc(db,"examImg",key))}catch(e){}
+    await deleteDoc(doc(db,"examItems",id));await deleteDoc(doc(db,"exams",id));await loadExams();$("impMsg").className="ok";$("impMsg").textContent=`ลบ ${e.title} แล้ว`}
+  catch(err){$("impMsg").className="err";$("impMsg").textContent=`ลบไม่สำเร็จ (${err.code||err.message})`}
+}
+
+function thaiYmd(ms){const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms));const g=t=>p.find(x=>x.type===t).value;return String((Number(g("year"))+543)%100).padStart(2,"0")+g("month")+g("day")}
+/* รหัสสมาชิก #วันที่สมัคร(ปีพ.ศ.2หลัก+เดือน+วัน)+ลำดับ5หลัก เช่น #69092900001 */
+function codeOf(u){return Number.isInteger(u.memberNo)&&u.memberNo>0&&/^\d{6}$/.test(u.memberDate||"")?"#"+u.memberDate+String(u.memberNo).padStart(5,"0"):""}
+const tsOf=v=>v&&typeof v.toMillis==="function"?v.toMillis():(v&&v.seconds?v.seconds*1000:(Date.parse(v)||0));
+/* สมาชิกเดิมที่ยังไม่มีรหัส: ออกรหัสให้ตามวันที่สมัคร (เก่าสุดได้เลขน้อยสุด) */
+async function backfillMemberNo(){
+  const todo=members.filter(u=>!Number.isInteger(u.memberNo)||!u.memberDate).sort((a,b)=>tsOf(a.createdAt)-tsOf(b.createdAt));
+  if(!todo.length) return;
+  try{
+    await runTransaction(db,async tx=>{
+      const cref=doc(db,"counters","member");const c=await tx.get(cref);
+      const snaps=await Promise.all(todo.map(u=>tx.get(doc(db,"users",u.id))));
+      let n=c.exists()?Number(c.data().n)||0:0;
+      snaps.forEach((sn,i)=>{if(!sn.exists())return;const d=sn.data(),date=d.memberDate||thaiYmd(tsOf(d.createdAt)||Date.now());if(!Number.isInteger(d.memberNo)){n++;tx.update(doc(db,"users",todo[i].id),{memberNo:n,memberDate:date});todo[i].memberNo=n}else{if(!d.memberDate)tx.update(doc(db,"users",todo[i].id),{memberDate:date});todo[i].memberNo=d.memberNo}todo[i].memberDate=date});
+      tx.set(cref,{n});
+    });
+    members.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9));renderMembers();
+  }catch(e){console.error(e);$("umsg").className="err";$("umsg").textContent=`ออกรหัสสมาชิกไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+}
 </script><div class="ihelp hide" id="installHelp" role="dialog" aria-modal="true" aria-labelledby="ihTitle"><div class="ibox"><h3 id="ihTitle">ติดตั้งหน้าแอดมินลงหน้าจอ</h3><div class="istep"><b>iPhone / iPad (Safari)</b><ol><li>กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศรชี้ขึ้น)</li><li>กด “เพิ่มไปยังหน้าจอโฮม”</li><li>ชื่อจะเป็น “แอดมิน” แล้วกด “เพิ่ม”</li></ol></div><div class="istep"><b>Android (Chrome)</b><ol><li>กดปุ่มจุดสามจุด มุมขวาบน</li><li>กด “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”</li></ol></div><p class="muted">จะได้ไอคอน “แอดมิน” สีกรมท่า แยกจากแอป “กะสอบ” ของนักเรียน</p><button type="button" id="installHelpClose">เข้าใจแล้ว</button></div></div>
 </body></html>
