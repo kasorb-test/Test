@@ -6030,7 +6030,7 @@ const canTake=e=>e && (e.tier==="free" || isPremium());
 async function loadCatalog(force){
   if(examCatalog && !force) return examCatalog;
   const snap=await getDocs(collection(db,"exams"));
-  examCatalog=[];snap.forEach(d=>examCatalog.push({id:d.id,...d.data()}));
+  examCatalog=[];snap.forEach(d=>{const e={id:d.id,...d.data()};if(Number(e.count)>0)examCatalog.push(e)});  // ชุดที่ยังไม่มีข้อสอบ ไม่แสดงให้นักเรียน
   examCatalog.sort((a,b)=>(a.order??99)-(b.order??99)||String(a.title).localeCompare(String(b.title)));
   return examCatalog;
 }
@@ -6075,7 +6075,7 @@ async function openTrack(id){
   list.filter(e=>e.kind!=="subject" && (e.track||[]).includes(id)).forEach(e=>{
     const best=prog.best[e.id];
     const el=document.createElement("div");el.className="setc";
-    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"ฟรี":"พรีเมียม"}</span></h4>
+    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span></h4>
       <div class="meta">${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที</div>
       ${best?`<div class="best">ทำแล้ว ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}</div>
       <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำข้อสอบ"):"สำหรับสมาชิกพรีเมียม"}</button>`;
