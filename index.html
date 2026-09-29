@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sriracha&amp;text=I%20WANBEPOLICFR&amp;display=swap" rel="stylesheet">
+<!-- ฟอนต์สารบรรณ สำหรับข้อสอบทุกข้อ -->
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 
@@ -19,6 +21,8 @@
   --text:#222;
   --muted:#777;
   --sidebar:230px;
+  /* ข้อสอบทุกข้อใช้ฟอนต์สารบรรณ (ใช้ class exam-text กับข้อสอบหน้าอื่นด้วย) */
+  --exam-font:"Sarabun","TH Sarabun New","TH SarabunPSK",sans-serif;
 }
 
 .leaderboard-item.rank-1{
@@ -2539,6 +2543,12 @@ input{
   color:#555;
 }
 .daily-result b{color:#15803d}
+/* ข้อสอบ: ฟอนต์สารบรรณ ตัวเล็กกว่าฟอนต์อื่นเล็กน้อยจึงขยายขนาดขึ้น */
+.exam-text,.daily-question,.daily-choice,.daily-result{font-family:var(--exam-font)}
+.daily-question{font-size:18px;font-weight:700}
+.daily-choice{font-size:17px}
+.daily-choice .choice-letter{font-family:Arial,sans-serif}
+.daily-result{font-size:16px}
 .stat-card{border-radius:18px}
 .stat-value{color:var(--orange);font-weight:900}
 @media(max-width:800px){
