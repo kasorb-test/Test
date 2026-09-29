@@ -2916,12 +2916,24 @@ body.exam-mode .hb .hb-exam{display:flex;flex-direction:column;justify-content:c
 .hb-exam span{font-size:13px;opacity:.9;margin-top:2px}
 @media(min-width:761px){body.exam-mode .xttl b{display:none}body.exam-mode .xttl span{font-size:14px;color:#16305f;font-weight:700}}
 @media(min-width:761px){body.exam-mode .hb .hb-exam{order:0}body.exam-mode .hb .hb-card{order:1;margin-left:auto}}
-@media(max-width:760px){body.exam-mode .hb .hb-exam{display:none}
-body.exam-mode .xbar{flex-wrap:wrap;row-gap:6px;padding-top:8px;padding-bottom:8px}
-body.exam-mode .xttl{order:-1;flex:1 1 100%;display:flex;align-items:baseline;gap:8px}
-body.exam-mode .xttl b{flex:1;min-width:0;white-space:normal;font-size:14px;line-height:1.35}
-body.exam-mode .xttl span{flex:0 0 auto;display:block}
-body.exam-mode #xSheetBtn{margin-left:auto}}
+.hb-ctog{display:none}
+/* มือถือ: แถบส้มแสดงข้อมูลชุดข้อสอบ ข้อมูลสมาชิกซ่อนไว้ กดปุ่มขวาเพื่อเปิด/ซ่อน */
+@media(max-width:760px){
+body.exam-mode .hb{flex-wrap:wrap!important;align-items:center;row-gap:8px!important}
+body.exam-mode .hb .hb-exam{display:flex;flex:1 1 0;padding:0}
+body.exam-mode .hb .hb-exam small{font-size:11px}
+body.exam-mode .hb .hb-exam b{font-size:15px;line-height:1.35}
+body.exam-mode .hb .hb-exam span{font-size:11.5px}
+body.exam-mode .hb .hb-ctog{display:flex;align-items:center;gap:2px;flex:0 0 auto;padding:3px 6px 3px 3px;border:1px solid rgba(255,255,255,.55);border-radius:999px;background:rgba(255,255,255,.18);pointer-events:auto;cursor:pointer}
+.hb-ctog img{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:2px solid #fff}
+.hb-ctog svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+body.exam-card-open .hb-ctog svg{transform:rotate(180deg)}
+body.exam-mode:not(.exam-card-open) .hb .hb-card{display:none}
+body.exam-mode .hb .hb-card{order:5;flex:1 1 100%}
+body.exam-mode .xttl b{display:none}
+body.exam-mode .xttl span{font-size:13px;color:#16305f;font-weight:700;overflow:visible;text-overflow:clip}
+}
+@media(max-width:380px){body.exam-mode .xttl span{font-size:12px}body.exam-mode .xttl{flex:0 0 auto;overflow:visible}body.exam-mode #xSheetBtn{margin-left:auto}}
 body.exam-mode .xprog{top:calc(var(--hbH,0px) + var(--xbH,58px))}body.exam-mode .xover{top:calc(var(--hbH,0px) + var(--xbH,58px) + 8px)}body.exam-mode .xbar{top:var(--hbH,0px)}body.exam-mode .xside{top:calc(var(--hbH,0px) + var(--xbH,58px) + 26px);max-height:calc(100vh - var(--hbH,0px) - var(--xbH,58px) - 42px)}body.exam-mode .xi{scroll-margin-top:calc(var(--hbH,0px) + var(--xbH,58px) + 32px)}
 body.exam-mode .app-main{margin-left:0!important}
 body.exam-mode .content{padding:0!important;max-width:none!important}
@@ -3431,6 +3443,7 @@ LINE OA @kasorb
 <div class="hb-quote" id="topQuote"></div>
 </button>
 <div class="hb-exam" id="hbExam"><small>กำลังทำแบบทดสอบ</small><b id="hbExamTitle"></b><span id="hbExamSub"></span></div>
+<button type="button" class="hb-ctog" id="hbCardToggle" aria-expanded="false" aria-label="เปิดหรือซ่อนข้อมูลสมาชิก"><img id="hbCtogAv" src="avatar20.png" alt=""><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
 <div class="hb-guest" id="guestBox"><b>ยังไม่ได้เข้าสู่ระบบ</b><span>เข้าสู่ระบบเพื่อทำแบบทดสอบ เก็บ XP และเลื่อนยศ</span><div><button type="button" id="guestLoginBtn">เข้าสู่ระบบ</button><button type="button" id="guestRegBtn" class="reg">สมัครสมาชิก</button></div></div>
 </header>
 <main class="content">
@@ -4080,6 +4093,7 @@ $("authClose").onclick=closeLogin;
 
 /* เมนูที่ส่วนหัว: ดึงรายการย่อยจากเมนูด้านข้าง ให้ตรงกันเสมอ */
 let tnY=0;
+$("hbCardToggle").onclick=()=>{const open=document.body.classList.toggle("exam-card-open");$("hbCardToggle").setAttribute("aria-expanded",open)};
 document.body.appendChild($("tnPanel"));  // อยู่นอกแถบหัว ไม่ให้ถูกตัดขอบเมื่อแถบหัวย่อ
 const TN_SRC={tests:'[data-group="tests"] .submenu',results:'[data-group="results"] .submenu',account:'[data-group="account"] .submenu',contact:'[data-group="contact"] .submenu'};
 function closeTopMenu(){$("tnPanel").classList.add("hidden");document.querySelectorAll(".tn-group.open").forEach(b=>b.classList.remove("open"))}
@@ -6435,6 +6449,7 @@ function renderExam(){
   const {meta,items}=exam;
   $("xTitle").textContent=exam.secs?`${meta.title} (เฉพาะ ${exam.secs.length} วิชา)`:meta.title;
   $("hbExamTitle").textContent=meta.title;
+  $("hbCtogAv").src=$("topAvatar").src;document.body.classList.remove("exam-card-open");
   $("hbExamSub").textContent=exam.secs?`เฉพาะ ${exam.secs.length} วิชา · ${exam.items.length} ข้อ · ${exam.minutes} นาที`:`ทำครบทั้งชุด · ${exam.items.length} ข้อ · ${exam.minutes} นาที`;
   const paper=$("xPaper");paper.innerHTML="";
   let lastSec="";
