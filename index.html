@@ -2692,6 +2692,14 @@ input{
 .hb-text .hb-today{font-size:15px}
 @media(max-width:1100px){.hb-text .hb-hi{font-size:22px}.hb-text .hb-today{font-size:14px}}
 .hb.mini .hb-text .hb-hi{font-size:21px}
+/* "สวัสดี ชื่อ" แล้วต่อด้วย "วันนี้คุณ…" บรรทัดเดียวกัน จอแคบค่อยขึ้นบรรทัดใหม่ */
+.hb-line{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:12px;row-gap:0;margin-top:2px}
+/* ลดระยะห่างระหว่างบรรทัด (ฟอนต์ศรีราชาบรรทัดสูง) */
+.hb-text{line-height:1.5}
+.hb-text .hb-today{row-gap:6px}
+.hb-text .hb-count{padding-top:3px;padding-bottom:3px}
+.hb-line .hb-hi{flex:0 1 auto;min-width:0;margin-top:0}
+.hb-line .hb-today{margin-top:0}
 /* คำขวัญสีดำมีเงา ให้ดูนูนมีมิติ */
 .hb-slogan{font-size:18px;letter-spacing:.05em;opacity:1;color:#141414;text-shadow:0 1px 0 rgba(255,255,255,.45),0 2px 0 rgba(255,255,255,.18),0 4px 8px rgba(0,0,0,.35)}
 /* คำขวัญอยู่ในป้ายสีขาว แบบเดียวกับ "วันนี้ทำไปแล้ว N ข้อ" */
@@ -2952,10 +2960,12 @@ LINE OA @kasorb
 <button aria-label="เปิดเมนู" class="hb-burger" id="menuToggle" type="button"><i></i></button>
 <div class="hb-text">
 <div class="hb-slogan">I WANNA BE A POLICE OFFICER</div>
+<div class="hb-line">
 <div class="hb-hi" id="heroHello">สวัสดี</div>
 <div class="hb-today">
 <span id="heroTodayAsk">วันนี้คุณทำข้อสอบแล้วหรือยัง?</span>
 <span class="hb-count" id="heroTodayCount">วันนี้ทำไปแล้ว 0 ข้อ</span>
+</div>
 </div>
 </div>
 <button class="hb-card" id="topProfileBtn" type="button">
