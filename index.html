@@ -4137,8 +4137,6 @@ function currentLevel(){
   if(done!==null && siteTotalQuestions>0) return levelFor(done,siteTotalQuestions,currentData?.xp);
   return Math.max(0,Math.min(MAX_LEVEL,Math.floor(Number(currentData?.level)||0)));
 }
-/* ตั้งแต่ นสต. ขึ้นไปเป็นยศตำรวจ ผู้หญิงต่อท้ายว่า "หญิง" */
-const FIRST_POLICE_LEVEL=4;
 const MAX_LEVEL=PREMIUM_RANKS.length-1;
 
 /* answered = จำนวนข้อที่เคยทำ (ไม่นับซ้ำ), total = จำนวนข้อสอบทั้งหมดในเว็บ */
@@ -4170,7 +4168,8 @@ if(currentData?.plan!=="premium"){
 const level=currentLevel();
 let rank=premiumRank(level);
 
-if(currentData?.gender==="female" && level>=FIRST_POLICE_LEVEL){
+/* ผู้หญิงต่อท้ายยศว่า "หญิง" ทุกยศ ตั้งแต่ Lv.1 */
+if(currentData?.gender==="female" && level>0){
   rank += "หญิง";
 }
 
