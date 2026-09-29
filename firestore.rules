@@ -53,10 +53,11 @@ service cloud.firestore {
         && request.resource.data.lastSeen == request.time;
     }
 
-    // อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง (active) เปลี่ยนเครื่องต้องให้แอดมินรีเซ็ต
+    // อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง (active) เครื่องชนิดเดียวกันแทนที่กันเองได้ นอกนั้นแอดมินลบให้
     function validDevices(d) {
       // lastSwapAt: ฟิลด์จากเวอร์ชันก่อน เก็บไว้ไม่ให้เอกสารเก่าบันทึกไม่ได้
-      return d.keys().hasOnly(["ids", "active", "activeAt", "lastSwapAt"])
+      // replaced: id ของเครื่องเดิมที่ถูกแทนที่ด้วยเครื่องชนิดเดียวกัน
+      return d.keys().hasOnly(["ids", "active", "activeAt", "lastSwapAt", "replaced"])
         && d.ids is map
         && d.ids.keys().size() >= 1 && d.ids.keys().size() <= 2
         // active = เครื่องที่ล็อกอินล่าสุด (null หลังแอดมินลบเครื่องที่ใช้งานอยู่)
@@ -69,6 +70,18 @@ service cloud.firestore {
       // เจ้าของสลับเครื่องที่ใช้งาน หรือเพิ่มเครื่องที่ 2 ได้ แต่ลบ/แทนที่เครื่องเดิมไม่ได้
       allow update: if isOwner(uid) && validDevices(request.resource.data)
         && request.resource.data.ids.keys().hasAll(resource.data.ids.keys());
+      // ครบ 2 เครื่องแล้ว: เครื่องใหม่แทนที่เครื่องเดิมที่ชื่อชนิดเดียวกันได้ 1 เครื่อง (เช่น iPad · Safari)
+      allow update: if isOwner(uid) && validDevices(request.resource.data)
+        && request.resource.data.get("replaced", "") is string
+        && request.resource.data.replaced in resource.data.ids
+        && !(request.resource.data.replaced in request.resource.data.ids)
+        && request.resource.data.active in request.resource.data.ids
+        && !(request.resource.data.active in resource.data.ids)
+        && request.resource.data.ids.keys().size() == resource.data.ids.keys().size()
+        && request.resource.data.ids.keys().hasAll(
+             resource.data.ids.keys().removeAll([request.resource.data.replaced]))
+        && resource.data.ids[request.resource.data.replaced].name
+             == request.resource.data.ids[request.resource.data.active].name;
       // แอดมินลบบางเครื่อง หรือลบทั้งหมดได้
       allow update: if isAdmin() && validDevices(request.resource.data);
       allow delete: if isAdmin();

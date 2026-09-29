@@ -5632,7 +5632,7 @@ async function loadHome(){
 }
 
 
-/* อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง เปลี่ยนเครื่องต้องให้แอดมินรีเซ็ต */
+/* อุปกรณ์: ผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง เครื่องชนิดเดียวกันแทนที่กันเองได้ นอกนั้นต้องให้แอดมินลบ */
 const ADMIN_EMAIL="thananitwit@gmail.com";
 const MAX_DEVICES=2;
 const OTHER_DEVICE_MSG="บัญชีนี้เข้าสู่ระบบจากเครื่องอื่น จึงออกจากระบบในเครื่องนี้";
@@ -5703,8 +5703,20 @@ async function claimDevice(user){
     update={[`ids.${me}`]:entry,active:me,activeAt:serverTimestamp()};
     if(!data) update={ids:{[me]:entry},active:me,activeAt:serverTimestamp()};
   }else{
-    kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว หากต้องการเข้าระบบ กรุณาติดต่อแอดมิน`);
-    return false;
+    /*
+      ครบ 2 เครื่องแล้ว แต่เป็นเครื่องชนิดเดียวกับที่ผูกไว้ (เช่น iPad · Safari)
+      ให้แทนที่เครื่องเดิมอัตโนมัติ: iPhone/iPad ที่ติดตั้งลงหน้าจอ ระบบนับแยกจาก Safari
+    */
+    const same=Object.entries(ids).filter(([,v])=>v && v.name===entry.name).map(([k])=>k);
+    const old=same.find(k=>k!==data?.active) || same[0];
+    if(!old){
+      kickOut(`บัญชีนี้ผูกครบ ${MAX_DEVICES} เครื่องแล้ว หากต้องการเข้าระบบ กรุณาติดต่อแอดมิน`);
+      return false;
+    }
+    const next={...ids};
+    delete next[old];
+    next[me]=entry;
+    update={ids:next,active:me,activeAt:serverTimestamp(),replaced:old};
   }
 
   try{
