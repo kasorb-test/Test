@@ -3037,6 +3037,22 @@ body:not(.review-mode) .rvbar{display:none}
 .asheet.navy .as-all{background:linear-gradient(120deg,#ff8a2b,#e2520a)}
 .asheet.navy .as-ring{background:conic-gradient(#16305f calc(var(--p)*1%),rgba(255,255,255,.3) 0)}
 .asheet.navy .as-ring div{background:#f0701c}
+/* เมนูที่ส่วนหัว (เหมือนเมนูด้านข้าง) กดแล้วรายการย่อยเลื่อนลง */
+.hb{flex-wrap:wrap!important}.topnav{order:-1;flex:0 0 100%;width:100%;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:-4px 0 2px}
+.topnav::-webkit-scrollbar{display:none}
+.tn-item{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;padding:7px 13px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.14);color:#fff;font:700 13.5px/1.2 inherit;cursor:pointer;white-space:nowrap}
+.tn-item svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.tn-item.open svg{transform:rotate(180deg)}
+.tn-item:hover,.tn-item.open{background:rgba(255,255,255,.28)}
+.tn-item.active{background:#fff;color:#e86208;border-color:#fff}
+.tn-item .sm{display:none}
+.tn-panel{position:fixed;z-index:90;min-width:220px;padding:6px;border-radius:14px;background:#fff;box-shadow:0 14px 34px rgba(20,34,60,.22);animation:tnDown .16s ease-out}
+@keyframes tnDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tn-panel button,.tn-panel a{display:block;width:100%;padding:11px 14px;border:0;border-radius:10px;background:none;color:#16305f;font:700 14px/1.3 inherit;text-align:left;text-decoration:none;cursor:pointer}
+.tn-panel button:hover,.tn-panel a:hover{background:#fff3ea;color:#e86208}
+.tn-panel button.active{background:#fff1e6;color:#e86208}
+body.exam-mode .topnav{display:none}
+@media(max-width:760px){.tn-item{padding:6px 10px;font-size:12.5px}.tn-item .lg{display:none}.tn-item .sm{display:inline}}@media(max-width:420px){.topnav{gap:4px}.tn-item{padding:6px 8px;font-size:12px;gap:2px}.tn-item svg{width:12px;height:12px}}
 /* ผู้เยี่ยมชม: กระดานอันดับไม่แสดงเลเวล และไม่มี "อันดับของฉัน" (เข้าสู่ระบบแล้วจึงเห็น) */
 body.guest #homePage .rank-level{display:none!important}
 body.guest #homePage .rank-xp{margin-left:auto}
@@ -3288,6 +3304,14 @@ LINE OA @kasorb
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="app-main">
 <header class="hb">
+<nav class="topnav" id="topNav" aria-label="เมนูหลัก">
+<button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก">หน้าหลัก</button>
+<button type="button" class="tn-item tn-group" data-menu="tests"><span class="lg">แบบทดสอบ</span><span class="sm">แบบทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item tn-group" data-menu="results"><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item tn-group" data-menu="account"><span class="lg">บัญชีของฉัน</span><span class="sm">บัญชี</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item tn-group" data-menu="contact"><span class="lg">ติดต่อเรา</span><span class="sm">ติดต่อ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+</nav>
+<div class="tn-panel hidden" id="tnPanel" role="menu"></div>
 <button aria-label="เปิดเมนู" class="hb-burger" id="menuToggle" type="button"><i></i></button>
 <div class="hb-text">
 <div class="hb-slogan">I WANNA BE A POLICE OFFICER</div>
@@ -3954,6 +3978,36 @@ $(page)
 
 
 $("authClose").onclick=closeLogin;
+
+/* เมนูที่ส่วนหัว: ดึงรายการย่อยจากเมนูด้านข้าง ให้ตรงกันเสมอ */
+let tnY=0;
+document.body.appendChild($("tnPanel"));  // อยู่นอกแถบหัว ไม่ให้ถูกตัดขอบเมื่อแถบหัวย่อ
+const TN_SRC={tests:'[data-group="tests"] .submenu',results:'[data-group="results"] .submenu',account:'[data-group="account"] .submenu',contact:'[data-group="contact"] .submenu'};
+function closeTopMenu(){$("tnPanel").classList.add("hidden");document.querySelectorAll(".tn-group.open").forEach(b=>b.classList.remove("open"))}
+function openTopMenu(btn){
+  const key=btn.dataset.menu,panel=$("tnPanel");
+  if(btn.classList.contains("open")){closeTopMenu();return}
+  closeTopMenu();
+  panel.innerHTML="";
+  $("sidebar").querySelectorAll(TN_SRC[key]+" > .nav-btn").forEach(src=>{
+    const el=document.createElement(src.tagName==="A"?"a":"button");
+    el.textContent=src.textContent.trim();
+    if(src.tagName==="A"){el.href=src.href;el.target="_blank";el.rel="noopener"}
+    else{el.type="button";el.classList.toggle("active",src.classList.contains("active"));el.onclick=()=>{closeTopMenu();showAppPage(src.dataset.page,src.dataset.title)}}
+    panel.appendChild(el);
+  });
+  btn.classList.add("open");panel.classList.remove("hidden");tnY=window.scrollY;
+  const r=btn.getBoundingClientRect(),w=panel.offsetWidth;
+  panel.style.top=(r.bottom+6)+"px";
+  panel.style.left=Math.max(8,Math.min(r.left,window.innerWidth-w-8))+"px";
+}
+document.querySelectorAll(".tn-group").forEach(b=>b.onclick=e=>{e.stopPropagation();openTopMenu(b)});
+document.querySelector('.tn-item[data-page="homePage"]').onclick=()=>{closeTopMenu();showAppPage("homePage","หน้าหลัก")};
+document.addEventListener("click",e=>{if(!e.target.closest("#tnPanel"))closeTopMenu()});
+window.addEventListener("scroll",()=>{if(Math.abs(window.scrollY-tnY)>40)closeTopMenu()},{passive:true});
+window.addEventListener("resize",closeTopMenu);
+/* เลื่อนแถบเมนูซ้ายขวา: ย้ายกล่องรายการย่อยตามปุ่ม */
+$("topNav").addEventListener("scroll",()=>{const b=document.querySelector(".tn-group.open"),panel=$("tnPanel");if(!b)return;const r=b.getBoundingClientRect();panel.style.left=Math.max(8,Math.min(r.left,window.innerWidth-panel.offsetWidth-8))+"px"},{passive:true});
 $("guestLoginBtn").onclick=()=>openLogin(null,null);
 $("guestRegBtn").onclick=()=>openLogin(null,null,true);
 
@@ -4473,6 +4527,8 @@ $(pageId)
 .classList
 .add("active");
 document.body.classList.toggle("on-home",pageId==="homePage");
+{const grp={subjectPage:"tests",mockPage:"tests",examPage:"tests",resultPage:"tests",reviewPage:"tests",scorePage:"results",historyPage:"results",myInfoPage:"account",premiumPage:"account"}[pageId];
+document.querySelectorAll(".tn-item").forEach(b=>b.classList.toggle("active",b.dataset.page===pageId||(!!grp&&b.dataset.menu===grp)));}
 if(pageId==="historyPage") renderHistory();
 if(pageId==="scorePage") renderOverview();
 document
