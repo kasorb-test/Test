@@ -3053,6 +3053,17 @@ body:not(.review-mode) .rvbar{display:none}
 .tn-panel button.active{background:#fff1e6;color:#e86208}
 body.exam-mode .topnav{display:none}
 @media(max-width:760px){.tn-item{padding:6px 10px;font-size:12.5px}.tn-item .lg{display:none}.tn-item .sm{display:inline}}@media(max-width:420px){.topnav{gap:4px}.tn-item{padding:6px 8px;font-size:12px;gap:2px}.tn-item svg{width:12px;height:12px}}
+.uidlg{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);animation:uidIn .15s ease-out}
+@keyframes uidIn{from{opacity:0}to{opacity:1}}
+.uidlg .box{width:100%;max-width:400px;padding:22px 20px 16px;border-radius:18px;background:#fff;box-shadow:0 24px 60px rgba(0,0,0,.28);font-family:inherit;animation:uidUp .18s ease-out}
+@keyframes uidUp{from{transform:translateY(10px)}to{transform:none}}
+.uidlg .msg{margin:0 0 16px;font-size:15.5px;line-height:1.65;color:#1f2937;white-space:pre-line;font-weight:600}
+.uidlg input{width:100%;box-sizing:border-box;margin:0 0 14px;padding:12px;border:1.5px solid #e5e7eb;border-radius:12px;font:inherit;font-size:15px}
+.uidlg input:focus{outline:none;border-color:#ff6a00}
+.uidlg .act{display:flex;gap:8px;justify-content:flex-end}
+.uidlg .act button{min-width:96px;margin:0;padding:11px 18px;border:0;border-radius:12px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;width:auto}
+.uidlg .ok{background:#ff6a00;color:#fff}.uidlg .ok.danger{background:#c62828}
+.uidlg .no{background:#f1f3f6;color:#374151}
 /* ผู้เยี่ยมชม: กระดานอันดับไม่แสดงเลเวล และไม่มี "อันดับของฉัน" (เข้าสู่ระบบแล้วจึงเห็น) */
 body.guest #homePage .rank-level{display:none!important}
 body.guest #homePage .rank-xp{margin-left:auto}
@@ -3099,17 +3110,31 @@ body:not(.on-home) .hb .hb-text{display:none}body:not(.on-home) .hb{flex-wrap:no
 <body class="on-home">
 
 <script>
+/* กล่องข้อความในหน้าเว็บ แทนกล่องของเบราว์เซอร์ (alert / confirm / prompt) */
 (function(){
-const toast=document.createElement("div");
-toast.id="kasorbToast";
-document.body.appendChild(toast);
-let timer=null;
-window.alert=function(message){
-toast.textContent=String(message ?? "");
-toast.classList.add("show");
-clearTimeout(timer);
-timer=setTimeout(()=>toast.classList.remove("show"),2200);
-};
+function dlg(message,opt){
+  opt=opt||{};
+  return new Promise(res=>{
+    const wrap=document.createElement("div");wrap.className="uidlg";wrap.setAttribute("role","dialog");
+    const box=document.createElement("div");box.className="box";
+    const p=document.createElement("p");p.className="msg";p.textContent=String(message??"");box.appendChild(p);
+    let inp=null;
+    if(opt.input!==undefined){inp=document.createElement("input");inp.type="text";inp.value=opt.input||"";box.appendChild(inp)}
+    const act=document.createElement("div");act.className="act";
+    const done=v=>{wrap.remove();document.removeEventListener("keydown",key,true);res(v)};
+    if(opt.cancel){const n=document.createElement("button");n.type="button";n.className="no";n.textContent=opt.cancel;n.onclick=()=>done(opt.input!==undefined?null:false);act.appendChild(n)}
+    const o=document.createElement("button");o.type="button";o.className="ok"+(opt.danger?" danger":"");o.textContent=opt.ok||"ตกลง";
+    o.onclick=()=>done(opt.input!==undefined?inp.value:true);act.appendChild(o);
+    box.appendChild(act);wrap.appendChild(box);document.body.appendChild(wrap);
+    const key=e=>{if(e.key==="Escape"){e.preventDefault();done(opt.cancel?(opt.input!==undefined?null:false):true)}else if(e.key==="Enter"&&document.activeElement!==act.querySelector(".no")){e.preventDefault();o.click()}};
+    document.addEventListener("keydown",key,true);
+    setTimeout(()=>(inp||o).focus(),30);
+  });
+}
+window.uiAlert=m=>dlg(m,{ok:"ตกลง"});
+window.uiConfirm=(m,o)=>dlg(m,{ok:(o&&o.ok)||"ตกลง",cancel:(o&&o.cancel)||"ยกเลิก",danger:o&&o.danger});
+window.uiPrompt=(m,v)=>dlg(m,{ok:"บันทึก",cancel:"ยกเลิก",input:v??""});
+window.alert=m=>{uiAlert(m)};
 })();
 </script>
 
@@ -5393,7 +5418,7 @@ return;
 
 
 const confirmed=
-confirm(
+await uiConfirm(
 
 `ยืนยันเปลี่ยนชื่อเล่นเป็น "${newName}" หรือไม่?
 
@@ -6393,8 +6418,8 @@ function leaveExamMode(){
   document.body.classList.remove("exam-mode","xsheet","xhide");
   $("xShield").classList.add("hidden");
 }
-$("xQuit").onclick=()=>{
-  if(!confirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ กลับมาทำต่อได้จนกว่าจะกดส่งคำตอบ (เวลายังนับต่อ)")) return;
+$("xQuit").onclick=async()=>{
+  if(!await uiConfirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ กลับมาทำต่อได้จนกว่าจะกดส่งคำตอบ (เวลายังนับต่อ)")) return;
   const t=currentTrack;leaveExamMode();exam=null;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
 };
 $("xSheetBtn").onclick=()=>document.body.classList.add("xsheet");
@@ -6424,8 +6449,8 @@ async function submitExam(auto){
   if(!exam) return;
   const {meta,items,ans,secs:pickSecs,minutes}=exam;
   const blank=ans.filter(a=>!(a>=0)).length;
-  if(!auto && blank && !confirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`)) return;
-  if(!auto && !blank && !confirm("ส่งคำตอบใช่หรือไม่?")) return;
+  if(!auto && blank && !await uiConfirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`)) return;
+  if(!auto && !blank && !await uiConfirm("ส่งคำตอบใช่หรือไม่?")) return;
   leaveExamMode();
   const secs=Math.round((Date.now()-exam.startedAt)/1000);
   const prog=await loadProgress(true);
