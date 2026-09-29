@@ -2903,7 +2903,22 @@ input{
 @media(max-width:600px){.setc{grid-template-columns:1fr}.setc .go{width:100%}}
 
 /* โหมดทำข้อสอบ: ซ่อนเมนูและแถบด้านบนของเว็บ */
-body.exam-mode .sidebar,body.exam-mode .menu-toggle,body.exam-mode .hb-burger{display:none!important}body.exam-mode .hb{pointer-events:none}body.exam-mode .xbar{top:var(--hbH,0px)}body.exam-mode .xover{top:calc(var(--hbH,0px) + 66px)}body.exam-mode .xprog{top:calc(var(--hbH,0px) + 58px)}body.exam-mode .xside{top:calc(var(--hbH,0px) + 84px);max-height:calc(100vh - var(--hbH,0px) - 100px)}body.exam-mode .xi{scroll-margin-top:calc(var(--hbH,0px) + 90px)}
+body.exam-mode .sidebar,body.exam-mode .menu-toggle,body.exam-mode .hb-burger{display:none!important}body.exam-mode .hb{pointer-events:none;transition:none}
+/* ระหว่างทำข้อสอบ: แถบส้มแสดงชื่อชุด (คอมพิวเตอร์) · มือถือแสดงชื่อชุดเต็มในแถบเวลา */
+.hb-exam{display:none}
+body.exam-mode .hb .hb-exam{display:flex;flex-direction:column;justify-content:center;flex:1 1 auto;min-width:0;color:#fff;padding:4px 0}
+.hb-exam small{font-size:12.5px;font-weight:700;opacity:.85}
+.hb-exam b{font-size:21px;line-height:1.3;font-weight:800}
+.hb-exam span{font-size:13px;opacity:.9;margin-top:2px}
+@media(min-width:761px){body.exam-mode .xttl b{display:none}body.exam-mode .xttl span{font-size:14px;color:#16305f;font-weight:700}}
+@media(min-width:761px){body.exam-mode .hb .hb-exam{order:0}body.exam-mode .hb .hb-card{order:1;margin-left:auto}}
+@media(max-width:760px){body.exam-mode .hb .hb-exam{display:none}
+body.exam-mode .xbar{flex-wrap:wrap;row-gap:6px;padding-top:8px;padding-bottom:8px}
+body.exam-mode .xttl{order:-1;flex:1 1 100%;display:flex;align-items:baseline;gap:8px}
+body.exam-mode .xttl b{flex:1;min-width:0;white-space:normal;font-size:14px;line-height:1.35}
+body.exam-mode .xttl span{flex:0 0 auto;display:block}
+body.exam-mode #xSheetBtn{margin-left:auto}}
+body.exam-mode .xprog{top:calc(var(--hbH,0px) + var(--xbH,58px))}body.exam-mode .xover{top:calc(var(--hbH,0px) + var(--xbH,58px) + 8px)}body.exam-mode .xbar{top:var(--hbH,0px)}body.exam-mode .xside{top:calc(var(--hbH,0px) + var(--xbH,58px) + 26px);max-height:calc(100vh - var(--hbH,0px) - var(--xbH,58px) - 42px)}body.exam-mode .xi{scroll-margin-top:calc(var(--hbH,0px) + var(--xbH,58px) + 32px)}
 body.exam-mode .app-main{margin-left:0!important}
 body.exam-mode .content{padding:0!important;max-width:none!important}
 body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
@@ -3411,6 +3426,7 @@ LINE OA @kasorb
 </div>
 <div class="hb-quote" id="topQuote"></div>
 </button>
+<div class="hb-exam" id="hbExam"><small>กำลังทำแบบทดสอบ</small><b id="hbExamTitle"></b><span id="hbExamSub"></span></div>
 <div class="hb-guest" id="guestBox"><b>ยังไม่ได้เข้าสู่ระบบ</b><span>เข้าสู่ระบบเพื่อทำแบบทดสอบ เก็บ XP และเลื่อนยศ</span><div><button type="button" id="guestLoginBtn">เข้าสู่ระบบ</button><button type="button" id="guestRegBtn" class="reg">สมัครสมาชิก</button></div></div>
 </header>
 <main class="content">
@@ -4708,6 +4724,8 @@ renderMembershipStatus();
   update();
   /* ความสูงของแถบ ใช้วางแถบเวลาในหน้าทำข้อสอบไว้ใต้แถบนี้ */
   const setH=()=>document.documentElement.style.setProperty("--hbH",bar.offsetHeight+"px");
+  const xb=document.getElementById("xbar");
+  if(xb&&"ResizeObserver" in window) new ResizeObserver(()=>document.documentElement.style.setProperty("--xbH",xb.offsetHeight+"px")).observe(xb,{box:"border-box"});
   if("ResizeObserver" in window) new ResizeObserver(setH).observe(bar,{box:"border-box"}); else window.addEventListener("resize",setH);
   bar.addEventListener("transitionend",setH);
   setH();
@@ -6412,6 +6430,8 @@ function secName(meta,n){
 function renderExam(){
   const {meta,items}=exam;
   $("xTitle").textContent=exam.secs?`${meta.title} (เฉพาะ ${exam.secs.length} วิชา)`:meta.title;
+  $("hbExamTitle").textContent=meta.title;
+  $("hbExamSub").textContent=exam.secs?`เฉพาะ ${exam.secs.length} วิชา · ${exam.items.length} ข้อ · ${exam.minutes} นาที`:`ทำครบทั้งชุด · ${exam.items.length} ข้อ · ${exam.minutes} นาที`;
   const paper=$("xPaper");paper.innerHTML="";
   let lastSec="";
   items.forEach((it,i)=>{
