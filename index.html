@@ -6419,7 +6419,7 @@ function leaveExamMode(){
   $("xShield").classList.add("hidden");
 }
 $("xQuit").onclick=async()=>{
-  if(!await uiConfirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ กลับมาทำต่อได้จนกว่าจะกดส่งคำตอบ (เวลายังนับต่อ)")) return;
+  if(!await uiConfirm("ออกจากข้อสอบตอนนี้?\nคำตอบที่ทำไว้จะถูกเก็บไว้ กลับมาทำต่อได้จนกว่าจะกดส่งคำตอบ (เวลายังนับต่อ)",{ok:"ออกจากข้อสอบ",cancel:"กลับไปทำต่อ"})) return;
   const t=currentTrack;leaveExamMode();exam=null;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
 };
 $("xSheetBtn").onclick=()=>document.body.classList.add("xsheet");
@@ -6449,8 +6449,8 @@ async function submitExam(auto){
   if(!exam) return;
   const {meta,items,ans,secs:pickSecs,minutes}=exam;
   const blank=ans.filter(a=>!(a>=0)).length;
-  if(!auto && blank && !await uiConfirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`)) return;
-  if(!auto && !blank && !await uiConfirm("ส่งคำตอบใช่หรือไม่?")) return;
+  if(!auto && blank && !await uiConfirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`,{ok:"ส่งคำตอบ",cancel:"กลับไปทำต่อ"})) return;
+  if(!auto && !blank && !await uiConfirm("ส่งคำตอบใช่หรือไม่?",{ok:"ส่งคำตอบ",cancel:"กลับไปทำต่อ"})) return;
   leaveExamMode();
   const secs=Math.round((Date.now()-exam.startedAt)/1000);
   const prog=await loadProgress(true);
