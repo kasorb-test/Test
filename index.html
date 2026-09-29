@@ -6301,6 +6301,7 @@ function renderAnswerSheet(){
   const part=(p,title,nums)=>`<div class="as-c as-p2${p.c>=pass(p.t)?" ok":""}"><span>${title} (${nums}) ${p.t}</span><div class="as-got">${p.c}</div><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":`ยังไม่ผ่าน (ผ่าน ${pass(p.t)})`}</em></div>`;
   const pct=Math.round(r.correct/n*100);
   const setNo=(r.meta.title.match(/ชุดที่\s*(\d+)/)||[])[1]||"";
+  $("rSheet").className="asheet navy";
   $("rSheet").innerHTML=`<div class="as-head"><div class="as-logo"><b>กะสอบ</b><i>TEST</i></div>
     <div class="as-ht"><small>ANSWER SHEET</small><h3>${escHtml(r.meta.title)}</h3>
     <div class="as-info"><span>${escHtml(currentData?.nickname||"")} <b>${escHtml(codeOfData(currentData))}</b></span>${setNo?`<span>ชุดที่ <b>${escHtml(setNo)}</b></span>`:""}<span>${new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</span><span>ใช้เวลา <b>${fmtTime(r.secs)}</b></span></div></div></div>
