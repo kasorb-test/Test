@@ -2825,6 +2825,18 @@ input{
 .tier.pm{background:#16305f;color:#fff}.tier.fr{background:#e7f6ec;color:#15803d}
 .setc .go{padding:11px 18px;border:0;border-radius:12px;background:#ff6a00;color:#fff;font-weight:800;white-space:nowrap}
 .setc .go.lock{background:#eef1f6;color:#16305f}
+.setc .best.sb{color:#16305f;font-weight:600}
+.xchoose{grid-column:1/-1;display:grid;gap:8px;margin-top:4px;padding:14px;border-radius:14px;background:#fff8f2;border:1px solid #f6dcc8}
+.xchoose .full{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border:0;border-radius:12px;background:#ff6a00;color:#fff;text-align:left;cursor:pointer;font:inherit}
+.xchoose .full b{font-size:15px}.xchoose .full span{font-size:12.5px;opacity:.9}
+.xchoose .orl{margin-top:4px;font-size:13px;font-weight:800;color:#c2410c}
+.xchoose .secs{display:grid;gap:6px}
+.xchoose .secs label{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;background:#fff;border:1px solid #eee;font-size:14px;cursor:pointer}
+.xchoose .secs input{width:18px;height:18px;margin:0;accent-color:#ff6a00;flex:0 0 auto}
+.xchoose .secs span{flex:1;min-width:0}.xchoose .secs em{font-style:normal;font-size:12px;color:#888;white-space:nowrap}
+.xchoose .secs label:has(input:checked){border-color:#ff6a00;background:#fff3ea}
+.xchoose .part{padding:12px 14px;border:0;border-radius:12px;background:#16305f;color:#fff;font-weight:800;cursor:pointer;font:inherit;font-weight:800}
+.xchoose .part:disabled{background:#e6e9ef;color:#8a93a3;cursor:default}
 @media(max-width:600px){.setc{grid-template-columns:1fr}.setc .go{width:100%}}
 
 /* โหมดทำข้อสอบ: ซ่อนเมนูและแถบด้านบนของเว็บ */
@@ -6099,17 +6111,41 @@ async function openTrack(id){
   box.innerHTML="";
   list.filter(e=>e.kind!=="subject" && (e.track||[]).includes(id)).forEach(e=>{
     const best=prog.best[e.id];
+    const secBest=(e.sections||[]).map((x,i)=>{const b=prog.best[`${e.id}:s${i}`];return b?`${escHtml(shortSec(x.name))} ${b.s}/${b.t}`:""}).filter(Boolean);
     const el=document.createElement("div");el.className="setc";
     el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span></h4>
       <div class="meta">${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที</div>
-      ${best?`<div class="best">ทำแล้ว ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}</div>
+      ${best?`<div class="best">ทำครบชุด ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}
+      ${secBest.length?`<div class="best sb">รายวิชาดีที่สุด: ${secBest.join(" · ")}</div>`:""}</div>
       <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำข้อสอบ"):"สำหรับสมาชิกพรีเมียม"}</button>`;
-    el.querySelector(".go").onclick=()=>canTake(e)?startExam(e.id):showUpgrade();
+    el.querySelector(".go").onclick=()=>!canTake(e)?showUpgrade():hasSession(e.id)?startExam(e.id):toggleChooser(el,e);
     box.appendChild(el);
   });
   window.scrollTo(0,0);
 }
 $("setBack").onclick=()=>renderMockPage();
+/* ชื่อวิชาแบบสั้น ใช้บนการ์ดชุดข้อสอบ */
+function shortSec(n){return ({"คอมพิวเตอร์และเทคโนโลยีสารสนเทศ":"คอมพิวเตอร์","ระเบียบงานสารบรรณและระเบียบการตำรวจ":"ระเบียบงานสารบรรณ","กฎหมายที่ประชาชนควรรู้":"กฎหมาย"})[n]||n}
+const secMinutes=(e,n)=>Math.max(1,Math.round((Number(e.minutes)||Number(e.count)||n)*n/(Number(e.count)||n)));
+/* เลือกแบบทำข้อสอบ: ทำครบทั้งชุด หรือเลือกทำเฉพาะวิชา */
+function toggleChooser(el,e){
+  const open=el.querySelector(".xchoose");if(open){open.remove();return}
+  document.querySelectorAll("#setList .xchoose").forEach(x=>x.remove());
+  const secs=(e.sections||[]).map((x,i)=>({i,name:x.name,n:Math.max(0,x.to-x.from+1)})).filter(x=>x.n>0);
+  const box=document.createElement("div");box.className="xchoose";
+  box.innerHTML=`<button type="button" class="full"><b>ทำครบทั้งชุด</b><span>${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที เหมือนสอบจริง</span></button>
+    ${secs.length>1?`<div class="orl">หรือ เลือกทำเฉพาะวิชา</div>
+    <div class="secs">${secs.map(x=>`<label><input type="checkbox" value="${x.i}"><span>${escHtml(x.name)}</span><em>${x.n} ข้อ</em></label>`).join("")}</div>
+    <button type="button" class="part" disabled>เลือกวิชาอย่างน้อย 1 วิชา</button>`:""}`;
+  const sel=()=>[...box.querySelectorAll("input:checked")].map(x=>+x.value);
+  box.querySelectorAll("input").forEach(c=>c.onchange=()=>{
+    const s=sel(),n=secs.filter(x=>s.includes(x.i)).reduce((a,x)=>a+x.n,0),b=box.querySelector(".part");
+    b.disabled=!s.length;b.textContent=s.length?`เริ่มทำ ${s.length} วิชา · ${n} ข้อ · ${secMinutes(e,n)} นาที`:"เลือกวิชาอย่างน้อย 1 วิชา";
+  });
+  box.querySelector(".full").onclick=()=>startExam(e.id);
+  const part=box.querySelector(".part");if(part)part.onclick=()=>{const s=sel();if(s.length)startExam(e.id,s)};
+  el.appendChild(box);
+}
 function showUpgrade(){
   alert("ชุดนี้สำหรับสมาชิกพรีเมียม\nติดต่อแอดมินทางแชทเพจหรือ LINE @kasorb เพื่ออัปเกรด");
 }
@@ -6120,9 +6156,11 @@ const sessKey=id=>`kasorbExam:${currentUser?.uid}:${id}`;
 function hasSession(id){try{return !!localStorage.getItem(sessKey(id))}catch(e){return false}}
 function saveSession(){
   if(!exam) return;
-  try{localStorage.setItem(sessKey(exam.meta.id),JSON.stringify({startedAt:exam.startedAt,ans:exam.ans}))}catch(e){}
+  try{localStorage.setItem(sessKey(exam.meta.id),JSON.stringify({startedAt:exam.startedAt,ans:exam.ans,secs:exam.secs,minutes:exam.minutes}))}catch(e){}
 }
-async function startExam(id){
+/* เลขวิชาของข้อ (ข้อมูลเก่าไม่มี sec ให้หาจากช่วงข้อ) */
+const secOf=(meta,it)=>Number.isInteger(it.sec)?it.sec:Math.max(0,(meta.sections||[]).findIndex(x=>it.n>=x.from&&it.n<=x.to));
+async function startExam(id,pick){
   const meta=(await loadCatalog()).find(e=>e.id===id);
   if(!canTake(meta)){showUpgrade();return;}
   let items;
@@ -6137,7 +6175,13 @@ async function startExam(id){
   }
   let saved=null;
   try{saved=JSON.parse(localStorage.getItem(sessKey(id))||"null")}catch(e){}
-  exam={meta,items,ans:(saved&&saved.ans)||Array(items.length).fill(-1),startedAt:saved?saved.startedAt:Date.now()};
+  /* ทำเฉพาะวิชา: เก็บเฉพาะข้อของวิชาที่เลือก เวลาลดลงตามจำนวนข้อ */
+  const secs=saved?(Array.isArray(saved.secs)?saved.secs:null):(Array.isArray(pick)&&pick.length?pick:null);
+  if(secs) items=items.filter(it=>secs.includes(secOf(meta,it)));
+  if(!items.length){alert("วิชาที่เลือกยังไม่มีข้อสอบ");return;}
+  const minutes=secs?(saved?.minutes||secMinutes(meta,items.length)):(Number(meta.minutes)||items.length);
+  const ans=saved&&Array.isArray(saved.ans)&&saved.ans.length===items.length?saved.ans:Array(items.length).fill(-1);
+  exam={meta,items,ans,secs,minutes,startedAt:saved?saved.startedAt:Date.now()};
   saveSession();
   renderExam();
   document.body.classList.add("exam-mode");
@@ -6149,7 +6193,7 @@ function secName(meta,n){
 }
 function renderExam(){
   const {meta,items}=exam;
-  $("xTitle").textContent=meta.title;
+  $("xTitle").textContent=exam.secs?`${meta.title} (เฉพาะ ${exam.secs.length} วิชา)`:meta.title;
   const paper=$("xPaper");paper.innerHTML="";
   let lastSec="";
   items.forEach((it,i)=>{
@@ -6209,7 +6253,7 @@ function paintAnswers(only){
 function tickTimer(){
   if(!exam) return;
   /* หมดเวลาแล้วยังทำต่อได้จนกว่าจะกดส่ง: นับเวลาที่เกินเป็น +เวลา และแจ้งเตือน */
-  const left=(Number(exam.meta.minutes)||exam.items.length)*60000-(Date.now()-exam.startedAt),over=left<=0;
+  const left=exam.minutes*60000-(Date.now()-exam.startedAt),over=left<=0;
   const s=over?Math.floor(-left/1000):Math.ceil(left/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
   $("xTimer").textContent=(over?"+":"")+(h?`${h}:${String(m).padStart(2,"0")}`:String(m).padStart(2,"0"))+":"+String(sec).padStart(2,"0");
   $("xTimer").classList.toggle("low",left<=5*60000);
@@ -6249,7 +6293,7 @@ $("xShieldBtn").onclick=()=>{document.body.classList.remove("xhide");$("xShield"
 let lastResult=null;
 async function submitExam(auto){
   if(!exam) return;
-  const {meta,items,ans}=exam;
+  const {meta,items,ans,secs:pickSecs,minutes}=exam;
   const blank=ans.filter(a=>!(a>=0)).length;
   if(!auto && blank && !confirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`)) return;
   if(!auto && !blank && !confirm("ส่งคำตอบใช่หรือไม่?")) return;
@@ -6269,8 +6313,11 @@ async function submitExam(auto){
       prog.h[qid]=hist.concat(a).slice(-20);
     }
   });
-  const best=prog.best[meta.id]||{s:0,t:items.length,n:0};
-  prog.best[meta.id]={s:Math.max(best.s,correct),t:items.length,n:(best.n||0)+1};
+  /* คะแนนดีที่สุดทั้งชุด นับเฉพาะตอนทำครบ ส่วนคะแนนรายวิชาเก็บทุกครั้ง (ทั้งทำครบและทำเฉพาะวิชา) */
+  if(!pickSecs){const best=prog.best[meta.id]||{s:0,t:items.length,n:0};prog.best[meta.id]={s:Math.max(best.s,correct),t:items.length,n:(best.n||0)+1};}
+  const perSec={};
+  items.forEach((it,i)=>{const k=secOf(meta,it);perSec[k]=perSec[k]||{c:0,t:0};perSec[k].t++;if(ans[i]===it.a)perSec[k].c++;});
+  Object.entries(perSec).forEach(([k,v])=>{const key=`${meta.id}:s${k}`,b=prog.best[key];if(!b||v.c>b.s||v.t!==b.t)prog.best[key]={s:b&&b.t===v.t?Math.max(b.s,v.c):v.c,t:v.t}});
   prog.keyVer=prog.keyVer||{};prog.keyVer[meta.id]=meta.keyVersion||1;
   const unique=Object.keys(prog.h).length;
   let saveErr=false;
@@ -6280,11 +6327,11 @@ async function submitExam(auto){
     await updateDoc(doc(db,"users",currentUser.uid),{xp,answered:unique});
     currentData.xp=xp;currentData.answered=unique;
     if(answered) await addTodayCount(answered);
-    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,at:serverTimestamp()});
+    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,...(pickSecs?{parts:pickSecs}:{}),at:serverTimestamp()});
   }catch(e){console.error(e);saveErr=true;}
   try{localStorage.removeItem(sessKey(meta.id))}catch(e){}
   renderProfile();
-  lastResult={meta,items,ans,correct,gained,answered,secs,bySec,saveErr};
+  lastResult={meta,items,ans,correct,gained,answered,secs,bySec,saveErr,pickSecs,minutes};
   exam=null;
   renderResult();
   showAppPage("resultPage","ผลการทดสอบ");
@@ -6293,9 +6340,9 @@ const fmtTime=s=>(s>=3600?`${Math.floor(s/3600)} ชม. `:"")+`${Math.floor(s%3
 function renderResult(){
   const r=lastResult,t=r.items.length,pct=Math.round(r.correct/t*100);
   $("rCard").innerHTML=`${r.saveErr?'<div class="rwarn">บันทึกผลไม่สำเร็จ ผลนี้ยังไม่ถูกนับ XP กรุณาแจ้งแอดมิน</div>':""}
-    <h2>${escHtml(r.meta.title)}</h2><div class="big">${r.correct}<small> / ${t} คะแนน</small></div>
+    <h2>${escHtml(r.meta.title)}</h2>${r.pickSecs?`<div>ทำเฉพาะวิชา: ${r.pickSecs.map(i=>escHtml((r.meta.sections[i]||{}).name||"")).join(", ")}</div>`:""}<div class="big">${r.correct}<small> / ${t} คะแนน</small></div>
     <div>ได้ ${pct}% · ตอบ ${r.answered} ข้อ · ไม่ได้ตอบ ${t-r.answered} ข้อ</div>
-    <div class="chips"><span>+${r.gained.toLocaleString()} XP</span><span>ใช้เวลา ${fmtTime(r.secs)}</span>${r.secs>(Number(r.meta.minutes)||t)*60?`<span class="over">เกินกำหนด ${fmtTime(r.secs-(Number(r.meta.minutes)||t)*60)}</span>`:""}</div>`;
+    <div class="chips"><span>+${r.gained.toLocaleString()} XP</span><span>ใช้เวลา ${fmtTime(r.secs)}</span>${r.secs>r.minutes*60?`<span class="over">เกินกำหนด ${fmtTime(r.secs-r.minutes*60)}</span>`:""}</div>`;
   renderAnswerSheet();
 }
 /* กระดาษคำตอบแบบกระดาษสอบจริง: 25 ข้อต่อคอลัมน์บนจอใหญ่ จอแคบลดจำนวนคอลัมน์ */
@@ -6315,7 +6362,7 @@ function renderAnswerSheet(){
     }
     grid+=`<div class="as-col"><div class="as-hd"><span></span><span><i>A</i><i>ก</i></span><span><i>B</i><i>ข</i></span><span><i>C</i><i>ค</i></span><span><i>D</i><i>ง</i></span></div>${rows}</div>`;
   }
-  const secs=(r.meta.sections||[]).map((x,i)=>{let c=0;for(let q=x.from;q<=x.to;q++){const it=r.items[q-1];if(it&&r.ans[q-1]===it.a)c++;}return {name:SEC_SHORT[i]||x.name,c,t:x.to-x.from+1};});
+  const secs=(r.meta.sections||[]).map((x,i)=>{let c=0,t=0;r.items.forEach((it,j)=>{if(secOf(r.meta,it)===i){t++;if(r.ans[j]===it.a)c++;}});return {name:SEC_SHORT[i]||x.name,c,t,no:i+1};}).filter(x=>x.t>0);
   const sum=(a,b)=>secs.slice(a,b).reduce((o,x)=>({c:o.c+x.c,t:o.t+x.t}),{c:0,t:0});
   const pass=t=>Math.ceil(t*0.6);
   const part=(p,title,nums)=>`<div class="as-c as-p2${p.c>=pass(p.t)?" ok":""}"><span>${title} (${nums}) ${p.t}</span><div class="as-got">${p.c}</div><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":`ยังไม่ผ่าน (ผ่าน ${pass(p.t)})`}</em></div>`;
@@ -6329,8 +6376,8 @@ function renderAnswerSheet(){
     <div class="as-lbl"><span>กระดาษคำตอบ</span><div class="as-leg"><span><i style="background:#16a34a;border-color:#16a34a"></i>ตอบถูก</span><span><i style="background:#dc2626;border-color:#dc2626"></i>ตอบผิด</span></div></div>
     <div class="as-grid">${grid}</div>
     ${secs.length?`<div class="as-sum"><div class="as-lbl"><span>สรุปคะแนน</span></div>
-      <div class="as-cards">${secs.map((x,i)=>`<div class="as-c"><span>${i+1}. ${escHtml(x.name)} (${x.t})</span><div class="as-got">${x.c}</div></div>`).join("")}</div>
-      <div class="as-tot">${part(sum(0,2),"ภาคความรู้ทั่วไป","1+2")}${secs.length>2?part(sum(2,secs.length),"ภาคความรู้เฉพาะตำแหน่ง",secs.slice(2).map((_,i)=>i+3).join("+")):""}
+      <div class="as-cards">${secs.map(x=>`<div class="as-c"><span>${x.no}. ${escHtml(x.name)} (${x.t})</span><div class="as-got">${x.c}</div></div>`).join("")}</div>
+      <div class="as-tot">${r.pickSecs?"":part(sum(0,2),"ภาคความรู้ทั่วไป","1+2")}${!r.pickSecs&&secs.length>2?part(sum(2,secs.length),"ภาคความรู้เฉพาะตำแหน่ง",secs.slice(2).map((_,i)=>i+3).join("+")):""}
       <div class="as-all as-ringbox"><div class="as-ring" style="--p:${pct}"><div>${pct}%</div></div><div><span>คะแนนรวม</span><b>${r.correct}<small> / ${n}</small></b></div></div></div></div>`:""}
     <div class="as-foot">"I WANNA BE A POLICE OFFICER"</div></div>`;
 }
