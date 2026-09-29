@@ -3037,6 +3037,8 @@ body:not(.review-mode) .rvbar{display:none}
 .asheet.navy .as-all{background:linear-gradient(120deg,#ff8a2b,#e2520a)}
 .asheet.navy .as-ring{background:conic-gradient(#16305f calc(var(--p)*1%),rgba(255,255,255,.3) 0)}
 .asheet.navy .as-ring div{background:#f0701c}
+/* กล่องทักทาย I WANNA BE... แสดงเฉพาะหน้าหลัก */
+body:not(.on-home) .hb .hb-text{display:none}body:not(.on-home) .hb{flex-wrap:nowrap;align-items:center}body:not(.on-home) .hb .hb-card{flex:0 1 380px;margin-left:auto;min-width:0}@media(max-width:760px){body:not(.on-home) .hb .hb-card{flex:1 1 auto}}
 /* ช่องวิชาในสรุปคะแนน: กระดาษส้มใช้สีกรมโปร่งแสง กระดาษกรมใช้สีส้มโปร่งแสง */
 .asheet .as-cards .as-c{background:rgba(22,48,95,.07);border-color:rgba(22,48,95,.18)}
 .asheet .as-cards .as-c span{color:#16305f;border-bottom-color:rgba(22,48,95,.22)}
@@ -3060,7 +3062,7 @@ body:not(.review-mode) .rvbar{display:none}
 }
 </style>
 </head>
-<body>
+<body class="on-home">
 
 <script>
 (function(){
@@ -4422,6 +4424,7 @@ page.classList.remove("active")
 $(pageId)
 .classList
 .add("active");
+document.body.classList.toggle("on-home",pageId==="homePage");
 if(pageId==="historyPage") renderHistory();
 if(pageId==="scorePage") renderOverview();
 document
