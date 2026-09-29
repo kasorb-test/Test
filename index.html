@@ -5380,15 +5380,21 @@ function renderToday(){
   $("heroTodayCount").classList.toggle("done",count>0);
 }
 
-async function addTodayCount(n){
+/* extra: ข้อมูลเพิ่ม เช่น ข้อสอบประจำวันที่ตอบแล้ว (จำไว้ในบัญชี ไม่ใช่แค่ในเครื่อง) */
+async function addTodayCount(n,extra={}){
   if(!currentUser || !currentData) return;
-  const today={date:todayKey(),count:todayCount()+n};
+  const old=currentData.today && currentData.today.date===todayKey() ? currentData.today : {};
+  const today={...old,...extra,date:todayKey(),count:todayCount()+n};
   currentData.today=today;
   renderToday();
   try{
     await updateDoc(doc(db,"users",currentUser.uid),{today});
   }catch(error){
     console.error(error);
+    /* เผื่อยังไม่ได้ Publish กฎใหม่: บันทึกแค่จำนวนข้อ */
+    try{
+      await updateDoc(doc(db,"users",currentUser.uid),{today:{date:today.date,count:today.count}});
+    }catch(e){ console.error(e); }
   }
 }
 
@@ -5420,9 +5426,19 @@ function renderDaily(home){
 
   $("dailyQuestion").textContent=homeText(daily.question);
   /* จำแยกตามบัญชี: บัญชีอื่นในเครื่องเดียวกันต้องตอบเองได้ */
-  const storeKey=`kasorbDaily:${currentUser?.uid||"guest"}:${todayKey()}:${homeText(daily.question).slice(0,40)}`;
+  const dailyKey=homeText(daily.question).slice(0,40);
+  const storeKey=`kasorbDaily:${currentUser?.uid||"guest"}:${todayKey()}:${dailyKey}`;
   let saved=null;
   try{ saved=localStorage.getItem(storeKey); }catch(e){}
+  /* ตอบจากเครื่องอื่นแล้ว: ดูจากข้อมูลในบัญชี จะได้ไม่นับซ้ำ */
+  const answeredInAccount=()=>{
+    const t=currentData?.today;
+    return t && t.date===todayKey() && t.daily===dailyKey ? t : null;
+  };
+  if((saved===null || saved==="") && answeredInAccount()){
+    const c=answeredInAccount().dailyChoice;
+    saved=Number.isInteger(c) ? String(c) : String(Number(daily.answer));
+  }
 
   const choiceLabel=i=>daily.english ? "ABCDE"[i] : String(i+1);
 
@@ -5457,7 +5473,7 @@ function renderDaily(home){
       result.appendChild(document.createTextNode(` — ${homeText(daily.explanation)}`));
     }
     try{ localStorage.setItem(storeKey,String(index)); }catch(e){}
-    if(fresh) addTodayCount(1);
+    if(fresh && !answeredInAccount()) addTodayCount(1,{daily:dailyKey,dailyChoice:index});
   }
 
   if(saved!==null && saved!=="") answer(Number(saved));

@@ -100,10 +100,14 @@ service cloud.firestore {
              .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today"])
         && validProfileText(request.resource.data)
         // วันนี้ทำข้อสอบไปกี่ข้อ: {date: "YYYY-MM-DD", count: 0-2000}
+        // daily / dailyChoice: ข้อสอบประจำวันที่ตอบแล้ว (กันนับซ้ำเมื่อเปิดหลายเครื่อง)
         && (
           !request.resource.data.diff(resource.data).affectedKeys().hasAny(["today"])
           || (
-            request.resource.data.today.keys().hasOnly(["date", "count"])
+            request.resource.data.today.keys().hasOnly(["date", "count", "daily", "dailyChoice"])
+            && request.resource.data.today.get("daily", "") is string
+            && request.resource.data.today.get("daily", "").size() <= 60
+            && request.resource.data.today.get("dailyChoice", 0) is int
             && request.resource.data.today.date is string
             && request.resource.data.today.count is int
             && request.resource.data.today.count >= 0
