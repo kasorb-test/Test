@@ -3,7 +3,14 @@
 <html lang="th">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script>
+/* มุมมองคอมบนมือถือ: ถ้าเลือกไว้ ให้หน้าเว็บกว้าง 1200px และย่อให้พอดีจอ ไม่งั้นใช้ความกว้างของเครื่องตามปกติ */
+(function(){var d=false;try{d=localStorage.getItem("kasorbDesktop")==="1"}catch(e){}
+var z=Math.min(1,(Math.min(screen.width,screen.height)||390)/1200).toFixed(3);
+document.write('<meta name="viewport" content="'+(d?"width=1200,initial-scale="+z+",minimum-scale="+z:"width=device-width,initial-scale=1.0")+'">');
+if(d)document.documentElement.classList.add("desk-view");})();
+</script>
+<noscript><meta content="width=device-width,initial-scale=1.0" name="viewport"/></noscript>
 <title>KASORB TEST</title>
 <!-- ติดตั้งลงหน้าจอมือถือ (PWA) -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -3320,6 +3327,9 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 @media(prefers-reduced-motion:reduce){.hh-walker,.hh-flag{animation:none}.hh-walker{left:30%}}
 @media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:17%;animation-name:hhWalkM}.hh-flag{font-size:9.5px;padding:3px 7px}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
+
+/* มุมมองคอมบนมือถือ: ไม่ให้เบราว์เซอร์ขยายตัวหนังสือเอง */
+html.desk-view,html.desk-view body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 </style>
 </head>
 <body class="on-home">
@@ -3535,6 +3545,15 @@ LINE OA @kasorb
 <path d="M9 11l3 3 3-3"></path>
 </svg>
 <span>ติดตั้งลงหน้าจอ</span>
+</span>
+</button>
+<button class="nav-btn view-btn hidden" id="viewModeBtn" type="button">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<rect x="3" y="4" width="18" height="12" rx="2"></rect>
+<path d="M8 20h8M12 16v4"></path>
+</svg>
+<span id="viewModeText">ดูแบบคอม</span>
 </span>
 </button>
 <button class="nav-btn logout-btn" id="logoutBtn" type="button">
@@ -4622,6 +4641,17 @@ sidebarOverlay
 .onclick=
 ()=>closeSidebar();
 
+/* ปุ่มสลับมุมมองคอม / มือถือ: แสดงเฉพาะเครื่องจอเล็ก (หรือตอนเปิดมุมมองคอมอยู่) */
+(()=>{
+  const btn=$("viewModeBtn"),on=document.documentElement.classList.contains("desk-view");
+  const small=Math.min(screen.width,screen.height)<=820;
+  if(small||on) btn.classList.remove("hidden");
+  $("viewModeText").textContent=on?"กลับไปแบบมือถือ":"ดูแบบคอม";
+  btn.onclick=()=>{try{on?localStorage.removeItem("kasorbDesktop"):localStorage.setItem("kasorbDesktop","1")}catch(e){}
+    /* เปิดหน้าใหม่ (ไม่ใช่รีเฟรช) เบราว์เซอร์จะคำนวณการย่อขยายใหม่ให้พอดีจอ */
+    const u=new URL(location.href);u.searchParams.set("view",on?"m":"d");u.hash="";location.replace(u.toString())};
+  if(/[?&]view=/.test(location.search)){const u=new URL(location.href);u.searchParams.delete("view");history.replaceState(null,"",u.toString())}
+})();
 $("tnSide").onclick=()=>{
   closeTopMenu();
   sidebar.classList.add("open");
