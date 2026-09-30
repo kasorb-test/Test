@@ -3233,7 +3233,9 @@ body:not(.on-home) .hb .hb-text{display:none}body:not(.on-home) .hb{flex-wrap:no
 .asheet .as-cards .as-c{background:rgba(22,48,95,.07);border-color:rgba(22,48,95,.18)}
 .asheet .as-cards .as-c span{color:#16305f;border-bottom-color:rgba(22,48,95,.22)}
 .asheet.navy .as-cards .as-c{background:rgba(255,106,0,.08);border-color:rgba(255,106,0,.28)}
-.asheet.navy .as-cards .as-c span{color:#b4470c;border-bottom-color:rgba(255,106,0,.3)}
+.asheet.navy .as-cards .as-c span{color:#16305f;border-bottom-color:rgba(255,106,0,.3)}
+/* ชื่อวิชาในสรุปคะแนนเป็นสีกรมเสมอ ทั้งกระดาษส้มและกระดาษกรม */
+.asheet .as-cards .as-c span,.asheet.navy .as-cards .as-c span{color:#16305f!important}
 /* มือถือ: การ์ดสรุปคะแนนแบบเดิม แต่ย่อให้เล็กลง เห็นครบในหน้าจอเดียว */
 @media(max-width:600px){
 .as-sum{margin-top:16px}
