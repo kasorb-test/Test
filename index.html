@@ -3254,6 +3254,12 @@ body:not(.on-home) .hb .hb-text{display:none}body:not(.on-home) .hb{flex-wrap:no
 .as-tot .as-ring{flex-basis:54px;width:54px;height:54px}.as-tot .as-ring div{width:42px;height:42px;font-size:12.5px}
 .as-tot .as-all b{font-size:24px}
 }
+
+/* แถบบนแบบลอย: เว้นขอบรอบด้าน มุมโค้ง ไม่เต็มจอแบบทื่อ ๆ */
+.hb{margin:12px 14px 0;border-radius:24px;top:12px!important;box-shadow:0 14px 34px rgba(232,98,8,.22),0 2px 6px rgba(0,0,0,.05)}
+.app-main{padding-top:0}
+@media(max-width:760px){.hb{margin:8px 8px 0;border-radius:20px;top:8px!important}}
+body.exam-mode .hb{margin-bottom:0}
 </style>
 </head>
 <body class="on-home">
@@ -4691,7 +4697,7 @@ renderMembershipStatus();
   window.addEventListener("scroll",update,{passive:true});
   update();
   /* ความสูงของแถบ ใช้วางแถบเวลาในหน้าทำข้อสอบไว้ใต้แถบนี้ */
-  const setH=()=>document.documentElement.style.setProperty("--hbH",bar.offsetHeight+"px");
+  const setH=()=>document.documentElement.style.setProperty("--hbH",(bar.offsetHeight+(parseFloat(getComputedStyle(bar).top)||0))+"px");
   const xb=document.getElementById("xbar");
   if(xb&&"ResizeObserver" in window) new ResizeObserver(()=>document.documentElement.style.setProperty("--xbH",xb.offsetHeight+"px")).observe(xb,{box:"border-box"});
   if("ResizeObserver" in window) new ResizeObserver(setH).observe(bar,{box:"border-box"}); else window.addEventListener("resize",setH);
