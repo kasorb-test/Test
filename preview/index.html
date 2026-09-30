@@ -2592,6 +2592,15 @@ input{
 .countdown-days{font-size:56px;font-weight:900;line-height:1}
 .countdown-unit{font-size:18px;font-weight:800}
 .countdown-date{font-size:13px;font-weight:600;opacity:.92}
+/* นับถอยหลัง: ย่อเล็ก อยู่เหนือสถิติด้านล่างของหน้าแรก */
+#countdownRow{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin:14px 0 10px}
+#countdownRow .countdown-card{padding:12px 14px;min-height:0;border-radius:16px}
+#countdownRow .countdown-label{font-size:11.5px;font-weight:700;line-height:1.35}
+#countdownRow .countdown-track{font-size:12.5px;margin-top:1px}
+#countdownRow .countdown-main{margin:4px 0 0;gap:5px}
+#countdownRow .countdown-days{font-size:26px!important}
+#countdownRow .countdown-unit{font-size:13px}
+#countdownRow .countdown-date{font-size:11px}
 .countdown-track{display:block;margin-top:2px;font-weight:800;color:#111;text-wrap:balance}
 .countdown-cheer{
   margin-top:14px;
@@ -3645,7 +3654,6 @@ LINE OA @kasorb
 <button type="button" class="ns-arrow ns-next" id="newsNext" aria-label="ข่าวถัดไป"></button>
 <div class="ns-dots" id="newsDots"></div>
 </div>
-<div class="countdown-row" id="countdownRow"></div>
 <div class="home-hero">
 <div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
 <div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
@@ -3682,6 +3690,7 @@ LINE OA @kasorb
 </div>
 </div>
 </div>
+<div class="countdown-row" id="countdownRow"></div>
 <div class="system-stats">
 <div class="stat-card">
 <div class="stat-value" id="statQuestions">—</div>
