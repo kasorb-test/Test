@@ -2952,6 +2952,9 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 .xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;background:#fff;white-space:pre-line;font-size:15.5px;line-height:1.75;color:#000;text-align:justify}
 .xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xwrap>*,.xpaper{min-width:0}@media(max-width:600px){.xtbl{font-size:13px}.xtbl th,.xtbl td{padding:5px 6px}}
 .xtbl{border-collapse:collapse;font-size:15px;min-width:50%}
+.rv .exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.rv .exp .xtblw{margin:6px 0 8px;white-space:normal}.rv .exp .xtbl{font-size:14.5px;line-height:1.5;background:#fff}.rv .exp .xtbl td{text-align:left}
+.xefig{margin:8px 0;white-space:normal}.xefig img.eimg{display:block;max-width:100%;height:auto;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,260px);margin:0}
+sub{font-size:.72em;vertical-align:sub;line-height:0}
 .xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5;font-weight:700}
 .xfig{margin:4px 0 12px}.xfig img{max-width:min(100%,520px)}
 .xq2{font-weight:600;margin-top:4px}
@@ -6343,7 +6346,7 @@ function distText(text,wrap){
   return out;
 }
 /* ข้อความข้อสอบแบบมีรูปแบบ: [a/b] เศษส่วน · __คำ__ ขีดเส้นใต้ · ~~คำ~~ ขีดฆ่า · ^{x} ตัวยก */
-const RICH=/(\[[^\]\/\n]{1,12}\/[^\]\n]{1,12}\]|__[^\n]+?__|~~[^\n]+?~~|\^\{[^}\n]+\})/g;
+const RICH=/(\[[^\[\]\/\n]{1,40}\/[^\[\]\n]{1,40}\]|__[^\n]+?__|~~[^\n]+?~~|==[^\n]+?==|\^\{[^}\n]+\}|_\{[^}\n]+\})/g;
 function richText(text,wrap){
   const out=wrap?document.createElement("span"):document.createDocumentFragment();
   if(wrap) out.className="t";
@@ -6354,7 +6357,8 @@ function richText(text,wrap){
     if(part[0]==="["){const [a,b]=part.slice(1,-1).split("/");el=document.createElement("span");el.className="frac";const t=document.createElement("span"),u=document.createElement("span");t.textContent=a.trim();u.textContent=b.trim();el.append(t,u)}
     else if(part.startsWith("__")){el=document.createElement("u");el.textContent=part.slice(2,-2)}   // คำที่ขีดเส้นใต้ไม่ตัดคำ ไม่มีช่องไฟแทรกกลางคำ
     else if(part.startsWith("~~")){el=document.createElement("s");el.textContent=part.slice(2,-2)}
-    else{el=document.createElement("sup");el.textContent=part.slice(2,-1)}
+    else if(part.startsWith("==")){el=document.createElement("mark");el.appendChild(distText(part.slice(2,-2)))}
+    else{el=document.createElement(part[0]==="_"?"sub":"sup");el.textContent=part.slice(2,-1)}
     out.appendChild(el);
   });
   return out;
@@ -6370,6 +6374,34 @@ function appendQuestion(box,it){
   }
   (Array.isArray(it.qfig)?it.qfig:[it.qfig]).map(imgSrc).filter(Boolean).forEach(fig=>box.insertAdjacentHTML("beforeend",`<div class="xfig">${examImg(fig,"รูปประกอบข้อ "+it.n)}</div>`));
   if(it.q2){const p2=document.createElement("p");p2.className="xq xq2";p2.appendChild(richText(it.q2));box.appendChild(p2)}
+}
+/* คำอธิบายเฉลย: ข้อความ + ตาราง (บรรทัด |ช่อง|ช่อง|) + รูปประกอบ ([[รูป]] ตามลำดับใน expFig) */
+function expBody(it){
+  const out=document.createDocumentFragment(),lines=String(it.exp||"-").split("\n"),figs=Array.isArray(it.expFig)?it.expFig:[];
+  let text=[],rows=[],fi=0;
+  const flushText=()=>{if(!text.length)return;const d=document.createElement("div");d.className="xet";d.appendChild(richText(text.join("\n")));out.appendChild(d);text=[]};
+  const flushRows=()=>{
+    if(!rows.length)return;
+    const t=document.createElement("table");t.className="xtbl";
+    const cells=rows.map(r=>r.slice(1,-1).split("|"));
+    const head=cells[0].some(c=>c.trim());
+    cells.forEach((r,ri)=>{if(ri===0&&!head)return;const tr=document.createElement("tr");r.forEach(c=>{const td=document.createElement(ri===0?"th":"td");c.split("<br>").forEach((x,xi)=>{if(xi)td.appendChild(document.createElement("br"));td.appendChild(richText(x.trim()))});tr.appendChild(td)});t.appendChild(tr)});
+    const w=document.createElement("div");w.className="xtblw";w.appendChild(t);out.appendChild(w);rows=[];
+  };
+  lines.forEach(l=>{
+    const tl=l.trim();
+    if(/^\|.*\|$/.test(tl)&&tl.length>1){flushText();rows.push(tl);return}
+    flushRows();
+    if(tl==="[[รูป]]"){
+      flushText();
+      const keys=(figs[fi++]||[]).map(imgSrc).filter(Boolean);
+      if(keys.length){const d=document.createElement("div");d.className="xefig"+(keys.length>1?" many":"");d.innerHTML=keys.map(k=>examImg(k,"รูปประกอบคำอธิบาย")).join("");out.appendChild(d)}
+      return;
+    }
+    text.push(l);
+  });
+  flushText();flushRows();
+  return out;
 }
 /* ตัวเลือก: รูป (cimg) หรือข้อความ */
 function appendChoice(b,it,k){
@@ -6836,7 +6868,9 @@ async function renderOverview(){
     next=`<div class="nx"><div class="${okP?"ok":""}"><span>ทำข้อสอบแล้ว (ต้อง ${needPct}%)</span><b>${pct}% ${okP?"ผ่านแล้ว":`ขาดอีก ${needPct-pct}%`}</b></div>
       <div class="${okX?"ok":""}"><span>XP (ต้อง ${needXp.toLocaleString()})</span><b>${xp.toLocaleString()} ${okX?"ผ่านแล้ว":`ขาด ${(needXp-xp).toLocaleString()}`}</b></div></div>`;
   }
-  /* ผลรายวิชา 2 แบบ: สะสม = รวมทุกครั้ง · ครั้งล่าสุด = ผลของครั้งล่าสุดที่ทำวิชานั้น (list เรียงล่าสุดก่อน) */
+  /* ผลรายวิชา 2 แบบ: สะสม = รวมทุกครั้ง · ครั้งล่าสุด = ผลของครั้งล่าสุดที่ทำวิชานั้น (list เรียงล่าสุดก่อน)
+     นับทั้งตอนทำครบชุดและทำเฉพาะวิชา ครั้งที่ทำก่อนมีการเก็บคะแนนรายวิชา คำนวณจากคำตอบที่บันทึกไว้ */
+  await fillBySec(list);
   const sum={},last={};
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
@@ -6848,6 +6882,21 @@ async function renderOverview(){
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
+const itemsCache=new Map();
+async function fillBySec(list){
+  for(const a of list){
+    if(a.bySec||!a.exam||!Array.isArray(a.ans)) continue;
+    const meta=loadCatalogSync(a.exam);if(!meta) continue;
+    try{
+      if(!itemsCache.has(a.exam)){const snap=await getDoc(doc(db,"examItems",a.exam));itemsCache.set(a.exam,snap.exists()?snap.data().items||[]:[])}
+      let items=itemsCache.get(a.exam);
+      if(Array.isArray(a.parts)) items=items.filter(it=>a.parts.includes(secOf(meta,it)));
+      if(items.length!==a.ans.length) continue;
+      const b={};items.forEach((it,i)=>{const sn=secName(meta,it.n)||"อื่น ๆ";b[sn]=b[sn]||{c:0,t:0};b[sn].t++;if(a.ans[i]===it.a)b[sn].c++});
+      a.bySec=b;
+    }catch(e){itemsCache.set(a.exam,[]);}
+  }
+}
 $("rReview").onclick=()=>renderReview();
 
 /* ===== เฉลย: มีลายน้ำรหัสสมาชิก ===== */
@@ -6882,7 +6931,7 @@ function renderReview(){
     exp.innerHTML='<b class="h">คำอธิบาย</b>';
     const eim=imgSrc(it.expImg);
     if(eim) exp.insertAdjacentHTML("beforeend",examImg(eim,""));
-    else exp.appendChild(richText(it.exp||"-"));
+    else exp.appendChild(expBody(it));
     box.appendChild(exp);paper.appendChild(box);
   });
   /* ลายน้ำ: รหัสอยู่กลางช่อง และวางซ้ำเฉพาะช่องที่เต็ม (repeat: space) ไม่ให้ตัวเลขถูกตัดที่ขอบซ้ายขวา */

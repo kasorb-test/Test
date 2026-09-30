@@ -133,6 +133,7 @@
 .xpaper u{text-underline-offset:3px;font-weight:700}
 .xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;white-space:pre-line;font-size:15px;line-height:1.75;text-align:justify}
 .xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xtbl{border-collapse:collapse;font-size:14.5px}.xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5}
+.exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.exp .xtbl td{text-align:left}.exp .xet{white-space:pre-line}.xefig{margin:8px 0}.xefig img.eimg{display:block;max-width:100%;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,240px);margin:0}sub{font-size:.72em;vertical-align:sub;line-height:0}
 .xfig{margin:4px 0 12px}.xfig img{max-width:min(100%,520px)}.xq2{font-weight:600}
 .xopts.pics{grid-template-columns:repeat(2,minmax(0,1fr))}.xc.pic img{max-width:100%;max-height:130px;margin:0}
 .fhelp{margin:-2px 0 6px;font-size:12px;color:#888}
@@ -445,7 +446,7 @@ $("impGo").onclick=async()=>{
       const d=p.d,old=examSets.find(e=>e.id===d.id);
       $("impMsg").textContent=`กำลังนำเข้า ${d.title}…`;
       const items=d.items.map((it,i)=>({n:it.n||i+1,sec:it.sec??0,q:String(it.q||""),c:it.c.map(String),a:it.a,exp:String(it.exp||""),eng:!!it.eng,
-        ...(it.img?{img:it.img}:{}),...(it.expImg?{expImg:it.expImg}:{}),...(it.passage?{passage:it.passage}:{}),...(it.passageImg?{passageImg:it.passageImg}:{}),...(it.group?{group:it.group}:{}),...(it.fig?{fig:true}:{}),
+        ...(it.img?{img:it.img}:{}),...(it.expImg?{expImg:it.expImg}:{}),...(Array.isArray(it.expFig)?{expFig:it.expFig.map(g=>[].concat(g).map(String))}:{}),...(it.passage?{passage:it.passage}:{}),...(it.passageImg?{passageImg:it.passageImg}:{}),...(it.group?{group:it.group}:{}),...(it.fig?{fig:true}:{}),
         ...(it.q2?{q2:String(it.q2)}:{}),...(it.box?{box:String(it.box)}:{}),...(it.tbl?{tbl:String(it.tbl)}:{}),...(it.qfig?{qfig:it.qfig}:{}),...(Array.isArray(it.cimg)?{cimg:it.cimg}:{})}));
       const keys=items.map(it=>it.a).join("");
       /* รูปประกอบข้อสอบ/คำอธิบาย: เก็บใน examImg (อ่านได้ตามสิทธิ์ของชุด) ไม่เก็บในเว็บที่ใครก็เปิดได้ */
@@ -536,10 +537,22 @@ function getImg(v){
 /* ตัดคำไทยแล้วคั่นด้วยช่องว่างขนาด 0 ให้จัดแบบกระจายเต็มบรรทัดเหมือนหน้านักเรียน */
 const thaiSeg="Segmenter" in Intl?new Intl.Segmenter("th",{granularity:"word"}):null;
 /* รูปแบบข้อความเหมือนหน้านักเรียน: [a/b] เศษส่วน · __คำ__ ขีดเส้นใต้ · ~~คำ~~ ขีดฆ่า · ^{x} ตัวยก */
-const RICH=/(\[[^\]\/\n]{1,12}\/[^\]\n]{1,12}\]|__[^\n]+?__|~~[^\n]+?~~|\^\{[^}\n]+\})/g;
+const RICH=/(\[[^\[\]\/\n]{1,40}\/[^\[\]\n]{1,40}\]|__[^\n]+?__|~~[^\n]+?~~|==[^\n]+?==|\^\{[^}\n]+\}|_\{[^}\n]+\})/g;
 function rich(text){return String(text??"").split(RICH).map((p,i)=>{if(!p)return"";if(i%2===0)return distPlain(p);
   if(p[0]==="["){const [a,b]=p.slice(1,-1).split("/");return `<span class="frac"><span>${esc(a.trim())}</span><span>${esc(b.trim())}</span></span>`}
-  if(p.startsWith("__"))return `<u>${esc(p.slice(2,-2))}</u>`;if(p.startsWith("~~"))return `<s>${esc(p.slice(2,-2))}</s>`;return `<sup>${esc(p.slice(2,-1))}</sup>`}).join("")}
+  if(p.startsWith("__"))return `<u>${esc(p.slice(2,-2))}</u>`;if(p.startsWith("~~"))return `<s>${esc(p.slice(2,-2))}</s>`;if(p.startsWith("=="))return `<mark>${distPlain(p.slice(2,-2))}</mark>`;return p[0]==="_"?`<sub>${esc(p.slice(2,-1))}</sub>`:`<sup>${esc(p.slice(2,-1))}</sup>`}).join("")}
+/* คำอธิบายเฉลย: ข้อความ + ตาราง + รูปประกอบ [[รูป]] (เหมือนหน้านักเรียน) */
+function expHtml(it){
+  const figs=Array.isArray(it.expFig)?it.expFig:[];let fi=0,rows=[],out="",text=[];
+  const ft=()=>{if(text.length){out+=`<div class="xet">${rich(text.join("\n"))}</div>`;text=[]}};
+  const fr=()=>{if(!rows.length)return;const cells=rows.map(r=>r.slice(1,-1).split("|")),head=cells[0].some(c=>c.trim());
+    out+=`<div class="xtblw"><table class="xtbl">${cells.map((r,ri)=>ri===0&&!head?"":`<tr>${r.map(c=>{const v=c.split("<br>").map(x=>rich(x.trim())).join("<br>");return ri?`<td>${v}</td>`:`<th>${v}</th>`}).join("")}</tr>`).join("")}</table></div>`;rows=[]};
+  String(it.exp||"-").split("\n").forEach(l=>{const t=l.trim();
+    if(/^\|.*\|$/.test(t)&&t.length>1){ft();rows.push(t);return}fr();
+    if(t==="[[รูป]]"){ft();const ks=(figs[fi++]||[]).filter(Boolean);if(ks.length)out+=`<div class="xefig${ks.length>1?" many":""}">${ks.map(imgTag).join("")}</div>`;return}
+    text.push(l)});
+  ft();fr();return out;
+}
 const dist=t=>rich(t);
 function distPlain(text){text=String(text??"");if(!thaiSeg||!/[\u0E00-\u0E7F]/.test(text))return esc(text);let out="",first=true;for(const {segment} of thaiSeg.segment(text)){if(!first&&!/^\s/.test(segment))out+='<span class="z"> </span>';out+=esc(segment);first=/\s$/.test(segment)}return out}
 const imgTag=v=>`<img class="eimg" data-k="${esc(v)}" alt="">`;
@@ -597,7 +610,7 @@ async function saveSet(){
   const items=ed.items.map(it=>{const o={...it};Object.keys(o).forEach(k=>{if(o[k]===undefined||o[k]==="")delete o[k]});o.q=it.q||"";o.exp=it.exp||"";return o});
   const keys=items.map(it=>it.a).join("");
   const keyVersion=keys===ed.keys?(ed.meta.keyVersion||1):(ed.meta.keyVersion||1)+1;
-  const imgs=[...new Set(items.flatMap(it=>[it.img,it.expImg,it.passageImg,...[].concat(it.qfig||[]),...(it.cimg||[])]).filter(isImgKey))];
+  const imgs=[...new Set(items.flatMap(it=>[it.img,it.expImg,it.passageImg,...[].concat(it.qfig||[]),...(it.cimg||[]),...[].concat(...(it.expFig||[]))]).filter(isImgKey))];
   const now=new Date().toISOString();
   edStatus("กำลังบันทึก…");
   try{
@@ -618,7 +631,7 @@ function qView(it){
   const opts=it.c.map((c,k)=>`<div class="xc${k===it.a?" ok":""}${pics&&it.cimg[k]?" pic":""}"><b>${lab(k)}</b>${im?"":pics&&it.cimg[k]?imgTag(it.cimg[k]):`<span class="t">${dist(c)}</span>`}</div>`).join("");
   const eim=it.expImg?imgTag(it.expImg):"";
   return `${im?`<p class="xq" style="margin-bottom:0"><em>${it.n}.</em></p>`:""}${q}<div class="xopts${im?" row":pics?" pics":""}">${opts}</div>
-  <div class="exp"><b class="h">เฉลยข้อ ${lab(it.a)} · คำอธิบาย</b>${eim||dist(it.exp||"-")}</div>
+  <div class="exp"><b class="h">เฉลยข้อ ${lab(it.a)} · คำอธิบาย</b>${eim||expHtml(it)}</div>
   <div class="qtools"><button type="button" class="ed" data-a="edit" data-n="${it.n}">แก้ไข</button><button type="button" class="rm" data-a="del" data-n="${it.n}">ลบ</button></div>`;
 }
 function passView(it){
@@ -637,7 +650,7 @@ function formView(){
   return `<div class="qform" id="qform"><h4>${edit.it?`แก้ไขข้อ ${it.n}`:`เพิ่มข้อสอบใหม่ · วิชา${esc(secName)}`}</h4>
   ${it.group?`<label>บทอ่านที่ใช้ร่วมกัน (ข้อ ${it.group[0]}-${it.group[1]})</label><textarea id="fP">${esc(it.passage||"")}</textarea>${imgPick("passageImg","รูปบทอ่าน (ถ้ามี)","")}`:""}
   <label>โจทย์</label><textarea id="fQ" placeholder="พิมพ์โจทย์">${esc(it.q)}</textarea>
-  <p class="fhelp">พิมพ์ [1/2] = เศษส่วน · __คำ__ = ขีดเส้นใต้ · ~~คำ~~ = ขีดฆ่า · 2^{x} = ตัวยก</p>
+  <p class="fhelp">พิมพ์ [1/2] = เศษส่วน · __คำ__ = ขีดเส้นใต้ · ~~คำ~~ = ขีดฆ่า · ==คำ== = ไฮไลต์ · 2^{x} = ตัวยก · a_{n} = ตัวห้อย · คำอธิบาย: บรรทัด |ช่อง|ช่อง| = ตาราง, [[รูป]] = ตำแหน่งรูปประกอบเดิม</p>
   <label>ข้อความในกรอบ (ถ้ามี)</label><textarea id="fB" placeholder="บทความ บทกลอน หรือบทสนทนา ที่แสดงในกรอบใต้โจทย์">${esc(it.box||"")}</textarea>
   <label>ตาราง (ถ้ามี)</label><textarea id="fT" placeholder="แถวละบรรทัด คั่นช่องด้วย | แถวแรกเป็นหัวตาราง เช่น&#10;กลุ่ม|จำนวนคน&#10;ชาย|20">${esc(it.tbl||"")}</textarea>
   ${imgPick("qfig","รูปประกอบโจทย์ (ถ้ามี)","แสดงใต้โจทย์ ตัวเลือกยังเป็นข้อความ")}
