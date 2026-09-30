@@ -133,6 +133,7 @@
 .xpaper u{text-underline-offset:3px;font-weight:700}
 .xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;white-space:pre-line;font-size:15px;line-height:1.75;text-align:justify}
 .xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xtbl{border-collapse:collapse;font-size:14.5px}.xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5}
+.tsubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:10px}.tsubs textarea{min-height:120px;font-size:14px}
 .pubbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 12px;padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px}.pubbar.off{background:#fff4e5;color:#b45309}.pubbar.on{background:#e7f6ec;color:#15803d}.pubbar button{width:auto;margin:0 0 0 auto;padding:9px 16px;border:0;border-radius:10px;font-weight:800;cursor:pointer}.pubbar.off button{background:#ff6a00;color:#fff}.pubbar.on button{background:#fff;color:#c62828;border:1px solid #f3c7c7}
 em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border-radius:999px;font-size:11.5px}em.pub.off{background:#fff4e5;color:#b45309}em.pub.on{background:#e7f6ec;color:#15803d}
 .subs{font-size:12.5px;color:#555;margin-bottom:6px}.subs button{width:auto;margin:0 0 0 4px;padding:3px 9px;font-size:12px;border-radius:8px;background:#eef2fa;color:#16305f;border:0}
@@ -165,6 +166,8 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <div class="hsave"><button type="button" id="saveCount">บันทึกการ์ดนับถอยหลัง</button><span id="countMsg"></span></div></div>
 <div class="hsec"><h3>สายที่เปิดให้นักเรียน</h3><p class="muted">สายที่ไม่ได้เลือก จะไม่แสดงในหน้าแบบทดสอบของนักเรียน</p><div class="tracks" id="openTracks"></div>
 <div class="hsave"><button type="button" id="saveTracks">บันทึกสายที่เปิด</button><span id="tracksMsg"></span></div></div>
+<div class="hsec"><h3>รายวิชาของแต่ละสาย</h3><p class="muted">บรรทัดละ 1 วิชา เรียงตามลำดับที่อยากให้นักเรียนเห็น เพิ่มวิชาใหม่ได้ (ชุดรายวิชาผูกกับชื่อวิชา ถ้าเปลี่ยนชื่อวิชา ชุดเดิมของวิชานั้นจะไม่แสดง)</p><div class="tsubs" id="trackSubs"></div>
+<div class="hsave"><button type="button" id="saveTrackSubs">บันทึกรายวิชา</button><span id="trackSubsMsg"></span></div></div>
 <div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
 <div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
 <div class="hsec"><h3>ข้อสอบประจำวัน</h3>
@@ -182,7 +185,7 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <div id="exNew" class="nform hide"><h3>สร้างชุดข้อสอบใหม่</h3>
 <label>ชื่อชุด</label><input id="nTitle" maxlength="80" placeholder="เช่น ข้อสอบเสมือนจริงสายปราบปราม ชุดที่ 1">
 <label>รูปแบบชุด</label><select id="nKind"><option value="mock">ข้อสอบเสมือนจริง (ครบทุกวิชา เหมือนสอบจริง)</option><option value="subject">แบบทดสอบรายวิชา (วิชาเดียว)</option><option value="mixed">ข้อสอบรวม (รวมหลายวิชา ไม่ใช่ชุดเสมือนจริง)</option><option value="real">ข้อสอบจริง (รายวิชา เฉพาะ Premium)</option></select>
-<div id="nSubjBox" class="hide"><div class="row"><div><label>หมวดวิชา</label><select id="nSubj"></select></div><div id="nSlotBox"><label>ช่องที่ (ชุดที่ 1-5 Free · 6-20 Premium)</label><select id="nSlot"></select></div></div></div>
+<div id="nSubjBox" class="hide"><div class="row"><div><label>หมวดวิชา</label><select id="nSubj"></select></div><div id="nSlotBox"><label>ช่องที่ (Free 5 ชุด · Premium 15 ชุด)</label><select id="nSlot"></select></div></div></div>
 <label>ใช้กับสายสอบ</label><div class="tracks" id="nTracks"></div>
 <div class="row"><div><label>ประเภท</label><select id="nTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="nMins" type="number" min="1" max="600" value="180"></div></div>
 <div id="nSecsBox"><label>วิชาในชุดนี้ (บรรทัดละ 1 วิชา เรียงตามลำดับ)</label><textarea id="nSecs"></textarea></div>
@@ -337,7 +340,7 @@ addEventListener("resize",measureSticky);
 if(window.ResizeObserver){const ro=new ResizeObserver(measureSticky);document.querySelectorAll(".stick").forEach(el=>ro.observe(el))}
 function showShell(on){$("boot").classList.add("hide");document.querySelector("main").classList.toggle("hide",on);$("shell").classList.toggle("hide",!on);document.body.classList.toggle("in",on)}
 onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
-async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};$("openTracks").innerHTML=tracksHtml(Array.isArray(h.tracks)&&h.tracks.length?h.tracks:DEFAULT_OPEN);const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
+async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};fillTrackSubs(h.trackSubjects);$("openTracks").innerHTML=tracksHtml(Array.isArray(h.tracks)&&h.tracks.length?h.tracks:DEFAULT_OPEN);const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
 /* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
 function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;r._pos=newsPos(n.pos);drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
 /* รูปข่าว: อัปโหลดจากเครื่อง (ย่อรูปแล้วเก็บใน siteImg) หรือใส่ลิงก์รูปแบบเดิม */
@@ -402,6 +405,16 @@ async function saveHomePart(data,msgId){
   catch(e){m.className="err";m.textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)";return false}
 }
 const DEFAULT_OPEN=["amnuay","pisut","prab"];
+const DEFAULT_TRACK_SUBJ={amnuay:[0,1,2,3,4,6,7],pisut:[0,1,2,3,4,6,7],prab:[0,1,2,4,5],namwan:[0,1,2,4,5],plrom:[0,1,2,4,5],tcd:[0,1,2,4,5]};
+const BASE_SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+function fillTrackSubs(ts){
+  const map={};TRACKS.forEach(([id])=>map[id]=Array.isArray(ts?.[id])&&ts[id].length?ts[id]:DEFAULT_TRACK_SUBJ[id].map(i=>BASE_SUBJECTS[i]));
+  $("trackSubs").innerHTML=TRACKS.map(([id,name])=>`<div><label>${esc(name)}</label><textarea data-id="${id}" rows="5">${esc(map[id].join("\n"))}</textarea></div>`).join("");
+  SUBJECTS=[...new Set([].concat(...Object.values(map)))];
+}
+$("saveTrackSubs").onclick=()=>{const ts={};let bad="";$("trackSubs").querySelectorAll("textarea").forEach(t=>{const v=[...new Set(t.value.split("\n").map(x=>x.trim().slice(0,60)).filter(Boolean))].slice(0,20);if(!v.length)bad=TRACKS.find(x=>x[0]===t.dataset.id)[1];ts[t.dataset.id]=v});
+  if(bad){$("trackSubsMsg").className="err";$("trackSubsMsg").textContent=`${bad} ต้องมีอย่างน้อย 1 วิชา`;return}
+  SUBJECTS=[...new Set([].concat(...Object.values(ts)))];return saveHomePart({trackSubjects:ts},"trackSubsMsg")};
 $("saveTracks").onclick=()=>{const t=readTracks("openTracks");if(!t.length){$("tracksMsg").className="err";$("tracksMsg").textContent="เลือกอย่างน้อย 1 สาย";return}return saveHomePart({tracks:t},"tracksMsg")};
 $("saveCount").onclick=()=>saveHomePart({exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title)},"countMsg");
 $("saveNews").onclick=async()=>{
@@ -513,7 +526,7 @@ function renderExams(){
   const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
   $("examTotal").textContent=examSets.length?`${examSets.length} ชุด · ${total.toLocaleString()} ข้อ`:"";
   if(!examSets.length){$("examList").innerHTML='<p class="muted">ยังไม่มีชุดข้อสอบ</p>';return}
-  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span><em class="pub ${e.published===false?"off":"on"}">${e.published===false?"ฉบับร่าง":"เผยแพร่แล้ว"}</em>${esc(KIND_NAME[e.kind]||"เสมือนจริง")}${e.subject?" "+esc(e.subject):""}${e.slot?" ชุดที่ "+e.slot:""} · ${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
+  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span><em class="pub ${e.published===false?"off":"on"}">${e.published===false?"ฉบับร่าง":"เผยแพร่แล้ว"}</em>${esc(KIND_NAME[e.kind]||"เสมือนจริง")}${e.subject?" "+esc(e.subject):""}${e.slot?" ชุด "+(e.slot<=5?(/ภาษาไทย/.test(e.subject||"")?"กขคงจ":"ABCDE")[e.slot-1]:"Premium "+(e.slot-5)):""} · ${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
   document.querySelectorAll("#examList .open").forEach(el=>el.onclick=()=>openSet(el.dataset.id));
 }
 async function deleteExam(id){
@@ -525,14 +538,15 @@ async function deleteExam(id){
 }
 
 /* สร้างชุดใหม่: เสมือนจริง / รายวิชา / ข้อสอบรวม */
-const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+let SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
 const REAL_SUBJECTS=["กฎหมาย","ภาษาอังกฤษ","ภาษาไทย","เทคโนโลยีสารสนเทศ","ความสามารถทั่วไป"];
 const KIND_NAME={mock:"เสมือนจริง",subject:"รายวิชา",mixed:"ข้อสอบรวม",real:"ข้อสอบจริง"};
 /* ช่องชุดรายวิชา 1-20 ที่ยังว่าง ของวิชาที่เลือก */
 function fillSlots(){
   const sub=$("nSubj").value,used=new Set(examSets.filter(e=>e.kind==="subject"&&e.subject===sub).map(e=>Number(e.slot)));
   const free=[...Array(20)].map((_,i)=>i+1).filter(n=>!used.has(n));
-  $("nSlot").innerHTML=free.length?free.map(n=>`<option value="${n}">ชุดที่ ${n} · ${n<=5?"Free":"Premium"}</option>`).join(""):'<option value="">ครบ 20 ชุดแล้ว</option>';
+  const lab=n=>n<=5?(/ภาษาไทย/.test(sub)?"กขคงจ":"ABCDE")[n-1]:String(n-5);
+  $("nSlot").innerHTML=free.length?free.map(n=>`<option value="${n}">${n<=5?"Free":"Premium"} ชุด ${lab(n)}</option>`).join(""):'<option value="">ครบ 20 ชุดแล้ว</option>';
 }
 const nKindSync=()=>{const k=$("nKind").value,one=k==="subject"||k==="real";
   $("nSubj").innerHTML=(k==="real"?REAL_SUBJECTS:SUBJECTS).map(x=>`<option>${esc(x)}</option>`).join("");

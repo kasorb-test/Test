@@ -3292,6 +3292,18 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .daily-card{border-left-width:1px!important}
 .sidebar{background:#fff;border-right:1px solid #efece8}
 .nav-btn{box-shadow:none!important;border-color:#f0eeeb!important}
+
+.home-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);align-items:center;gap:18px;margin:4px 0 18px;padding:26px 28px;border:1px solid #efece8;border-radius:24px;background:#fff;box-shadow:0 6px 20px rgba(17,17,17,.04);overflow:hidden}
+.hh-tag{display:inline-block;padding:4px 11px;border-radius:999px;background:#fff1e6;color:#e86208;font-size:12px;font-weight:800;letter-spacing:.06em}
+.hh-text h2{margin:12px 0 8px;font-size:32px;line-height:1.25;font-weight:900;color:#111}
+.hh-text p{margin:0;color:#6b7280;font-size:15px;line-height:1.6}
+.hh-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hh-go,.hh-alt{padding:11px 18px;border-radius:999px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer}
+.hh-go{border:0;background:#111;color:#fff}.hh-alt{border:1px solid #e5e1dc;background:#fff;color:#111}
+.hh-art{position:relative}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
+.hh-mascot{position:absolute;left:-6%;bottom:-4%;width:22%;max-width:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.08))}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{left:auto;right:2%;width:20%}}
+.au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 </style>
 </head>
 <body class="on-home">
@@ -3346,7 +3358,7 @@ window.alert=m=>{uiAlert(m)};
 <h1 class="brand-title"><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
 <section class="au" id="loginPage">
-<div class="au-blk au-head"><div class="au-ic"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4 3 7 7 9 4-2 7-5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><div class="au-ht"><h2>ยินดีต้อนรับกลับ</h2><p>เข้าสู่ระบบเพื่อฝึกต่อ</p></div><span class="au-go"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M14 4h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5"/></svg></span></div>
+<div class="au-blk au-head"><div class="au-mascot"><img src="mascot-2b.svg" alt="มาสคอตดินสอ 2B"></div><div class="au-ht"><h2>ยินดีต้อนรับกลับ</h2><p>เข้าสู่ระบบเพื่อฝึกต่อ</p></div><span class="au-go"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M14 4h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5"/></svg></span></div>
 <div class="au-blk au-fields">
 <label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><input id="loginEmail" placeholder="อีเมล" type="email" autocomplete="email"/></label>
 <label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><input id="loginPassword" placeholder="รหัสผ่าน" type="password" autocomplete="current-password"/>
@@ -3560,12 +3572,11 @@ LINE OA @kasorb
 <main class="content">
 <!-- HOME -->
 <section class="app-page active" id="homePage">
-<h2 class="page-heading">
-หน้าหลัก
-</h2>
-<p class="page-desc">
-ติดตามอันดับ ความคืบหน้า และสถิติการใช้งาน
-</p>
+<div class="home-hero">
+<div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
+<div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
+<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><img class="hh-mascot" src="mascot-2b.svg" alt="มาสคอตดินสอ 2B" draggable="false"></div>
+</div>
 <div class="news-slider hidden" id="newsSlider" aria-label="ข่าวสารและประกาศ">
 <div class="ns-track" id="newsTrack"></div>
 <button type="button" class="ns-arrow ns-prev" id="newsPrev" aria-label="ข่าวก่อนหน้า"></button>
@@ -6140,7 +6151,7 @@ async function loadHome(){
   }catch(error){
     console.error(error);
   }
-  openTracks=Array.isArray(home.tracks)&&home.tracks.length?home.tracks:DEFAULT_OPEN;homeReadyOk();
+  openTracks=Array.isArray(home.tracks)&&home.tracks.length?home.tracks:DEFAULT_OPEN;trackSubjects=home.trackSubjects&&typeof home.trackSubjects==="object"?home.trackSubjects:null;homeReadyOk();
   siteTotalQuestions=Math.max(0,Number(home.totalQuestions)||0);
   if(currentData) renderProfile();
   renderCountdown(home);
@@ -6516,6 +6527,11 @@ $("setBack").onclick=()=>renderMockPage();
    แท็บ ข้อสอบจริง (เห็นเฉพาะ Premium): 5 วิชา > ชุดข้อสอบจริงของวิชานั้น */
 const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
 const TRACK_SUBJECTS={amnuay:[0,1,2,3,4,6,7],pisut:[0,1,2,3,4,6,7],prab:[0,1,2,4,5],namwan:[0,1,2,4,5],plrom:[0,1,2,4,5],tcd:[0,1,2,4,5]};
+/* วิชาของแต่ละสาย: แอดมินแก้ได้ (site/home.trackSubjects) ไม่ได้ตั้งไว้ใช้ค่าเริ่มต้น */
+let trackSubjects=null;
+const subjectsOf=id=>Array.isArray(trackSubjects?.[id])&&trackSubjects[id].length?trackSubjects[id]:(TRACK_SUBJECTS[id]||[]).map(i=>SUBJECTS[i]);
+/* ชื่อชุดตามช่อง: Free ภาษาไทย ก-จ วิชาอื่น A-E · Premium 1, 2, 3 ... */
+const slotLabel=(sub,n)=>n<=FREE_SLOTS?(/ภาษาไทย/.test(sub)?"กขคงจ":"ABCDE")[n-1]:String(n-FREE_SLOTS);
 const REAL_SUBJECTS=["กฎหมาย","ภาษาอังกฤษ","ภาษาไทย","เทคโนโลยีสารสนเทศ","ความสามารถทั่วไป"];
 const SLOTS=20,FREE_SLOTS=5;
 let subjToken=0,subjTab="subj",subjTrack=(()=>{try{return localStorage.getItem("kasorbSubjTrack")||"amnuay"}catch(e){return "amnuay"}})();
@@ -6537,10 +6553,10 @@ async function renderSubjectPage(){
   const kind=subjTab==="real"?"real":"subject";
   const subjSets=list.filter(e=>e.kind==="subject");
   const cnt=n=>`<span class="cn${n?"":" z"}">${n}</span>`;
-  $("subjTracks").innerHTML=shownTracks().map(([id,name])=>{const subs=(TRACK_SUBJECTS[id]||[]).map(i=>SUBJECTS[i]);return `<button type="button" data-id="${id}" class="chip2${id===subjTrack?" on":""}">${ICO.layers}<span>${escHtml(name)}</span>${cnt(subjSets.filter(e=>subs.includes(e.subject)).length)}</button>`}).join("");
+  $("subjTracks").innerHTML=shownTracks().map(([id,name])=>{const subs=subjectsOf(id);return `<button type="button" data-id="${id}" class="chip2${id===subjTrack?" on":""}">${ICO.layers}<span>${escHtml(name)}</span>${cnt(subjSets.filter(e=>subs.includes(e.subject)).length)}</button>`}).join("");
   $("subjTracks").querySelectorAll("button").forEach(b=>b.onclick=()=>{subjTrack=b.dataset.id;try{localStorage.setItem("kasorbSubjTrack",subjTrack)}catch(e){}renderSubjectPage()});
   box.innerHTML="";
-  const subs=subjTab==="real"?REAL_SUBJECTS:(TRACK_SUBJECTS[subjTrack]||[]).map(i=>SUBJECTS[i]);
+  const subs=subjTab==="real"?REAL_SUBJECTS:subjectsOf(subjTrack);
   subs.forEach(sub=>{
     const sets=list.filter(e=>e.kind===kind&&e.subject===sub);
     const b=document.createElement("button");b.type="button";b.className="chip2";
@@ -6586,7 +6602,7 @@ async function openSubject(sub,sets,kind){
     const st=lock?"lock":e?"ready":"wait";
     const t=document.createElement("button");t.type="button";t.className="stile "+st+" "+tier;
     t.title=e?.title||label;
-    t.innerHTML=`<span class="n">${no||"•"}</span><span class="s">${lock?LOCK:st==="ready"?(best?`${best.s}/${best.t}`:(hasSession(e.id)?"ทำต่อ":"เริ่มทำ")):"รอ"}</span>`;
+    t.innerHTML=`<span class="n">${no?(kind==="real"?no:slotLabel(sub,no)):"•"}</span><span class="s">${lock?LOCK:st==="ready"?(best?`${best.s}/${best.t}`:(hasSession(e.id)?"ทำต่อ":"เริ่มทำ")):"รอ"}</span>`;
     if(st==="wait") t.disabled=true;
     t.onclick=()=>lock?showUpgrade():e?startExam(e.id):null;
     g.appendChild(t);
@@ -6599,9 +6615,9 @@ async function openSubject(sub,sets,kind){
     const at=n=>sets.find(x=>Number(x.slot)===n)||null;
     const ready=(a,b)=>[...Array(b-a+1)].filter((_,i)=>at(a+i)).length;
     const gf=group("ชุด Free",`พร้อมทำ ${ready(1,FREE_SLOTS)} จาก ${FREE_SLOTS} ชุด`);
-    for(let n=1;n<=FREE_SLOTS;n++) tile(gf,at(n),`ชุดที่ ${n}`,n,"free");
+    for(let n=1;n<=FREE_SLOTS;n++) tile(gf,at(n),`ชุด ${slotLabel(sub,n)}`,n,"free");
     const gp=group("ชุด Premium",!isPremium()&&!boughtSubject(sub)?"อัปเกรด Premium เพื่อปลดล็อก":`พร้อมทำ ${ready(FREE_SLOTS+1,SLOTS)} จาก ${SLOTS-FREE_SLOTS} ชุด`);
-    for(let n=FREE_SLOTS+1;n<=SLOTS;n++) tile(gp,at(n),`ชุดที่ ${n}`,n,"premium");
+    for(let n=FREE_SLOTS+1;n<=SLOTS;n++) tile(gp,at(n),`ชุด Premium ${slotLabel(sub,n)}`,n,"premium");
     /* ชุดรายวิชาที่ไม่ได้ระบุช่อง (สร้างก่อนมีช่อง) */
     const extra=sets.filter(x=>!(Number(x.slot)>=1&&Number(x.slot)<=SLOTS));
     if(extra.length){const gx=group("ชุดเพิ่มเติม",`${extra.length} ชุด`);extra.forEach(e=>tile(gx,e,e.title,0,e.tier==="free"?"free":"premium"))}
@@ -6611,6 +6627,8 @@ async function openSubject(sub,sets,kind){
 $("subjBack").onclick=()=>renderSubjectPage();
 document.querySelectorAll("#subjTabs [data-t]").forEach(b=>b.onclick=()=>{subjTab=b.dataset.t;renderSubjectPage()});
 $("subjGoMock").onclick=()=>showAppPage("mockPage","แบบทดสอบเสมือนจริง");
+$("hhMock").onclick=()=>showAppPage("mockPage","แบบทดสอบเสมือนจริง");
+$("hhSubj").onclick=()=>showAppPage("subjectPage","แบบทดสอบรายวิชา");
 /* ชื่อวิชาแบบสั้น ใช้บนการ์ดชุดข้อสอบ */
 function shortSec(n){return ({"คอมพิวเตอร์และเทคโนโลยีสารสนเทศ":"คอมพิวเตอร์","ระเบียบงานสารบรรณและระเบียบการตำรวจ":"ระเบียบงานสารบรรณ","กฎหมายที่ประชาชนควรรู้":"กฎหมาย"})[n]||n}
 const secMinutes=(e,n)=>Math.max(1,Math.round((Number(e.minutes)||Number(e.count)||n)*n/(Number(e.count)||n)));
