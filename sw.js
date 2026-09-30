@@ -4,3 +4,8 @@
 */
 self.addEventListener("install",()=>self.skipWaiting());
 self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()));
+/* หน้าเว็บโหลดจากเว็บจริงทุกครั้ง ไม่ใช้สำเนาเก่าในเครื่อง (แอปบน iPad/iPhone เคยค้างหน้าเก่า) */
+self.addEventListener("fetch",e=>{
+  if(e.request.mode!=="navigate") return;
+  e.respondWith(fetch(e.request,{cache:"no-store"}).catch(()=>fetch(e.request)));
+});

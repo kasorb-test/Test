@@ -1387,6 +1387,38 @@ input{
     max-width:none !important;
   }
 }
+
+/* ===== หน้าเข้าสู่ระบบ / สมัครสมาชิก: บล็อกโปร่งบนพื้นพีช ===== */
+#authShell{min-height:100vh;background:radial-gradient(520px 320px at 50% 0,rgba(255,150,100,.32),transparent 70%),linear-gradient(180deg,#fff6f0 0%,#fbf4f0 55%,#eef1f8 100%)}
+#authShell .auth-main{max-width:500px;padding:56px 18px 40px}
+#authShell .brand-title{margin-bottom:2px}#authShell .subtitle{margin-bottom:26px}
+.au{display:flex;flex-direction:column;gap:14px}
+.au-blk{background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 12px 34px rgba(232,98,8,.08),0 2px 6px rgba(0,0,0,.03);backdrop-filter:blur(10px)}
+.au-head{display:flex;align-items:center;gap:16px;padding:18px 20px}
+.au-ic{flex:0 0 auto;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ff8a3d,#ff5a1f);box-shadow:0 10px 22px rgba(255,90,31,.35)}
+.au-ic svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.au-ht{flex:1;min-width:0}.au-ht h2{margin:0;font-size:24px;font-weight:900;color:#141414;line-height:1.25}.au-ht p{margin:3px 0 0;color:#6b7280;font-weight:600;font-size:14.5px}
+.au-go{flex:0 0 auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff1e8;border:1px solid #ffd3b8}
+.au-go svg{width:20px;height:20px;fill:none;stroke:#ff6a00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.au-fields{padding:6px 14px}
+.au-row{display:flex;align-items:center;gap:14px;padding:8px 0;position:relative;cursor:text}
+.au-row+.au-row::before{content:"";position:absolute;left:62px;right:4px;top:0;height:1px;background:#eee}
+.au-fi{flex:0 0 auto;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.au-fi svg{width:22px;height:22px;fill:none;stroke:#ff6a00;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.au-row input{flex:1;min-width:0;margin:0!important;padding:12px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:16.5px;color:#111;outline:none}
+.au-row input::placeholder{color:#8a8f98}
+.au-row .password-eye{position:static;transform:none;flex:0 0 auto;width:40px;height:40px;background:none;border:0;display:grid;place-items:center}
+.au-row .password-eye svg{width:22px;height:22px;fill:none;stroke:#555;stroke-width:1.8}
+.au-forgot{text-align:right;margin:-4px 6px 0}.au-forgot button,.au-link button{border:0;background:none;padding:0;font:inherit;font-weight:800;color:#5b6170;cursor:pointer}
+.au-main{width:100%;padding:16px;border:0;border-radius:999px;background:linear-gradient(90deg,#ff9a6c,#ff6a2b);color:#fff;font:inherit;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 12px 26px rgba(255,106,43,.3);transition:transform .12s,box-shadow .12s}
+.au-main:hover{transform:translateY(-1px);box-shadow:0 16px 30px rgba(255,106,43,.36)}.au-main:disabled{opacity:.6}
+.au-or{display:flex;align-items:center;gap:12px;color:#8a8f98;font-weight:700;font-size:13px;letter-spacing:1px}.au-or::before,.au-or::after{content:"";flex:1;height:1px;background:#e8e3df}
+.au-alt{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border:1px solid #fff;border-radius:999px;background:rgba(255,255,255,.85);color:#374151;font:inherit;font-size:16.5px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.au-alt svg{width:22px;height:22px;fill:none;stroke:#ff6a00;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.au-pad{padding:18px 20px}.au-pad h3{margin:14px 0 10px;font-size:15px}
+.au-link{text-align:center;margin:2px 0 0;color:#6b7280;font-weight:600}.au-link button{color:#ff6a00}
+.au-msg{text-align:center;margin:0}
+@media(max-width:480px){#authShell .auth-main{padding-top:36px}.au-head{padding:14px 16px;gap:12px}.au-ic{width:52px;height:52px}.au-ht h2{font-size:21px}.au-fi{width:42px;height:42px}.au-row+.au-row::before{left:56px}}
 </style>
 
 <style id="kasorb-gender-rank-layout">
@@ -2945,7 +2977,44 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 #examPage>.xbar{max-width:none;padding-left:max(18px,calc((100vw - 1180px)/2 + 18px));padding-right:max(18px,calc((100vw - 1180px)/2 + 18px))}
 .xback{flex:0 0 38px;width:38px;height:38px;border:0;border-radius:11px;background:#f4f4f4;position:relative;cursor:pointer}
 .xback::before{content:"";position:absolute;left:15px;top:14px;width:9px;height:9px;border:solid #333;border-width:0 0 2.5px 2.5px;transform:rotate(45deg)}
-.xttl{min-width:0;margin-right:auto}.xttl b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xttl span{font-size:12px;color:#888;white-space:nowrap}.xttl{flex:1 1 0;overflow:hidden}.xttl span{display:block;overflow:hidden;text-overflow:ellipsis}#xSheetBtn{margin-right:-6px}@media(max-width:480px){.xbar{gap:8px}#xSheetBtn{margin-right:-4px;padding:7px 9px;font-size:12px}.xtimer{padding:7px 11px;font-size:14px}}.xttl i{font-style:normal}.xpaper .xq,.xpaper .xpass,.xpaper .exp,.xpaper .xc{text-align:justify;text-justify:inter-character}.xpaper .z{font-size:0}.xc .t{flex:1;min-width:0}.xpaper .xq{font-size:16px;font-weight:600;line-height:1.65}.xpaper .xc{font-size:15.5px;padding:7px 8px}.xpaper .xc b{flex-basis:23px;height:23px;font-size:12.5px}.xpaper .xpass,.xpaper .exp{font-size:15px}.chips span.over{background:#c62828;color:#fff}.xover{position:sticky;top:60px;z-index:29;margin:0;padding:8px 16px;background:#fdecec;color:#c62828;font-weight:800;font-size:13px;text-align:center;font-family:inherit}@media(max-width:380px){.xbar{padding-left:12px;padding-right:12px;gap:7px}.xttl .xlg{display:none}#xSheetBtn{padding:7px 8px}.xtimer{padding:7px 10px}}
+.xttl{min-width:0;margin-right:auto}.xttl b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xttl span{font-size:12px;color:#888;white-space:nowrap}.xttl{flex:1 1 0;overflow:hidden}.xttl span{display:block;overflow:hidden;text-overflow:ellipsis}#xSheetBtn{margin-right:-6px}@media(max-width:480px){.xbar{gap:8px}#xSheetBtn{margin-right:-4px;padding:7px 9px;font-size:12px}.xtimer{padding:7px 11px;font-size:14px}}.xttl i{font-style:normal}.xpaper .xq,.xpaper .xpass,.xpaper .exp,.xpaper .xc{text-align:justify;text-justify:inter-character}.xpaper .z{font-size:0}
+.frac{display:inline-flex;flex-direction:column;align-items:stretch;vertical-align:middle;margin:0 3px;font-size:.88em;line-height:1.15;text-align:center}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px 1px}.frac>span:last-child{padding:1px 3px 0}
+.xpaper u{text-decoration-thickness:1.5px;text-underline-offset:3px;font-weight:700}
+.xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;background:#fff;white-space:pre-line;font-size:15.5px;line-height:1.75;color:#000;text-align:justify}
+.xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xwrap>*,.xpaper{min-width:0}@media(max-width:600px){.xtbl{font-size:13px}.xtbl th,.xtbl td{padding:5px 6px}}
+.xtbl{border-collapse:collapse;font-size:15px;min-width:50%}
+.ssec{margin:18px 0 26px}.stag{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.5px;background:#fff}.stag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.stag.or{color:#e86208;border-color:#fde0cb;background:#fff7f0}.stag.bl{color:#16305f;border-color:#d7e0f0;background:#f3f6fc}
+.stt{margin:12px 0 16px;font-size:26px;font-weight:900;color:#1b1b1b;line-height:1.3}@media(max-width:600px){.stt{font-size:22px}}
+.chips2{display:flex;flex-wrap:wrap;gap:10px}
+.chip2{display:inline-flex;align-items:center;gap:10px;padding:13px 16px;border:1px solid #e7e7e7;border-radius:16px;background:#fff;font:inherit;font-size:15px;font-weight:800;color:#222;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.03);transition:border-color .15s,box-shadow .15s,transform .15s;text-align:left}
+.chip2:hover{border-color:#ffc9a3;box-shadow:0 6px 16px rgba(255,106,0,.12);transform:translateY(-1px)}
+.chip2 .ci{width:20px;height:20px;flex:0 0 auto;fill:none;stroke:#555;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chip2 .cn{min-width:26px;height:26px;padding:0 8px;border-radius:999px;background:#f1f1f1;color:#555;font-size:13px;display:inline-flex;align-items:center;justify-content:center}.chip2 .cn.z{color:#aaa}
+.chip2.on{border-color:#ff6a00;background:#fff7f0;box-shadow:0 6px 16px rgba(255,106,0,.14)}.chip2.on .ci{stroke:#e86208}.chip2.on .cn{background:#ff6a00;color:#fff}
+@media(max-width:600px){.chips2{gap:8px}.chip2{padding:11px 13px;font-size:14px;gap:8px}}
+.stabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.stabs button{padding:9px 16px;border:1px solid #f3d3bd;border-radius:999px;background:#fff;color:#c2410c;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer}.stabs button.on{background:#ff6a00;border-color:#ff6a00;color:#fff}.stabs button.on .tier{background:#fff;color:#16305f}.stabs .gomock{margin-left:auto;border-color:#16305f;color:#16305f}
+.strk{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.strk button{padding:7px 12px;border:1px solid #e5e5e5;border-radius:10px;background:#fff;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}.strk button.on{border-color:#16305f;background:#16305f;color:#fff}
+.setc.wait{opacity:.75}.setc .go:disabled{background:#e5e5e5;color:#888;cursor:default}
+#subjList .list-button{display:flex;justify-content:space-between;align-items:center;gap:10px}.subj-n{color:#999;font-weight:600;font-size:12.5px;white-space:nowrap}.subj-h{margin:10px 0 12px;font-size:18px}#subjSets{display:block}
+.sgh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:16px 2px 8px;max-width:640px}.sgh:first-child{margin-top:4px}.sgh b{font-size:16px;color:#16305f}.sgh span{font-size:12.5px;color:#888;font-weight:700}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;max-width:640px}
+.stile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;aspect-ratio:1/1;padding:6px;border:1px solid #ececec;border-radius:14px;background:#fff;font-family:inherit;cursor:pointer;transition:border-color .15s,transform .15s}
+.stile .n{font-size:20px;font-weight:900;line-height:1;color:#1f2937}.stile .s{display:flex;align-items:center;font-size:11.5px;font-weight:700;color:#9ca3af}
+.stile .s svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2}
+.stile.ready{border-color:#ff6a00;background:#fff7f0}.stile.ready .n{color:#e86208}.stile.ready .s{color:#e86208}.stile.ready:hover{transform:translateY(-1px)}
+.stile.wait{background:#fafafa;border-style:dashed;cursor:default}.stile.wait .n{color:#c4c4c4}.stile.wait .s{color:#d0d0d0}
+.stile.lock{background:#f5f7fb;border-color:#e3e8f2}.stile.lock .n{color:#94a3b8}.stile.lock .s{color:#94a3b8}
+.rv .exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.rv .exp .xtblw{margin:6px 0 8px;white-space:normal}.rv .exp .xtbl{font-size:14.5px;line-height:1.5;background:#fff}.rv .exp .xtbl td{text-align:left}
+.xefig{margin:8px 0;white-space:normal}.xefig img.eimg{display:block;max-width:100%;height:auto;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,260px);margin:0}
+sub{font-size:.72em;vertical-align:sub;line-height:0}
+.xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5;font-weight:700}
+.xfig{margin:4px 0 12px}.xfig img{max-width:min(100%,520px)}
+.xq2{font-weight:600;margin-top:4px}
+.xopts.pics{grid-template-columns:repeat(2,minmax(0,1fr))}
+.xc.pic{align-items:center}.xc.pic img.eimg{max-width:100%;max-height:140px;width:auto;margin:0}
+.xc.pic img.eimg:not(.ok){min-height:60px;width:100px}.xc .t{flex:1;min-width:0}.xpaper .xq{font-size:16px;font-weight:600;line-height:1.65}.xpaper .xc{font-size:15.5px;padding:7px 8px}.xpaper .xc b{flex-basis:23px;height:23px;font-size:12.5px}.xpaper .xpass,.xpaper .exp{font-size:15px}.chips span.over{background:#c62828;color:#fff}.xover{position:sticky;top:60px;z-index:29;margin:0;padding:8px 16px;background:#fdecec;color:#c62828;font-weight:800;font-size:13px;text-align:center;font-family:inherit}@media(max-width:380px){.xbar{padding-left:12px;padding-right:12px;gap:7px}.xttl .xlg{display:none}#xSheetBtn{padding:7px 8px}.xtimer{padding:7px 10px}}
 .xtimer{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:linear-gradient(120deg,#ff8a2b,#ff6a00);color:#fff;font-weight:900;font-size:15px;font-variant-numeric:tabular-nums;box-shadow:0 3px 10px rgba(255,106,0,.25)}
 .xtimer.low{background:#c62828;box-shadow:0 3px 10px rgba(198,40,40,.3)}
 .xsheetbtn{display:none;white-space:nowrap;padding:8px 10px;border-radius:10px;border:1px solid #f1d9c6;background:#fff6ef;color:#e86208;font-weight:800;font-size:13px}
@@ -3121,6 +3190,10 @@ body:not(.review-mode) .rvbar{display:none}
 /* มือถือ: ข้อสอบประจำวันตัวเล็กลง */
 @media(max-width:600px){#dailyCard{padding:14px 16px}#dailyCard .daily-question{font-size:15.5px;line-height:1.55}#dailyCard .daily-choice{font-size:14.5px;padding-top:8px;padding-bottom:8px;line-height:1.45}#dailyCard .choice-letter{width:22px;height:22px;min-width:22px;font-size:11px}#dailyCard .daily-result{font-size:14px}}
 body.exam-mode .topnav{display:none}
+/* มือถือ: ปุ่มสามขีดซ้ายสุดเปิดแถบข้าง (มีออกจากระบบ) แทนปุ่มติดต่อเรา */
+.tn-side{display:none!important}
+@media(max-width:760px){.tn-side{display:inline-flex!important}.topnav .tn-item[data-menu="contact"]{display:none!important}}
+@media(max-width:560px){.tn-side{display:flex!important}}
 @media(max-width:760px){.tn-item{padding:6px 10px;font-size:12.5px}.tn-item .lg{display:none}.tn-item .sm{display:inline}}@media(max-width:560px){.topnav{gap:4px;overflow:visible}.tn-item{flex:1 1 0;min-width:0;flex-direction:column;justify-content:center;gap:2px;padding:6px 2px 5px;border-radius:12px;font-size:11.5px}.tn-item svg{display:none}.tn-item svg.ti{display:block;width:18px;height:18px}.tn-item span{overflow:hidden;text-overflow:ellipsis;max-width:100%}}
 .uidlg{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);animation:uidIn .15s ease-out}
 @keyframes uidIn{from{opacity:0}to{opacity:1}}
@@ -3151,7 +3224,7 @@ body.guest .hb-guest button{flex:1;padding:9px 10px;border:0;border-radius:11px;
 body.guest .hb-guest button.reg{background:#16305f}
 @media(max-width:760px){body.guest .hb-guest{flex:1 1 100%}}
 body:not(.on-home).guest .hb .hb-guest{flex:1 1 auto;margin-left:auto;max-width:380px}
-#authShell.over{position:fixed;inset:0;z-index:200;overflow:auto;background:#f6f6f6}
+#authShell.over{position:fixed;inset:0;z-index:900;overflow:auto;background:radial-gradient(520px 320px at 50% 0,rgba(255,150,100,.32),transparent 70%),linear-gradient(180deg,#fff6f0 0%,#fbf4f0 55%,#eef1f8 100%)}
 .auth-close{display:inline-block;margin:0 0 8px;padding:9px 14px;border:1px solid #f1d9c6;border-radius:11px;background:#fff6ef;color:#e86208;font-weight:800;cursor:pointer;font-family:inherit}
 .auth-why{margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#fff1e6;color:#c2410c;font-weight:700;font-size:14px;text-align:center}
 /* กล่องทักทาย I WANNA BE... แสดงเฉพาะหน้าหลัก */
@@ -3177,6 +3250,60 @@ body:not(.on-home) .hb .hb-text{display:none}body:not(.on-home) .hb{flex-wrap:no
 .as-tot .as-ring{flex-basis:54px;width:54px;height:54px}.as-tot .as-ring div{width:42px;height:42px;font-size:12.5px}
 .as-tot .as-all b{font-size:24px}
 }
+
+/* แถบบนแบบลอย: เว้นขอบรอบด้าน มุมโค้ง ไม่เต็มจอแบบทื่อ ๆ */
+.hb{margin:12px 14px 0;border-radius:24px;top:12px!important;box-shadow:0 14px 34px rgba(232,98,8,.22),0 2px 6px rgba(0,0,0,.05)}
+.app-main{padding-top:0}
+@media(max-width:760px){.hb{margin:8px 8px 0;border-radius:20px;top:8px!important}}
+body.exam-mode .hb{margin-bottom:0}
+</style>
+
+<style id="kasorb-minimal">
+/* ===== ธีมมินิมอล: พื้นขาวนวล ตัวอักษรเข้ม สีส้มใช้เป็นสีเน้นเท่านั้น ===== */
+body{background:#f7f6f4}
+body .hb{background:#fff!important;color:#111!important;border:1px solid #efece8;box-shadow:0 8px 28px rgba(17,17,17,.06)!important}
+body .hb::after,body .hb::before{display:none!important}
+body .hb .tn-item{background:transparent!important;border-color:transparent!important;color:#555!important}
+body .hb .tn-item:hover,body .hb .tn-item.open{background:#f4f2ef!important}
+body .hb .tn-item.active{background:#111!important;color:#fff!important;border-color:#111!important}
+body .hb .hb-text{background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+body .hb .hb-slogan,body .hb .hb-slogan *{text-shadow:none!important;background:none!important;box-shadow:none!important;padding:0!important;color:#e86208!important;font-family:inherit!important;font-size:12px!important;letter-spacing:.14em!important;font-weight:800!important}
+body .hb .hb-hi{color:#111!important}
+body .hb .hb-today,body .hb .hb-today span{color:#6b7280!important}
+body .hb .hb-count{background:#f4f2ef!important;color:#374151!important}
+body .hb .hb-count.done{background:#fff1e6!important;color:#e86208!important}
+body .hb .hb-card{background:#faf9f7!important;border:1px solid #efece8!important;box-shadow:none!important}
+body .hb .hb-exam,body .hb .hb-exam *{color:#111!important}
+body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after{background:#111!important}
+.countdown-card,.countdown-card.alt{background:#fff!important;color:#111!important;border:1px solid #efece8;box-shadow:0 6px 20px rgba(17,17,17,.04)!important}
+.countdown-card::after{display:none}
+.countdown-card .countdown-days{color:#e86208}.countdown-card.alt .countdown-days{color:#16305f}
+.countdown-card .countdown-label{color:#374151}.countdown-card .countdown-date{color:#6b7280}
+.countdown-card .countdown-cheer{background:#fff1e6;color:#e86208}.countdown-card.alt .countdown-cheer{background:#eef2fa;color:#16305f}
+.ns-slide::after{display:none}.news-slider{box-shadow:0 6px 20px rgba(17,17,17,.06)}
+.ns-slide.c0{background:linear-gradient(120deg,#ff7a1a,#f06a0f)}
+#leaderboardList .leaderboard-item{background:#fff!important;border-color:#f0eeeb!important;box-shadow:none!important}
+#leaderboardList .leaderboard-item.rank-1,#leaderboardList .leaderboard-item.rank-2,#leaderboardList .leaderboard-item.rank-3{background:#fff!important}
+#leaderboardList .leaderboard-item .rank-person>strong{display:inline-grid;place-items:center;width:30px!important;height:30px;border-radius:50%;background:#f4f2ef;color:#374151;font-size:14px!important}
+#leaderboardList .rank-1 .rank-person>strong{background:#f5c542;color:#5b4300}
+#leaderboardList .rank-2 .rank-person>strong{background:#d6dbe3;color:#374151}
+#leaderboardList .rank-3 .rank-person>strong{background:#e8b48a;color:#5a2e0e}
+.dashboard-card,.daily-card,.card,.stat-card{border-color:#efece8!important;box-shadow:0 6px 20px rgba(17,17,17,.04)!important}
+.daily-card{border-left-width:1px!important}
+.sidebar{background:#fff;border-right:1px solid #efece8}
+.nav-btn{box-shadow:none!important;border-color:#f0eeeb!important}
+
+.home-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);align-items:center;gap:18px;margin:4px 0 18px;padding:26px 28px;border:1px solid #efece8;border-radius:24px;background:#fff;box-shadow:0 6px 20px rgba(17,17,17,.04);overflow:hidden}
+.hh-tag{display:inline-block;padding:4px 11px;border-radius:999px;background:#fff1e6;color:#e86208;font-size:12px;font-weight:800;letter-spacing:.06em}
+.hh-text h2{margin:12px 0 8px;font-size:32px;line-height:1.25;font-weight:900;color:#111}
+.hh-text p{margin:0;color:#6b7280;font-size:15px;line-height:1.6}
+.hh-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hh-go,.hh-alt{padding:11px 18px;border-radius:999px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer}
+.hh-go{border:0;background:#111;color:#fff}.hh-alt{border:1px solid #e5e1dc;background:#fff;color:#111}
+.hh-art{position:relative}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
+.hh-mascot{position:absolute;left:-6%;bottom:-4%;width:22%;max-width:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.08))}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{left:auto;right:2%;width:20%}}
+.au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 </style>
 </head>
 <body class="on-home">
@@ -3230,50 +3357,45 @@ window.alert=m=>{uiAlert(m)};
 <p class="auth-why hidden" id="authWhy">เข้าสู่ระบบหรือสมัครสมาชิกก่อน เพื่อใช้งานส่วนนี้</p>
 <h1 class="brand-title"><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
-<section class="card" id="loginPage">
-<h2>เข้าสู่ระบบ</h2>
-<input id="loginEmail" placeholder="อีเมล" type="email"/>
-<div class="password-wrap">
-<input id="loginPassword" placeholder="รหัสผ่าน" type="password"/>
+<section class="au" id="loginPage">
+<div class="au-blk au-head"><div class="au-mascot"><img src="mascot-2b.svg" alt="มาสคอตดินสอ 2B"></div><div class="au-ht"><h2>ยินดีต้อนรับกลับ</h2><p>เข้าสู่ระบบเพื่อฝึกต่อ</p></div><span class="au-go"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M14 4h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5"/></svg></span></div>
+<div class="au-blk au-fields">
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><input id="loginEmail" placeholder="อีเมล" type="email" autocomplete="email"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><input id="loginPassword" placeholder="รหัสผ่าน" type="password" autocomplete="current-password"/>
 <button aria-label="แสดงหรือซ่อนรหัสผ่าน" class="password-eye" id="toggleLoginPassword" type="button">
 <svg id="eyeIcon" viewbox="0 0 24 24">
 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
 <circle cx="12" cy="12" r="3"></circle>
 </svg>
-</button>
+</button></label>
 </div>
-<button class="btn primary" id="loginBtn">
-เข้าสู่ระบบ
-</button>
-<button class="btn" id="goRegisterBtn" style="background:#22c55e;color:white;font-weight:700;">
-สมัครสมาชิก
-</button>
-<button class="btn" id="forgotBtn" style="background:#f3f4f6;color:#666;border:1px solid #e5e7eb;">
-ลืมรหัสผ่าน
-</button>
-<p class="small" id="loginMsg"></p>
+<div class="au-forgot"><button type="button" id="forgotBtn">ลืมรหัสผ่าน?</button></div>
+<button class="au-main" id="loginBtn" type="button">เข้าสู่ระบบ</button>
+<div class="au-or"><span>หรือ</span></div>
+<button class="au-alt" id="goRegisterBtn" type="button"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 12-5M18 14v6M15 17h6"/></svg>สมัครสมาชิกใหม่</button>
+<p class="small au-msg" id="loginMsg"></p>
 </section>
-<section class="card hidden" id="registerPage">
-<h2>สมัครสมาชิก</h2>
-<input id="regEmail" placeholder="อีเมล" type="email"/>
-<input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password"/>
-<input id="regNickname" maxlength="20" placeholder="ชื่อเล่น (ไม่เกิน 20 ตัวอักษร)" type="text"/>
+<section class="au hidden" id="registerPage">
+<div class="au-blk au-head"><div class="au-ic"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 12-5M18 14v6M15 17h6"/></svg></div><div class="au-ht"><h2>สมัครสมาชิก</h2><p>สร้างบัญชี Free เริ่มฝึกทำข้อสอบได้ทันที</p></div></div>
+<div class="au-blk au-fields">
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><input id="regEmail" placeholder="อีเมล" type="email" autocomplete="email"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password" autocomplete="new-password"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><input id="regNickname" maxlength="20" placeholder="ชื่อเล่น (ไม่เกิน 20 ตัวอักษร)" type="text"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></span><input id="regQuote" maxlength="50" placeholder="คติประจำตัว (ไม่บังคับ)" type="text"/></label>
+</div>
+<div class="au-blk au-pad">
 <div class="gender-register" aria-label="เพศ">
   <span class="gender-label">เพศ</span>
   <label><input type="radio" name="regGender" value="male"/> ชาย</label>
   <label><input type="radio" name="regGender" value="female"/> หญิง</label>
   <label><input type="radio" name="regGender" value="unspecified" checked/> ไม่ระบุ</label>
 </div>
-<input id="regQuote" maxlength="50" placeholder="คำคม / คำคม/คติประจำตัว (ไม่บังคับ)" type="text"/>
 <h3>เลือกรูปโปรไฟล์</h3>
 <div class="avatar-grid" id="registerAvatarGrid"></div>
-<button class="btn primary" id="registerBtn">
-สร้างบัญชี
-</button>
-<button class="btn secondary" id="backLoginBtn">
-กลับหน้าเข้าสู่ระบบ
-</button>
-<p class="small" id="registerMsg"></p>
+</div>
+<button class="au-main" id="registerBtn" type="button">สร้างบัญชี</button>
+<p class="au-link">มีบัญชีแล้ว? <button type="button" id="backLoginBtn">เข้าสู่ระบบ</button></p>
+<p class="small au-msg" id="registerMsg"></p>
 </section>
 </main>
 </div>
@@ -3415,6 +3537,7 @@ LINE OA @kasorb
 <div class="app-main">
 <header class="hb">
 <nav class="topnav" id="topNav" aria-label="เมนูหลัก">
+<button type="button" class="tn-item tn-side" id="tnSide" aria-label="เปิดแถบเมนู"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 6h16M4 12h16M4 18h16"></path> </svg><span>เมนู</span></button>
 <button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M3 11.5 12 4l9 7.5"></path> <path d="M5.5 10.5V20h13v-9.5"></path> <path d="M9.5 20v-5h5v5"></path> </svg><span>หน้าหลัก</span></button>
 <button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">แบบทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="results"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 19V9"></path> <path d="M10 19V5"></path> <path d="M16 19v-7"></path> <path d="M22 19H2"></path> </svg><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -3449,12 +3572,11 @@ LINE OA @kasorb
 <main class="content">
 <!-- HOME -->
 <section class="app-page active" id="homePage">
-<h2 class="page-heading">
-หน้าหลัก
-</h2>
-<p class="page-desc">
-ติดตามอันดับ ความคืบหน้า และสถิติการใช้งาน
-</p>
+<div class="home-hero">
+<div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
+<div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
+<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><img class="hh-mascot" src="mascot-2b.svg" alt="มาสคอตดินสอ 2B" draggable="false"></div>
+</div>
 <div class="news-slider hidden" id="newsSlider" aria-label="ข่าวสารและประกาศ">
 <div class="ns-track" id="newsTrack"></div>
 <button type="button" class="ns-arrow ns-prev" id="newsPrev" aria-label="ข่าวก่อนหน้า"></button>
@@ -3477,126 +3599,7 @@ LINE OA @kasorb
 <h3>อันดับผู้ทำคะแนนสะสมสูงสุด</h3>
 <p style="color:#777">Top 10 จาก XP สะสม</p>
 <div id="leaderboardList">
-<div class="leaderboard-item rank-1" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;font-size:20px;">1</strong>
-    <img src="avatar01.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">ส.ต.อ.หญิง Nink</div>
-      <div class="leader-quote">“พยายามวันนี้ เพื่อวันติดยศ”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.4</div>
-  <strong class="rank-xp">8,420 XP</strong>
-</div>
-<div class="leaderboard-item rank-2" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;font-size:20px;">2</strong>
-    <img src="avatar02.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">ส.ต.ท.หญิง Ploy</div>
-      <div class="leader-quote">“ค่อย ๆ ไป แต่ไม่หยุด”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.3</div>
-  <strong class="rank-xp">7,980 XP</strong>
-</div>
-<div class="leaderboard-item rank-3" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;font-size:20px;">3</strong>
-    <img src="avatar03.png" style="width:46px;height:46px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">ส.ต.ต.หญิง Jane</div>
-      <div class="leader-quote">“ทำให้เต็มที่ในทุกข้อ”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.2</div>
-  <strong class="rank-xp">7,250 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">4</strong>
-    <img src="avatar04.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต. Beam</div>
-      <div class="leader-quote">“เป้าหมายมีไว้ไปให้ถึง”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">6,900 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">5</strong>
-    <img src="avatar05.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต.หญิง Mint</div>
-      <div class="leader-quote">“เก่งขึ้นทุกครั้งที่ลงมือทำ”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">6,520 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">6</strong>
-    <img src="avatar06.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต. First</div>
-      <div class="leader-quote">“วินัยสำคัญกว่าแรงฮึด”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">6,100 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">7</strong>
-    <img src="avatar07.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต. Film</div>
-      <div class="leader-quote">“วันนี้ต้องดีกว่าเมื่อวาน”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">5,860 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">8</strong>
-    <img src="avatar08.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต. Ice</div>
-      <div class="leader-quote">“อ่านให้เข้าใจ ทำให้แม่น”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">5,500 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">9</strong>
-    <img src="avatar09.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต. Bank</div>
-      <div class="leader-quote">“ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">5,120 XP</strong>
-</div>
-<div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
-  <div class="rank-person">
-    <strong style="width:28px;">10</strong>
-    <img src="avatar10.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;"/>
-    <div class="rank-person-info">
-      <div class="rank-person-name">นสต.หญิง May</div>
-      <div class="leader-quote">“ไม่หยุดจนกว่าจะสำเร็จ”</div>
-    </div>
-  </div>
-  <div class="rank-level">Lv.1</div>
-  <strong class="rank-xp">4,850 XP</strong>
-</div>
+<div id="lbItems"></div>
 <div class="my-rank-title" style="margin:18px 0 8px;">อันดับของฉัน</div>
 <div class="leaderboard-item rank-normal" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
   <div class="rank-person">
@@ -3639,32 +3642,10 @@ LINE OA @kasorb
 <p class="page-desc">
 เลือกวิชาที่ต้องการฝึกทำแบบทดสอบ
 </p>
-<div class="card">
-<button class="list-button">
-ความสามารถทั่วไป / คณิตศาสตร์
-</button>
-<button class="list-button">
-ภาษาไทย
-</button>
-<button class="list-button">
-ภาษาอังกฤษ
-</button>
-<button class="list-button">
-คอมพิวเตอร์สำนักงาน
-</button>
-<button class="list-button">
-กฎหมายที่ประชาชนควรรู้
-</button>
-<button class="list-button">
-สังคม วัฒนธรรม และอาเซียน
-</button>
-<button class="list-button">
-งานสารบรรณ
-</button>
-<button class="list-button">
-ลักษณะที่ 54
-</button>
-</div>
+<div class="stabs" id="subjTabs"><button type="button" data-t="subj" class="on">รายวิชา</button><button type="button" data-t="real" id="subjRealTab" class="hidden">ข้อสอบจริง <span class="tier pm">Premium</span></button><button type="button" class="gomock" id="subjGoMock">ข้อสอบเสมือนจริง ›</button></div>
+<div id="subjTrackBox" class="ssec"><span class="stag or">ตามสายงาน</span><h3 class="stt">เลือกดูตามสายงาน</h3><div class="chips2" id="subjTracks"></div></div>
+<div id="subjListBox" class="ssec"><span class="stag bl" id="subjListTag">ตามรายวิชา</span><h3 class="stt" id="subjListTitle">เลือกดูตามรายวิชา</h3><div class="chips2" id="subjList"></div></div>
+<div class="hidden" id="subjSetsBox"><button class="set-back" id="subjBack" type="button">เลือกวิชาอื่น</button><h3 id="subjName" class="subj-h"></h3><div id="subjSets"></div></div>
 </section>
 <!-- MOCK -->
 <section class="app-page" id="mockPage">
@@ -3735,26 +3716,26 @@ LINE OA @kasorb
 <div>
 <div style="font-size:14px;color:#888;margin-bottom:6px;">สถานะปัจจุบัน</div>
 <div id="membershipBadge" style="display:inline-block;padding:7px 12px;border-radius:999px;font-weight:700;background:#f2f2f2;color:#555;">
-      FREE
+      Free
     </div>
 </div>
 <button class="btn primary" id="upgradePremiumBtn" style="width:auto;min-width:210px;margin-top:0;">
-    อัปเกรดเป็น PREMIUM
+    อัปเกรดเป็น Premium
   </button>
 </div>
 <div id="membershipFreeBox" style="margin-top:22px;">
-<h3 style="margin-bottom:8px;">สมาชิก FREE</h3>
+<h3 style="margin-bottom:8px;">สมาชิก Free</h3>
 <p style="color:#777;line-height:1.7;margin-top:0;">
-    ใช้งานแบบทดสอบฟรีได้ตามสิทธิ์ของบัญชี
+    ใช้งานแบบทดสอบ Freeได้ตามสิทธิ์ของบัญชี
   </p>
 <div style="margin-top:16px;line-height:1.9;">
-<div>• แบบทดสอบฟรี</div>
+<div>• แบบทดสอบ Free</div>
 <div>• บันทึกประวัติการทำแบบทดสอบ</div>
 <div>• สะสมคะแนน XP และ Level</div>
 </div>
 </div>
 <div class="hidden" id="membershipPremiumBox" style="margin-top:22px;">
-<h3 style="margin-bottom:8px;">สมาชิก PREMIUM</h3>
+<h3 style="margin-bottom:8px;">สมาชิก Premium</h3>
 <p id="membershipPremiumNote" style="color:#777;line-height:1.7;margin-top:0;">
     ปลดล็อกสิทธิ์ Premium ของบัญชีแล้ว
   </p>
@@ -3762,7 +3743,6 @@ LINE OA @kasorb
 <div>• แบบทดสอบ Premium</div>
 <div>• ทำแบบทดสอบซ้ำได้</div>
 <div>• เฉลยและคำอธิบาย</div>
-<div>• เอกสารประกอบ PDF</div>
 </div>
 </div>
 </div>
@@ -3962,6 +3942,8 @@ collection,
 query,
 where,
 getCountFromServer,
+getAggregateFromServer,
+sum,
 onSnapshot,
 getDocs,
 addDoc,
@@ -4624,6 +4606,12 @@ sidebarOverlay
 .onclick=
 ()=>closeSidebar();
 
+$("tnSide").onclick=()=>{
+  closeTopMenu();
+  sidebar.classList.add("open");
+  sidebarOverlay.classList.add("open");
+};
+
   
 
 function closeSidebar(){
@@ -4692,6 +4680,7 @@ closeSidebar();
 window.scrollTo(0,0);
 if(pageId!=="reviewPage") document.body.classList.remove("review-mode");
 if(pageId==="mockPage") renderMockPage();
+if(pageId==="subjectPage") renderSubjectPage();
 
 
 if(
@@ -4751,7 +4740,7 @@ renderMembershipStatus();
   window.addEventListener("scroll",update,{passive:true});
   update();
   /* ความสูงของแถบ ใช้วางแถบเวลาในหน้าทำข้อสอบไว้ใต้แถบนี้ */
-  const setH=()=>document.documentElement.style.setProperty("--hbH",bar.offsetHeight+"px");
+  const setH=()=>document.documentElement.style.setProperty("--hbH",(bar.offsetHeight+(parseFloat(getComputedStyle(bar).top)||0))+"px");
   const xb=document.getElementById("xbar");
   if(xb&&"ResizeObserver" in window) new ResizeObserver(()=>document.documentElement.style.setProperty("--xbH",xb.offsetHeight+"px")).observe(xb,{box:"border-box"});
   if("ResizeObserver" in window) new ResizeObserver(setH).observe(bar,{box:"border-box"}); else window.addEventListener("resize",setH);
@@ -4837,8 +4826,8 @@ function xpForAnswer(correct,attempt){
 
 /*
   ยศตามเลเวล รวม 19 ขั้น Lv.0 - Lv.18
-  สมาชิกฟรีแสดงเป็น "ผู้ทดลองสอบ" Lv.0 เสมอ
-  สมาชิกพรีเมียมขึ้นเลเวลเมื่อผ่านทั้ง 2 เงื่อนไข:
+  สมาชิก Freeแสดงเป็น "ผู้ทดลองสอบ" Lv.0 เสมอ
+  สมาชิก Premiumขึ้นเลเวลเมื่อผ่านทั้ง 2 เงื่อนไข:
   - ทำแล้วขั้นต่ำ (% ของข้อสอบทั้งหมดในเว็บ นับข้อที่ไม่ซ้ำ)
   - XP สะสมขั้นต่ำ
   Lv.1 เริ่มเมื่อทำข้อสอบข้อแรก
@@ -4954,7 +4943,7 @@ function planText(){
 
 return currentData?.plan==="premium"
 ?
-"สมาชิก PREMIUM"
+"สมาชิก Premium"
 :
 "สมาชิกทั่วไป";
 
@@ -4984,7 +4973,7 @@ snap.exists()
 currentData=
 snap.data();
 
-/* แพ็กเกจรายปีที่หมดอายุแล้ว ให้กลับเป็นสมาชิกฟรี */
+/* แพ็กเกจรายปีที่หมดอายุแล้ว ให้กลับเป็นสมาชิก Free */
 if(
 currentData.plan==="premium"
 &&
@@ -5094,6 +5083,7 @@ $("myRankNickname").textContent=`${rankNameOnly()} ${nickname}`;
 $("myRankLevel").textContent=levelText();
 $("myRankQuote").textContent=quote ? `“${quote}”` : "";
 $("myRankXp").textContent=`${Number(currentData?.xp||0).toLocaleString()} XP`;
+syncBoard(avatar,`${rankNameOnly()} ${nickname}`,quote);
 
 
 const progress=progressPercent();
@@ -5750,9 +5740,9 @@ $("membershipBadge")
 .textContent=
 isPremium
 ?
-"PREMIUM"
+"Premium"
 :
-"FREE";
+"Free";
 
 $("membershipBadge")
 .style.background=
@@ -5895,6 +5885,10 @@ function renderNews(home){
     const slide=document.createElement(link ? "a" : "div");
     slide.className="ns-slide c"+(i%3);
     if(link){ slide.href=link; slide.target="_blank"; slide.rel="noopener"; }
+    /* ส่วนของรูปที่แอดมินเลือกไว้ */
+    const pm=/^(\d{1,3}) (\d{1,3})$/.exec(n.pos||"");
+    slide.style.backgroundSize="cover";
+    slide.style.backgroundPosition=pm?`${Math.min(100,+pm[1])}% ${Math.min(100,+pm[2])}%`:"50% 50%";
     const img=httpsUrl(n.image);
     if(img){
       slide.classList.add("img");
@@ -5970,6 +5964,18 @@ function renderToday(){
   const count=todayCount();
   $("heroTodayCount").textContent=`วันนี้ทำไปแล้ว ${count.toLocaleString()} ข้อ`;
   $("heroTodayCount").classList.toggle("done",count>0);
+  syncTodayCount(count);
+}
+
+/* ส่งยอดของวันนี้ที่ทำไว้ก่อนมีตัวรวมทั้งเว็บ (ส่งครั้งเดียวต่อยอด) */
+let syncedToday="";
+function syncTodayCount(count){
+  if(!currentUser || count<=0) return;
+  const key=`${currentUser.uid}:${todayKey()}:${count}`;
+  if(syncedToday===key) return;
+  syncedToday=key;
+  setDoc(doc(db,"todayCount",currentUser.uid),{date:todayKey(),count})
+    .then(()=>loadTodayTotal()).catch(e=>console.error(e));
 }
 
 /* extra: ข้อมูลเพิ่ม เช่น ข้อสอบประจำวันที่ตอบแล้ว (จำไว้ในบัญชี ไม่ใช่แค่ในเครื่อง) */
@@ -6075,11 +6081,7 @@ function renderStats(home){
   const num=v=>Number.isFinite(Number(v)) && Number(v)>0 ? Number(v).toLocaleString() : "—";
   $("statQuestions").textContent=num(home.totalQuestions);
   $("statMembers").textContent=num(home.members);
-  /* ยังไม่มีระบบทำข้อสอบ จึงเป็น 0 จนกว่าจะเชื่อมกับระบบข้อสอบ */
-  const testsToday=home.testsToday && home.testsToday.date===todayKey()
-    ? Number(home.testsToday.count)||0
-    : 0;
-  $("statTestsToday").textContent=testsToday.toLocaleString();
+  loadTodayTotal();
   loadOnlineCount();
 }
 
@@ -6112,6 +6114,22 @@ document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="visible") sendHeartbeat();
 });
 
+/* ทำแบบทดสอบแล้ววันนี้ (ทั้งเว็บ): ผลรวมจำนวนข้อที่สมาชิกทุกคนทำในวันนี้ */
+async function loadTodayTotal(){
+  const own=todayCount();
+  $("statTestsToday").textContent=currentUser ? own.toLocaleString() : "—";
+  if(!currentUser) return;
+  try{
+    const snap=await getAggregateFromServer(
+      query(collection(db,"todayCount"),where("date","==",todayKey())),
+      {n:sum("count")}
+    );
+    $("statTestsToday").textContent=Math.max(own,Number(snap.data().n)||0).toLocaleString();
+  }catch(error){
+    console.error(error);
+  }
+}
+
 async function loadOnlineCount(){
   try{
     const since=Timestamp.fromMillis(Date.now()-ONLINE_WINDOW_MS);
@@ -6133,9 +6151,11 @@ async function loadHome(){
   }catch(error){
     console.error(error);
   }
+  openTracks=Array.isArray(home.tracks)&&home.tracks.length?home.tracks:DEFAULT_OPEN;trackSubjects=home.trackSubjects&&typeof home.trackSubjects==="object"?home.trackSubjects:null;homeReadyOk();
   siteTotalQuestions=Math.max(0,Number(home.totalQuestions)||0);
   if(currentData) renderProfile();
   renderCountdown(home);
+  loadBoard();
   renderNews(home);
   renderDaily(home);
   renderStats(home);
@@ -6259,6 +6279,10 @@ async function claimDevice(user){
 
 
 /* ===== ระบบข้อสอบ ===== */
+/* สายที่แอดมินเปิดให้นักเรียนเห็น (site/home.tracks) */
+const DEFAULT_OPEN=["amnuay","pisut","prab"];
+let openTracks=DEFAULT_OPEN,homeReadyOk;const homeReady=new Promise(r=>homeReadyOk=r);
+const shownTracks=()=>TRACKS.filter(t=>openTracks.includes(t[0]));
 const TRACKS=[
   ["amnuay","สายอำนวยการ"],["prab","สายปราบปราม"],["pisut","สายพิสูจน์หลักฐาน"],
   ["namwan","กองร้อยน้ำหวาน"],["plrom","พลร่ม"],["tcd","ตชด."]
@@ -6288,6 +6312,70 @@ function distText(text,wrap){
     out.appendChild(document.createTextNode(segment));first=/\s$/.test(segment);
   }
   return out;
+}
+/* ข้อความข้อสอบแบบมีรูปแบบ: [a/b] เศษส่วน · __คำ__ ขีดเส้นใต้ · ~~คำ~~ ขีดฆ่า · ^{x} ตัวยก */
+const RICH=/(\[[^\[\]\/\n]{1,40}\/[^\[\]\n]{1,40}\]|__[^\n]+?__|~~[^\n]+?~~|==[^\n]+?==|\^\{[^}\n]+\}|_\{[^}\n]+\})/g;
+function richText(text,wrap){
+  const out=wrap?document.createElement("span"):document.createDocumentFragment();
+  if(wrap) out.className="t";
+  String(text??"").split(RICH).forEach((part,i)=>{
+    if(!part) return;
+    if(i%2===0){out.appendChild(distText(part));return}
+    let el;
+    if(part[0]==="["){const [a,b]=part.slice(1,-1).split("/");el=document.createElement("span");el.className="frac";const t=document.createElement("span"),u=document.createElement("span");t.textContent=a.trim();u.textContent=b.trim();el.append(t,u)}
+    else if(part.startsWith("__")){el=document.createElement("u");el.textContent=part.slice(2,-2)}   // คำที่ขีดเส้นใต้ไม่ตัดคำ ไม่มีช่องไฟแทรกกลางคำ
+    else if(part.startsWith("~~")){el=document.createElement("s");el.textContent=part.slice(2,-2)}
+    else if(part.startsWith("==")){el=document.createElement("mark");el.appendChild(distText(part.slice(2,-2)))}
+    else{el=document.createElement(part[0]==="_"?"sub":"sup");el.textContent=part.slice(2,-1)}
+    out.appendChild(el);
+  });
+  return out;
+}
+/* ส่วนโจทย์ของข้อ: เลขข้อ + โจทย์ + กรอบข้อความ + ตาราง + รูปประกอบ + ข้อความหลังรูป */
+function appendQuestion(box,it){
+  const q=document.createElement("p");q.className="xq";q.innerHTML=`<em>${it.n}.</em>`;q.appendChild(richText(it.q||""));box.appendChild(q);
+  if(it.box){const d=document.createElement("div");d.className="xbox";d.appendChild(richText(it.box));box.appendChild(d)}
+  if(it.tbl){
+    const t=document.createElement("table");t.className="xtbl";
+    String(it.tbl).split("\n").forEach((row,r)=>{const tr=document.createElement("tr");row.split("|").forEach(c=>{const td=document.createElement(r?"td":"th");td.appendChild(richText(c.trim()));tr.appendChild(td)});t.appendChild(tr)});
+    const w=document.createElement("div");w.className="xtblw";w.appendChild(t);box.appendChild(w);
+  }
+  (Array.isArray(it.qfig)?it.qfig:[it.qfig]).map(imgSrc).filter(Boolean).forEach(fig=>box.insertAdjacentHTML("beforeend",`<div class="xfig">${examImg(fig,"รูปประกอบข้อ "+it.n)}</div>`));
+  if(it.q2){const p2=document.createElement("p");p2.className="xq xq2";p2.appendChild(richText(it.q2));box.appendChild(p2)}
+}
+/* คำอธิบายเฉลย: ข้อความ + ตาราง (บรรทัด |ช่อง|ช่อง|) + รูปประกอบ ([[รูป]] ตามลำดับใน expFig) */
+function expBody(it){
+  const out=document.createDocumentFragment(),lines=String(it.exp||"-").split("\n"),figs=Array.isArray(it.expFig)?it.expFig:[];
+  let text=[],rows=[],fi=0;
+  const flushText=()=>{if(!text.length)return;const d=document.createElement("div");d.className="xet";d.appendChild(richText(text.join("\n")));out.appendChild(d);text=[]};
+  const flushRows=()=>{
+    if(!rows.length)return;
+    const t=document.createElement("table");t.className="xtbl";
+    const cells=rows.map(r=>r.slice(1,-1).split("|"));
+    const head=cells[0].some(c=>c.trim());
+    cells.forEach((r,ri)=>{if(ri===0&&!head)return;const tr=document.createElement("tr");r.forEach(c=>{const td=document.createElement(ri===0?"th":"td");c.split("<br>").forEach((x,xi)=>{if(xi)td.appendChild(document.createElement("br"));td.appendChild(richText(x.trim()))});tr.appendChild(td)});t.appendChild(tr)});
+    const w=document.createElement("div");w.className="xtblw";w.appendChild(t);out.appendChild(w);rows=[];
+  };
+  lines.forEach(l=>{
+    const tl=l.trim();
+    if(/^\|.*\|$/.test(tl)&&tl.length>1){flushText();rows.push(tl);return}
+    flushRows();
+    if(tl==="[[รูป]]"){
+      flushText();
+      const keys=(figs[fi++]||[]).map(imgSrc).filter(Boolean);
+      if(keys.length){const d=document.createElement("div");d.className="xefig"+(keys.length>1?" many":"");d.innerHTML=keys.map(k=>examImg(k,"รูปประกอบคำอธิบาย")).join("");out.appendChild(d)}
+      return;
+    }
+    text.push(l);
+  });
+  flushText();flushRows();
+  return out;
+}
+/* ตัวเลือก: รูป (cimg) หรือข้อความ */
+function appendChoice(b,it,k){
+  const ci=Array.isArray(it.cimg)?imgSrc(it.cimg[k]):"";
+  if(ci){b.classList.add("pic");b.insertAdjacentHTML("beforeend",examImg(ci,"ตัวเลือก "+(k+1)))}
+  else b.appendChild(richText(it.c[k]||"",true));
 }
 function examImg(key,alt){
   return `<img class="eimg" alt="${escHtml(alt||"")}" data-k="${key}" draggable="false">`;
@@ -6330,12 +6418,14 @@ async function ensureMemberNo(){
   }catch(e){console.error(e);}
 }
 const isPremium=()=>currentData?.plan==="premium";
-const canTake=e=>e && (e.tier==="free" || isPremium());
+/* ทำได้เมื่อ: ชุด Free / สมาชิก Premium / ซื้อวิชานั้นแยก (เฉพาะชุดรายวิชา) */
+const boughtSubject=sub=>!!sub&&Array.isArray(currentData?.subjects)&&currentData.subjects.includes(sub);
+const canTake=e=>e && (e.tier==="free" || isPremium() || (e.kind==="subject"&&boughtSubject(e.subject)));
 
 async function loadCatalog(force){
   if(examCatalog && !force) return examCatalog;
   const snap=await getDocs(collection(db,"exams"));
-  examCatalog=[];snap.forEach(d=>{const e={id:d.id,...d.data()};if(Number(e.count)>0)examCatalog.push(e)});  // ชุดที่ยังไม่มีข้อสอบ ไม่แสดงให้นักเรียน
+  examCatalog=[];snap.forEach(d=>{const e={id:d.id,...d.data()};if(Number(e.count)>0&&e.published!==false)examCatalog.push(e)});  // ชุดที่ยังไม่มีข้อสอบ หรือยังเป็นฉบับร่าง ไม่แสดงให้นักเรียน
   examCatalog.sort((a,b)=>(a.order??99)-(b.order??99)||String(a.title).localeCompare(String(b.title)));
   return examCatalog;
 }
@@ -6360,9 +6450,11 @@ async function renderMockPage(){
   let list=[];
   try{list=await loadCatalog(true);}catch(e){console.error(e);if(my===mockToken)grid.innerHTML='<div class="card placeholder">โหลดชุดข้อสอบไม่ได้ กรุณาลองใหม่อีกครั้ง</div>';return;}
   if(my!==mockToken) return;
+  await Promise.race([homeReady,new Promise(r=>setTimeout(r,1500))]);
+  if(my!==mockToken) return;
   grid.innerHTML="";
-  TRACKS.forEach(([id,name])=>{
-    const n=list.filter(e=>e.kind!=="subject" && (e.track||[]).includes(id)).length;
+  shownTracks().forEach(([id,name])=>{
+    const n=list.filter(e=>e.kind!=="subject"&&e.kind!=="real" && (e.track||[]).includes(id)).length;
     const b=document.createElement("button");b.type="button";b.className="track"+(n?" has":"");
     b.innerHTML=`<b>${escHtml(name)}</b><span>${n?`${n} ชุด`:"เร็ว ๆ นี้"}</span>`;
     b.disabled=!n;b.onclick=()=>openTrack(id);grid.appendChild(b);
@@ -6377,21 +6469,166 @@ async function openTrack(id){
   const [list,prog]=await Promise.all([loadCatalog(),loadProgress()]);
   if(my!==mockToken) return;
   box.innerHTML="";
-  list.filter(e=>e.kind!=="subject" && (e.track||[]).includes(id)).forEach(e=>{
+  list.filter(e=>e.kind!=="subject"&&e.kind!=="real" && (e.track||[]).includes(id)).forEach(e=>{
     const best=prog.best[e.id];
     const secBest=(e.sections||[]).map((x,i)=>{const b=prog.best[`${e.id}:s${i}`];return b?`${escHtml(shortSec(x.name))} ${b.s}/${b.t}`:""}).filter(Boolean);
     const el=document.createElement("div");el.className="setc";
-    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span></h4>
+    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span>${e.kind==="mixed"?'<span class="tier mx">ข้อสอบรวม</span>':""}</h4>
       <div class="meta">${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที</div>
       ${best?`<div class="best">ทำครบชุด ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}
       ${secBest.length?`<div class="best sb">รายวิชาดีที่สุด: ${secBest.join(" · ")}</div>`:""}</div>
-      <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำข้อสอบ"):"สำหรับสมาชิกพรีเมียม"}</button>`;
+      <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำข้อสอบ"):"สำหรับสมาชิก Premium"}</button>`;
     el.querySelector(".go").onclick=()=>!canTake(e)?showUpgrade():hasSession(e.id)?startExam(e.id):toggleChooser(el,e);
     box.appendChild(el);
   });
   window.scrollTo(0,0);
 }
+/* ===== อันดับ XP สะสม: สมาชิกจริงจาก board/{uid} แทนที่รายชื่อตัวอย่างทีละคน จนครบ 10 อันดับ ===== */
+const SAMPLE_BOARD=[{name:"ส.ต.อ.หญิง Nink",lv:"Lv.4",xp:8420,avatar:"avatar01.png",quote:"พยายามวันนี้ เพื่อวันติดยศ",sample:1},{name:"ส.ต.ท.หญิง Ploy",lv:"Lv.3",xp:7980,avatar:"avatar02.png",quote:"ค่อย ๆ ไป แต่ไม่หยุด",sample:1},{name:"ส.ต.ต.หญิง Jane",lv:"Lv.2",xp:7250,avatar:"avatar03.png",quote:"ทำให้เต็มที่ในทุกข้อ",sample:1},{name:"นสต. Beam",lv:"Lv.1",xp:6900,avatar:"avatar04.png",quote:"เป้าหมายมีไว้ไปให้ถึง",sample:1},{name:"นสต.หญิง Mint",lv:"Lv.1",xp:6520,avatar:"avatar05.png",quote:"เก่งขึ้นทุกครั้งที่ลงมือทำ",sample:1},{name:"นสต. First",lv:"Lv.1",xp:6100,avatar:"avatar06.png",quote:"วินัยสำคัญกว่าแรงฮึด",sample:1},{name:"นสต. Film",lv:"Lv.1",xp:5860,avatar:"avatar07.png",quote:"วันนี้ต้องดีกว่าเมื่อวาน",sample:1},{name:"นสต. Ice",lv:"Lv.1",xp:5500,avatar:"avatar08.png",quote:"อ่านให้เข้าใจ ทำให้แม่น",sample:1},{name:"นสต. Bank",lv:"Lv.1",xp:5120,avatar:"avatar09.png",quote:"ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น",sample:1},{name:"นสต.หญิง May",lv:"Lv.1",xp:4850,avatar:"avatar10.png",quote:"ไม่หยุดจนกว่าจะสำเร็จ",sample:1}];
+function drawBoard(rows){
+  $("lbItems").innerHTML=rows.map((r,i)=>{const n=i+1,big=n<=3;
+    return `<div class="leaderboard-item ${big?"rank-"+n:"rank-normal"}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
+  <div class="rank-person"><strong style="width:28px;font-size:${big?20:16}px;">${n}</strong>
+    <img src="${/^avatar\d{2}\.png$/.test(r.avatar||"")?r.avatar:"avatar20.png"}" alt="" style="width:${big?46:42}px;height:${big?46:42}px;border-radius:50%;object-fit:cover;"/>
+    <div class="rank-person-info"><div class="rank-person-name">${escHtml(r.name||"สมาชิก")}</div>${r.quote?`<div class="leader-quote">“${escHtml(r.quote)}”</div>`:""}</div></div>
+  <div class="rank-level">${escHtml(r.lv||"Lv.0")}</div><strong class="rank-xp">${(Number(r.xp)||0).toLocaleString()} XP</strong></div>`}).join("");
+}
+drawBoard(SAMPLE_BOARD);
+async function loadBoard(){
+  let real=[];
+  try{const snap=await getDocs(query(collection(db,"board"),orderBy("xp","desc"),limit(10)));snap.forEach(d=>real.push({id:d.id,...d.data()}))}catch(e){console.error(e);return}
+  real=real.filter(r=>Number(r.xp)>0);
+  const rows=real.concat(SAMPLE_BOARD.slice(0,Math.max(0,10-real.length))).sort((a,b)=>(Number(b.xp)||0)-(Number(a.xp)||0)).slice(0,10);
+  drawBoard(rows);
+  if(!currentUser) return;
+  const mine=Number(currentData?.xp)||0,at=rows.findIndex(r=>r.id===currentUser.uid);
+  if(at>=0){$("myRankNumber").textContent=at+1;return}
+  if(!mine){$("myRankNumber").textContent="—";return}
+  try{
+    const above=(await getCountFromServer(query(collection(db,"board"),where("xp",">",mine)))).data().count;
+    const kept=real.length<10?SAMPLE_BOARD.slice(0,10-real.length).filter(r=>r.xp>mine).length:0;
+    $("myRankNumber").textContent=(above+kept+1).toLocaleString();
+  }catch(e){console.error(e)}
+}
+/* ส่งข้อมูลของตัวเองขึ้นกระดาน เมื่อมี XP และข้อมูลเปลี่ยน */
+let boardSent="";
+function syncBoard(avatar,name,quote){
+  if(!currentUser||!currentData) return;
+  const xp=Number(currentData.xp)||0;
+  const d={name:String(name).slice(0,60),avatar:/^avatar\d{2}\.png$/.test(String(avatar).split("/").pop())?String(avatar).split("/").pop():"avatar20.png",lv:levelText().slice(0,40),quote:String(quote||"").slice(0,80),xp};
+  const key=currentUser.uid+JSON.stringify(d);
+  if(boardSent===key) return;
+  boardSent=key;
+  (xp>0?setDoc(doc(db,"board",currentUser.uid),d):Promise.resolve()).then(()=>loadBoard()).catch(e=>{console.error(e);loadBoard()});
+}
 $("setBack").onclick=()=>renderMockPage();
+/* ===== แบบทดสอบรายวิชา =====
+   แท็บ รายวิชา: เลือกสาย > วิชาของสายนั้น > ชุดที่ 1-20 (1-5 ฟรี, 6-20 Premium)
+   แท็บ ข้อสอบจริง (เห็นเฉพาะ Premium): 5 วิชา > ชุดข้อสอบจริงของวิชานั้น */
+const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+const TRACK_SUBJECTS={amnuay:[0,1,2,3,4,6,7],pisut:[0,1,2,3,4,6,7],prab:[0,1,2,4,5],namwan:[0,1,2,4,5],plrom:[0,1,2,4,5],tcd:[0,1,2,4,5]};
+/* วิชาของแต่ละสาย: แอดมินแก้ได้ (site/home.trackSubjects) ไม่ได้ตั้งไว้ใช้ค่าเริ่มต้น */
+let trackSubjects=null;
+const subjectsOf=id=>Array.isArray(trackSubjects?.[id])&&trackSubjects[id].length?trackSubjects[id]:(TRACK_SUBJECTS[id]||[]).map(i=>SUBJECTS[i]);
+/* ชื่อชุดตามช่อง: Free ภาษาไทย ก-จ วิชาอื่น A-E · Premium 1, 2, 3 ... */
+const slotLabel=(sub,n)=>n<=FREE_SLOTS?(/ภาษาไทย/.test(sub)?"กขคงจ":"ABCDE")[n-1]:String(n-FREE_SLOTS);
+const REAL_SUBJECTS=["กฎหมาย","ภาษาอังกฤษ","ภาษาไทย","เทคโนโลยีสารสนเทศ","ความสามารถทั่วไป"];
+const SLOTS=20,FREE_SLOTS=5;
+let subjToken=0,subjTab="subj",subjTrack=(()=>{try{return localStorage.getItem("kasorbSubjTrack")||"amnuay"}catch(e){return "amnuay"}})();
+async function renderSubjectPage(){
+  const my=++subjToken;
+  if(subjTab==="real"&&!isPremium()) subjTab="subj";
+  $("subjRealTab").classList.toggle("hidden",!isPremium());
+  document.querySelectorAll("#subjTabs [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===subjTab));
+  $("subjSetsBox").classList.add("hidden");$("subjListBox").classList.remove("hidden");const box=$("subjList");
+  $("subjTrackBox").classList.toggle("hidden",subjTab!=="subj");
+  $("subjListTag").textContent=subjTab==="real"?"เฉพาะ Premium":"ตามรายวิชา";
+  $("subjListTitle").textContent=subjTab==="real"?"ข้อสอบจริงรายวิชา":`รายวิชาของ${(TRACKS.find(t=>t[0]===subjTrack)||[])[1]||""}`;
+  box.innerHTML='<p class="small">กำลังโหลด…</p>';
+  let list=[];try{list=await loadCatalog()}catch(e){console.error(e)}
+  await Promise.race([homeReady,new Promise(r=>setTimeout(r,1500))]);
+  if(my!==subjToken) return;
+  if(!openTracks.includes(subjTrack)) subjTrack=(shownTracks()[0]||TRACKS[0])[0];
+  $("subjListTitle").textContent=subjTab==="real"?"ข้อสอบจริงรายวิชา":`รายวิชาของ${(TRACKS.find(t=>t[0]===subjTrack)||[])[1]||""}`;
+  const kind=subjTab==="real"?"real":"subject";
+  const subjSets=list.filter(e=>e.kind==="subject");
+  const cnt=n=>`<span class="cn${n?"":" z"}">${n}</span>`;
+  $("subjTracks").innerHTML=shownTracks().map(([id,name])=>{const subs=subjectsOf(id);return `<button type="button" data-id="${id}" class="chip2${id===subjTrack?" on":""}">${ICO.layers}<span>${escHtml(name)}</span>${cnt(subjSets.filter(e=>subs.includes(e.subject)).length)}</button>`}).join("");
+  $("subjTracks").querySelectorAll("button").forEach(b=>b.onclick=()=>{subjTrack=b.dataset.id;try{localStorage.setItem("kasorbSubjTrack",subjTrack)}catch(e){}renderSubjectPage()});
+  box.innerHTML="";
+  const subs=subjTab==="real"?REAL_SUBJECTS:subjectsOf(subjTrack);
+  subs.forEach(sub=>{
+    const sets=list.filter(e=>e.kind===kind&&e.subject===sub);
+    const b=document.createElement("button");b.type="button";b.className="chip2";
+    b.innerHTML=`${subjIcon(sub)}<span>${subjTab==="real"?"ข้อสอบจริง":""}${escHtml(sub)}</span>${cnt(sets.length)}`;
+    b.onclick=()=>openSubject(sub,sets,kind);
+    box.appendChild(b);
+  });
+}
+/* ไอคอนเส้นของแต่ละวิชา */
+const svgI=d=>`<svg class="ci" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const ICO={
+  layers:svgI('<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>'),
+  calc:svgI('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>'),
+  book:svgI('<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z"/><path d="M5 17a3 3 0 0 1 3-3h11"/>'),
+  pen:svgI('<path d="m4 20 4-1 11-11-3-3L5 16l-1 4Z"/><path d="m14 6 3 3"/>'),
+  pc:svgI('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
+  law:svgI('<path d="M12 3v18M6 21h12M5 7h14"/><path d="m5 7-3 6a3 3 0 0 0 6 0L5 7ZM19 7l-3 6a3 3 0 0 0 6 0l-3-6Z"/>'),
+  globe:svgI('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'),
+  doc:svgI('<path d="M7 3h7l5 5v13H7V3Z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>'),
+  shield:svgI('<path d="M12 3 5 6v6c0 4 3 7 7 9 4-2 7-5 7-9V6l-7-3Z"/>')
+};
+function subjIcon(sub){
+  if(/ความสามารถ|คณิต/.test(sub)) return ICO.calc;
+  if(/ภาษาไทย/.test(sub)) return ICO.book;
+  if(/อังกฤษ/.test(sub)) return ICO.pen;
+  if(/คอมพิวเตอร์|เทคโนโลยี/.test(sub)) return ICO.pc;
+  if(/กฎหมาย/.test(sub)) return ICO.law;
+  if(/สังคม/.test(sub)) return ICO.globe;
+  if(/สารบรรณ/.test(sub)) return ICO.doc;
+  return ICO.shield;
+}
+async function openSubject(sub,sets,kind){
+  $("subjListBox").classList.add("hidden");$("subjTrackBox").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");
+  $("subjName").textContent=(kind==="real"?"ข้อสอบจริง":"")+sub;
+  const box=$("subjSets");box.innerHTML="";
+  const prog=await loadProgress().catch(()=>({best:{}}));
+  const LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>';
+  const group=(title,sub)=>{const h=document.createElement("div");h.className="sgh";h.innerHTML=`<b>${escHtml(title)}</b><span>${escHtml(sub)}</span>`;box.appendChild(h);const g=document.createElement("div");g.className="sgrid";box.appendChild(g);return g};
+  /* ช่องชุดข้อสอบ: พร้อมทำ / รออัปโหลด / ล็อก (Premium) */
+  const tile=(g,e,label,no,tier)=>{
+    const best=e&&(prog.best||{})[e.id];
+    const lock=tier==="premium"&&!isPremium()&&!(kind==="subject"&&boughtSubject(sub));
+    const st=lock?"lock":e?"ready":"wait";
+    const t=document.createElement("button");t.type="button";t.className="stile "+st+" "+tier;
+    t.title=e?.title||label;
+    t.innerHTML=`<span class="n">${no?(kind==="real"?no:slotLabel(sub,no)):"•"}</span><span class="s">${lock?LOCK:st==="ready"?(best?`${best.s}/${best.t}`:(hasSession(e.id)?"ทำต่อ":"เริ่มทำ")):"รอ"}</span>`;
+    if(st==="wait") t.disabled=true;
+    t.onclick=()=>lock?showUpgrade():e?startExam(e.id):null;
+    g.appendChild(t);
+  };
+  if(kind==="real"){
+    const g=group("ข้อสอบจริง",sets.length?`${sets.length} ชุด`:"รออัปโหลด");
+    if(!sets.length) tile(g,null,"ชุดที่ 1",1,"premium");
+    sets.forEach((e,i)=>tile(g,e,`ชุดที่ ${i+1}`,i+1,"premium"));
+  }else{
+    const at=n=>sets.find(x=>Number(x.slot)===n)||null;
+    const ready=(a,b)=>[...Array(b-a+1)].filter((_,i)=>at(a+i)).length;
+    const gf=group("ชุด Free",`พร้อมทำ ${ready(1,FREE_SLOTS)} จาก ${FREE_SLOTS} ชุด`);
+    for(let n=1;n<=FREE_SLOTS;n++) tile(gf,at(n),`ชุด ${slotLabel(sub,n)}`,n,"free");
+    const gp=group("ชุด Premium",!isPremium()&&!boughtSubject(sub)?"อัปเกรด Premium เพื่อปลดล็อก":`พร้อมทำ ${ready(FREE_SLOTS+1,SLOTS)} จาก ${SLOTS-FREE_SLOTS} ชุด`);
+    for(let n=FREE_SLOTS+1;n<=SLOTS;n++) tile(gp,at(n),`ชุด Premium ${slotLabel(sub,n)}`,n,"premium");
+    /* ชุดรายวิชาที่ไม่ได้ระบุช่อง (สร้างก่อนมีช่อง) */
+    const extra=sets.filter(x=>!(Number(x.slot)>=1&&Number(x.slot)<=SLOTS));
+    if(extra.length){const gx=group("ชุดเพิ่มเติม",`${extra.length} ชุด`);extra.forEach(e=>tile(gx,e,e.title,0,e.tier==="free"?"free":"premium"))}
+  }
+  window.scrollTo(0,0);
+}
+$("subjBack").onclick=()=>renderSubjectPage();
+document.querySelectorAll("#subjTabs [data-t]").forEach(b=>b.onclick=()=>{subjTab=b.dataset.t;renderSubjectPage()});
+$("subjGoMock").onclick=()=>showAppPage("mockPage","แบบทดสอบเสมือนจริง");
+$("hhMock").onclick=()=>showAppPage("mockPage","แบบทดสอบเสมือนจริง");
+$("hhSubj").onclick=()=>showAppPage("subjectPage","แบบทดสอบรายวิชา");
 /* ชื่อวิชาแบบสั้น ใช้บนการ์ดชุดข้อสอบ */
 function shortSec(n){return ({"คอมพิวเตอร์และเทคโนโลยีสารสนเทศ":"คอมพิวเตอร์","ระเบียบงานสารบรรณและระเบียบการตำรวจ":"ระเบียบงานสารบรรณ","กฎหมายที่ประชาชนควรรู้":"กฎหมาย"})[n]||n}
 const secMinutes=(e,n)=>Math.max(1,Math.round((Number(e.minutes)||Number(e.count)||n)*n/(Number(e.count)||n)));
@@ -6415,7 +6652,7 @@ function toggleChooser(el,e){
   el.appendChild(box);
 }
 function showUpgrade(){
-  alert("ชุดนี้สำหรับสมาชิกพรีเมียม\nติดต่อแอดมินทางแชทเพจหรือ LINE @kasorb เพื่ออัปเกรด");
+  alert("ชุดนี้สำหรับสมาชิก Premium\nติดต่อแอดมินทางแชทเพจหรือ LINE @kasorb เพื่ออัปเกรด");
 }
 
 /* ===== ทำข้อสอบ ===== */
@@ -6473,20 +6710,20 @@ function renderExam(){
     if(it.group && it.group[0]===it.n){
       const p=document.createElement("div");p.className="xpass";
       const im=imgSrc(it.passageImg);
-      if(im){p.innerHTML=examImg(im,"")}else p.appendChild(distText(it.passage||""));
-      if(it.group) p.insertAdjacentHTML("afterbegin",`<b style="display:block;font-family:Arial;font-size:13px;color:#c2410c">ใช้ตอบข้อ ${it.group[0]}-${it.group[1]}</b>`);
+      if(im){p.innerHTML=examImg(im,"")}else p.appendChild(richText(it.passage||""));
+      if(it.group&&it.group[1]>it.group[0]) p.insertAdjacentHTML("afterbegin",`<b style="display:block;font-family:Arial;font-size:13px;color:#c2410c">ใช้ตอบข้อ ${it.group[0]}-${it.group[1]}</b>`);
       paper.appendChild(p);
     }
     const box=document.createElement("div");box.className="xi";box.id="xq"+i;
     const im=imgSrc(it.img);
     if(im) box.innerHTML=examImg(im,"ข้อ "+it.n);
-    else{const q=document.createElement("p");q.className="xq";q.innerHTML=`<em>${it.n}.</em>`;q.appendChild(distText(it.q||""));box.appendChild(q);}
-    const opts=document.createElement("div");opts.className="xopts"+(im?" row":"");
+    else appendQuestion(box,it);
+    const opts=document.createElement("div");opts.className="xopts"+(im?" row":Array.isArray(it.cimg)&&it.cimg.some(imgSrc)?" pics":"");
     it.c.forEach((c,k)=>{
       const b=document.createElement("button");b.type="button";b.className="xc";b.dataset.i=i;b.dataset.k=k;
       const lab=it.eng?"abcd"[k]:String(k+1);
       b.innerHTML=`<b>${lab}</b>`;
-      if(!im) b.appendChild(distText(c,true));
+      if(!im) appendChoice(b,it,k);
       b.onclick=()=>choose(i,k);
       opts.appendChild(b);
     });
@@ -6546,7 +6783,9 @@ $("xQuit").onclick=async()=>{
     if(n&&!await uiConfirm(`ลบคำตอบที่ทำไว้ ${n} ข้อ แล้วเริ่มใหม่ใช่หรือไม่?\nลบแล้วกู้คืนไม่ได้`,{ok:"ลบและเริ่มใหม่",cancel:"กลับไปทำต่อ",danger:true})) return;
     try{localStorage.removeItem(sessKey(exam.meta.id))}catch(e){}
   }
-  const t=currentTrack;leaveExamMode();exam=null;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
+  const t=currentTrack,k=exam.meta.kind;leaveExamMode();exam=null;
+  if(k==="subject"||k==="real"){showAppPage("subjectPage","แบบทดสอบรายวิชา");return}
+  showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);
 };
 $("xSheetBtn").onclick=()=>document.body.classList.add("xsheet");
 $("xDrawer").onclick=e=>{if(e.target===$("xDrawer"))document.body.classList.remove("xsheet")};
@@ -6665,7 +6904,7 @@ function renderAnswerSheet(){
 let sheetW=window.innerWidth;
 window.addEventListener("resize",()=>{if(Math.abs(window.innerWidth-sheetW)>40&&$("resultPage").classList.contains("active")){sheetW=window.innerWidth;renderAnswerSheet();}});
 
-$("rBack").onclick=()=>{if(lastResult?.from==="history"){showAppPage("historyPage","ประวัติการทำแบบทดสอบ");return}const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
+$("rBack").onclick=()=>{if(lastResult?.from==="history"){showAppPage("historyPage","ประวัติการทำแบบทดสอบ");return}if(lastResult?.meta?.kind==="subject"||lastResult?.meta?.kind==="real"){showAppPage("subjectPage","แบบทดสอบรายวิชา");return}const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
 
 /* ===== ประวัติการทำแบบทดสอบ ===== */
 let attemptsCache=null,histShown=20;
@@ -6740,7 +6979,7 @@ async function renderOverview(){
   }
   /* เงื่อนไขเลื่อนยศ */
   let next;
-  if(!premium) next=`<p class="note">สมาชิกฟรีอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุดฟรีได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
+  if(!premium) next=`<p class="note">สมาชิก Freeอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุด Freeได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
   else if(lv>=MAX_LEVEL) next=`<p class="note">ถึงยศสูงสุดแล้ว</p>`;
   else if(lv===0) next=`<div class="nx"><div><span>ทำข้อสอบข้อแรก</span><b>ยังไม่เริ่ม</b></div></div>`;
   else{
@@ -6748,7 +6987,9 @@ async function renderOverview(){
     next=`<div class="nx"><div class="${okP?"ok":""}"><span>ทำข้อสอบแล้ว (ต้อง ${needPct}%)</span><b>${pct}% ${okP?"ผ่านแล้ว":`ขาดอีก ${needPct-pct}%`}</b></div>
       <div class="${okX?"ok":""}"><span>XP (ต้อง ${needXp.toLocaleString()})</span><b>${xp.toLocaleString()} ${okX?"ผ่านแล้ว":`ขาด ${(needXp-xp).toLocaleString()}`}</b></div></div>`;
   }
-  /* ผลรายวิชา 2 แบบ: สะสม = รวมทุกครั้ง · ครั้งล่าสุด = ผลของครั้งล่าสุดที่ทำวิชานั้น (list เรียงล่าสุดก่อน) */
+  /* ผลรายวิชา 2 แบบ: สะสม = รวมทุกครั้ง · ครั้งล่าสุด = ผลของครั้งล่าสุดที่ทำวิชานั้น (list เรียงล่าสุดก่อน)
+     นับทั้งตอนทำครบชุดและทำเฉพาะวิชา ครั้งที่ทำก่อนมีการเก็บคะแนนรายวิชา คำนวณจากคำตอบที่บันทึกไว้ */
+  await fillBySec(list);
   const sum={},last={};
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
@@ -6760,6 +7001,21 @@ async function renderOverview(){
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
+const itemsCache=new Map();
+async function fillBySec(list){
+  for(const a of list){
+    if(a.bySec||!a.exam||!Array.isArray(a.ans)) continue;
+    const meta=loadCatalogSync(a.exam);if(!meta) continue;
+    try{
+      if(!itemsCache.has(a.exam)){const snap=await getDoc(doc(db,"examItems",a.exam));itemsCache.set(a.exam,snap.exists()?snap.data().items||[]:[])}
+      let items=itemsCache.get(a.exam);
+      if(Array.isArray(a.parts)) items=items.filter(it=>a.parts.includes(secOf(meta,it)));
+      if(items.length!==a.ans.length) continue;
+      const b={};items.forEach((it,i)=>{const sn=secName(meta,it.n)||"อื่น ๆ";b[sn]=b[sn]||{c:0,t:0};b[sn].t++;if(a.ans[i]===it.a)b[sn].c++});
+      a.bySec=b;
+    }catch(e){itemsCache.set(a.exam,[]);}
+  }
+}
 $("rReview").onclick=()=>renderReview();
 
 /* ===== เฉลย: มีลายน้ำรหัสสมาชิก ===== */
@@ -6775,18 +7031,18 @@ function renderReview(){
     if(sn&&sn!==lastSec){const h=document.createElement("div");h.className="xsec";h.textContent=sn;paper.appendChild(h);lastSec=sn;}
     if(it.group&&it.group[0]===it.n){
       const p=document.createElement("div");p.className="xpass";const im=imgSrc(it.passageImg);
-      if(im)p.innerHTML=examImg(im,"");else p.appendChild(distText(it.passage||""));
+      if(im)p.innerHTML=examImg(im,"");else p.appendChild(richText(it.passage||""));
       paper.appendChild(p);
     }
     const a=r.ans[i],ok=a===it.a;
     const box=document.createElement("div");box.className="xi";
     const im=imgSrc(it.img);
     if(im) box.innerHTML=examImg(im,"ข้อ "+it.n);
-    else{const q=document.createElement("p");q.className="xq";q.innerHTML=`<em>${it.n}.</em>`;q.appendChild(distText(it.q||""));box.appendChild(q);}
-    const opts=document.createElement("div");opts.className="xopts"+(im?" row":"");
+    else appendQuestion(box,it);
+    const opts=document.createElement("div");opts.className="xopts"+(im?" row":Array.isArray(it.cimg)&&it.cimg.some(imgSrc)?" pics":"");
     it.c.forEach((c,k)=>{
       const b=document.createElement("div");b.className="xc"+(k===it.a?" ok":(k===a?" no":""));
-      b.innerHTML=`<b>${it.eng?"abcd"[k]:k+1}</b>`;if(!im)b.appendChild(distText(c,true));opts.appendChild(b);
+      b.innerHTML=`<b>${it.eng?"abcd"[k]:k+1}</b>`;if(!im)appendChoice(b,it,k);opts.appendChild(b);
     });
     box.appendChild(opts);
     box.insertAdjacentHTML("beforeend",`<span class="res ${a<0?"skip":ok?"ok":"no"}">${a<0?"ไม่ได้ตอบ":ok?"ตอบถูก":"ตอบผิด"} · เฉลยข้อ ${it.eng?"abcd"[it.a]:it.a+1}</span>`);
@@ -6794,7 +7050,7 @@ function renderReview(){
     exp.innerHTML='<b class="h">คำอธิบาย</b>';
     const eim=imgSrc(it.expImg);
     if(eim) exp.insertAdjacentHTML("beforeend",examImg(eim,""));
-    else exp.appendChild(distText(it.exp||"-"));
+    else exp.appendChild(expBody(it));
     box.appendChild(exp);paper.appendChild(box);
   });
   /* ลายน้ำ: รหัสอยู่กลางช่อง และวางซ้ำเฉพาะช่องที่เต็ม (repeat: space) ไม่ให้ตัวเลขถูกตัดที่ขอบซ้ายขวา */
