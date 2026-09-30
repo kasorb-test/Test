@@ -1426,6 +1426,20 @@ input{
 .au-link{text-align:center;margin:2px 0 0;color:#6b7280;font-weight:600}.au-link button{color:#ff6a00}
 .au-msg{text-align:center;margin:0}
 @media(max-width:480px){#authShell .auth-main{padding-top:36px}.au-head{padding:14px 16px;gap:12px}.au-ic{width:52px;height:52px}.au-ht h2{font-size:21px}.au-fi{width:42px;height:42px}.au-row+.au-row::before{left:56px}}
+.xpaper .xpass{margin:18px 0 6px;padding:0;border:1px solid #cfd6e2;border-radius:10px;background:#fbfcfe;overflow:hidden;white-space:normal;text-align:left}
+.xpass-h{padding:8px 14px;background:#eef2f8;border-bottom:1px solid #cfd6e2;color:#16305f;font-size:13px;font-weight:700;line-height:1.5;font-family:inherit}
+.xpass-b{padding:12px 16px;white-space:pre-line;text-align:justify;text-justify:inter-character;color:#000;line-height:1.75}
+.xpaper .xpass.long .xpass-b{font-size:10px;line-height:1.75}
+.xpaper .xbox.long{font-size:10px;line-height:1.75;padding:10px 14px;border:1px solid #cfd6e2;border-radius:8px;background:#fbfcfe}
+.fx-big{font-size:1.25em}.fx-sm{font-size:.82em}
+.fx-c-red{color:#dc2626}.fx-c-blue{color:#1d4ed8}.fx-c-green{color:#15803d}.fx-c-orange{color:#ea580c}.fx-c-navy{color:#16305f}
+.fx-bg-yellow{background:#fef08a}.fx-bg-green{background:#bbf7d0}.fx-bg-pink{background:#fbcfe8}.fx-bg-blue{background:#bfdbfe}
+[class^="fx-bg-"]{padding:0 .12em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.quote-picks{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.quote-picks .qp-label{width:100%;font-size:12px;color:#6b7280}
+.qp-chip{border:1px solid #e5e7eb;background:#fff;color:#16305f;border-radius:999px;padding:5px 10px;font:inherit;font-size:12.5px;cursor:pointer}
+.qp-chip:hover{border-color:#ff8a3d}
+.qp-chip.on{background:#16305f;border-color:#16305f;color:#fff}
 </style>
 
 <style id="kasorb-gender-rank-layout">
@@ -2613,7 +2627,10 @@ input{
 .ns-dots{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:7px;z-index:2}
 .ns-dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.55);cursor:pointer;transition:width .2s}
 .ns-dots button.on{width:24px;background:#fff}
+/* ส่วนของรูปที่แอดมินเลือก แยกคอม / มือถือ */
+.ns-slide.img{background-position:var(--npD,50% 50%)!important}
 @media(max-width:700px){
+  .ns-slide.img{background-position:var(--npM,50% 50%)!important}
   .ns-slide{height:180px;padding:18px 18px 34px}
   .ns-text{font-size:17px}
   .ns-arrow{display:none}
@@ -3003,7 +3020,7 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 @media(max-width:600px){.chips2{gap:8px}.chip2{padding:11px 13px;font-size:14px;gap:8px}}
 .stabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.stabs button{padding:9px 16px;border:1px solid #f3d3bd;border-radius:999px;background:#fff;color:#c2410c;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer}.stabs button.on{background:#ff6a00;border-color:#ff6a00;color:#fff}.stabs button.on .tier{background:#fff;color:#16305f}.stabs .gomock{margin-left:auto;border-color:#16305f;color:#16305f}
 .strk{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.strk button{padding:7px 12px;border:1px solid #e5e5e5;border-radius:10px;background:#fff;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}.strk button.on{border-color:#16305f;background:#16305f;color:#fff}
-.setc.wait{opacity:.75}.setc .go:disabled{background:#e5e5e5;color:#888;cursor:default}
+.setc.wait{opacity:.75}.setc.wait{grid-template-columns:minmax(0,1fr) auto!important;padding:12px 16px}.setc.wait h4{font-size:15px;margin:0}.setc.wait .go{width:auto!important;padding:8px 14px;font-size:13px}.setc .go:disabled{background:#e5e5e5;color:#888;cursor:default}
 #subjList .list-button{display:flex;justify-content:space-between;align-items:center;gap:10px}.subj-n{color:#999;font-weight:600;font-size:12.5px;white-space:nowrap}.subj-h{margin:10px 0 12px;font-size:18px}#subjSets{display:block}
 .sgh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:16px 2px 8px;max-width:640px}.sgh:first-child{margin-top:4px}.sgh b{font-size:16px;color:#16305f}.sgh span{font-size:12.5px;color:#888;font-weight:700}
 .sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;max-width:640px}
@@ -3217,7 +3234,6 @@ body.exam-mode .topnav{display:none}
 .uidlg .act.col button small{display:block;margin-top:2px;font-size:12.5px;font-weight:600;opacity:.8}
 .uidlg .red{background:#fdecec;color:#c62828}
 /* ผู้เยี่ยมชม: กระดานอันดับไม่แสดงเลเวล และไม่มี "อันดับของฉัน" (เข้าสู่ระบบแล้วจึงเห็น) */
-body.guest #homePage .rank-level{display:none!important}
 body.guest #homePage .rank-xp{margin-left:auto}
 body.guest #homePage .my-rank-title,body.guest #homePage .my-rank-title + .leaderboard-item{display:none!important}
 /* ผู้เยี่ยมชม */
@@ -3313,19 +3329,20 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 /* มาสคอตเดินไปมาซ้ายขวาบนพื้นห้อง หันหน้าตามทางที่เดิน */
 .hh-walk{position:absolute;left:0;right:0;bottom:-2%;height:0;pointer-events:none}
 /* น้องดินสอถือป้าย "วันนี้ N ข้อ" เดินไปชิดขวาแล้วกลับมาชิดซ้าย */
-.hh-walker{position:absolute;bottom:0;left:0;width:13%;max-width:72px;animation:hhWalk 14s ease-in-out infinite}
+.hh-walker{--pole:168px;position:absolute;bottom:0;left:0;width:13%;max-width:72px;animation:hhWalk 14s ease-in-out infinite}
 .hh-mascot{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08))}
 /* ธงเล็กปักบนไม้ ถือไว้ข้างตัว ผืนธงพลิ้วเบา ๆ */
-.hh-sign{position:absolute;left:14%;bottom:52%;width:0;height:0}
-.hh-sign::before{content:"";position:absolute;left:-1px;bottom:0;width:2px;height:54px;border-radius:2px;background:#9b7a57}
-.hh-sign::after{content:"";position:absolute;left:-3px;bottom:52px;width:6px;height:6px;border-radius:50%;background:#ff6a00}
-.hh-flag{position:absolute;right:1px;bottom:30px;white-space:nowrap;padding:4px 8px 4px 9px;border-radius:7px 0 0 7px;background:#16305f;color:#fff;font-size:10.5px;font-weight:700;line-height:1.25;box-shadow:0 3px 10px rgba(22,48,95,.25);transform-origin:100% 50%;animation:hhFlag 1.8s ease-in-out infinite}
+.hh-sign{position:absolute;left:82.5%;bottom:calc(63% - 10px);width:0;height:0;z-index:0}
+.hh-mascot{position:relative;z-index:1}
+.hh-sign::before{content:"";position:absolute;left:-1.5px;bottom:0;width:3px;height:var(--pole,104px);border-radius:2px;background:#9b7a57}
+.hh-sign::after{content:"";position:absolute;left:-4px;bottom:calc(var(--pole,104px) - 3px);width:8px;height:8px;border-radius:50%;background:#ff6a00}
+.hh-flag{position:absolute;right:1.5px;bottom:calc(var(--pole,104px) - 26px);white-space:nowrap;padding:4px 8px 4px 9px;border-radius:7px 0 0 7px;background:#16305f;color:#fff;font-size:10.5px;font-weight:700;line-height:1.25;box-shadow:0 3px 10px rgba(22,48,95,.25);transform-origin:100% 50%;animation:hhFlag 1.8s ease-in-out infinite}
 .hh-flag b{color:#ffb066;font-weight:900}
 @keyframes hhFlag{0%,100%{transform:skewY(5deg) scaleX(1)}50%{transform:skewY(-4deg) scaleX(.95)}}
 @keyframes hhWalk{0%,6%{left:26%}44%,56%{left:84%}94%,100%{left:26%}}
 @keyframes hhWalkM{0%,6%{left:34%}44%,56%{left:80%}94%,100%{left:34%}}
 @media(prefers-reduced-motion:reduce){.hh-walker,.hh-flag{animation:none}.hh-walker{left:30%}}
-@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:17%;animation-name:hhWalkM}.hh-flag{font-size:9.5px;padding:3px 7px}}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:17%;animation-name:hhWalkM;--pole:112px}.hh-flag{font-size:9.5px;padding:3px 7px}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 
 /* มุมมองคอมบนมือถือ: ไม่ให้เบราว์เซอร์ขยายตัวหนังสือเอง */
@@ -3408,6 +3425,7 @@ window.alert=m=>{uiAlert(m)};
 <label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password" autocomplete="new-password"/></label>
 <label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><input id="regNickname" maxlength="20" placeholder="ชื่อเล่น (ไม่เกิน 20 ตัวอักษร)" type="text"/></label>
 <label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></span><input id="regQuote" maxlength="50" placeholder="คติประจำตัว (ไม่บังคับ)" type="text"/></label>
+<div class="quote-picks" data-for="regQuote"></div>
 </div>
 <div class="au-blk au-pad">
 <div class="gender-register" aria-label="เพศ">
@@ -3417,6 +3435,14 @@ window.alert=m=>{uiAlert(m)};
   <label><input type="radio" name="regGender" value="unspecified" checked/> ไม่ระบุ</label>
 </div>
 <h3>เลือกรูปโปรไฟล์</h3>
+<div class="photo-up">
+<button type="button" class="photo-tile" id="regPhotoTile" aria-label="อัปโหลดรูปของฉัน">
+<img alt="" class="hidden" id="regPhotoPreview"/>
+<span id="regPhotoText">อัปโหลด<br/>รูปของฉัน</span>
+</button>
+<input accept="image/*" class="hidden" id="regPhotoInput" type="file"/>
+<p class="small photo-note" id="regPhotoNote">อัปโหลดรูปของตัวเอง หรือเลือกรูปการ์ตูนด้านล่าง</p>
+</div>
 <div class="avatar-grid" id="registerAvatarGrid"></div>
 </div>
 <button class="au-main" id="registerBtn" type="button">สร้างบัญชี</button>
@@ -3924,6 +3950,7 @@ LINE OA @kasorb
 แก้ไขคำคม/คติประจำตัว
 </h3>
 <input id="quoteInput" maxlength="50" placeholder="พิมพ์คำคมหรือคติประจำตัว" type="text"/>
+<div class="quote-picks" data-for="quoteInput"></div>
 <p class="small">
 สูงสุด 50 ตัวอักษร
 </p>
@@ -4281,6 +4308,10 @@ item.classList
 
 if(type==="register"){
 selectedRegisterAvatar=file;
+regPhoto=null;
+$("regPhotoTile").classList.remove("selected");
+$("regPhotoPreview").classList.add("hidden");
+$("regPhotoText").classList.remove("hidden");
 return;
 }
 selectedAccountAvatar=file;
@@ -4312,6 +4343,19 @@ createAvatarGrid(
 );
 
 
+/* สมัครสมาชิก: อัปโหลดรูปของตัวเองได้ (ย่อรูปแบบเดียวกับหน้าข้อมูลของฉัน) */
+let regPhoto=null;
+$("regPhotoTile").onclick=()=>$("regPhotoInput").click();
+$("regPhotoInput").onchange=async()=>{
+  const file=$("regPhotoInput").files[0];$("regPhotoInput").value="";
+  if(!file) return;
+  if(!/^image\//.test(file.type)){$("regPhotoNote").textContent="กรุณาเลือกไฟล์รูปภาพ";return}
+  $("regPhotoNote").textContent="กำลังเตรียมรูป…";
+  try{regPhoto=await shrinkPhoto(file)}catch(e){console.error(e);regPhoto=null;$("regPhotoNote").textContent="ใช้รูปนี้ไม่ได้ กรุณาเลือกรูปอื่น";return}
+  $("registerAvatarGrid").querySelectorAll(".avatar-choice").forEach(x=>x.classList.remove("selected"));
+  $("regPhotoPreview").src=regPhoto;$("regPhotoPreview").classList.remove("hidden");$("regPhotoText").classList.add("hidden");$("regPhotoTile").classList.add("selected");
+  $("regPhotoNote").textContent="ใช้รูปนี้เป็นรูปโปรไฟล์ (เปลี่ยนได้ภายหลัง)";
+};
 /* REGISTER */
 
 $("registerBtn")
@@ -4433,6 +4477,7 @@ serverTimestamp()
 }
 
 );
+if(regPhoto){try{await updateDoc(doc(db,"users",result.user.uid),{photo:regPhoto})}catch(e){console.error(e)}}
 
 
 alert(
@@ -5932,9 +5977,9 @@ function renderNews(home){
     slide.className="ns-slide c"+(i%3);
     if(link){ slide.href=link; slide.target="_blank"; slide.rel="noopener"; }
     /* ส่วนของรูปที่แอดมินเลือกไว้ */
-    const pm=/^(\d{1,3}) (\d{1,3})$/.exec(n.pos||"");
+    const pp=v=>{const m=/^(\d{1,3}) (\d{1,3})$/.exec(v||"");return m?`${Math.min(100,+m[1])}% ${Math.min(100,+m[2])}%`:"50% 50%"};
     slide.style.backgroundSize="cover";
-    slide.style.backgroundPosition=pm?`${Math.min(100,+pm[1])}% ${Math.min(100,+pm[2])}%`:"50% 50%";
+    slide.style.setProperty("--npD",pp(n.pos));slide.style.setProperty("--npM",pp(n.posM||n.pos));
     const img=httpsUrl(n.image);
     if(img){
       slide.classList.add("img");
@@ -6337,6 +6382,8 @@ const TRACKS=[
   ["amnuay","สายอำนวยการ"],["prab","สายปราบปราม"],["pisut","สายพิสูจน์หลักฐาน"],
   ["namwan","กองร้อยน้ำหวาน"],["plrom","พลร่ม"],["tcd","ตชด."]
 ];
+/* จำนวนช่องชุดเสมือนจริงต่อสาย (อำนวยการกับพิสูจน์หลักฐานใช้ชุดเดียวกัน เพราะสอบพร้อมกัน) */
+const MOCK_SLOTS={amnuay:10,pisut:10,prab:13};
 const escHtml=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 /* รูปข้อสอบเก็บใน Firestore (examImg) ตามสิทธิ์ของชุด: โหลดเมื่อเลื่อนมาใกล้ แล้วจำไว้ */
 const imgSrc=k=>/^[0-9a-f]{16,40}$/.test(k||"") ? k : "";
@@ -6388,9 +6435,25 @@ function distText(text,wrap){
 }
 /* ข้อความข้อสอบแบบมีรูปแบบ: [a/b] เศษส่วน · __คำ__ ขีดเส้นใต้ · ~~คำ~~ ขีดฆ่า · ^{x} ตัวยก */
 const RICH=/(\[[^\[\]\/\n]{1,40}\/[^\[\]\n]{1,40}\]|__[^\n]+?__|~~[^\n]+?~~|==[^\n]+?==|\^\{[^}\n]+\}|_\{[^}\n]+\})/g;
+/* จัดรูปแบบจากแอดมิน: [b]หนา[/b] [i]เอียง[/i] [big]ใหญ่[/big] [small]เล็ก[/small] [c=red]สี[/c] [bg=yellow]ไฮไลต์[/bg] ซ้อนกันได้ */
+const FMT=/\[(b|i|big|small|c|bg)(?:=([a-z]+))?\]([\s\S]*?)\[\/\1\]/g;
+const FMT_C=["red","blue","green","orange","navy"],FMT_BG=["yellow","green","pink","blue"];
 function richText(text,wrap){
   const out=wrap?document.createElement("span"):document.createDocumentFragment();
   if(wrap) out.className="t";
+  const src=String(text??"");let last=0;
+  for(const m of src.matchAll(FMT)){
+    if(m.index>last) richBasic(out,src.slice(last,m.index));
+    const [,tag,val]=m;let el;
+    if(tag==="b") el=document.createElement("strong");
+    else if(tag==="i") el=document.createElement("em");
+    else{el=document.createElement("span");el.className=tag==="big"?"fx-big":tag==="small"?"fx-sm":tag==="c"?(FMT_C.includes(val)?"fx-c-"+val:""):(FMT_BG.includes(val)?"fx-bg-"+val:"fx-bg-yellow")}
+    el.appendChild(richText(m[3]));out.appendChild(el);last=m.index+m[0].length;
+  }
+  if(last<src.length) richBasic(out,src.slice(last));
+  return out;
+}
+function richBasic(out,text){
   String(text??"").split(RICH).forEach((part,i)=>{
     if(!part) return;
     if(i%2===0){out.appendChild(distText(part));return}
@@ -6402,12 +6465,24 @@ function richText(text,wrap){
     else{el=document.createElement(part[0]==="_"?"sub":"sup");el.textContent=part.slice(2,-1)}
     out.appendChild(el);
   });
-  return out;
+}
+/* บทอ่านที่ใช้ร่วมกันหลายข้อ: กรอบพร้อมคำชี้แจง บทความยาวใช้ตัวอักษรเล็กลงครึ่งหนึ่ง (นักเรียนขยายอ่านได้) */
+const LONG_TEXT=280;
+function passBox(it){
+  const p=document.createElement("div");p.className="xpass";
+  const [a,b]=it.group||[it.n,it.n];
+  const h=document.createElement("div");h.className="xpass-h";
+  h.textContent=b>a?`คำชี้แจง อ่านข้อความต่อไปนี้ แล้วตอบคำถามข้อ ${a}–${b}`:`คำชี้แจง อ่านข้อความต่อไปนี้ แล้วตอบคำถามข้อ ${a}`;
+  const body=document.createElement("div");body.className="xpass-b";
+  const im=imgSrc(it.passageImg);
+  if(im) body.innerHTML=examImg(im,"");
+  else{body.appendChild(richText(it.passage||""));if(String(it.passage||"").length>LONG_TEXT)p.classList.add("long")}
+  p.append(h,body);return p;
 }
 /* ส่วนโจทย์ของข้อ: เลขข้อ + โจทย์ + กรอบข้อความ + ตาราง + รูปประกอบ + ข้อความหลังรูป */
 function appendQuestion(box,it){
   const q=document.createElement("p");q.className="xq";q.innerHTML=`<em>${it.n}.</em>`;q.appendChild(richText(it.q||""));box.appendChild(q);
-  if(it.box){const d=document.createElement("div");d.className="xbox";d.appendChild(richText(it.box));box.appendChild(d)}
+  if(it.box){const d=document.createElement("div");d.className="xbox"+(String(it.box).length>LONG_TEXT?" long":"");d.appendChild(richText(it.box));box.appendChild(d)}
   if(it.tbl){
     const t=document.createElement("table");t.className="xtbl";
     String(it.tbl).split("\n").forEach((row,r)=>{const tr=document.createElement("tr");row.split("|").forEach(c=>{const td=document.createElement(r?"td":"th");td.appendChild(richText(c.trim()));tr.appendChild(td)});t.appendChild(tr)});
@@ -6528,9 +6603,10 @@ async function renderMockPage(){
   grid.innerHTML="";
   shownTracks().forEach(([id,name])=>{
     const n=list.filter(e=>e.kind!=="subject"&&e.kind!=="real" && (e.track||[]).includes(id)).length;
-    const b=document.createElement("button");b.type="button";b.className="track"+(n?" has":"");
-    b.innerHTML=`<b>${escHtml(name)}</b><span>${n?`${n} ชุด`:"เร็ว ๆ นี้"}</span>`;
-    b.disabled=!n;b.onclick=()=>openTrack(id);grid.appendChild(b);
+    const N=MOCK_SLOTS[id]||0;
+    const b=document.createElement("button");b.type="button";b.className="track"+(n||N?" has":"");
+    b.innerHTML=`<b>${escHtml(name)}</b><span>${N?`${Math.min(n,N)}/${N} ชุด`:n?`${n} ชุด`:"เร็ว ๆ นี้"}</span>`;
+    b.disabled=!n&&!N;b.onclick=()=>openTrack(id);grid.appendChild(b);
   });
 }
 async function openTrack(id){
@@ -6542,7 +6618,22 @@ async function openTrack(id){
   const [list,prog]=await Promise.all([loadCatalog(),loadProgress()]);
   if(my!==mockToken) return;
   box.innerHTML="";
-  list.filter(e=>e.kind!=="subject"&&e.kind!=="real" && (e.track||[]).includes(id)).forEach(e=>{
+  const sets=list.filter(e=>e.kind!=="subject"&&e.kind!=="real" && (e.track||[]).includes(id));
+  const N=MOCK_SLOTS[id]||0;
+  if(!N){sets.forEach(e=>box.appendChild(mockCard(e,prog)));window.scrollTo(0,0);return;}
+  /* ช่องชุดที่ 1..N: วางตาม slot หรือเลข "ชุดที่ N" ในชื่อ ช่องที่ยังไม่มีชุดแสดง "รออัปโหลด" */
+  const at=new Array(N+1).fill(null),extra=[];
+  sets.forEach(e=>{const k=Number(e.slot)||Number((String(e.title).match(/ชุดที่\s*(\d+)/)||[])[1])||0;if(k>=1&&k<=N&&!at[k])at[k]=e;else extra.push(e)});
+  extra.forEach(e=>{const k=at.findIndex((x,i)=>i>0&&!x);if(k>0)at[k]=e;else at.push(e)});
+  at.slice(1).forEach((e,i)=>{
+    if(e){box.appendChild(mockCard(e,prog));return;}
+    const el=document.createElement("div");el.className="setc wait";
+    el.innerHTML=`<div><h4>ชุดที่ ${i+1}</h4><div class="meta">ยังไม่เปิดให้ทำ</div></div><button class="go" type="button" disabled>รออัปโหลด</button>`;
+    box.appendChild(el);
+  });
+  window.scrollTo(0,0);
+}
+function mockCard(e,prog){
     const best=prog.best[e.id];
     const secBest=(e.sections||[]).map((x,i)=>{const b=prog.best[`${e.id}:s${i}`];return b?`${escHtml(shortSec(x.name))} ${b.s}/${b.t}`:""}).filter(Boolean);
     const el=document.createElement("div");el.className="setc";
@@ -6552,12 +6643,12 @@ async function openTrack(id){
       ${secBest.length?`<div class="best sb">รายวิชาดีที่สุด: ${secBest.join(" · ")}</div>`:""}</div>
       <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำข้อสอบ"):"สำหรับสมาชิก Premium"}</button>`;
     el.querySelector(".go").onclick=()=>!canTake(e)?showUpgrade():hasSession(e.id)?startExam(e.id):toggleChooser(el,e);
-    box.appendChild(el);
-  });
-  window.scrollTo(0,0);
+    return el;
 }
 /* ===== อันดับ XP สะสม: สมาชิกจริงจาก board/{uid} แทนที่รายชื่อตัวอย่างทีละคน จนครบ 10 อันดับ ===== */
 const SAMPLE_BOARD=[{name:"ส.ต.อ.หญิง Nink",lv:"Lv.4",xp:8420,avatar:"avatar01.png",quote:"พยายามวันนี้ เพื่อวันติดยศ",sample:1},{name:"ส.ต.ท.หญิง Ploy",lv:"Lv.3",xp:7980,avatar:"avatar02.png",quote:"ค่อย ๆ ไป แต่ไม่หยุด",sample:1},{name:"ส.ต.ต.หญิง Jane",lv:"Lv.2",xp:7250,avatar:"avatar03.png",quote:"ทำให้เต็มที่ในทุกข้อ",sample:1},{name:"นสต. Beam",lv:"Lv.1",xp:6900,avatar:"avatar04.png",quote:"เป้าหมายมีไว้ไปให้ถึง",sample:1},{name:"นสต.หญิง Mint",lv:"Lv.1",xp:6520,avatar:"avatar05.png",quote:"เก่งขึ้นทุกครั้งที่ลงมือทำ",sample:1},{name:"นสต. First",lv:"Lv.1",xp:6100,avatar:"avatar06.png",quote:"วินัยสำคัญกว่าแรงฮึด",sample:1},{name:"นสต. Film",lv:"Lv.1",xp:5860,avatar:"avatar07.png",quote:"วันนี้ต้องดีกว่าเมื่อวาน",sample:1},{name:"นสต. Ice",lv:"Lv.1",xp:5500,avatar:"avatar08.png",quote:"อ่านให้เข้าใจ ทำให้แม่น",sample:1},{name:"นสต. Bank",lv:"Lv.1",xp:5120,avatar:"avatar09.png",quote:"ฝึกทุกวัน แล้ววันจริงจะง่ายขึ้น",sample:1},{name:"นสต.หญิง May",lv:"Lv.1",xp:4850,avatar:"avatar10.png",quote:"ไม่หยุดจนกว่าจะสำเร็จ",sample:1}];
+function fillQuotePicks(){document.querySelectorAll(".quote-picks").forEach(box=>{if(box.dataset.ready)return;box.dataset.ready="1";const inp=$(box.dataset.for);box.innerHTML='<span class="qp-label">เลือกคติตัวอย่าง หรือพิมพ์เองได้</span>'+SAMPLE_BOARD.slice(0,9).map(r=>`<button type="button" class="qp-chip">${escHtml(r.quote)}</button>`).join("");box.addEventListener("click",e=>{const b=e.target.closest(".qp-chip");if(!b||!inp)return;inp.value=b.textContent;box.querySelectorAll(".qp-chip").forEach(x=>x.classList.toggle("on",x===b));inp.dispatchEvent(new Event("input",{bubbles:true}))});inp?.addEventListener("input",()=>box.querySelectorAll(".qp-chip").forEach(x=>x.classList.toggle("on",x.textContent===inp.value)))})}
+setTimeout(fillQuotePicks,0);
 function drawBoard(rows){
   $("lbItems").innerHTML=rows.map((r,i)=>{const n=i+1,big=n<=3;
     return `<div class="leaderboard-item ${big?"rank-"+n:"rank-normal"}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid;border-radius:14px;margin:10px 0;">
@@ -6779,11 +6870,7 @@ function renderExam(){
     const sn=secName(meta,it.n);
     if(sn && sn!==lastSec){const h=document.createElement("div");h.className="xsec";h.textContent=sn;paper.appendChild(h);lastSec=sn;}
     if(it.group && it.group[0]===it.n){
-      const p=document.createElement("div");p.className="xpass";
-      const im=imgSrc(it.passageImg);
-      if(im){p.innerHTML=examImg(im,"")}else p.appendChild(richText(it.passage||""));
-      if(it.group&&it.group[1]>it.group[0]) p.insertAdjacentHTML("afterbegin",`<b style="display:block;font-family:Arial;font-size:13px;color:#c2410c">ใช้ตอบข้อ ${it.group[0]}-${it.group[1]}</b>`);
-      paper.appendChild(p);
+      paper.appendChild(passBox(it));
     }
     const box=document.createElement("div");box.className="xi";box.id="xq"+i;
     const im=imgSrc(it.img);
@@ -7100,9 +7187,7 @@ function renderReview(){
     const sn=secName(r.meta,it.n);
     if(sn&&sn!==lastSec){const h=document.createElement("div");h.className="xsec";h.textContent=sn;paper.appendChild(h);lastSec=sn;}
     if(it.group&&it.group[0]===it.n){
-      const p=document.createElement("div");p.className="xpass";const im=imgSrc(it.passageImg);
-      if(im)p.innerHTML=examImg(im,"");else p.appendChild(richText(it.passage||""));
-      paper.appendChild(p);
+      paper.appendChild(passBox(it));
     }
     const a=r.ans[i],ok=a===it.a;
     const box=document.createElement("div");box.className="xi";

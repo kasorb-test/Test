@@ -18,8 +18,9 @@
   <!-- arms -->
   <path d="M44 128c-14 4-20 14-18 24" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round" fill="none"/>
   <circle cx="26" cy="153" r="6" fill="#fff" stroke="#3a2a1a" stroke-width="3"/>
-  <g class="wave"><path d="M116 128c14-6 20-18 18-30" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round" fill="none"/>
-  <circle cx="134" cy="96" r="6" fill="#fff" stroke="#3a2a1a" stroke-width="3"/></g>
+  <!-- แขนขวายกขึ้นถือไม้ธง (ไม้ธงวาดในหน้าเว็บ ต่อจากมือนี้) -->
+  <path d="M116 128c10-4 14-18 16-36" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <circle cx="132" cy="88" r="7" fill="#fff" stroke="#3a2a1a" stroke-width="3"/>
   <!-- eraser + ferrule -->
   <rect x="46" y="18" width="68" height="30" rx="12" fill="#f7a8b8"/>
   <rect x="46" y="18" width="68" height="12" rx="6" fill="#fbc3cf"/>
