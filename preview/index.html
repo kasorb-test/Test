@@ -611,6 +611,9 @@ input{
 .lstep.now span{display:block;font-size:12.5px;opacity:.92}
 .lstep .lav{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:2px solid #fff;flex:0 0 auto}
 .lstep.next{color:#c2410c;background:#fff7ed;border:1.5px dashed #fdba74}.lstep.next:before{background:#fdba74}
+/* แสดงครบทุกขั้น: ขั้นอื่นเตี้ยลง ขั้นปัจจุบันเด่นเหมือนเดิม */
+.ladder .lstep:not(.now){padding:5px 12px;margin-bottom:5px;border-radius:10px}.ladder .lstep:not(.now) b{font-size:13.5px}.ladder .lstep:not(.now) small{font-size:11.5px}.ladder .lstep:not(.now):before{width:10px;height:10px;margin-top:-8px;left:-25px}
+.ladder .lstep.next:not(:has(+.now)){border-style:solid;border-color:#fde3cc}
 .lgap{margin:-2px 0 6px;padding-left:4px;color:#bbb;font-weight:900;letter-spacing:3px}
 .nx{display:flex;gap:10px;flex-wrap:wrap}
 .nx div{flex:1 1 180px;padding:12px 14px;border-radius:14px;border:2px solid #e5e7eb}
@@ -7126,12 +7129,11 @@ async function renderOverview(){
   try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
   const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
   const premium=currentData?.plan==="premium",lv=currentLevel();
-  /* บันไดยศ: เรียงจากสูงลงต่ำ แสดง 2 ขั้นถัดไป ขั้นปัจจุบัน ขั้นก่อนหน้า และยศสูงสุด */
+  /* บันไดยศ: เรียงจากสูงลงต่ำ แสดงครบทุกขั้น */
   const steps=[];
-  const hi=Math.min(MAX_LEVEL,lv+2),lo=Math.max(0,lv-1);
-  if(hi<MAX_LEVEL){steps.push(`<div class="lstep"><b>Lv.${MAX_LEVEL} ${escHtml(rankLabel(MAX_LEVEL))}</b><small>ยศสูงสุด</small></div>`);if(hi<MAX_LEVEL-1)steps.push('<div class="lgap">&middot; &middot; &middot;</div>')}
+  const hi=MAX_LEVEL,lo=0;
   for(let l=hi;l>=lo;l--){
-    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":`อีก ${l-lv} ขั้น`}</small></div>`);
+    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":l===MAX_LEVEL?"ยศสูงสุด":`อีก ${l-lv} ขั้น`}</small></div>`);
     else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
     else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
   }
