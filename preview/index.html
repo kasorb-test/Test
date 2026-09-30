@@ -3635,11 +3635,6 @@ LINE OA @kasorb
 <main class="content">
 <!-- HOME -->
 <section class="app-page active" id="homePage">
-<div class="home-hero">
-<div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
-<div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
-<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
-</div>
 <div class="news-slider hidden" id="newsSlider" aria-label="ข่าวสารและประกาศ">
 <div class="ns-track" id="newsTrack"></div>
 <button type="button" class="ns-arrow ns-prev" id="newsPrev" aria-label="ข่าวก่อนหน้า"></button>
@@ -3647,6 +3642,11 @@ LINE OA @kasorb
 <div class="ns-dots" id="newsDots"></div>
 </div>
 <div class="countdown-row" id="countdownRow"></div>
+<div class="home-hero">
+<div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
+<div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
+<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
+</div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
 <h3 class="daily-title">ข้อสอบประจำวัน</h3>
@@ -5952,11 +5952,7 @@ function renderCountdown(home){
       date.textContent=left>=0 ? `วันสอบ ${thaiDate(exam)}` : `สอบไปแล้วเมื่อ ${thaiDate(exam)}`;
     }
 
-    const cheer=document.createElement("div");
-    cheer.className="countdown-cheer";
-    cheer.textContent="ฝึกวันละนิด ติดยศได้แน่นอน";
-
-    card.append(label,main,date,cheer);
+    card.append(label,main,date);
     row.appendChild(card);
   });
 }
