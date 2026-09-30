@@ -3305,10 +3305,10 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .hh-art{position:relative}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
 /* มาสคอตเดินไปมาซ้ายขวาบนพื้นห้อง หันหน้าตามทางที่เดิน */
 .hh-walk{position:absolute;left:0;right:0;bottom:-2%;height:0;pointer-events:none}
-.hh-mascot{position:absolute;bottom:0;left:0;width:18%;max-width:96px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.08));animation:hhWalk 16s linear infinite}
-@keyframes hhWalk{0%{left:2%;transform:scaleX(1)}46%{left:80%;transform:scaleX(1)}50%{left:80%;transform:scaleX(-1)}96%{left:2%;transform:scaleX(-1)}100%{left:2%;transform:scaleX(1)}}
+.hh-mascot{position:absolute;bottom:0;left:0;width:11%;max-width:60px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08));animation:hhWalk 14s ease-in-out infinite}
+@keyframes hhWalk{0%,6%{left:3%}44%,56%{left:86%}94%,100%{left:3%}}
 @media(prefers-reduced-motion:reduce){.hh-mascot{animation:none;left:4%}}
-@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{width:20%}}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{width:12%}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 </style>
 </head>
