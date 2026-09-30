@@ -2589,6 +2589,7 @@ input{
 .countdown-days{font-size:56px;font-weight:900;line-height:1}
 .countdown-unit{font-size:18px;font-weight:800}
 .countdown-date{font-size:13px;font-weight:600;opacity:.92}
+.countdown-track{display:block;margin-top:2px;font-weight:800;color:#111;text-wrap:balance}
 .countdown-cheer{
   margin-top:14px;
   display:inline-block;
@@ -5928,7 +5929,9 @@ function renderCountdown(home){
 
     const label=document.createElement("div");
     label.className="countdown-label";
-    label.textContent=`นับถอยหลังสอบ${homeText(item.title)}`;
+    label.textContent="นับถอยหลังสอบ";
+    const track=document.createElement("span");track.className="countdown-track";track.textContent=homeText(item.title);
+    label.appendChild(track);
 
     const main=document.createElement("div");
     main.className="countdown-main";
