@@ -2612,6 +2612,24 @@ input{
 .st-ladder{width:18px;background:linear-gradient(90deg,#c9a27a 0 3px,transparent 3px calc(100% - 3px),#c9a27a calc(100% - 3px)),repeating-linear-gradient(0deg,transparent 0 7px,#d8b690 7px 9px)}
 .st-me img{border-width:2px;box-shadow:0 6px 14px rgba(22,48,95,.22)}
 .st-cap{font-weight:600;color:#475569}
+/* ฉากธรรมชาติหลังบันไดยศ: ฟ้า ภูเขา เนินหญ้า ต้นไม้ เมฆลอย นก */
+.stairs{background:linear-gradient(180deg,#dcefff 0%,#eef7ff 45%,#f6fbf2 100%)!important;box-shadow:inset 0 0 0 1px #e3ecf3!important}
+.st-scene{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.st-land{position:absolute;left:0;right:0;bottom:0;width:100%;height:92%}
+.st-trees{position:absolute;left:0;width:100%;bottom:calc(56px + 48px);height:40px}
+.st-sun{position:absolute;right:14%;top:16px;width:34px;height:34px;border-radius:50%;background:#fff1b8;box-shadow:0 0 0 8px rgba(255,241,184,.35),0 0 30px rgba(255,220,120,.5)}
+.st-cloud{position:absolute;height:14px;border-radius:14px;background:#fff;opacity:.9;animation:stCloud 34s linear infinite}
+.st-cloud:before,.st-cloud:after{content:"";position:absolute;bottom:4px;border-radius:50%;background:#fff}
+.st-cloud:before{left:8px;width:18px;height:18px}.st-cloud:after{left:22px;width:14px;height:14px}
+.st-cloud.c1{top:26px;width:54px;left:8%}.st-cloud.c2{top:52px;width:44px;left:48%;animation-duration:46s;animation-delay:-18s}
+@keyframes stCloud{0%{transform:translateX(0)}50%{transform:translateX(40px)}100%{transform:translateX(0)}}
+.st-bird{position:absolute;width:12px;height:5px;border-top:2px solid #64748b;border-radius:50% 50% 0 0;opacity:.6;animation:stBird 7s ease-in-out infinite}
+.st-bird:after{content:"";position:absolute;left:10px;top:-2px;width:12px;height:5px;border-top:2px solid #64748b;border-radius:50% 50% 0 0}
+.st-bird.b1{left:30%;top:30px}.st-bird.b2{left:36%;top:42px;transform:scale(.8);animation-delay:-3s}
+@keyframes stBird{0%,100%{translate:0 0}50%{translate:14px -6px}}
+.st-floor{background:#7fb877!important;height:8px!important}
+.st-col{box-shadow:0 12px 16px -12px rgba(30,60,30,.45)!important}
+@media(prefers-reduced-motion:reduce){.st-cloud,.st-bird{animation:none}}
 .st-star{display:block;width:16px;height:16px;margin:-2px auto 2px;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:stStar 2.4s ease-in-out infinite}
 @keyframes stStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(12deg)}}
 .st-gap{position:absolute;left:-10px;top:40%;font-style:normal;font-weight:900;color:#c9a14a;letter-spacing:1px}
@@ -7189,7 +7207,9 @@ function stairsHtml(lv,xp){
   const av=escHtml($("topAvatar").src);
   const ladder=top?"":`<div class="st-ladder" style="left:calc(${(ci+1)*W}% - 22px);bottom:${H(ci)}px;height:${H(ci+1)-H(ci)+14}px"></div>`;
   const climb=top?"":`--dy:${H(ci+1)-H(ci)}px;--dx:calc(${W/2}cqw - 8px);`;
-  return `<div class="stairs"><div class="st-floor"></div>${cols}${ladder}
+  return `<div class="stairs"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
+    <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 70 L38 34 L70 58 L112 22 L160 64 L205 44 L250 76 L300 60 L350 84 L400 74 V200 H0Z" fill="#c7d9ee"/><path d="M112 22 l-13 12 h9 l4-5 5 6 7-4z" fill="#fff" opacity=".85"/><path d="M38 34 l-9 8 h6 l3-3 3 4 5-3z" fill="#fff" opacity=".8"/><path d="M0 104 Q70 76 140 98 T280 96 T400 104 V200 H0Z" fill="#a6cd9d"/><path d="M0 136 Q90 112 190 130 T400 126 V200 H0Z" fill="#8cc284"/></svg>
+    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#5a9a5e"><path d="M8 60 l9-40 9 40z"/><path d="M22 60 l7-30 7 30z"/><path d="M92 60 l8-34 8 34z"/><path d="M104 60 l6-24 6 24z"/></g><g fill="#6fae6f"><circle cx="46" cy="48" r="11"/><circle cx="130" cy="50" r="9"/></g></svg></div><div class="st-floor"></div>${cols}${ladder}
     <div class="st-me${top?"":" climb"}" style="${climb}left:calc(${ci*W+W/2}% - 27px);bottom:${H(ci)}px"><img src="${av}" alt=""><i></i></div></div>
     <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}</p>`;
 }
