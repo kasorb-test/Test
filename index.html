@@ -6156,7 +6156,7 @@ async function loadHome(){
   }catch(error){
     console.error(error);
   }
-  openTracks=Array.isArray(home.tracks)&&home.tracks.length?home.tracks:DEFAULT_OPEN;trackSubjects=home.trackSubjects&&typeof home.trackSubjects==="object"?home.trackSubjects:null;homeReadyOk();
+  openTracks=Array.isArray(home.tracks)&&home.tracks.length?home.tracks:DEFAULT_OPEN;trackSubjects=home.trackSubjects&&typeof home.trackSubjects==="object"?home.trackSubjects:null;if(Array.isArray(home.trackList)&&home.trackList.length)TRACKS.splice(0,TRACKS.length,...home.trackList.filter(t=>t&&t.id&&t.name).map(t=>[String(t.id),String(t.name)]));homeReadyOk();
   siteTotalQuestions=Math.max(0,Number(home.totalQuestions)||0);
   if(currentData) renderProfile();
   renderCountdown(home);
