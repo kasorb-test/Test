@@ -3303,8 +3303,12 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .hh-go,.hh-alt{padding:11px 18px;border-radius:999px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer}
 .hh-go{border:0;background:#111;color:#fff}.hh-alt{border:1px solid #e5e1dc;background:#fff;color:#111}
 .hh-art{position:relative}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
-.hh-mascot{position:absolute;left:-6%;bottom:-4%;width:22%;max-width:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.08))}
-@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{left:auto;right:2%;width:20%}}
+/* มาสคอตเดินไปมาซ้ายขวาบนพื้นห้อง หันหน้าตามทางที่เดิน */
+.hh-walk{position:absolute;left:0;right:0;bottom:-2%;height:0;pointer-events:none}
+.hh-mascot{position:absolute;bottom:0;left:0;width:18%;max-width:96px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.08));animation:hhWalk 16s linear infinite}
+@keyframes hhWalk{0%{left:2%;transform:scaleX(1)}46%{left:80%;transform:scaleX(1)}50%{left:80%;transform:scaleX(-1)}96%{left:2%;transform:scaleX(-1)}100%{left:2%;transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.hh-mascot{animation:none;left:4%}}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{width:20%}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 </style>
 </head>
@@ -3577,7 +3581,7 @@ LINE OA @kasorb
 <div class="home-hero">
 <div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
 <div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
-<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><img class="hh-mascot" src="mascot-2b.svg" alt="มาสคอตดินสอ 2B" draggable="false"></div>
+<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></div>
 </div>
 <div class="news-slider hidden" id="newsSlider" aria-label="ข่าวสารและประกาศ">
 <div class="ns-track" id="newsTrack"></div>
