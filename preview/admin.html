@@ -1,0 +1,959 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>[ทดลอง] KASORB Admin</title><link rel="manifest" href="admin.webmanifest"><link rel="icon" type="image/png" sizes="192x192" href="admin-icon-192.png"><link rel="apple-touch-icon" href="admin-apple-touch-icon.png"><meta name="theme-color" content="#16305f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="แอดมิน"><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Mitr:wght@600&amp;text=%E0%B8%81%E0%B8%B0%E0%B8%AA%E0%B8%AD%E0%B8%9A&amp;display=swap" rel="stylesheet"><style>body{font-family:system-ui;background:#f5f5f5;margin:0}main{max-width:760px;margin:auto;padding:18px}.card{background:#fff;padding:20px;border-radius:16px;margin:14px 0}input,button{width:100%;padding:12px;margin:5px 0;box-sizing:border-box}button{background:#f47b20;color:white;border:0;border-radius:10px;font-weight:700}.hide{display:none}.u{padding:12px 0;border-bottom:1px solid #eee}.muted{color:#666}label{display:block;font-weight:700;margin-top:12px}textarea,select{width:100%;padding:12px;margin:5px 0;box-sizing:border-box;font:inherit}textarea{min-height:90px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ok{color:#16834a;font-weight:700}.pw{position:relative}.pw input{padding-right:70px}.pw .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:auto;margin:0;padding:8px 10px;background:#eee;color:#333;font-weight:700;font-size:13px}.light{background:#eee;color:#333}#msg{line-height:1.6}#msg.err{color:#c62828;font-weight:700}#msg.ok{color:#16834a}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}.tabs button{width:auto;margin:0;padding:7px 12px;border-radius:999px;background:#f2f2f2;color:#555;font-size:13px}.tabs button.on{background:#f47b20;color:#fff}.tabs b{opacity:.75;margin-left:2px}.mt{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}.mt th{text-align:left;color:#999;font-size:12px;padding:8px 6px;border-bottom:1px solid #eee}.mt td{padding:11px 6px;border-bottom:1px solid #f4f4f4;vertical-align:middle}.mt .name{font-weight:800}.mt .mail{color:#666;word-break:break-all}.mt .pc{width:1%;white-space:nowrap}.seg{display:flex;background:#f2f2f2;border-radius:10px;padding:3px}.seg button{width:auto;margin:0;flex:1;padding:8px 12px;border-radius:8px;background:transparent;color:#666;font-size:13px}.seg button.on{background:#fff;color:#e86208;box-shadow:0 1px 4px rgba(0,0,0,.12)}.seg button.on.lifetime{color:#15803d}.seg.busy{opacity:.5;pointer-events:none}.exp{font-size:12px;margin-top:4px;color:#e86208;white-space:normal}.exp.lifetime{color:#15803d}.exp.free{color:#999}#umsg{min-height:1.2em;margin:6px 0}#dmsg{min-height:1.2em;margin:6px 0}.dev{display:flex;flex-wrap:wrap;gap:6px}.dev span{display:inline-block;padding:4px 10px;border-radius:999px;background:#f2f2f2;color:#555;font-size:12px;font-weight:700}.dev span.act{background:#e8f7ee;color:#15803d}.dev span{display:inline-flex!important;align-items:center;gap:6px}.rm-dev{width:auto;margin:0;padding:2px 8px;border-radius:999px;background:#c62828;color:#fff;font-size:11px;font-weight:800}.reset-row{width:auto;margin:0;padding:9px 14px;border-radius:9px;font-size:13px;font-weight:800;background:#c62828;color:#fff}.reset-row:disabled{background:#eee;color:#aaa}.mt .when{font-size:12px;color:#888;white-space:nowrap}.mt .sc{width:1%;white-space:nowrap;text-align:right}.mt td{vertical-align:top}.mt td:first-child,.mt td.col-mail{padding-top:18px}.acts{display:flex;gap:6px;justify-content:flex-end}.save-row,.undo-row{width:auto;margin:0;padding:9px 14px;border-radius:9px;font-size:13px;font-weight:800;color:#fff;min-width:64px}.save-row{background:#15803d}.undo-row{background:#c62828}.save-row:disabled,.undo-row:disabled{background:#eee;color:#aaa;cursor:default}.mt tr.changed td{background:#fffaf5}.seg button.on.pend{box-shadow:0 0 0 2px #f47b20 inset;color:#e86208}.pend-note{color:#e86208;font-weight:700}@media(max-width:600px){.mt thead{display:none}.mt,.mt tbody{display:block}.mt tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 10px;align-items:start;padding:12px 8px;border-bottom:1px solid #f0f0f0}.mt td{display:block;padding:0;border:0;width:auto!important;background:transparent!important}.mt td.col-mail{display:none}.mt td.sc{grid-column:2;grid-row:1;text-align:right}.mt td:first-child{padding-top:0}.save-row,.undo-row{padding:8px 11px;min-width:0}.mt td.pc{grid-column:1 / -1}.mt .mail-sm{word-break:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mt tr.changed{background:#fffaf5}}.until{width:auto;margin:0 0 0 4px;padding:4px 6px;border:1px solid #f3c7a3;border-radius:7px;font:inherit;font-size:12px;color:#e86208;background:#fff8f2}@media(max-width:600px){.mt .col-mail{display:none}.mt .mail-sm{display:block!important;font-weight:400;font-size:12px}}.stick{position:sticky;top:0;z-index:4;background:#fff;margin:0 -20px;padding:8px 20px 2px;border-bottom:1px solid #f0f0f0}.stick input{margin-top:0}#umsg:empty,#dmsg:empty{display:none}@media(max-width:760px){.stick{margin:0 -14px;padding:8px 14px 4px}.stick .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.stick .tabs button{flex:0 0 auto}}.mt th{position:sticky;top:var(--stickH,0px);z-index:3;background:#fff}.boot{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#999;font-weight:700}.boot.hide{display:none}#shell,#shell *{box-sizing:border-box}body.in{background:#f6f6f6}#shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}#shell.hide{display:none}
+.side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:#fff;border-right:1px solid #ececec;padding:22px 14px}
+.brand{font-size:20px;font-weight:900;color:#f47b20;padding:0 10px 20px}.brand span{display:block;font-size:12px;font-weight:600;color:#999;margin-top:2px}
+.side-nav{flex:1}.side-nav button{display:flex;align-items:center;gap:10px;width:100%;margin:3px 0;padding:12px 14px;border-radius:11px;background:transparent;color:#444;font-size:15px;font-weight:600;text-align:left}
+.side-nav button:hover{background:#fff6ef}.side-nav button.on{background:#fff2e8;color:#e86208;font-weight:800}
+.side-nav svg{width:19px;height:19px;flex:0 0 19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.side-out{margin-top:10px;background:#f4f4f4;color:#666}
+.content{padding:24px;max-width:860px;width:100%}.content .card{margin:0}.page{display:none}.page.on{display:block}
+.soon{margin-top:14px;padding:34px 16px;border:2px dashed #eadfd6;border-radius:14px;text-align:center;font-weight:800;color:#c55309;background:#fffaf5}.soon span{font-weight:500;color:#999;font-size:14px}
+/* มือถือ: แถบบนมีโลโก้ + ปุ่มเมนู เมนูเลื่อนออกมาจากด้านซ้าย */
+.mtop,.mshade{display:none}
+@media(max-width:760px){
+#shell{grid-template-columns:1fr}
+.mtop{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:40;padding:10px 14px;background:#fff;border-bottom:1px solid #ececec;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.mtop .logo{font-size:17px}
+.mtop .mt-sub{margin-left:auto;font-size:12px;font-weight:700;color:#999}
+.mburger{flex:0 0 42px;width:42px;height:42px;margin:0;padding:0;border:0;border-radius:12px;background:#eaf0fa;color:#16305f;display:grid;place-items:center}
+.mburger i,.mburger i::before,.mburger i::after{display:block;width:18px;height:2px;border-radius:2px;background:currentColor;position:relative}
+.mburger i::before,.mburger i::after{content:"";position:absolute;left:0}.mburger i::before{top:-6px}.mburger i::after{top:6px}
+.side{position:fixed!important;top:0;left:0;bottom:0;z-index:60;width:264px;max-width:85vw;height:100%;padding:22px 14px;transform:translateX(-105%);transition:transform .25s ease;box-shadow:6px 0 24px rgba(0,0,0,.12)}
+.side.open{transform:none}
+.mshade{position:fixed;inset:0;z-index:55;background:rgba(15,23,42,.35)}
+.mshade.open{display:block}
+.content{padding:14px}
+.stick{top:var(--mtopH,62px)}
+.mt th{top:calc(var(--mtopH,62px) + var(--stickH,0px))}
+}
+.nrow{position:relative;margin:10px 0;padding:12px 14px;border:1px solid #eee;border-radius:12px;background:#fcfcfc}.nrow b{display:block;margin-bottom:4px;color:#e86208;font-size:13px}.nrow label{margin-top:8px}.nrow .ndel{position:absolute;right:10px;top:8px;width:auto;margin:0;padding:5px 10px;background:#fdecec;color:#c62828;font-size:13px}.nadd{width:auto;background:#fff2e8;color:#e86208}
+.hsec{margin:16px 0 0;padding:4px 16px 16px;border:1px solid #eee;border-radius:14px}
+.hsec h3{margin:14px 0 6px}
+.hsave{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px}.hsave button{width:auto;margin:0;padding:11px 18px}
+.hsave span{font-size:14px;font-weight:700;color:#15803d}.hsave span.err{color:#c62828}
+.nimg{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0}
+.nimg .pick{display:inline-block;padding:9px 14px;border-radius:9px;background:#eef2fa;color:#16305f;font-weight:700;font-size:13px;cursor:pointer}
+.nimg button{width:auto;margin:0;padding:9px 12px;font-size:13px;background:#fdecec;color:#c62828}
+.npos{display:flex;flex-wrap:wrap;gap:10px;width:100%}.npos>div{display:flex;flex-direction:column;gap:3px;font-size:12px;color:#666;font-weight:700}.npos small{width:100%;font-size:12px;color:#888}
+.nf{display:block;height:110px;border-radius:10px;border:1px solid #e5e5e5;background:#f3f3f3 50% 50%/cover no-repeat;cursor:grab;touch-action:none;user-select:none}.nf:active{cursor:grabbing}
+.npos>div{flex:0 1 330px;min-width:0}.npos>div:nth-child(2){flex-basis:220px}.nf.nd{width:100%;height:auto;aspect-ratio:330/103}.nf.nm{width:100%;height:auto;aspect-ratio:2/1}
+.nimg .or{font-size:12px;color:#888;width:100%}
+.uph{width:34px;height:34px;margin-right:8px;vertical-align:middle;border-radius:50%;object-fit:cover;border:1px solid #eee}.rm-photo{margin-left:8px!important;vertical-align:middle;width:auto;margin:0;padding:3px 8px;border-radius:8px;background:#fdecec;color:#c62828;font-size:12px;font-weight:700}
+/* โลโก้แบบไอคอนแอปแอดมิน: กรอบกรมท่า กะสอบ สีขาว + ADMIN กรอบส้ม */
+.logo{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:.35em;padding:.38em .75em .42em;border-radius:16px;background:linear-gradient(135deg,#27477f 0%,#16305f 55%,#0f2449 100%);box-shadow:0 6px 16px rgba(22,48,95,.28);font-size:20px;line-height:1.2;white-space:nowrap}
+.logo::after{content:"";position:absolute;right:-1.6em;top:-2em;width:3.6em;height:3.6em;border-radius:50%;background:rgba(255,255,255,.14);pointer-events:none}
+.logo-name{position:relative;z-index:1;font-family:"Mitr",Arial,sans-serif;font-weight:600;font-size:1.12em;color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.25)}
+.logo-test{position:relative;z-index:1;display:inline-block;padding:1px .45em 2px;border-radius:999px;background:#ff6a00;color:#fff;font-style:normal;font-weight:900;font-size:.72em;letter-spacing:.08em;line-height:1.35}
+.brand .logo{display:inline-flex;margin:0;font-size:19px;font-weight:900;color:#fff}
+.brand .brand-sub{display:block;margin-top:8px}
+.login-logo{display:flex;flex-direction:column;align-items:center;gap:8px;margin:24px 0 8px;text-align:center}
+.login-logo .logo{font-size:26px}
+.login-logo .brand-sub{font-size:14px;font-weight:600;color:#999}
+/* ปุ่มติดตั้งลงหน้าจอ + หน้าต่างวิธีติดตั้ง */
+.side-install{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;background:#eaf0fa;color:#16305f}
+.side-install.hide{display:none}
+.side-install svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ihelp{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45)}
+.ihelp.hide{display:none}
+.ibox{width:100%;max-width:420px;max-height:90vh;overflow:auto;padding:22px 22px 18px;border-radius:18px;background:#fff;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.ibox h3{margin:0 0 12px;font-size:18px;color:#16305f}
+.istep{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:#f2f5fb;font-size:14px;line-height:1.6}
+.istep ol{margin:6px 0 0;padding-left:20px}
+.ibox button{width:100%}
+/* ใส่ข้อสอบ */
+.imp{margin-top:12px;padding:14px;border:2px dashed #f1d0b5;border-radius:14px;background:#fffaf5}
+.impbtn{display:inline-block;padding:11px 16px;border-radius:11px;background:#ff6a00;color:#fff;font-weight:800;cursor:pointer}
+.irow{display:flex;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff;border:1px solid #f1e3d6;font-size:14px}
+.irow b{display:block}.irow .bad{color:#c62828;font-weight:700}.irow .good{color:#15803d;font-weight:700}
+#impGo{margin-top:12px}
+.erow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.erow .t b{display:block;font-size:15px}.erow .t span{font-size:13px;color:#888}
+.erow .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+.erow select,.erow input{width:auto;margin:0;padding:8px 10px}
+.erow input{width:74px}
+.erow .del{width:auto;margin:0;padding:8px 12px;background:#fdecec;color:#c62828;font-size:13px}.erow .t span{display:inline}.erow .ren{width:auto;margin:0 0 0 10px;padding:3px 10px;border-radius:999px;background:#eef2fa;color:#16305f;font-size:12px;vertical-align:1px}
+@media(max-width:760px){.erow{grid-template-columns:1fr}.erow .ctl{justify-content:flex-start}}
+/* แก้ไขข้อสอบ: หน้าตาเหมือนหน้าข้อสอบของนักเรียน */
+.xnew{width:auto;margin:6px 0 4px;padding:11px 16px;border-radius:11px;background:#ff6a00;font-size:15px}
+.erow .open{width:auto;margin:0;padding:9px 16px;border-radius:10px;background:#16305f;font-size:13px}
+.erow .t span{display:block}
+.ximp{margin-top:22px}.ximp summary{cursor:pointer;font-weight:800;color:#666;padding:8px 0}
+.nform{margin:10px 0 4px;padding:16px;border:1px solid #f1e3d6;border-radius:14px;background:#fffaf5}
+.nform h3{margin:0 0 6px;font-size:17px}
+.tracks{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+.tracks label{display:inline-flex;align-items:center;gap:6px;margin:0;padding:7px 12px;border-radius:999px;background:#fff;border:1px solid #e6e6e6;font-weight:600;font-size:14px;cursor:pointer}
+.tracks input{width:auto;margin:0}
+.tracks label:has(input:checked){background:#fff1e6;border-color:#ff6a00;color:#c2410c}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btns button{width:auto;margin:0;padding:10px 18px}
+.btn-light{background:#eee!important;color:#333!important}.btn-red{background:#fdecec!important;color:#c62828!important}.btn-navy{background:#16305f!important}
+.xtop{position:sticky;top:var(--mtopH,0px);z-index:5;display:flex;align-items:center;gap:10px;margin:-20px -20px 0;padding:12px 20px;background:#fff;border-bottom:1px solid #f0f0f0;border-radius:16px 16px 0 0}
+.xtop .back{width:auto;margin:0;padding:8px 12px;background:#f2f2f2;color:#333;font-size:13px;flex:0 0 auto}
+.xtop b{flex:1;min-width:0;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xtop .st{font-size:12px;color:#15803d;font-weight:700;white-space:nowrap}.xtop .st.err{color:#c62828}
+.xset{margin-top:14px;border:1px solid #eee;border-radius:14px;padding:4px 14px}
+.xset summary{cursor:pointer;font-weight:800;padding:10px 0;color:#16305f}
+.xset .row3{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:14px 0 4px;padding-bottom:4px;scrollbar-width:none}
+.chips button{flex:0 0 auto;width:auto;margin:0;padding:7px 12px;border-radius:999px;background:#fff6ef;color:#c2410c;font-size:13px}
+.xpaper{margin-top:10px;background:#fff;border:1px solid #f1e3d6;border-radius:16px;padding:4px 22px 18px;font-family:"Sarabun","TH Sarabun New",sans-serif}
+.xsec{display:flex;align-items:center;gap:8px;margin:18px 0 0;padding:8px 12px;border-radius:10px;background:#fff6ef;color:#c2410c;font-weight:800;font-size:14px;font-family:system-ui;scroll-margin-top:120px}
+.xsec span{flex:1}.xsec button{width:auto;margin:0;padding:4px 10px;border-radius:999px;background:#fff;color:#c2410c;font-size:12px}
+.xi{position:relative;padding:18px 0;border-bottom:1px dashed #e8e0d8;scroll-margin-top:120px}
+.xi.hl{animation:hl 1.6s}@keyframes hl{from{background:#fff1e6}to{background:transparent}}
+.xq{margin:0 0 10px;font-size:16px;font-weight:600;line-height:1.65;color:#000;white-space:pre-line;padding-right:118px}
+.xq em{font-style:normal;margin-right:6px}
+.xopts{display:grid;gap:4px}.xopts.row{grid-template-columns:repeat(4,1fr)}
+.xc{display:flex;gap:10px;align-items:center;padding:7px 8px;border-radius:10px;font-size:15.5px;line-height:1.55;color:#000}.xc .t{flex:1;min-width:0}.xq,.xpass,.exp,.xc{text-align:justify}.z{font-size:0}
+.xc b{flex:0 0 23px;height:23px;border-radius:50%;border:1.5px solid #000;display:grid;place-items:center;font-weight:600;font-size:12.5px}
+.xc.ok{background:#e7f6ec}.xc.ok b{background:#15803d;border-color:#15803d;color:#fff}
+.xpass{margin:16px 0 0;padding:14px 16px;border:1px solid #e8e0d8;border-radius:12px;background:#fcfcfc;white-space:pre-line;font-size:15px;line-height:1.7;color:#000}
+.xpass b.g{display:block;font-family:system-ui;font-size:13px;color:#c2410c}
+.xi img,.xpass img,.exp img{display:block;max-width:100%;height:auto;margin:6px 0}
+.eimg:not([src]){min-height:80px;width:100%;border-radius:10px;background:#f3f3f3}
+.exp{margin-top:10px;padding:12px 14px;border-left:4px solid #ff6a00;border-radius:0 12px 12px 0;background:#fffaf6;font-size:15px;line-height:1.7;color:#000;white-space:pre-line}
+.exp b.h{display:block;margin-bottom:4px;color:#c2410c;font-family:system-ui;font-size:14px}
+.qtools{position:absolute;top:18px;right:0;display:flex;gap:6px}
+.qtools button{width:auto;margin:0;padding:6px 12px;border-radius:9px;font-size:13px;font-family:system-ui}
+.qtools .ed{background:#16305f}.qtools .rm{background:#fdecec;color:#c62828}
+.addq{display:block;width:100%;margin:12px 0 0;padding:12px;border:2px dashed #f1c9a8;border-radius:12px;background:#fffaf5;color:#c2410c;font-weight:800;font-size:14px;font-family:system-ui}
+.qform{scroll-margin-top:130px;margin:14px 0;padding:16px;border:2px solid #ff6a00;border-radius:14px;background:#fff;font-family:system-ui}
+.qform h4{margin:0 0 4px;color:#c2410c}
+.qform label{font-size:14px}
+.qform textarea{font-family:"Sarabun",sans-serif;font-size:17px;min-height:70px}
+.chrow{display:flex;align-items:center;gap:8px;margin:5px 0}
+.chrow .rad{display:inline-flex;align-items:center;gap:4px;margin:0;padding:8px 10px;border-radius:10px;background:#f2f2f2;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}
+.chrow .rad input{width:auto;margin:0}
+.chrow .rad:has(input:checked){background:#15803d;color:#fff}
+.chrow input[type=text]{margin:0;font-family:"Sarabun",sans-serif;font-size:17px}
+.imgpick{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0 6px}
+.imgpick .pick{display:inline-block;padding:8px 12px;border-radius:9px;background:#eef2fa;color:#16305f;font-weight:700;font-size:13px;cursor:pointer}
+.imgpick button{width:auto;margin:0;padding:8px 12px;font-size:13px}
+.imgpick img{display:block;max-width:100%;max-height:220px;border:1px solid #eee;border-radius:8px}
+.imgpick .note{font-size:12px;color:#888;width:100%}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;margin:0 3px;font-size:.88em;line-height:1.15;text-align:center}.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px 1px}
+.xpaper u{text-underline-offset:3px;font-weight:700}
+.xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;white-space:pre-line;font-size:15px;line-height:1.75;text-align:justify}
+.xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xtbl{border-collapse:collapse;font-size:14.5px}.xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5}
+.tsh{margin:14px 0 8px;font-size:14px;color:#16305f}.addbtn{width:auto!important;margin:8px 0 4px!important;padding:8px 14px!important;border:1px dashed #c9d3e6!important;border-radius:10px!important;background:#f5f7fb!important;color:#16305f!important;font-weight:800!important;font-size:13px!important}
+.smaster{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px}.srow{display:flex;align-items:center;gap:6px}.srow .sn{flex:0 0 22px;color:#999;font-size:12px;font-weight:700;text-align:right}.srow input{flex:1;margin:0!important}.srow .sdel{width:auto!important;margin:0!important;padding:8px 10px!important;background:#fdecec!important;color:#c62828!important;font-size:12px!important}
+.tred{display:grid;gap:10px}.tcard{padding:12px;border:1px solid #eee;border-radius:12px;background:#fafafa}.thead{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}.thead .tname{flex:1 1 200px;margin:0!important;font-weight:800}.topen{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;white-space:nowrap}.topen input{width:auto;margin:0}.thead .tdel{width:auto!important;margin:0!important;padding:8px 10px!important;background:#fdecec!important;color:#c62828!important;font-size:12px!important}
+.tchips{display:flex;flex-wrap:wrap;gap:6px}.tchip{width:auto!important;margin:0!important;padding:7px 12px!important;border:1px solid #e3e3e3!important;border-radius:999px!important;background:#fff!important;color:#555!important;font-size:13px!important;font-weight:700!important}.tchip.on{background:#16305f!important;border-color:#16305f!important;color:#fff!important}.tcard small{display:block;margin-top:6px;color:#888;font-size:12px}
+.pubbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 12px;padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px}.pubbar.off{background:#fff4e5;color:#b45309}.pubbar.on{background:#e7f6ec;color:#15803d}.pubbar button{width:auto;margin:0 0 0 auto;padding:9px 16px;border:0;border-radius:10px;font-weight:800;cursor:pointer}.pubbar.off button{background:#ff6a00;color:#fff}.pubbar.on button{background:#fff;color:#c62828;border:1px solid #f3c7c7}
+em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border-radius:999px;font-size:11.5px}em.pub.off{background:#fff4e5;color:#b45309}em.pub.on{background:#e7f6ec;color:#15803d}
+.subs{font-size:12.5px;color:#555;margin-bottom:6px}.subs button{width:auto;margin:0 0 0 4px;padding:3px 9px;font-size:12px;border-radius:8px;background:#eef2fa;color:#16305f;border:0}
+.uidlg .chk{display:grid;gap:6px;margin:6px 0 12px}.uidlg .chk label{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}.uidlg .chk input{width:auto;margin:0}
+.exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.exp .xtbl td{text-align:left}.exp .xet{white-space:pre-line}.xefig{margin:8px 0}.xefig img.eimg{display:block;max-width:100%;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,240px);margin:0}sub{font-size:.72em;vertical-align:sub;line-height:0}
+.xfig{margin:4px 0 12px}.xfig img{max-width:min(100%,520px)}.xq2{font-weight:600}
+.xopts.pics{grid-template-columns:repeat(2,minmax(0,1fr))}.xc.pic img{max-width:100%;max-height:130px;margin:0}
+.fhelp{margin:-2px 0 6px;font-size:12px;color:#888}
+.cthumb{flex:1;min-width:0}.cthumb img{max-height:70px;max-width:100%;border:1px solid #eee;border-radius:6px}
+.cpick{display:inline-flex;gap:4px;flex:0 0 auto}.cpick .pick{padding:8px 10px;border-radius:9px;background:#eef2fa;color:#16305f;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap}.cpick button{width:auto;margin:0;padding:8px 10px;font-size:12px}
+.ferr{color:#c62828;font-weight:700;font-size:14px;margin:8px 0 0}
+@media(max-width:760px){.xtop{margin:-20px -14px 0;padding:10px 14px}.xpaper{padding:2px 12px 14px}.xq{padding-right:0;margin-top:34px}.qtools{top:12px}.xset .row3{grid-template-columns:1fr}}
+#shell .content{min-width:0}.mno{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#16305f;letter-spacing:.03em}
+.uidlg{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);animation:uidIn .15s ease-out}
+@keyframes uidIn{from{opacity:0}to{opacity:1}}
+.uidlg .box{width:100%;max-width:400px;padding:22px 20px 16px;border-radius:18px;background:#fff;box-shadow:0 24px 60px rgba(0,0,0,.28);font-family:inherit;animation:uidUp .18s ease-out}
+@keyframes uidUp{from{transform:translateY(10px)}to{transform:none}}
+.uidlg .msg{margin:0 0 16px;font-size:15.5px;line-height:1.65;color:#1f2937;white-space:pre-line;font-weight:600}
+.uidlg input{width:100%;box-sizing:border-box;margin:0 0 14px;padding:12px;border:1.5px solid #e5e7eb;border-radius:12px;font:inherit;font-size:15px}
+.uidlg input:focus{outline:none;border-color:#ff6a00}
+.uidlg .act{display:flex;gap:8px;justify-content:flex-end}
+.uidlg .act button{min-width:96px;margin:0;padding:11px 18px;border:0;border-radius:12px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;width:auto}
+.uidlg .ok{background:#ff6a00;color:#fff}.uidlg .ok.danger{background:#c62828}
+.uidlg .no{background:#f1f3f6;color:#374151}
+.fx-big{font-size:1.25em}.fx-sm{font-size:.82em}
+.fx-c-red{color:#dc2626}.fx-c-blue{color:#1d4ed8}.fx-c-green{color:#15803d}.fx-c-orange{color:#ea580c}.fx-c-navy{color:#16305f}
+.fx-bg-yellow{background:#fef08a}.fx-bg-green{background:#bbf7d0}.fx-bg-pink{background:#fbcfe8}.fx-bg-blue{background:#bfdbfe}
+.xpass.long{font-size:10px!important;line-height:1.75}
+.fmtbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:8px 0 4px;padding:6px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.fmtbar button{min-width:32px;height:30px;margin:0;padding:0 8px;border:1px solid #e5e7eb;border-radius:7px;background:#fff;color:#111;font:inherit;font-size:13px;cursor:pointer;width:auto}
+.fmtbar button:hover{border-color:#ff8a3d}.fmtbar button.sw{font-weight:800}
+.fmtbar .sep{width:1px;height:20px;background:#e5e7eb;margin:0 3px}.fmtbar .lb{font-size:12px;color:#6b7280;margin-right:1px}
+</style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>แบบทดสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แต่ละส่วนมีปุ่มบันทึกของตัวเอง แก้ส่วนไหนก็กดบันทึกเฉพาะส่วนนั้น</p><div class="hsec">
+<h3>การ์ดนับถอยหลัง</h3>
+<div class="row"><div><label>การ์ดที่ 1: สายงาน</label><input id="exam0Title"></div><div><label>วันสอบ</label><input id="exam0Date" type="date"></div></div>
+<div class="row"><div><label>การ์ดที่ 2: สายงาน</label><input id="exam1Title"></div><div><label>วันสอบ</label><input id="exam1Date" type="date"></div></div>
+<label>จำนวนข้อสอบทั้งหมดในเว็บ</label><input id="totalQuestions" type="number" readonly style="background:#f6f6f6;color:#777"><p class="muted" style="margin:-4px 0 10px;font-size:13px">นับให้อัตโนมัติจากหน้า "แบบทดสอบ"</p>
+<div class="hsave"><button type="button" id="saveCount">บันทึกการ์ดนับถอยหลัง</button><span id="countMsg"></span></div></div>
+<div class="hsec"><h3>สายสอบและรายวิชา</h3><p class="muted">แก้ชื่อได้ทุกช่อง กดเลือกวิชาที่แต่ละสายใช้สอบ ติ๊ก "เปิดให้นักเรียน" เฉพาะสายที่พร้อม เปลี่ยนชื่อวิชาแล้ว ชุดข้อสอบและรายวิชาที่สมาชิกซื้อไว้จะเปลี่ยนชื่อตามให้อัตโนมัติ</p>
+<h4 class="tsh">รายวิชาทั้งหมด</h4><div class="smaster" id="subjMaster"></div><button type="button" class="addbtn" id="addSubj">+ เพิ่มวิชา</button>
+<h4 class="tsh">สายสอบ</h4><div class="tred" id="trackEd"></div><button type="button" class="addbtn" id="addTrack">+ เพิ่มสาย</button>
+<div class="hsave"><button type="button" id="saveTS">บันทึกสายและรายวิชา</button><span id="tsMsg"></span></div></div>
+<div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
+<div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
+<div class="hsec"><h3>ข้อสอบประจำวัน</h3>
+<label>คำถาม</label><textarea id="dailyQ"></textarea>
+<label style="font-weight:400"><input id="dailyEng" type="checkbox" style="width:auto"> ข้อสอบภาษาอังกฤษ (ตัวเลือกเป็น A B C D แทน 1 2 3 4)</label>
+<div class="row"><div><label>ตัวเลือก 1</label><input id="dailyC0"></div><div><label>ตัวเลือก 2</label><input id="dailyC1"></div><div><label>ตัวเลือก 3</label><input id="dailyC2"></div><div><label>ตัวเลือก 4</label><input id="dailyC3"></div></div>
+<label>ข้อที่ถูก</label><select id="dailyAns"><option value="0">ตัวเลือก 1</option><option value="1">ตัวเลือก 2</option><option value="2">ตัวเลือก 3</option><option value="3">ตัวเลือก 4</option></select>
+<label>คำอธิบายเฉลย (ไม่บังคับ)</label><textarea id="dailyExp"></textarea>
+<div class="hsave"><button type="button" id="saveDaily">บันทึกข้อสอบประจำวัน</button><span id="dailyMsg"></span></div></div><p id="homeMsg"></p></div>
+<div id="panel" class="card page" data-page="members"><h2>สมาชิก</h2><p class="muted">หลังลูกค้าชำระเงิน เลือกแพ็กเกจ แล้วกด บันทึก ที่แถวของคนนั้น (รายปีนับ 1 ปีจากวันที่เลือก แก้วันได้)</p>
+<div class="stick"><div id="tabs" class="tabs"><button type="button" data-f="all" class="on">ทั้งหมด <b>0</b></button><button type="button" data-f="free">Free <b>0</b></button><button type="button" data-f="yearly">รายปี <b>0</b></button><button type="button" data-f="lifetime">ตลอดชีพ <b>0</b></button></div>
+<input id="q" type="search" placeholder="ค้นหาอีเมล ชื่อเล่น หรือรหัสสมาชิก"><p id="umsg" class="ok"></p></div>
+<div id="users"></div></div><div id="devicesCard" class="card page" data-page="devices"><h2>อุปกรณ์</h2><p class="muted">สมาชิก 1 คนผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง ถ้านักเรียนติดต่อมาว่าเข้าเครื่องใหม่ไม่ได้ กด ลบ ที่เครื่องที่ไม่ใช้แล้ว (หรือ ลบทั้งหมด) แล้วเครื่องที่ล็อกอินครั้งถัดไปจะถูกผูกใหม่</p><div class="stick"><input id="dq" type="search" placeholder="ค้นหาอีเมลหรือชื่อเล่น"><p id="dmsg" class="ok"></p></div><div id="devList"><p class="muted">กำลังโหลด…</p></div></div><div id="examsCard" class="card page" data-page="exams"><div id="exListView"><h2>แบบทดสอบ</h2><p class="muted">เลือกชุดข้อสอบเพื่อดูและแก้ไข หน้าตาเหมือนที่นักเรียนเห็น เพิ่มข้อสอบได้ทีละข้อในวิชาที่ต้องการ</p>
+<button type="button" class="xnew" id="exNewBtn">+ สร้างชุดข้อสอบใหม่</button>
+<div id="exNew" class="nform hide"><h3>สร้างชุดข้อสอบใหม่</h3>
+<label>ชื่อชุด</label><input id="nTitle" maxlength="80" placeholder="เช่น ข้อสอบเสมือนจริงสายปราบปราม ชุดที่ 1">
+<label>รูปแบบชุด</label><select id="nKind"><option value="mock">ข้อสอบเสมือนจริง (ครบทุกวิชา เหมือนสอบจริง)</option><option value="subject">แบบทดสอบรายวิชา (วิชาเดียว)</option><option value="mixed">ข้อสอบรวม (รวมหลายวิชา ไม่ใช่ชุดเสมือนจริง)</option><option value="real">ข้อสอบจริง (รายวิชา เฉพาะ Premium)</option></select>
+<div id="nSubjBox" class="hide"><div class="row"><div><label>หมวดวิชา</label><select id="nSubj"></select></div><div id="nSlotBox"><label>ช่องที่ (Free 5 ชุด · Premium 15 ชุด)</label><select id="nSlot"></select></div></div></div>
+<label>ใช้กับสายสอบ</label><div class="tracks" id="nTracks"></div>
+<div class="row"><div><label>ประเภท</label><select id="nTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="nMins" type="number" min="1" max="600" value="180"></div></div>
+<div id="nSecsBox"><label>วิชาในชุดนี้ (บรรทัดละ 1 วิชา เรียงตามลำดับ)</label><textarea id="nSecs"></textarea></div>
+<p id="nErr" class="ferr"></p><div class="btns"><button type="button" id="nGo">สร้างชุด</button><button type="button" class="btn-light" id="nCancel">ยกเลิก</button></div></div>
+<h3 style="margin-top:22px">ชุดข้อสอบในเว็บ <span id="examTotal" class="muted" style="font-weight:600;font-size:14px"></span></h3><div id="examList"><p class="muted">กำลังโหลด…</p></div>
+<details class="ximp"><summary>นำเข้าหลายข้อพร้อมกันจากไฟล์ (.json)</summary><div class="imp"><label class="impbtn">เลือกไฟล์ข้อสอบ (.json)<input id="examFiles" type="file" accept=".json,application/json" multiple hidden></label><div id="impList"></div><button type="button" id="impGo" class="hide">นำเข้าข้อสอบ</button><p id="impMsg"></p></div></details></div>
+<div id="exEditView" class="hide"><div class="xtop"><button type="button" class="back" id="exBack">&lsaquo; ชุดทั้งหมด</button><b id="exTitle"></b><span class="st" id="exSt"></span></div><div class="pubbar" id="pubBar"><span id="pubTxt"></span><button type="button" id="pubBtn"></button></div>
+<details class="xset" id="exSet"><summary>ตั้งค่าชุดข้อสอบ</summary>
+<label>ชื่อชุด</label><input id="sTitle" maxlength="80">
+<label>ใช้กับสายสอบ</label><div class="tracks" id="sTracks"></div>
+<div class="row3"><div><label>ประเภท</label><select id="sTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="sMins" type="number" min="1" max="600"></div></div>
+<div class="btns" style="margin-bottom:12px"><button type="button" class="btn-navy" id="sSave">บันทึกการตั้งค่า</button><button type="button" class="btn-red" id="sDel">ลบชุดนี้</button></div></details>
+<div class="chips" id="exChips"></div><div class="xpaper" id="exPaper"></div></div></div></section></div>
+<script>
+/* กล่องข้อความในหน้าเว็บ แทนกล่องของเบราว์เซอร์ (alert / confirm / prompt) */
+(function(){
+function dlg(message,opt){
+  opt=opt||{};
+  return new Promise(res=>{
+    const wrap=document.createElement("div");wrap.className="uidlg";wrap.setAttribute("role","dialog");
+    const box=document.createElement("div");box.className="box";
+    const p=document.createElement("p");p.className="msg";p.textContent=String(message??"");box.appendChild(p);
+    let inp=null,checks=null;
+    if(opt.checks){checks=document.createElement("div");checks.className="chk";opt.checks.forEach(([v,l,on])=>{const lb=document.createElement("label");const c=document.createElement("input");c.type="checkbox";c.value=v;c.checked=!!on;lb.append(c," "+l);checks.appendChild(lb)});box.appendChild(checks)}
+    if(opt.input!==undefined){inp=document.createElement("input");inp.type="text";inp.value=opt.input||"";box.appendChild(inp)}
+    const act=document.createElement("div");act.className="act";
+    const done=v=>{wrap.remove();document.removeEventListener("keydown",key,true);res(v)};
+    if(opt.cancel){const n=document.createElement("button");n.type="button";n.className="no";n.textContent=opt.cancel;n.onclick=()=>done(opt.input!==undefined?null:false);act.appendChild(n)}
+    const o=document.createElement("button");o.type="button";o.className="ok"+(opt.danger?" danger":"");o.textContent=opt.ok||"ตกลง";
+    o.onclick=()=>done(checks?[...checks.querySelectorAll("input:checked")].map(c=>c.value):opt.input!==undefined?inp.value:true);act.appendChild(o);
+    box.appendChild(act);wrap.appendChild(box);document.body.appendChild(wrap);
+    const key=e=>{if(e.key==="Escape"){e.preventDefault();done(opt.cancel?(opt.input!==undefined?null:false):true)}else if(e.key==="Enter"&&document.activeElement!==act.querySelector(".no")){e.preventDefault();o.click()}};
+    document.addEventListener("keydown",key,true);
+    setTimeout(()=>(inp||o).focus(),30);
+  });
+}
+window.uiAlert=m=>dlg(m,{ok:"ตกลง"});
+window.uiChecks=(m,list)=>dlg(m,{checks:list,ok:"บันทึก",cancel:"ยกเลิก"}).then(v=>Array.isArray(v)?v:null);
+window.uiConfirm=(m,o)=>dlg(m,{ok:(o&&o.ok)||"ตกลง",cancel:(o&&o.cancel)||"ยกเลิก",danger:o&&o.danger});
+window.uiPrompt=(m,v)=>dlg(m,{ok:"บันทึก",cancel:"ยกเลิก",input:v??""});
+window.alert=m=>{uiAlert(m)};
+})();
+</script>
+<script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";import{getFirestore,collection,getDocs,doc,updateDoc,getDoc,setDoc,deleteDoc,runTransaction,deleteField}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";const firebaseConfig={apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",authDomain:"kasorb-test-ad000.firebaseapp.com",projectId:"kasorb-test-ad000",storageBucket:"kasorb-test-ad000.firebasestorage.app",messagingSenderId:"999267444865",appId:"1:999267444865:web:5509772cd5f94af768c580"};/* แยกการล็อกอินของแอดมินจากหน้าเว็บหลัก (ตั้งชื่อ app ต่างกัน ระบบจะจำ session แยกกัน) */
+const app=initializeApp(firebaseConfig,"kasorb-admin"),auth=getAuth(app),db=getFirestore(app),$=x=>document.getElementById(x),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const ADMIN="thananitwit@gmail.com";
+const say=(t,cls)=>{$("msg").textContent=t;$("msg").className=cls||""};
+const authError=e=>({"auth/invalid-credential":"อีเมลหรือรหัสผ่านไม่ถูกต้อง ถ้าจำรหัสผ่านไม่ได้ กดปุ่ม ลืมรหัสผ่าน","auth/wrong-password":"รหัสผ่านไม่ถูกต้อง ถ้าจำไม่ได้ กดปุ่ม ลืมรหัสผ่าน","auth/user-not-found":"ไม่พบบัญชีอีเมลนี้","auth/invalid-email":"รูปแบบอีเมลไม่ถูกต้อง","auth/missing-password":"กรุณากรอกรหัสผ่าน","auth/too-many-requests":"ลองผิดหลายครั้งเกินไป ระบบล็อกชั่วคราว กรุณารอสักครู่ หรือกด ลืมรหัสผ่าน","auth/user-disabled":"บัญชีนี้ถูกปิดใช้งาน","auth/network-request-failed":"เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาลองใหม่"})[e&&e.code]||("เข้าสู่ระบบไม่สำเร็จ ("+(e&&e.code||"ไม่ทราบสาเหตุ")+")");
+$("eye").onclick=()=>{const h=$("pass").type==="password";$("pass").type=h?"text":"password";$("eye").textContent=h?"ซ่อน":"แสดง"};
+$("go").onclick=async()=>{const email=$("email").value.trim().toLowerCase();if(!email||!$("pass").value){say("กรุณากรอกอีเมลและรหัสผ่าน","err");return}if(email!==ADMIN){say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("กำลังเข้าสู่ระบบ…");try{await signInWithEmailAndPassword(auth,email,$("pass").value)}catch(e){say(authError(e),"err")}};
+$("pass").onkeydown=e=>{if(e.key==="Enter")$("go").click()};
+$("forgot").onclick=async()=>{const email=$("email").value.trim().toLowerCase()||ADMIN;$("email").value=email;try{await sendPasswordResetEmail(auth,email);say("ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่ "+email+" แล้ว กรุณาเช็กอีเมล (รวมถึงกล่องจดหมายขยะ)","ok")}catch(e){say(authError(e),"err")}};$("out").onclick=()=>signOut(auth);
+/* สมาชิก: ตาราง + แท็บกรอง + เลือกแพ็กเกจ ฟรี / รายปี / ตลอดชีพ */
+let members=[],filter="all";
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const thDate=s=>new Date(`${s}T00:00:00`).toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
+const planOf=u=>{if(u.plan!=="premium")return"free";if(u.planType==="yearly")return u.premiumUntil&&u.premiumUntil<ymd(new Date())?"expired":"yearly";return"lifetime"};
+const groupOf=u=>{const p=planOf(u);return p==="expired"?"free":p};
+const PLANS=[["free","Free"],["yearly","รายปี"],["lifetime","ตลอดชีพ"]];
+function planNote(u){const p=planOf(u);if(p==="yearly")return`หมดอายุ ${thDate(u.premiumUntil)}`;if(p==="lifetime")return"ใช้ได้ตลอดชีพ";if(p==="expired")return`รายปีหมดอายุแล้ว ${thDate(u.premiumUntil)}`;return""}
+/* เลือกแพ็กเกจไว้ก่อน (ยังไม่บันทึก) แล้วกดปุ่มบันทึกของแถวนั้น + ถามยืนยัน */
+const pending=new Map();
+const nextYear=()=>{const d=new Date();d.setFullYear(d.getFullYear()+1);return ymd(d)};
+function wantOf(u){const p=pending.get(u.id);const g=groupOf(u);const v=p?p.v:g;const until=v==="yearly"?(p&&p.until)||(g==="yearly"?u.premiumUntil:nextYear()):null;return{v,until,changed:!!p}}
+function setPending(u,v,until){const g=groupOf(u);const want={v,until:v==="yearly"?(until||(g==="yearly"?u.premiumUntil:nextYear())):null};
+if(want.v===g&&(g!=="yearly"||want.until===u.premiumUntil))pending.delete(u.id);else pending.set(u.id,want);renderMembers()}
+function renderMembers(){
+const q=$("q").value.trim().toLowerCase();
+const counts={all:members.length,free:0,yearly:0,lifetime:0};
+members.forEach(u=>counts[groupOf(u)]++);
+document.querySelectorAll("#tabs button").forEach(t=>{t.classList.toggle("on",t.dataset.f===filter);t.querySelector("b").textContent=counts[t.dataset.f]});
+const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)||codeOf(u).includes(q.replace(/^#/,""))));
+if(!members.length){$("users").innerHTML='<p class="muted">ยังไม่มีสมาชิก</p>';return}
+if(!list.length){$("users").innerHTML='<p class="muted">ไม่พบสมาชิก</p>';return}
+$("users").innerHTML=`<table class="mt"><thead><tr><th>ชื่อเล่น</th><th class="col-mail">อีเมล</th><th>แพ็กเกจ</th><th></th></tr></thead><tbody>${list.map(u=>{const w=wantOf(u);const id=esc(u.id);
+const note=w.changed?`<div class="exp pend-note">ยังไม่ได้บันทึก${w.v==="yearly"?"":` — จะเปลี่ยนเป็น${PLANS.find(p=>p[0]===w.v)[1]}`}</div>`:"";
+const info=w.v==="yearly"?`<div class="exp yearly">${w.changed?"ใช้ได้ถึง":"หมดอายุ"} <input type="date" class="until" data-id="${id}" value="${esc(w.until)}"></div>`:(w.changed?"":`<div class="exp ${w.v}">${planNote(u)}</div>`);
+return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}<span class="mno">${esc(codeOf(u)||"ยังไม่มีรหัส")}</span>${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="subs">ซื้อรายวิชา: <b>${(u.subjects||[]).length?esc(u.subjects.join(", ")):"-"}</b> <button type="button" class="sub-edit" data-id="${id}">แก้ไข</button></div><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
+const find=id=>members.find(x=>x.id===id);
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{const u=find(b.parentElement.dataset.id);if(u)setPending(u,b.dataset.v)});
+document.querySelectorAll(".until").forEach(i=>i.onchange=()=>{const u=find(i.dataset.id);if(u&&i.value)setPending(u,"yearly",i.value)});
+document.querySelectorAll(".undo-row").forEach(b=>b.onclick=()=>{pending.delete(b.dataset.id);renderMembers()});
+document.querySelectorAll(".sub-edit").forEach(b=>b.onclick=()=>editSubjects(b.dataset.id));document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.dataset.id));document.querySelectorAll(".rm-photo").forEach(b=>b.onclick=()=>removePhoto(b.dataset.id));
+}
+/* รูปที่นักเรียนอัปโหลด: แอดมินลบได้ถ้าไม่เหมาะสม นักเรียนจะกลับไปใช้รูปการ์ตูนเดิม */
+function hasPhoto(u){return typeof u.photo==="string"&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u.photo)}
+async function removePhoto(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;
+if(!await uiConfirm(`ยืนยันลบรูปที่ ${who} อัปโหลด\nจะกลับไปใช้รูปการ์ตูนเดิม\nใช่หรือไม่?`))return;
+try{await updateDoc(doc(db,"users",id),{photo:""});u.photo="";renderMembers();$("umsg").className="ok";$("umsg").textContent=`ลบรูปของ ${who} แล้ว`}
+catch(e){$("umsg").className="err";$("umsg").textContent=`ลบรูปไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}}
+/* ขายแยกวิชา: เลือกวิชาที่สมาชิกซื้อ ทำได้ทุกชุดของวิชานั้น (ไม่รวมข้อสอบจริง ซึ่งเป็นสิทธิ์ Premium) */
+async function editSubjects(id){
+  const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;const have=new Set(u.subjects||[]);
+  const picked=await uiChecks(`วิชาที่ ${who} ซื้อ`,SUBJECTS.map(x=>[x,x,have.has(x)]));
+  if(!picked)return;
+  try{await updateDoc(doc(db,"users",id),{subjects:picked});u.subjects=picked;renderMembers();$("umsg").className="ok";$("umsg").textContent=`บันทึกแล้ว: ${who} ซื้อ ${picked.length?picked.join(", "):"ไม่มีวิชา"}`}
+  catch(e){$("umsg").className="err";$("umsg").textContent=`บันทึกไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+}
+async function saveRow(id){
+const u=members.find(x=>x.id===id);const p=pending.get(id);if(!u||!p)return;
+const who=u.nickname||u.email,label=PLANS.find(x=>x[0]===p.v)[1];
+const data=p.v==="free"?{plan:"free",planType:null,premiumUntil:null}:p.v==="lifetime"?{plan:"premium",planType:"lifetime",premiumUntil:null}:{plan:"premium",planType:"yearly",premiumUntil:p.until};
+const detail=p.v==="yearly"?`\nใช้ได้ถึง ${thDate(p.until)}`:p.v==="lifetime"?"\nไม่มีวันหมดอายุ":"";
+if(!await uiConfirm(`ยืนยันบันทึก ${who} เป็น ${label}${detail}\nใช่หรือไม่?`))return;
+await savePlan(document.querySelector(`.seg[data-id="${CSS.escape(id)}"]`),u,data,p.v);
+}
+async function savePlan(seg,u,data,v){const who=u.nickname||u.email;
+if(seg)seg.classList.add("busy");$("umsg").className="ok";$("umsg").textContent="กำลังบันทึก…";
+try{await updateDoc(doc(db,"users",u.id),data);Object.assign(u,data);pending.delete(u.id);renderMembers();$("umsg").textContent=`บันทึกแล้ว: ${who} เป็น ${PLANS.find(p=>p[0]===v)[1]}${data.premiumUntil?` ถึง ${thDate(data.premiumUntil)}`:""}`}
+catch(e){if(seg)seg.classList.remove("busy");$("umsg").className="";$("umsg").textContent=`บันทึกไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+}
+document.querySelectorAll("#tabs button").forEach(t=>t.onclick=()=>{filter=t.dataset.f;renderMembers()});
+$("q").oninput=renderMembers;
+/* อุปกรณ์ของสมาชิก */
+let devices=new Map();
+function renderDevices(){
+const q=$("dq").value.trim().toLowerCase();
+const list=members.filter(u=>!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q));
+if(!list.length){$("devList").innerHTML='<p class="muted">ไม่พบสมาชิก</p>';return}
+$("devList").innerHTML=`<table class="mt"><thead><tr><th>ชื่อเล่น</th><th class="col-mail">อีเมล</th><th>เครื่องที่ผูก</th><th></th></tr></thead><tbody>${list.map(u=>{const d=devices.get(u.id);const ids=d&&d.ids?Object.entries(d.ids):[];
+return`<tr><td><div class="name">${esc(u.nickname||"-")}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="dev">${ids.length?ids.map(([id,x])=>`<span class="${id===d.active?"act":""}">${esc(x.name||"อุปกรณ์")}${id===d.active?" · ใช้งานอยู่":""}<button type="button" class="rm-dev" data-uid="${esc(u.id)}" data-dev="${esc(id)}">ลบ</button></span>`).join(""):'<span>ยังไม่มี</span>'}</div></td><td class="sc"><button type="button" class="reset-row" data-id="${esc(u.id)}" ${ids.length?"":"disabled"}>ลบทั้งหมด</button></td></tr>`}).join("")}</tbody></table>`;
+document.querySelectorAll(".reset-row").forEach(b=>b.onclick=()=>resetDevices(b.dataset.id));
+document.querySelectorAll(".rm-dev").forEach(b=>b.onclick=()=>removeDevice(b.dataset.uid,b.dataset.dev));
+}
+async function loadDevices(){try{const s=await getDocs(collection(db,"devices"));devices=new Map();s.forEach(d=>devices.set(d.id,d.data()));renderDevices()}catch(e){$("devList").innerHTML=`<p class="muted">โหลดข้อมูลอุปกรณ์ไม่ได้ (${esc(e.code||e.message)}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว</p>`}}
+async function removeDevice(uid,devId){const u=members.find(x=>x.id===uid);const d=devices.get(uid);if(!u||!d||!d.ids||!d.ids[devId])return;const who=u.nickname||u.email;const name=d.ids[devId].name||"อุปกรณ์";const wasActive=d.active===devId;
+if(!await uiConfirm(`ยืนยันลบ "${name}" ออกจากบัญชีของ ${who}${wasActive?"\nเครื่องนี้กำลังใช้งานอยู่ จะออกจากระบบทันที":""}\nใช่หรือไม่?`))return;
+const ids={...d.ids};delete ids[devId];const rest=Object.keys(ids);
+try{if(!rest.length){await deleteDoc(doc(db,"devices",uid));devices.delete(uid)}else{const next={ids,active:wasActive?null:d.active};await updateDoc(doc(db,"devices",uid),next);devices.set(uid,{...d,...next})}
+renderDevices();$("dmsg").className="ok";$("dmsg").textContent=`ลบ "${name}" ของ ${who} แล้ว`}catch(e){$("dmsg").className="";$("dmsg").textContent=`ลบไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}}
+async function resetDevices(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;
+if(!await uiConfirm(`ยืนยันลบอุปกรณ์ทั้งหมดของ ${who}\nเครื่องที่ผูกไว้ทั้งหมดจะถูกลบ และเครื่องที่กำลังใช้งานอยู่จะออกจากระบบ\nใช่หรือไม่?`))return;
+try{await deleteDoc(doc(db,"devices",id));devices.delete(id);renderDevices();$("dmsg").className="ok";$("dmsg").textContent=`ลบอุปกรณ์ทั้งหมดของ ${who} แล้ว`}catch(e){$("dmsg").className="";$("dmsg").textContent=`รีเซ็ตไม่สำเร็จ (${e.code||e.message})`}}
+$("dq").oninput=renderDevices;
+async function load(){try{let s=await getDocs(collection(db,"users")),a=[];s.forEach(d=>{let u=d.data();if(u.role!=="admin"&&(u.email||"").toLowerCase()!==ADMIN)a.push({id:d.id,...u})});a.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9)||(x.email||"").localeCompare(y.email||""));members=a;setDoc(doc(db,"site","home"),{members:a.length},{merge:true}).catch(()=>{});renderMembers();loadDevices();backfillMemberNo()}catch(e){$("users").textContent="โหลดรายชื่อไม่ได้"}}
+function goPage(name){if(!document.querySelector(`.page[data-page="${name}"]`))name="home";document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.dataset.page===name));document.querySelectorAll(".side-nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===name));try{localStorage.setItem("kasorbAdminPage",name)}catch(e){}if(name==="devices"&&members.length)loadDevices();window.scrollTo(0,0);measureSticky()}
+document.querySelectorAll(".side-nav button").forEach(b=>b.onclick=()=>{goPage(b.dataset.go);menu(false)});
+/* มือถือ: เปิด/ปิดเมนูด้านซ้าย */
+function menu(open){$("side").classList.toggle("open",open);$("mShade").classList.toggle("open",open)}
+$("mMenu").onclick=()=>menu(!$("side").classList.contains("open"));
+$("mShade").onclick=()=>menu(false);
+/* ติดตั้งหน้าแอดมินลงหน้าจอ: Android ใช้หน้าต่างติดตั้ง, iPhone/iPad แสดงวิธีทำ */
+(()=>{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(e=>console.error(e));
+const btn=$("installBtn"),help=$("installHelp");const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;let pe=null;
+if(!standalone)btn.classList.remove("hide");
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();pe=e});addEventListener("appinstalled",()=>btn.classList.add("hide"));
+btn.onclick=async()=>{menu(false);if(pe){pe.prompt();try{await pe.userChoice}catch(e){}pe=null;return}help.classList.remove("hide")};
+$("installHelpClose").onclick=()=>help.classList.add("hide");help.onclick=e=>{if(e.target===help)help.classList.add("hide")};})();
+/* แถบค้นหา + หัวตาราง ค้างอยู่ด้านบนตอนเลื่อน: วัดความสูงแถบค้นหา ให้หัวตารางอยู่ใต้แถบพอดี */
+function measureSticky(){const mt=document.querySelector(".mtop");document.documentElement.style.setProperty("--mtopH",(mt&&mt.offsetHeight?mt.offsetHeight:0)+"px");document.querySelectorAll(".page").forEach(pg=>{const st=pg.querySelector(".stick");if(st)pg.style.setProperty("--stickH",st.offsetHeight+"px")})}
+addEventListener("resize",measureSticky);
+if(window.ResizeObserver){const ro=new ResizeObserver(measureSticky);document.querySelectorAll(".stick").forEach(el=>ro.observe(el))}
+function showShell(on){$("boot").classList.add("hide");document.querySelector("main").classList.toggle("hide",on);$("shell").classList.toggle("hide",!on);document.body.classList.toggle("in",on)}
+onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
+async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};fillTS(h);const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
+/* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
+function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;r._pos=newsPos(n.pos);r._posM=newsPos(n.posM||n.pos);drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
+/* รูปข่าว: อัปโหลดจากเครื่อง (ย่อรูปแล้วเก็บใน siteImg) หรือใส่ลิงก์รูปแบบเดิม */
+const siteImgCache=new Map();
+function siteImg(k){if(!siteImgCache.has(k))siteImgCache.set(k,getDoc(doc(db,"siteImg",k)).then(s=>s.exists()?s.data().d:"").catch(()=>{siteImgCache.delete(k);return ""}));return siteImgCache.get(k)}
+/* ส่วนของรูปที่แสดงในข่าว: ตำแหน่ง x y เป็นเปอร์เซ็นต์ (เหมือน background-position) */
+function newsPos(p){const m=/^(\d{1,3}) (\d{1,3})$/.exec(p||"");return m?[Math.min(100,+m[1]),Math.min(100,+m[2])]:[50,50]}
+/* ลากแยกกัน: กรอบคอมใช้ r._pos กรอบมือถือใช้ r._posM */
+function dragNewsPos(r,frames){
+  const key=f=>f.classList.contains("nm")?"_posM":"_pos";
+  const paint=()=>frames.forEach(f=>f.style.backgroundPosition=`${r[key(f)][0]}% ${r[key(f)][1]}%`);paint();
+  frames.forEach(f=>{
+    f.onpointerdown=e=>{
+      e.preventDefault();f.setPointerCapture(e.pointerId);
+      const k=key(f),im=f._im,start=[e.clientX,e.clientY,...r[k]];
+      if(!im) return;
+      /* ส่วนที่รูปเกินกรอบ (cover) ใช้คำนวณว่าลากกี่พิกเซลเท่ากับกี่เปอร์เซ็นต์ */
+      const sc=Math.max(f.clientWidth/im.naturalWidth,f.clientHeight/im.naturalHeight);
+      const ox=im.naturalWidth*sc-f.clientWidth,oy=im.naturalHeight*sc-f.clientHeight;
+      f.onpointermove=ev=>{
+        const x=ox>1?start[2]-(ev.clientX-start[0])/ox*100:start[2],y=oy>1?start[3]-(ev.clientY-start[1])/oy*100:start[3];
+        r[k]=[Math.round(Math.max(0,Math.min(100,x))),Math.round(Math.max(0,Math.min(100,y)))];paint();
+      };
+      f.onpointerup=f.onpointercancel=()=>{f.onpointermove=null};
+    };
+  });
+}
+function drawNewsImg(r){
+  const box=r.querySelector(".nimg"),v=r._img;
+  box.innerHTML=`${v?'<div class="npos"><div><span>คอมพิวเตอร์</span><i class="nf nd"></i></div><div><span>มือถือ</span><i class="nf nm"></i></div><small>ลากรูปในแต่ละกรอบเพื่อเลือกส่วนที่จะแสดง คอมกับมือถือตั้งแยกกันได้</small></div>':""}<label class="pick">${v?"เปลี่ยนรูป":"อัปโหลดรูปจากเครื่อง"}<input type="file" accept="image/png,image/jpeg,image/webp" hidden></label>${v?'<button type="button">ลบรูป</button>':""}<details class="or"><summary>หรือใส่ลิงก์รูป</summary><input class="ni" placeholder="https://..." value="${esc(v?.url||"")}"></details>`;
+  const frames=[...box.querySelectorAll(".nf")];
+  if(frames.length){
+    const show=src=>{const im=new Image();im.onload=()=>frames.forEach(f=>f._im=im);im.src=src;frames.forEach(f=>f.style.backgroundImage=`url("${src}")`);dragNewsPos(r,frames)};
+    if(v.key)siteImg(v.key).then(d=>{if(/^data:image\//.test(d))show(d)});else show(v.url);
+  }
+  box.querySelector("button")?.addEventListener("click",()=>{r._img=null;r._pos=[50,50];r._posM=[50,50];drawNewsImg(r)});
+  box.querySelector(".ni").onchange=e=>{const u=e.target.value.trim();r._img=u?{url:u}:null;drawNewsImg(r)};
+  box.querySelector("input[type=file]").onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    const pick=box.querySelector(".pick");pick.textContent="กำลังอัปโหลด…";
+    try{const d=await newsImgData(f);const k=await sha24(d);await setDoc(doc(db,"siteImg",k),{d});siteImgCache.set(k,Promise.resolve(d));r._img={key:k};r._pos=[50,50];r._posM=[50,50];drawNewsImg(r);$("newsMsg").className="";$("newsMsg").textContent='อัปโหลดรูปแล้ว กด "บันทึกข่าวสาร" เพื่อใช้รูปนี้'}
+    catch(err){$("newsMsg").className="err";$("newsMsg").textContent=err.code==="permission-denied"?"อัปโหลดไม่ได้ ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว":(err.message||"อัปโหลดไม่สำเร็จ");drawNewsImg(r)}
+  };
+}
+async function newsImgData(f){
+  if(!/^image\/(png|jpeg|webp)$/.test(f.type)) throw new Error("ใช้ได้เฉพาะรูป .jpg .png .webp");
+  const url=URL.createObjectURL(f),im=new Image();
+  try{await new Promise((ok,bad)=>{im.onload=ok;im.onerror=bad;im.src=url})}catch(e){throw new Error("เปิดรูปไม่ได้")}
+  let w=im.naturalWidth,h=im.naturalHeight;if(w>1280){h=Math.round(h*1280/w);w=1280}
+  const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);URL.revokeObjectURL(url);
+  let d="";for(const q of [.82,.72,.6,.5]){d=c.toDataURL("image/jpeg",q);if(d.length<=700000)break}
+  if(d.length>700000) throw new Error("รูปใหญ่เกินไป กรุณาย่อรูปก่อน");
+  return d;
+}
+async function sha24(d){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(d));return [...new Uint8Array(b)].slice(0,12).map(x=>x.toString(16).padStart(2,"0")).join("")}
+function numberNews(){const rows=[...$("newsRows").children];rows.forEach((r,i)=>r.querySelector("b").textContent="ข่าวที่ "+(i+1));$("newsAdd").style.display=rows.length>=10?"none":""}
+function setNewsRows(list){$("newsRows").innerHTML="";(list.length?list:[{}]).slice(0,10).forEach(newsRow)}
+function readNewsRows(){return[...$("newsRows").children].map(r=>{const n={text:r.querySelector(".nt").value.trim()},l=r.querySelector(".nl").value.trim();if(r._img?.key)n.imageKey=r._img.key;else if(r._img?.url)n.image=r._img.url;if(r._img&&(r._pos[0]!==50||r._pos[1]!==50))n.pos=r._pos.join(" ");if(r._img&&r._posM&&(r._posM[0]!==50||r._posM[1]!==50))n.posM=r._posM.join(" ");if(l)n.link=l;return n}).filter(n=>n.text).slice(0,10)}
+$("newsAdd").onclick=()=>newsRow();setNewsRows([]);
+/* หน้าหลัก: บันทึกแยกทีละส่วน (merge เฉพาะฟิลด์ของส่วนนั้น) */
+async function saveHomePart(data,msgId){
+  const m=$(msgId);m.className="";m.textContent="กำลังบันทึก…";
+  try{await setDoc(doc(db,"site","home"),{...data,updatedAt:new Date().toISOString()},{merge:true});m.textContent="บันทึกแล้ว";return true}
+  catch(e){m.className="err";m.textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)";return false}
+}
+const DEFAULT_OPEN=["amnuay","pisut","prab"];
+const DEFAULT_TRACK_SUBJ={amnuay:[0,1,2,3,4,6,7],pisut:[0,1,2,3,4,6,7],prab:[0,1,2,4,5],namwan:[0,1,2,4,5],plrom:[0,1,2,4,5],tcd:[0,1,2,4,5]};
+const BASE_SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+/* ===== สายสอบและรายวิชา: แก้ชื่อ เพิ่ม ลบ และกดเลือกวิชาของแต่ละสาย ===== */
+let ts={subjects:[],tracks:[]},tsSeq=0;
+const tsKey=()=>"s"+(++tsSeq);
+function fillTS(h){
+  const list=Array.isArray(h.trackList)&&h.trackList.length?h.trackList.map(t=>[t.id,t.name]):TRACKS.map(t=>[t[0],t[1]]);
+  const tsub=h.trackSubjects&&typeof h.trackSubjects==="object"?h.trackSubjects:{};
+  const names=Array.isArray(h.subjectList)&&h.subjectList.length?h.subjectList:[...new Set(BASE_SUBJECTS.concat(...Object.values(tsub).filter(Array.isArray)))];
+  ts.subjects=names.map(n=>({k:tsKey(),name:n,orig:n}));
+  const byName=n=>(ts.subjects.find(x=>x.name===n)||{}).k;
+  const open=Array.isArray(h.tracks)&&h.tracks.length?h.tracks:DEFAULT_OPEN;
+  ts.tracks=list.map(([id,name])=>({id,name,open:open.includes(id),subs:new Set((Array.isArray(tsub[id])&&tsub[id].length?tsub[id]:(DEFAULT_TRACK_SUBJ[id]||[]).map(i=>BASE_SUBJECTS[i])).map(byName).filter(Boolean))}));
+  applyTS();drawTS();
+}
+function applyTS(){
+  TRACKS.splice(0,TRACKS.length,...ts.tracks.map(t=>[t.id,t.name]));
+  SUBJECTS=ts.subjects.map(x=>x.name);
+}
+function drawTS(){
+  $("subjMaster").innerHTML=ts.subjects.map((x,i)=>`<div class="srow"><span class="sn">${i+1}</span><input data-k="${x.k}" value="${esc(x.name)}" maxlength="60"><button type="button" class="sdel" data-k="${x.k}" aria-label="ลบวิชา">ลบ</button></div>`).join("");
+  $("trackEd").innerHTML=ts.tracks.map(t=>`<div class="tcard" data-id="${esc(t.id)}"><div class="thead"><input class="tname" value="${esc(t.name)}" maxlength="40"><label class="topen"><input type="checkbox" ${t.open?"checked":""}> เปิดให้นักเรียน</label><button type="button" class="tdel">ลบสาย</button></div>
+    <div class="tchips">${ts.subjects.map(x=>`<button type="button" class="tchip${t.subs.has(x.k)?" on":""}" data-k="${x.k}">${esc(x.name||"(ยังไม่ตั้งชื่อ)")}</button>`).join("")}</div><small>เลือกแล้ว ${[...t.subs].filter(k=>ts.subjects.some(x=>x.k===k)).length} วิชา</small></div>`).join("");
+  $("subjMaster").querySelectorAll("input").forEach(i=>i.oninput=()=>{const x=ts.subjects.find(s=>s.k===i.dataset.k);x.name=i.value;document.querySelectorAll(`.tchip[data-k="${x.k}"]`).forEach(c=>c.textContent=x.name.trim()||"(ยังไม่ตั้งชื่อ)")});
+  $("subjMaster").querySelectorAll(".sdel").forEach(b=>b.onclick=async()=>{const x=ts.subjects.find(s=>s.k===b.dataset.k);if(!await uiConfirm(`ลบวิชา "${x.name}" ออกจากทุกสาย\nชุดข้อสอบของวิชานี้จะไม่แสดงในหน้ารายวิชา\nใช่หรือไม่?`,{ok:"ลบ",cancel:"ยกเลิก",danger:true}))return;ts.subjects=ts.subjects.filter(s=>s!==x);ts.tracks.forEach(t=>t.subs.delete(x.k));drawTS()});
+  $("trackEd").querySelectorAll(".tcard").forEach(c=>{const t=ts.tracks.find(x=>x.id===c.dataset.id);
+    c.querySelector(".tname").oninput=e=>{t.name=e.target.value};
+    c.querySelector(".topen input").onchange=e=>{t.open=e.target.checked};
+    c.querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{t.subs.has(b.dataset.k)?t.subs.delete(b.dataset.k):t.subs.add(b.dataset.k);b.classList.toggle("on");c.querySelector("small").textContent=`เลือกแล้ว ${[...t.subs].filter(k=>ts.subjects.some(x=>x.k===k)).length} วิชา`});
+    c.querySelector(".tdel").onclick=async()=>{if(!await uiConfirm(`ลบ "${t.name}"\nชุดข้อสอบที่เลือกสายนี้ไว้จะไม่แสดงในสายนี้\nใช่หรือไม่?`,{ok:"ลบ",cancel:"ยกเลิก",danger:true}))return;ts.tracks=ts.tracks.filter(x=>x!==t);drawTS()};
+  });
+}
+$("addSubj").onclick=()=>{ts.subjects.push({k:tsKey(),name:"",orig:null});drawTS();const ins=$("subjMaster").querySelectorAll("input");ins[ins.length-1].focus()};
+$("addTrack").onclick=()=>{ts.tracks.push({id:"t"+Date.now().toString(36),name:"สายใหม่",open:false,subs:new Set()});drawTS();const ins=$("trackEd").querySelectorAll(".tname");ins[ins.length-1].select()};
+$("saveTS").onclick=async()=>{
+  const m=$("tsMsg");m.className="err";
+  const names=ts.subjects.map(x=>x.name.trim());
+  if(names.some(n=>!n)){m.textContent="มีวิชาที่ยังไม่ได้ตั้งชื่อ";return}
+  if(new Set(names).size!==names.length){m.textContent="มีชื่อวิชาซ้ำกัน";return}
+  if(ts.tracks.some(t=>!t.name.trim())){m.textContent="มีสายที่ยังไม่ได้ตั้งชื่อ";return}
+  if(!ts.tracks.some(t=>t.open)){m.textContent="ต้องเปิดให้นักเรียนอย่างน้อย 1 สาย";return}
+  const bad=ts.tracks.find(t=>t.open&&!ts.subjects.some(x=>t.subs.has(x.k)));
+  if(bad){m.textContent=`${bad.name} ยังไม่ได้เลือกวิชา`;return}
+  ts.subjects.forEach(x=>x.name=x.name.trim());ts.tracks.forEach(t=>t.name=t.name.trim());
+  const renames=ts.subjects.filter(x=>x.orig&&x.orig!==x.name).map(x=>[x.orig,x.name]);
+  const data={subjectList:ts.subjects.map(x=>x.name),trackList:ts.tracks.map(t=>({id:t.id,name:t.name})),tracks:ts.tracks.filter(t=>t.open).map(t=>t.id),
+    trackSubjects:Object.fromEntries(ts.tracks.map(t=>[t.id,ts.subjects.filter(x=>t.subs.has(x.k)).map(x=>x.name)]))};
+  if(!await saveHomePart(data,"tsMsg")) return;
+  /* เปลี่ยนชื่อวิชา: ชุดรายวิชาและรายวิชาที่สมาชิกซื้อไว้ เปลี่ยนตาม */
+  if(renames.length){
+    m.className="";m.textContent="กำลังเปลี่ยนชื่อวิชาในชุดข้อสอบและสมาชิก…";
+    const map=new Map(renames);let n=0,fail=0;
+    const rows=async c=>{const out=[];(await getDocs(collection(db,c))).forEach(d=>out.push([d.id,d.data()]));return out};
+    try{for(const [id,e] of await rows("exams")){if(e.subject&&map.has(e.subject)){try{await updateDoc(doc(db,"exams",id),{subject:map.get(e.subject)});n++}catch(err){fail++}}}}catch(err){console.error(err);fail++}
+    try{for(const [id,u] of await rows("users")){if(Array.isArray(u.subjects)&&u.subjects.some(x=>map.has(x))){try{await updateDoc(doc(db,"users",id),{subjects:u.subjects.map(x=>map.get(x)||x)});n++}catch(err){fail++}}}}catch(err){console.error(err);fail++}
+    examSets.forEach(e=>{if(map.has(e.subject))e.subject=map.get(e.subject)});members.forEach(u=>{if(Array.isArray(u.subjects))u.subjects=u.subjects.map(x=>map.get(x)||x)});
+    m.className=fail?"err":"";m.textContent=fail?`บันทึกแล้ว แต่เปลี่ยนชื่อบางรายการไม่สำเร็จ (${fail})`:`บันทึกแล้ว · เปลี่ยนชื่อวิชาใน ${n} รายการ`;
+  }
+  ts.subjects.forEach(x=>x.orig=x.name);applyTS();
+};
+$("saveCount").onclick=()=>saveHomePart({exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title)},"countMsg");
+$("saveNews").onclick=async()=>{
+  const old=await getDoc(doc(db,"site","home")).then(s=>s.exists()?s.data():{}).catch(()=>({}));
+  const oldDates=new Map((old.news||[]).map(n=>[n.text,n.date]));const today=new Date().toISOString().slice(0,10);
+  const news=readNewsRows().map(n=>({...n,date:oldDates.get(n.text)||today}));
+  const badUrl=news.find(n=>[n.image,n.link].some(u=>u&&!/^https:\/\/\S+$/.test(u)));
+  if(badUrl){$("newsMsg").className="err";$("newsMsg").textContent="ลิงก์ต้องขึ้นต้นด้วย https:// (ข่าว: "+badUrl.text+")";return}
+  if(await saveHomePart({news},"newsMsg")){
+    /* ลบรูปข่าวที่ไม่ได้ใช้แล้ว */
+    const used=new Set(news.map(n=>n.imageKey).filter(Boolean));
+    for(const k of new Set((old.news||[]).map(n=>n.imageKey).filter(k=>k&&!used.has(k)))){try{await deleteDoc(doc(db,"siteImg",k))}catch(e){}}
+  }
+};
+$("saveDaily").onclick=()=>{const choices=[0,1,2,3].map(i=>$("dailyC"+i).value.trim()).filter(Boolean);return saveHomePart({daily:{question:$("dailyQ").value.trim(),choices,answer:Math.min(Number($("dailyAns").value),Math.max(choices.length-1,0)),explanation:$("dailyExp").value.trim(),english:$("dailyEng").checked}},"dailyMsg")};
+
+/* ===== ข้อสอบ: exams/{id} (ข้อมูลชุด) + examItems/{id} (ข้อสอบ เฉลย คำอธิบาย) + examImg/{key} (รูป) ===== */
+const TRACKS=[["amnuay","สายอำนวยการ"],["prab","สายปราบปราม"],["pisut","สายพิสูจน์หลักฐาน"],["namwan","กองร้อยน้ำหวาน"],["plrom","พลร่ม"],["tcd","ตชด."]];
+const DEFAULT_SECS=["ความสามารถทั่วไป","ภาษาไทย","คอมพิวเตอร์และเทคโนโลยีสารสนเทศ","ระเบียบงานสารบรรณและระเบียบการตำรวจ","กฎหมายที่ประชาชนควรรู้","ภาษาอังกฤษ"];
+const trackName=id=>(TRACKS.find(t=>t[0]===id)||[])[1]||id;
+const tracksHtml=sel=>TRACKS.map(([id,n])=>`<label><input type="checkbox" value="${id}"${sel.includes(id)?" checked":""}>${n}</label>`).join("");
+const readTracks=box=>[...$(box).querySelectorAll("input:checked")].map(x=>x.value);
+const isImgKey=k=>/^[0-9a-f]{16,40}$/.test(k||"");
+const clampMins=v=>Math.min(600,Math.max(1,Math.round(Number(v)||0)));
+
+/* นำเข้าจากไฟล์ .json */
+let pendingExams=[];
+function checkExam(d){
+  const errs=[];
+  if(!d||typeof d!=="object") return ["ไฟล์ไม่ถูกต้อง"];
+  if(!/^[a-z0-9_-]{2,40}$/i.test(d.id||"")) errs.push("ไม่มีรหัสชุด (id)");
+  if(!d.title) errs.push("ไม่มีชื่อชุด");
+  const items=Array.isArray(d.items)?d.items:[];
+  if(!items.length) errs.push("ไม่มีข้อสอบ");
+  items.forEach((it,i)=>{
+    if(!Array.isArray(it.c)||it.c.length!==4) errs.push(`ข้อ ${i+1}: ตัวเลือกไม่ครบ 4`);
+    if(!(Number.isInteger(it.a)&&it.a>=0&&it.a<4)) errs.push(`ข้อ ${i+1}: ไม่มีเฉลย`);
+  });
+  return errs.slice(0,5);
+}
+$("examFiles").onchange=async()=>{
+  pendingExams=[];$("impMsg").textContent="";
+  const files=[...$("examFiles").files];
+  for(const f of files){
+    let d=null,errs=[];
+    try{d=JSON.parse(await f.text());errs=checkExam(d)}catch(e){errs=["อ่านไฟล์ไม่ได้"]}
+    pendingExams.push({name:f.name,d,errs});
+  }
+  $("impList").innerHTML=pendingExams.map(p=>`<div class="irow"><div><b>${esc(p.d?.title||p.name)}</b><span class="muted">${p.d?.items?.length||0} ข้อ · ${p.d?.tier==="free"?"Free":"Premium"}</span></div><div class="${p.errs.length?"bad":"good"}">${p.errs.length?esc(p.errs.join(", ")):"พร้อมนำเข้า"}</div></div>`).join("");
+  $("impGo").classList.toggle("hide",!pendingExams.some(p=>!p.errs.length));
+  $("examFiles").value="";
+};
+$("impGo").onclick=async()=>{
+  const ok=pendingExams.filter(p=>!p.errs.length);
+  if(!ok.length) return;
+  const exist=ok.filter(p=>examSets.some(e=>e.id===p.d.id));
+  if(exist.length&&!await uiConfirm(`มีชุดเดิมอยู่แล้ว ${exist.length} ชุด (${exist.map(p=>p.d.title).join(", ")})\nนำเข้าทับของเดิมใช่หรือไม่?`)) return;
+  $("impGo").disabled=true;$("impMsg").className="ok";
+  let done=0;
+  try{
+    for(const p of ok){
+      const d=p.d,old=examSets.find(e=>e.id===d.id);
+      $("impMsg").textContent=`กำลังนำเข้า ${d.title}…`;
+      const items=d.items.map((it,i)=>({n:it.n||i+1,sec:it.sec??0,q:String(it.q||""),c:it.c.map(String),a:it.a,exp:String(it.exp||""),eng:!!it.eng,
+        ...(it.img?{img:it.img}:{}),...(it.expImg?{expImg:it.expImg}:{}),...(Array.isArray(it.expFig)?{expFig:it.expFig.map(g=>[].concat(g).map(String))}:{}),...(it.passage?{passage:it.passage}:{}),...(it.passageImg?{passageImg:it.passageImg}:{}),...(it.group?{group:it.group}:{}),...(it.fig?{fig:true}:{}),
+        ...(it.q2?{q2:String(it.q2)}:{}),...(it.box?{box:String(it.box)}:{}),...(it.tbl?{tbl:String(it.tbl)}:{}),...(it.qfig?{qfig:it.qfig}:{}),...(Array.isArray(it.cimg)?{cimg:it.cimg}:{})}));
+      const keys=items.map(it=>it.a).join("");
+      /* รูปประกอบข้อสอบ/คำอธิบาย: เก็บใน examImg (อ่านได้ตามสิทธิ์ของชุด) ไม่เก็บในเว็บที่ใครก็เปิดได้ */
+      const imgs=d.images&&typeof d.images==="object"?d.images:{};
+      const imgKeys=Object.keys(imgs).filter(k=>isImgKey(k)&&/^data:image\/(png|jpeg);base64,/.test(imgs[k]));
+      let oldKeys=[],oldAns=old?.keys;
+      if(old){try{const o=await getDoc(doc(db,"examItems",d.id));if(o.exists()){oldKeys=o.data().imgs||[];oldAns=o.data().keys??oldAns}}catch(e){}}
+      const keyVersion=old?(oldAns===keys?old.keyVersion||1:(old.keyVersion||1)+1):1;
+      let k=0;
+      for(const key of imgKeys){k++;$("impMsg").textContent=`กำลังนำเข้า ${d.title}… รูป ${k}/${imgKeys.length}`;await setDoc(doc(db,"examImg",key),{exam:d.id,d:imgs[key]})}
+      for(const key of oldKeys.filter(x=>!imgKeys.includes(x))){try{await deleteDoc(doc(db,"examImg",key))}catch(e){}}
+      await setDoc(doc(db,"examItems",d.id),{items,imgs:imgKeys,keys,updatedAt:new Date().toISOString()});
+      await setDoc(doc(db,"exams",d.id),{title:old?.title||d.title,kind:old?.kind||d.kind||"mock",published:old?(old.published!==false):false,...((old?.subject||d.subject)?{subject:old?.subject||d.subject}:{}),track:old?.track||d.track||[],tier:old?.tier||d.tier||"premium",
+        minutes:old?.minutes||d.minutes||Math.max(1,items.length),count:items.length,sections:d.sections||[],order:old?.order??d.order??99,keyVersion,updatedAt:new Date().toISOString()});
+      done++;
+    }
+    $("impMsg").textContent=`นำเข้าแล้ว ${done} ชุด`;
+    pendingExams=[];$("impList").innerHTML="";$("impGo").classList.add("hide");
+    await loadExams();
+  }catch(e){$("impMsg").className="err";$("impMsg").textContent=`นำเข้าไม่สำเร็จ (${e.code||e.message}) นำเข้าแล้ว ${done} ชุด — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+  $("impGo").disabled=false;
+};
+
+/* รายชื่อชุด */
+let examSets=[];
+function syncTotal(){
+  const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
+  $("totalQuestions").value=total;
+  setDoc(doc(db,"site","home"),{totalQuestions:total},{merge:true}).catch(()=>{});
+  return total;
+}
+async function loadExams(){
+  try{
+    const s=await getDocs(collection(db,"exams"));examSets=[];s.forEach(d=>examSets.push({id:d.id,...d.data()}));
+    examSets.sort((a,b)=>(a.order??99)-(b.order??99)||String(a.title).localeCompare(String(b.title)));
+    renderExams();syncTotal();
+    /* เฉลยเคยเก็บไว้ในข้อมูลชุด (ทุกคนอ่านได้): ย้ายไปไว้กับตัวข้อสอบ ซึ่งอ่านได้ตามสิทธิ์ของชุด */
+    for(const e of examSets.filter(x=>x.keys!=null)){
+      try{await setDoc(doc(db,"examItems",e.id),{keys:e.keys},{merge:true});await updateDoc(doc(db,"exams",e.id),{keys:deleteField()});delete e.keys}catch(err){console.error(err)}
+    }
+  }catch(e){$("examList").innerHTML=`<p class="err">โหลดชุดข้อสอบไม่ได้ (${esc(e.code||e.message)}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว</p>`}
+}
+function renderExams(){
+  const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
+  $("examTotal").textContent=examSets.length?`${examSets.length} ชุด · ${total.toLocaleString()} ข้อ`:"";
+  if(!examSets.length){$("examList").innerHTML='<p class="muted">ยังไม่มีชุดข้อสอบ</p>';return}
+  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span><em class="pub ${e.published===false?"off":"on"}">${e.published===false?"ฉบับร่าง":"เผยแพร่แล้ว"}</em>${esc(KIND_NAME[e.kind]||"เสมือนจริง")}${e.subject?" "+esc(e.subject):""}${e.slot?" ชุด "+(e.slot<=5?(/ภาษาไทย/.test(e.subject||"")?"กขคงจ":"ABCDE")[e.slot-1]:"Premium "+(e.slot-5)):""} · ${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
+  document.querySelectorAll("#examList .open").forEach(el=>el.onclick=()=>openSet(el.dataset.id));
+}
+async function deleteExam(id){
+  const e=examSets.find(x=>x.id===id);if(!e)return false;
+  if(!await uiConfirm(`ยืนยันลบ "${e.title}" (${e.count} ข้อ)\nนักเรียนจะทำชุดนี้ไม่ได้อีก\nใช่หรือไม่?`))return false;
+  try{try{const o=await getDoc(doc(db,"examItems",id));for(const key of (o.exists()&&o.data().imgs)||[]) await deleteDoc(doc(db,"examImg",key))}catch(e){}
+    await deleteDoc(doc(db,"examItems",id));await deleteDoc(doc(db,"exams",id));await loadExams();return true}
+  catch(err){alert(`ลบไม่สำเร็จ (${err.code||err.message})`);return false}
+}
+
+/* สร้างชุดใหม่: เสมือนจริง / รายวิชา / ข้อสอบรวม */
+let SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+const REAL_SUBJECTS=["กฎหมาย","ภาษาอังกฤษ","ภาษาไทย","เทคโนโลยีสารสนเทศ","ความสามารถทั่วไป"];
+const KIND_NAME={mock:"เสมือนจริง",subject:"รายวิชา",mixed:"ข้อสอบรวม",real:"ข้อสอบจริง"};
+/* ช่องชุดรายวิชา 1-20 ที่ยังว่าง ของวิชาที่เลือก */
+function fillSlots(){
+  const sub=$("nSubj").value,used=new Set(examSets.filter(e=>e.kind==="subject"&&e.subject===sub).map(e=>Number(e.slot)));
+  const free=[...Array(20)].map((_,i)=>i+1).filter(n=>!used.has(n));
+  const lab=n=>n<=5?(/ภาษาไทย/.test(sub)?"กขคงจ":"ABCDE")[n-1]:String(n-5);
+  $("nSlot").innerHTML=free.length?free.map(n=>`<option value="${n}">${n<=5?"Free":"Premium"} ชุด ${lab(n)}</option>`).join(""):'<option value="">ครบ 20 ชุดแล้ว</option>';
+}
+const nKindSync=()=>{const k=$("nKind").value,one=k==="subject"||k==="real";
+  $("nSubj").innerHTML=(k==="real"?REAL_SUBJECTS:SUBJECTS).map(x=>`<option>${esc(x)}</option>`).join("");
+  $("nSubjBox").classList.toggle("hide",!one);$("nSlotBox").classList.toggle("hide",k!=="subject");$("nSecsBox").classList.toggle("hide",one);
+  $("nTier").closest("div").classList.toggle("hide",one);
+  if(one&&+$("nMins").value===180)$("nMins").value=30;if(!one&&+$("nMins").value===30)$("nMins").value=180;fillSlots()};
+$("nKind").onchange=nKindSync;$("nSubj").onchange=fillSlots;
+$("exNewBtn").onclick=()=>{
+  $("nKind").value="mock";nKindSync();
+  $("nTitle").value="";$("nTracks").innerHTML=tracksHtml([]);$("nTier").value="premium";$("nMins").value=180;$("nSecs").value=DEFAULT_SECS.join("\n");$("nErr").textContent="";
+  $("exNew").classList.remove("hide");$("exNewBtn").classList.add("hide");$("nTitle").focus();
+};
+$("nCancel").onclick=()=>{$("exNew").classList.add("hide");$("exNewBtn").classList.remove("hide")};
+$("nGo").onclick=async()=>{
+  const kind=$("nKind").value,one=kind==="subject"||kind==="real",subject=one?$("nSubj").value:"",slot=kind==="subject"?Number($("nSlot").value)||0:0;
+  if(kind==="subject"&&!slot){$("nErr").textContent="วิชานี้ครบ 20 ชุดแล้ว";return}
+  const title=$("nTitle").value.trim().slice(0,80),track=readTracks("nTracks"),secs=one?[subject]:$("nSecs").value.split("\n").map(x=>x.trim()).filter(Boolean);
+  const err=!title?"กรุณาใส่ชื่อชุด":!track.length?"กรุณาเลือกสายสอบอย่างน้อย 1 สาย":!secs.length?"กรุณาใส่วิชาอย่างน้อย 1 วิชา":"";
+  $("nErr").textContent=err;if(err)return;
+  const id="set"+Date.now().toString(36),order=Math.max(0,...examSets.map(e=>Number(e.order)||0))+1,now=new Date().toISOString();
+  $("nGo").disabled=true;
+  try{
+    await setDoc(doc(db,"examItems",id),{items:[],imgs:[],keys:"",updatedAt:now});
+    await setDoc(doc(db,"exams",id),{title,kind,...(subject?{subject}:{}),...(slot?{slot}:{}),published:false,track,tier:kind==="subject"?(slot<=5?"free":"premium"):kind==="real"?"premium":$("nTier").value,minutes:clampMins($("nMins").value),count:0,sections:secs.map(name=>({name,from:1,to:0})),order,keyVersion:1,updatedAt:now});
+    $("exNew").classList.add("hide");$("exNewBtn").classList.remove("hide");
+    await loadExams();await openSet(id);
+  }catch(e){$("nErr").textContent=`สร้างไม่สำเร็จ (${e.code||e.message})`}
+  $("nGo").disabled=false;
+};
+
+/* ===== แก้ไขชุดข้อสอบ ===== */
+let ed=null;     // {id, meta, items, keys, imgs}
+let edit=null;   // {it: ข้อที่แก้ (null = ข้อใหม่), sec, imgs:{img,expImg,passageImg}}
+const imgCache=new Map();
+function getImg(v){
+  if(/^data:image\//.test(v||"")) return Promise.resolve(v);
+  if(!imgCache.has(v)) imgCache.set(v,getDoc(doc(db,"examImg",v)).then(s=>s.exists()?s.data().d:"").catch(()=>{imgCache.delete(v);return ""}));
+  return imgCache.get(v);
+}
+/* ตัดคำไทยแล้วคั่นด้วยช่องว่างขนาด 0 ให้จัดแบบกระจายเต็มบรรทัดเหมือนหน้านักเรียน */
+const thaiSeg="Segmenter" in Intl?new Intl.Segmenter("th",{granularity:"word"}):null;
+/* รูปแบบข้อความเหมือนหน้านักเรียน: [a/b] เศษส่วน · __คำ__ ขีดเส้นใต้ · ~~คำ~~ ขีดฆ่า · ^{x} ตัวยก */
+const RICH=/(\[[^\[\]\/\n]{1,40}\/[^\[\]\n]{1,40}\]|__[^\n]+?__|~~[^\n]+?~~|==[^\n]+?==|\^\{[^}\n]+\}|_\{[^}\n]+\})/g;
+const FMT=/\[(b|i|big|small|c|bg)(?:=([a-z]+))?\]([\s\S]*?)\[\/\1\]/g;
+const FMT_C=["red","blue","green","orange","navy"],FMT_BG=["yellow","green","pink","blue"];
+/* แถบจัดรูปแบบ: ครอบข้อความที่เลือกในช่องล่าสุดของฟอร์มแก้ข้อ */
+let fmtField=null;
+document.addEventListener("focusin",e=>{if(e.target.closest?.("#qform")&&/^(TEXTAREA|INPUT)$/.test(e.target.tagName)&&e.target.type!=="radio"&&e.target.type!=="checkbox"&&e.target.type!=="file")fmtField=e.target});
+document.addEventListener("mousedown",e=>{if(e.target.closest?.("#fmtBar button"))e.preventDefault()});
+document.addEventListener("click",e=>{const b=e.target.closest?.("#fmtBar button");if(!b)return;
+  const f=fmtField&&document.contains(fmtField)?fmtField:$("fQ");if(!f)return;
+  const a=f.selectionStart??f.value.length,z=f.selectionEnd??a,sel=f.value.slice(a,z);let rep,ca,cz;
+  if(b.dataset.clear){rep=sel.replace(/\[\/?(b|i|big|small|c|bg)(=[a-z]+)?\]/g,"").replace(/__|~~|==/g,"");ca=a;cz=a+rep.length}
+  else{const [o,c]=b.dataset.w.split("|");rep=o+sel+c;ca=a+o.length;cz=ca+sel.length}
+  f.focus();f.setRangeText(rep,a,z,"end");f.setSelectionRange(ca,cz);f.dispatchEvent(new Event("input",{bubbles:true}))});
+function rich(text){const src=String(text??"");let out="",last=0;
+  for(const m of src.matchAll(FMT)){out+=richBasic(src.slice(last,m.index));const [,t,v]=m,inner=rich(m[3]);
+    out+=t==="b"?`<strong>${inner}</strong>`:t==="i"?`<em>${inner}</em>`:`<span class="${t==="big"?"fx-big":t==="small"?"fx-sm":t==="c"?(FMT_C.includes(v)?"fx-c-"+v:""):(FMT_BG.includes(v)?"fx-bg-"+v:"fx-bg-yellow")}">${inner}</span>`;last=m.index+m[0].length}
+  return out+richBasic(src.slice(last))}
+function richBasic(text){return String(text??"").split(RICH).map((p,i)=>{if(!p)return"";if(i%2===0)return distPlain(p);
+  if(p[0]==="["){const [a,b]=p.slice(1,-1).split("/");return `<span class="frac"><span>${esc(a.trim())}</span><span>${esc(b.trim())}</span></span>`}
+  if(p.startsWith("__"))return `<u>${esc(p.slice(2,-2))}</u>`;if(p.startsWith("~~"))return `<s>${esc(p.slice(2,-2))}</s>`;if(p.startsWith("=="))return `<mark>${distPlain(p.slice(2,-2))}</mark>`;return p[0]==="_"?`<sub>${esc(p.slice(2,-1))}</sub>`:`<sup>${esc(p.slice(2,-1))}</sup>`}).join("")}
+/* คำอธิบายเฉลย: ข้อความ + ตาราง + รูปประกอบ [[รูป]] (เหมือนหน้านักเรียน) */
+function expHtml(it){
+  const figs=Array.isArray(it.expFig)?it.expFig:[];let fi=0,rows=[],out="",text=[];
+  const ft=()=>{if(text.length){out+=`<div class="xet">${rich(text.join("\n"))}</div>`;text=[]}};
+  const fr=()=>{if(!rows.length)return;const cells=rows.map(r=>r.slice(1,-1).split("|")),head=cells[0].some(c=>c.trim());
+    out+=`<div class="xtblw"><table class="xtbl">${cells.map((r,ri)=>ri===0&&!head?"":`<tr>${r.map(c=>{const v=c.split("<br>").map(x=>rich(x.trim())).join("<br>");return ri?`<td>${v}</td>`:`<th>${v}</th>`}).join("")}</tr>`).join("")}</table></div>`;rows=[]};
+  String(it.exp||"-").split("\n").forEach(l=>{const t=l.trim();
+    if(/^\|.*\|$/.test(t)&&t.length>1){ft();rows.push(t);return}fr();
+    if(t==="[[รูป]]"){ft();const ks=(figs[fi++]||[]).filter(Boolean);if(ks.length)out+=`<div class="xefig${ks.length>1?" many":""}">${ks.map(imgTag).join("")}</div>`;return}
+    text.push(l)});
+  ft();fr();return out;
+}
+const dist=t=>rich(t);
+function distPlain(text){text=String(text??"");if(!thaiSeg||!/[\u0E00-\u0E7F]/.test(text))return esc(text);let out="",first=true;for(const {segment} of thaiSeg.segment(text)){if(!first&&!/^\s/.test(segment))out+='<span class="z"> </span>';out+=esc(segment);first=/\s$/.test(segment)}return out}
+const imgTag=v=>`<img class="eimg" data-k="${esc(v)}" alt="">`;
+function loadImgs(root){return Promise.all([...root.querySelectorAll("img.eimg:not([src])")].map(el=>getImg(el.dataset.k).then(src=>{if(!/^data:image\/(png|jpeg);base64,/.test(src)){el.alt="โหลดรูปไม่ได้";return}el.src=src;return el.decode().catch(()=>{})})))}
+function edStatus(t,bad){$("exSt").textContent=t;$("exSt").className="st"+(bad?" err":"")}
+async function openSet(id){
+  const meta=examSets.find(e=>e.id===id);if(!meta)return;
+  edStatus("กำลังโหลด…");
+  $("exListView").classList.add("hide");$("exEditView").classList.remove("hide");window.scrollTo(0,0);
+  $("exTitle").textContent=meta.title;$("exPaper").innerHTML='<p class="muted">กำลังโหลดข้อสอบ…</p>';$("exChips").innerHTML="";
+  try{
+    const s=await getDoc(doc(db,"examItems",id));const d=s.exists()?s.data():{};
+    const items=(d.items||[]).map(it=>({...it,c:[...(it.c||[])]}));
+    ed={id,meta:{...meta,sections:(meta.sections&&meta.sections.length?meta.sections:[{name:"ทั่วไป",from:1,to:items.length}]).map(x=>({...x}))},items,keys:d.keys??items.map(it=>it.a).join(""),imgs:d.imgs||[]};
+    /* ข้อที่ไม่มีเลขวิชา: หาจากช่วงข้อของวิชา */
+    items.forEach(it=>{if(!Number.isInteger(it.sec)){const i=ed.meta.sections.findIndex(x=>it.n>=x.from&&it.n<=x.to);it.sec=Math.max(0,i)}});
+    edit=null;fillSettings();renderPaper();edStatus("");
+  }catch(e){$("exPaper").innerHTML=`<p class="err">โหลดข้อสอบไม่ได้ (${esc(e.code||e.message)})</p>`;edStatus("")}
+}
+$("exBack").onclick=async()=>{
+  if(edit&&!await uiConfirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ออกจากหน้านี้ใช่หรือไม่?"))return;
+  ed=null;edit=null;$("exEditView").classList.add("hide");$("exListView").classList.remove("hide");renderExams();window.scrollTo(0,0);
+};
+/* เผยแพร่: ชุดใหม่เป็นฉบับร่างก่อน ตรวจแล้วค่อยกดเผยแพร่ให้นักเรียนเห็น (ชุดเดิมที่ไม่มีค่านี้ถือว่าเผยแพร่แล้ว) */
+const isPub=m=>m.published!==false;
+function drawPub(){
+  const on=isPub(ed.meta);$("pubBar").className="pubbar "+(on?"on":"off");
+  $("pubTxt").textContent=on?"เผยแพร่แล้ว — นักเรียนเห็นและทำชุดนี้ได้":"ฉบับร่าง — นักเรียนยังไม่เห็นชุดนี้ ตรวจแล้วกดเผยแพร่";
+  $("pubBtn").textContent=on?"ยกเลิกการเผยแพร่":"เผยแพร่ให้นักเรียน";
+}
+$("pubBtn").onclick=async()=>{
+  const on=!isPub(ed.meta);
+  if(on&&!ed.items.length){alert("ชุดนี้ยังไม่มีข้อสอบ");return}
+  if(!await uiConfirm(on?`เผยแพร่ "${ed.meta.title}" ให้นักเรียนทำ\nใช่หรือไม่?`:`ยกเลิกการเผยแพร่ "${ed.meta.title}"\nนักเรียนจะไม่เห็นชุดนี้จนกว่าจะเผยแพร่อีกครั้ง\nใช่หรือไม่?`,{ok:on?"เผยแพร่":"ยกเลิกการเผยแพร่",cancel:"ไม่ใช่"}))return;
+  $("pubBtn").disabled=true;
+  try{await updateDoc(doc(db,"exams",ed.id),{published:on});ed.meta.published=on;const x=examSets.find(e=>e.id===ed.id);if(x)x.published=on;drawPub();edStatus(on?"เผยแพร่แล้ว":"ยกเลิกการเผยแพร่แล้ว")}
+  catch(e){edStatus("บันทึกไม่สำเร็จ",true)}
+  $("pubBtn").disabled=false;
+};
+function fillSettings(){drawPub();
+  const m=ed.meta;$("sTitle").value=m.title||"";$("sTracks").innerHTML=tracksHtml(m.track||[]);$("sTier").value=m.tier==="free"?"free":"premium";$("sMins").value=Number(m.minutes)||180;
+}
+$("sSave").onclick=async()=>{
+  const title=$("sTitle").value.trim().slice(0,80),track=readTracks("sTracks");
+  if(!title){alert("กรุณาใส่ชื่อชุด");return}
+  if(!track.length){alert("กรุณาเลือกสายสอบอย่างน้อย 1 สาย");return}
+  const data={title,track,tier:$("sTier").value,minutes:clampMins($("sMins").value)};
+  edStatus("กำลังบันทึก…");
+  try{await updateDoc(doc(db,"exams",ed.id),data);Object.assign(ed.meta,data);Object.assign(examSets.find(e=>e.id===ed.id)||{},data);$("exTitle").textContent=title;fillSettings();edStatus("บันทึกแล้ว")}
+  catch(e){edStatus("บันทึกไม่สำเร็จ",true)}
+};
+$("sDel").onclick=async()=>{if(await deleteExam(ed.id)){ed=null;edit=null;$("exEditView").classList.add("hide");$("exListView").classList.remove("hide");window.scrollTo(0,0)}};
+
+/* จัดเลขข้อใหม่ตามลำดับวิชา แล้วคำนวณช่วงข้อของแต่ละวิชาและกลุ่มบทอ่าน */
+function normalize(){
+  const items=ed.items;
+  const idx=new Map(items.map((it,i)=>[it,i]));
+  items.sort((a,b)=>a.sec-b.sec||idx.get(a)-idx.get(b));
+  const groups=new Map();
+  items.forEach((it,i)=>{it.n=i+1;if(it.group){const k=it.group.join("-");if(!groups.has(k))groups.set(k,[]);groups.get(k).push(it)}});
+  groups.forEach(list=>{const g=[list[0].n,list[list.length-1].n];list.forEach(it=>it.group=g)});
+  let prev=0;
+  ed.meta.sections=ed.meta.sections.map((x,si)=>{
+    const ns=items.filter(it=>it.sec===si).map(it=>it.n);
+    const r=ns.length?{name:x.name,from:ns[0],to:ns[ns.length-1]}:{name:x.name,from:prev+1,to:prev};
+    prev=r.to;return r;
+  });
+}
+async function saveSet(){
+  normalize();
+  const items=ed.items.map(it=>{const o={...it};Object.keys(o).forEach(k=>{if(o[k]===undefined||o[k]==="")delete o[k]});o.q=it.q||"";o.exp=it.exp||"";return o});
+  const keys=items.map(it=>it.a).join("");
+  const keyVersion=keys===ed.keys?(ed.meta.keyVersion||1):(ed.meta.keyVersion||1)+1;
+  const imgs=[...new Set(items.flatMap(it=>[it.img,it.expImg,it.passageImg,...[].concat(it.qfig||[]),...(it.cimg||[]),...[].concat(...(it.expFig||[]))]).filter(isImgKey))];
+  const now=new Date().toISOString();
+  edStatus("กำลังบันทึก…");
+  try{
+    await setDoc(doc(db,"examItems",ed.id),{items,imgs,keys,updatedAt:now});
+    const meta={count:items.length,sections:ed.meta.sections,keyVersion,updatedAt:now};
+    await updateDoc(doc(db,"exams",ed.id),meta);
+    for(const k of ed.imgs.filter(k=>!imgs.includes(k))){try{await deleteDoc(doc(db,"examImg",k))}catch(e){}}
+    Object.assign(ed.meta,meta);Object.assign(examSets.find(e=>e.id===ed.id)||{},meta);
+    ed.keys=keys;ed.imgs=imgs;syncTotal();edStatus("บันทึกแล้ว");return true;
+  }catch(e){edStatus("บันทึกไม่สำเร็จ",true);alert(`บันทึกไม่สำเร็จ (${e.code||e.message})`);return false}
+}
+
+function qView(it){
+  const lab=k=>it.eng?"abcd"[k]:String(k+1),im=isImgKey(it.img)||/^data:/.test(it.img||"");
+  const tbl=t=>`<div class="xtblw"><table class="xtbl">${String(t).split("\n").map((r,ri)=>`<tr>${r.split("|").map(c=>ri?`<td>${rich(c.trim())}</td>`:`<th>${rich(c.trim())}</th>`).join("")}</tr>`).join("")}</table></div>`;
+  const q=im?imgTag(it.img):`<p class="xq"><em>${it.n}.</em>${dist(it.q)}</p>${it.box?`<div class="xbox">${rich(it.box)}</div>`:""}${it.tbl?tbl(it.tbl):""}${[].concat(it.qfig||[]).filter(Boolean).map(k=>`<div class="xfig">${imgTag(k)}</div>`).join("")}${it.q2?`<p class="xq xq2">${rich(it.q2)}</p>`:""}`;
+  const pics=Array.isArray(it.cimg)&&it.cimg.some(Boolean);
+  const opts=it.c.map((c,k)=>`<div class="xc${k===it.a?" ok":""}${pics&&it.cimg[k]?" pic":""}"><b>${lab(k)}</b>${im?"":pics&&it.cimg[k]?imgTag(it.cimg[k]):`<span class="t">${dist(c)}</span>`}</div>`).join("");
+  const eim=it.expImg?imgTag(it.expImg):"";
+  return `${im?`<p class="xq" style="margin-bottom:0"><em>${it.n}.</em></p>`:""}${q}<div class="xopts${im?" row":pics?" pics":""}">${opts}</div>
+  <div class="exp"><b class="h">เฉลยข้อ ${lab(it.a)} · คำอธิบาย</b>${eim||expHtml(it)}</div>
+  <div class="qtools"><button type="button" class="ed" data-a="edit" data-n="${it.n}">แก้ไข</button><button type="button" class="rm" data-a="del" data-n="${it.n}">ลบ</button></div>`;
+}
+function passView(it){
+  const body=it.passageImg?imgTag(it.passageImg):rich(it.passage||"");
+  return `<div class="xpass${!it.passageImg&&String(it.passage||"").length>280?" long":""}"><b class="g">คำชี้แจง อ่านข้อความต่อไปนี้ แล้วตอบคำถามข้อ ${it.group[0]}${it.group[1]>it.group[0]?"–"+it.group[1]:""}</b>${body}</div>`;
+}
+function imgPick(field,label,note){
+  const v=edit.imgs[field];
+  return `<label>${label}</label><div class="imgpick" data-f="${field}">${v?imgTag(v):""}<label class="pick">${v?"เปลี่ยนรูป":"เลือกรูป"}<input type="file" accept="image/png,image/jpeg" hidden></label>${v?'<button type="button" class="btn-red" data-a="rmimg">ลบรูป</button>':""}${note?`<span class="note">${note}</span>`:""}</div>`;
+}
+function formView(){
+  const base=edit.it||{q:"",c:["","","",""],a:-1,exp:"",eng:/อังกฤษ/.test(ed.meta.sections[edit.sec]?.name||"")};
+  const it={...base,...(edit.draft||{}),n:base.n,group:base.group};
+  const secName=ed.meta.sections[edit.sec]?.name||"";
+  const lab=k=>it.eng?"abcd"[k]:String(k+1);
+  return `<div class="qform" id="qform"><h4>${edit.it?`แก้ไขข้อ ${it.n}`:`เพิ่มข้อสอบใหม่ · วิชา${esc(secName)}`}</h4>
+  ${it.group?`<label>บทอ่านที่ใช้ร่วมกัน (ข้อ ${it.group[0]}-${it.group[1]})</label><textarea id="fP">${esc(it.passage||"")}</textarea>${imgPick("passageImg","รูปบทอ่าน (ถ้ามี)","")}`:""}
+  <label>โจทย์</label><textarea id="fQ" placeholder="พิมพ์โจทย์">${esc(it.q)}</textarea>
+  <div class="fmtbar" id="fmtBar" title="เลือกข้อความในช่องที่กำลังพิมพ์ แล้วกดปุ่ม">
+    <button type="button" data-w="[b]|[/b]"><b>B</b></button><button type="button" data-w="[i]|[/i]"><i>I</i></button><button type="button" data-w="__|__"><u>U</u></button><button type="button" data-w="~~|~~"><s>S</s></button>
+    <span class="sep"></span><button type="button" data-w="[big]|[/big]">ใหญ่</button><button type="button" data-w="[small]|[/small]">เล็ก</button>
+    <span class="sep"></span><span class="lb">สี</span>${FMT_C.map(c=>`<button type="button" class="sw fx-c-${c}" data-w="[c=${c}]|[/c]" aria-label="สี ${c}">A</button>`).join("")}
+    <span class="sep"></span><span class="lb">ไฮไลต์</span>${FMT_BG.map(c=>`<button type="button" class="sw fx-bg-${c}" data-w="[bg=${c}]|[/bg]" aria-label="ไฮไลต์ ${c}">ab</button>`).join("")}
+    <span class="sep"></span><button type="button" data-w="^{|}">x<sup>2</sup></button><button type="button" data-w="_{|}">x<sub>2</sub></button><button type="button" data-w="[|/]">a/b</button>
+    <span class="sep"></span><button type="button" data-clear="1">ล้างรูปแบบ</button>
+  </div>
+  <p class="fhelp">เลือกข้อความในช่องใดก็ได้ด้านล่าง แล้วกดปุ่มด้านบน หรือพิมพ์เอง: [1/2] = เศษส่วน · __คำ__ = ขีดเส้นใต้ · ~~คำ~~ = ขีดฆ่า · ==คำ== = ไฮไลต์ · 2^{x} = ตัวยก · a_{n} = ตัวห้อย · คำอธิบาย: บรรทัด |ช่อง|ช่อง| = ตาราง, [[รูป]] = ตำแหน่งรูปประกอบเดิม</p>
+  <label>ข้อความในกรอบ (ถ้ามี)</label><textarea id="fB" placeholder="บทความ บทกลอน หรือบทสนทนา ที่แสดงในกรอบใต้โจทย์">${esc(it.box||"")}</textarea>
+  <label>ตาราง (ถ้ามี)</label><textarea id="fT" placeholder="แถวละบรรทัด คั่นช่องด้วย | แถวแรกเป็นหัวตาราง เช่น&#10;กลุ่ม|จำนวนคน&#10;ชาย|20">${esc(it.tbl||"")}</textarea>
+  ${imgPick("qfig","รูปประกอบโจทย์ (ถ้ามี)","แสดงใต้โจทย์ ตัวเลือกยังเป็นข้อความ")}
+  <label>ข้อความหลังกรอบ/รูป (ถ้ามี)</label><textarea id="fQ2" placeholder="เช่น คำถามที่ตามหลังบทความ">${esc(it.q2||"")}</textarea>
+  ${imgPick("img","รูปแทนทั้งข้อ (ไม่แนะนำ)","ถ้าใส่รูป นักเรียนจะเห็นรูปแทนข้อความโจทย์และตัวเลือกทั้งหมด")}
+  <label>ตัวเลือก (กด "ถูก" หน้าตัวเลือกที่เป็นเฉลย)</label>
+  ${[0,1,2,3].map(k=>`<div class="chrow"><label class="rad"><input type="radio" name="fA" value="${k}"${it.a===k?" checked":""}>ถูก</label><b class="fl">${lab(k)}</b>${edit.cimgs[k]?`<span class="cthumb">${imgTag(edit.cimgs[k])}</span>`:`<input type="text" id="fC${k}" value="${esc(it.c[k]||"")}" placeholder="ตัวเลือกที่ ${lab(k)}">`}<span class="cpick" data-k="${k}"><label class="pick">${edit.cimgs[k]?"เปลี่ยนรูป":"ใช้รูป"}<input type="file" accept="image/png,image/jpeg" hidden></label>${edit.cimgs[k]?`<button type="button" class="btn-red" data-a="rmcimg" data-k="${k}">ลบรูป</button>`:""}</span></div>`).join("")}
+  <label>คำอธิบายเฉลย</label><textarea id="fE" placeholder="อธิบายว่าทำไมข้อนี้ถูก">${esc(it.exp||"")}</textarea>
+  ${imgPick("expImg","รูปคำอธิบาย (ถ้ามี)","ถ้าใส่รูป นักเรียนจะเห็นรูปแทนข้อความคำอธิบาย")}
+  <label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="fEng" style="width:auto;margin:0"${it.eng?" checked":""}>ข้อภาษาอังกฤษ (ตัวเลือก a b c d)</label>
+  <p class="ferr" id="fErr"></p>
+  <div class="btns"><button type="button" data-a="fsave">บันทึกข้อนี้</button><button type="button" class="btn-light" data-a="fcancel">ยกเลิก</button></div></div>`;
+}
+function renderPaper(){
+  const paper=$("exPaper"),secs=ed.meta.sections;
+  $("exChips").innerHTML=secs.map((x,si)=>`<button type="button" data-s="${si}">${si+1}. ${esc(x.name)} · ${ed.items.filter(it=>it.sec===si).length}</button>`).join("");
+  $("exChips").querySelectorAll("button").forEach(b=>b.onclick=()=>$("xs"+b.dataset.s)?.scrollIntoView({behavior:"smooth"}));
+  let h="";
+  secs.forEach((x,si)=>{
+    const list=ed.items.filter(it=>it.sec===si);
+    h+=`<div class="xsec" id="xs${si}"><span>${si+1}. ${esc(x.name)} (${list.length} ข้อ)</span><button type="button" data-a="rsec" data-s="${si}">เปลี่ยนชื่อวิชา</button>${list.length||secs.length<2?"":`<button type="button" data-a="dsec" data-s="${si}">ลบวิชา</button>`}</div>`;
+    list.forEach(it=>{
+      if(it.group&&it.group[0]===it.n) h+=passView(it);
+      h+=edit&&edit.it===it?formView():`<div class="xi" id="xn${it.n}">${qView(it)}</div>`;
+    });
+    h+=edit&&!edit.it&&edit.sec===si?formView():`<button type="button" class="addq" data-a="add" data-s="${si}">+ เพิ่มข้อสอบในวิชา${esc(x.name)}</button>`;
+  });
+  h+=`<button type="button" class="addq" data-a="addsec" style="margin-top:22px;border-color:#c9d3e8;background:#f5f7fc;color:#16305f">+ เพิ่มวิชา</button>`;
+  paper.innerHTML=h;const loaded=loadImgs(paper);
+  const f=$("qform");
+  if(f){
+    f.querySelectorAll(".imgpick input[type=file]").forEach(inp=>inp.onchange=async()=>{
+      const file=inp.files[0];if(!file)return;const field=inp.closest(".imgpick").dataset.f;
+      try{keepForm();edit.imgs[field]=await fileToData(file);renderPaper()}catch(e){$("fErr").textContent=e.message||"เปิดรูปไม่ได้"}
+    });
+    $("fEng").onchange=()=>{const e=$("fEng").checked;f.querySelectorAll(".fl").forEach((b,k)=>b.textContent=e?"abcd"[k]:k+1)};
+    f.querySelectorAll(".cpick input[type=file]").forEach(inp=>inp.onchange=async()=>{
+      const file=inp.files[0];if(!file)return;const k=Number(inp.closest(".cpick").dataset.k);
+      try{keepForm();edit.cimgs[k]=await fileToData(file);renderPaper()}catch(e){$("fErr").textContent=e.message||"เปิดรูปไม่ได้"}
+    });
+  }
+  return loaded;
+}
+/* จำค่าที่พิมพ์ไว้ก่อนวาดฟอร์มใหม่ (เช่น ตอนเลือกรูป) */
+function keepForm(){
+  if(!$("qform"))return;
+  const it=edit.draft=edit.draft||{};
+  it.q=$("fQ").value;it.c=[0,1,2,3].map(k=>$("fC"+k)?$("fC"+k).value:(it.c||[])[k]||"");it.exp=$("fE").value;it.eng=$("fEng").checked;
+  it.box=$("fB").value;it.tbl=$("fT").value;it.q2=$("fQ2").value;
+  const a=document.querySelector('#qform input[name=fA]:checked');it.a=a?Number(a.value):-1;
+  if($("fP"))it.passage=$("fP").value;
+}
+async function fileToData(f){
+  if(!/^image\/(png|jpeg)$/.test(f.type)) throw new Error("ใช้ได้เฉพาะรูป .png หรือ .jpg");
+  const url=URL.createObjectURL(f),im=new Image();
+  try{await new Promise((ok,bad)=>{im.onload=ok;im.onerror=bad;im.src=url})}catch(e){throw new Error("เปิดรูปไม่ได้")}
+  let w=im.naturalWidth,h=im.naturalHeight;if(w>1400){h=Math.round(h*1400/w);w=1400}
+  const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);URL.revokeObjectURL(url);
+  let d=f.type==="image/png"?c.toDataURL("image/png"):c.toDataURL("image/jpeg",.85);
+  for(const q of [.8,.7,.6,.5]){if(d.length<=900000)break;d=c.toDataURL("image/jpeg",q)}
+  if(d.length>900000) throw new Error("รูปใหญ่เกินไป กรุณาย่อรูปก่อน");
+  return d;
+}
+async function imgKeyOf(d){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(d));return [...new Uint8Array(b)].slice(0,12).map(x=>x.toString(16).padStart(2,"0")).join("")}
+async function uploadImg(v){
+  if(!/^data:image\//.test(v||"")) return v||"";
+  const k=await imgKeyOf(v);await setDoc(doc(db,"examImg",k),{exam:ed.id,d:v});imgCache.set(k,Promise.resolve(v));return k;
+}
+function startEdit(it,sec){
+  edit={it,sec,imgs:{img:it?.img||"",expImg:it?.expImg||"",passageImg:it?.passageImg||"",qfig:[].concat(it?.qfig||[])[0]||""},cimgs:[0,1,2,3].map(k=>(it?.cimg||[])[k]||""),qfigMore:[].concat(it?.qfig||[]).slice(1)};
+  const done=renderPaper(),go=()=>$("qform")?.scrollIntoView({block:"start"});
+  go();$("fQ")?.focus({preventScroll:true});done.then(go);  // รูปด้านบนโหลดเสร็จแล้วตำแหน่งเลื่อน: เลื่อนกลับมาที่ฟอร์มอีกครั้ง
+}
+async function saveForm(btn){
+  keepForm();const d=edit.draft,has=v=>String(v||"").trim()!=="";
+  const qImg=edit.imgs.img;
+  const err=!has(d.q)&&!has(d.box)&&!has(d.q2)&&!qImg&&!edit.imgs.qfig?"กรุณาพิมพ์โจทย์ หรือใส่รูปโจทย์"
+    :!qImg&&d.c.some((c,k)=>!has(c)&&!edit.cimgs[k])?"กรุณาใส่ตัวเลือกให้ครบ 4 ข้อ (ข้อความหรือรูป)"
+    :d.a<0?'กรุณากด "ถูก" หน้าตัวเลือกที่เป็นเฉลย':"";
+  $("fErr").textContent=err;if(err)return;
+  btn.disabled=true;edStatus("กำลังบันทึก…");
+  try{
+    const up={};for(const f of ["img","expImg","passageImg","qfig"]) up[f]=await uploadImg(edit.imgs[f]);
+    const cimg=[];for(const v of edit.cimgs) cimg.push(await uploadImg(v));
+    const it=edit.it||{sec:edit.sec};
+    const qfig=up.qfig?[up.qfig,...edit.qfigMore]:[];
+    Object.assign(it,{q:d.q.trim(),c:d.c.map((c,k)=>cimg[k]?"":c.trim()),a:d.a,exp:d.exp.trim(),eng:d.eng,img:up.img,expImg:up.expImg,
+      box:d.box.trim(),tbl:d.tbl.trim(),q2:d.q2.trim(),qfig:qfig.length>1?qfig:qfig[0]||"",cimg:cimg.some(Boolean)?cimg:undefined});
+    if(it.group){ed.items.filter(x=>x.group&&x.group.join()===it.group.join()).forEach(x=>{x.passage=(d.passage||"").trim();x.passageImg=up.passageImg})}
+    const isNew=!edit.it;if(isNew)ed.items.push(it);
+    const prev=edit;edit=null;
+    if(!(await saveSet())){edit=prev;if(isNew)ed.items.splice(ed.items.indexOf(it),1);btn.disabled=false;return}
+    const done=renderPaper(),el=$("xn"+it.n),go=()=>el?.scrollIntoView({block:"center"});
+    if(el){go();el.classList.add("hl");done.then(go)}
+  }catch(e){btn.disabled=false;edStatus("บันทึกไม่สำเร็จ",true);$("fErr").textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`}
+}
+$("exPaper").addEventListener("click",async ev=>{
+  const b=ev.target.closest("button[data-a]");if(!b)return;
+  const a=b.dataset.a,si=Number(b.dataset.s),it=ed.items.find(x=>x.n===Number(b.dataset.n));
+  if(edit&&["edit","add"].includes(a)&&!await uiConfirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ทิ้งการแก้ไขนั้นใช่หรือไม่?"))return;
+  if(a==="edit") startEdit(it,it.sec);
+  else if(a==="add") startEdit(null,si);
+  else if(a==="fcancel"){edit=null;renderPaper()}
+  else if(a==="fsave") saveForm(b);
+  else if(a==="rmimg"){keepForm();const f=b.closest(".imgpick").dataset.f;edit.imgs[f]="";if(f==="qfig")edit.qfigMore=[];renderPaper()}
+  else if(a==="rmcimg"){keepForm();edit.cimgs[Number(b.dataset.k)]="";renderPaper()}
+  else if(a==="del"){
+    if(!await uiConfirm(`ลบข้อ ${it.n} ใช่หรือไม่?\nข้อถัดไปจะเลื่อนเลขขึ้นมาแทน`))return;
+    const i=ed.items.indexOf(it);ed.items.splice(i,1);
+    if(!(await saveSet())){ed.items.splice(i,0,it);return}
+    renderPaper();
+  }
+  else if(a==="rsec"){
+    const t=await uiPrompt("ชื่อวิชา",ed.meta.sections[si].name);if(t==null||!t.trim())return;
+    const old=ed.meta.sections[si].name;ed.meta.sections[si].name=t.trim().slice(0,80);
+    if(!(await saveSet())){ed.meta.sections[si].name=old;return}
+    renderPaper();
+  }
+  else if(a==="dsec"){
+    if(!await uiConfirm(`ลบวิชา "${ed.meta.sections[si].name}" ใช่หรือไม่?`))return;
+    ed.meta.sections.splice(si,1);ed.items.forEach(x=>{if(x.sec>si)x.sec--});
+    await saveSet();renderPaper();
+  }
+  else if(a==="addsec"){
+    const t=await uiPrompt("ชื่อวิชาใหม่");if(t==null||!t.trim())return;
+    ed.meta.sections.push({name:t.trim().slice(0,80),from:1,to:0});
+    if(!(await saveSet())){ed.meta.sections.pop();return}
+    renderPaper();$("xs"+(ed.meta.sections.length-1))?.scrollIntoView({behavior:"smooth"});
+  }
+});
+
+function thaiYmd(ms){const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms));const g=t=>p.find(x=>x.type===t).value;return String((Number(g("year"))+543)%100).padStart(2,"0")+g("month")+g("day")}
+/* รหัสสมาชิก #วันที่สมัคร(ปีพ.ศ.2หลัก+เดือน+วัน)+ลำดับ5หลัก เช่น #69092900001 */
+function codeOf(u){return Number.isInteger(u.memberNo)&&u.memberNo>0&&/^\d{6}$/.test(u.memberDate||"")?"#"+u.memberDate+String(u.memberNo).padStart(5,"0"):""}
+const tsOf=v=>v&&typeof v.toMillis==="function"?v.toMillis():(v&&v.seconds?v.seconds*1000:(Date.parse(v)||0));
+/* สมาชิกเดิมที่ยังไม่มีรหัส: ออกรหัสให้ตามวันที่สมัคร (เก่าสุดได้เลขน้อยสุด) */
+async function backfillMemberNo(){
+  const todo=members.filter(u=>!Number.isInteger(u.memberNo)||!u.memberDate).sort((a,b)=>tsOf(a.createdAt)-tsOf(b.createdAt));
+  if(!todo.length) return;
+  try{
+    await runTransaction(db,async tx=>{
+      const cref=doc(db,"counters","member");const c=await tx.get(cref);
+      const snaps=await Promise.all(todo.map(u=>tx.get(doc(db,"users",u.id))));
+      let n=c.exists()?Number(c.data().n)||0:0;
+      snaps.forEach((sn,i)=>{if(!sn.exists())return;const d=sn.data(),date=d.memberDate||thaiYmd(tsOf(d.createdAt)||Date.now());if(!Number.isInteger(d.memberNo)){n++;tx.update(doc(db,"users",todo[i].id),{memberNo:n,memberDate:date});todo[i].memberNo=n}else{if(!d.memberDate)tx.update(doc(db,"users",todo[i].id),{memberDate:date});todo[i].memberNo=d.memberNo}todo[i].memberDate=date});
+      tx.set(cref,{n});
+    });
+    members.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9));renderMembers();
+  }catch(e){console.error(e);$("umsg").className="err";$("umsg").textContent=`ออกรหัสสมาชิกไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+}
+</script><div class="ihelp hide" id="installHelp" role="dialog" aria-modal="true" aria-labelledby="ihTitle"><div class="ibox"><h3 id="ihTitle">ติดตั้งหน้าแอดมินลงหน้าจอ</h3><div class="istep"><b>iPhone / iPad (Safari)</b><ol><li>กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศรชี้ขึ้น)</li><li>กด “เพิ่มไปยังหน้าจอโฮม”</li><li>ชื่อจะเป็น “แอดมิน” แล้วกด “เพิ่ม”</li></ol></div><div class="istep"><b>Android (Chrome)</b><ol><li>กดปุ่มจุดสามจุด มุมขวาบน</li><li>กด “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”</li></ol></div><p class="muted">จะได้ไอคอน “แอดมิน” สีกรมท่า แยกจากแอป “กะสอบ” ของนักเรียน</p><button type="button" id="installHelpClose">เข้าใจแล้ว</button></div></div>
+<div style="position:fixed;left:8px;bottom:8px;z-index:99999;padding:3px 9px;border-radius:999px;background:#7c3aed;color:#fff;font:700 11px sans-serif;pointer-events:none;opacity:.9">หน้าทดลอง</div></body></html>
