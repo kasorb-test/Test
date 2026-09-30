@@ -2955,7 +2955,19 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 .stabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.stabs button{padding:9px 16px;border:1px solid #f3d3bd;border-radius:999px;background:#fff;color:#c2410c;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer}.stabs button.on{background:#ff6a00;border-color:#ff6a00;color:#fff}.stabs button.on .tier{background:#fff;color:#16305f}.stabs .gomock{margin-left:auto;border-color:#16305f;color:#16305f}
 .strk{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.strk button{padding:7px 12px;border:1px solid #e5e5e5;border-radius:10px;background:#fff;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}.strk button.on{border-color:#16305f;background:#16305f;color:#fff}
 .setc.wait{opacity:.75}.setc .go:disabled{background:#e5e5e5;color:#888;cursor:default}
-#subjList .list-button{display:flex;justify-content:space-between;align-items:center;gap:10px}.subj-n{color:#999;font-weight:600;font-size:12.5px;white-space:nowrap}.subj-h{margin:10px 0 12px;font-size:18px}#subjSets{display:grid;gap:12px}.tier.mx{background:#eef2fa;color:#16305f;margin-left:4px}
+#subjList .list-button{display:flex;justify-content:space-between;align-items:center;gap:10px}.subj-n{color:#999;font-weight:600;font-size:12.5px;white-space:nowrap}.subj-h{margin:10px 0 12px;font-size:18px}#subjSets{display:block}
+.sgh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:18px 2px 10px}.sgh:first-child{margin-top:4px}.sgh b{font-size:16px;color:#16305f}.sgh span{font-size:12.5px;color:#888;font-weight:700}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.stile{position:relative;display:flex;flex-direction:column;gap:6px;min-height:86px;padding:12px 12px 12px 14px;border:1px solid #eee;border-radius:14px;background:#fff;text-align:left;font-family:inherit;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.04);transition:transform .12s,box-shadow .12s}
+.stile .top{display:flex;align-items:center;justify-content:space-between;gap:6px}.stile .no{font-size:15.5px;font-weight:800;color:#222}.stile .tier{margin:0;font-size:10.5px;padding:2px 7px}
+.stile .nm{font-size:12.5px;color:#555;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.stile .info{display:flex;align-items:center;gap:5px;font-size:12.5px;color:#777;font-weight:600}.stile .info svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;flex:0 0 auto}
+.stile .bst{font-size:12px;color:#15803d;font-weight:800}
+.stile .cta{margin-top:auto;align-self:flex-start;padding:6px 12px;border-radius:999px;background:#ff6a00;color:#fff;font-size:12.5px;font-weight:800}
+.stile.ready{border-color:#ffd2b0;box-shadow:0 6px 16px rgba(255,106,0,.12)}.stile.ready::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:#ff6a00}
+.stile.ready:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(255,106,0,.18)}
+.stile.wait{background:#fafafa;border:1.5px dashed #e3e3e3;box-shadow:none;cursor:default}.stile.wait .no{color:#9a9a9a}.stile.wait .info{color:#aaa}
+.stile.lock{background:linear-gradient(135deg,#f3f6fc,#e9eef8);border-color:#dbe3f2}.stile.lock .no{color:#16305f}.stile.lock .info{color:#16305f}.tier.mx{background:#eef2fa;color:#16305f;margin-left:4px}
 .rv .exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.rv .exp .xtblw{margin:6px 0 8px;white-space:normal}.rv .exp .xtbl{font-size:14.5px;line-height:1.5;background:#fff}.rv .exp .xtbl td{text-align:left}
 .xefig{margin:8px 0;white-space:normal}.xefig img.eimg{display:block;max-width:100%;height:auto;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,260px);margin:0}
 sub{font-size:.72em;vertical-align:sub;line-height:0}
@@ -6453,28 +6465,37 @@ async function openSubject(sub,sets,kind){
   $("subjName").textContent=(kind==="real"?"ข้อสอบจริง":"")+sub;
   const box=$("subjSets");box.innerHTML="";
   const prog=await loadProgress().catch(()=>({best:{}}));
-  const card=(e,label,tier)=>{
-    const el=document.createElement("div");el.className="setc"+(e?"":" wait");
+  const LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>';
+  const group=(title,sub)=>{const h=document.createElement("div");h.className="sgh";h.innerHTML=`<b>${escHtml(title)}</b><span>${escHtml(sub)}</span>`;box.appendChild(h);const g=document.createElement("div");g.className="sgrid";box.appendChild(g);return g};
+  /* ช่องชุดข้อสอบ: พร้อมทำ / รออัปโหลด / ล็อก (Premium) */
+  const tile=(g,e,label,no,tier)=>{
     const best=e&&(prog.best||{})[e.id];
-    const ok=e&&canTake(e);
-    const lockFree=tier==="premium"&&!isPremium()&&!boughtSubject(sub);
-    el.innerHTML=`<div><h4>${escHtml(e?e.title:label)}<span class="tier ${tier==="free"?"fr":"pm"}">${tier==="free"?"Free":"Premium"}</span></h4>
-      <div class="meta">${e?`${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที`:"รออัปโหลดข้อสอบ"}</div>
-      ${best?`<div class="best">ทำแล้ว ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}</div>
-      <button class="go${ok?"":" lock"}" type="button" ${!e&&!lockFree?"disabled":""}>${lockFree?"สำหรับสมาชิกพรีเมียม":!e?"รออัปโหลด":hasSession(e.id)?"ทำต่อ":"เริ่มทำแบบทดสอบ"}</button>`;
-    el.querySelector(".go").onclick=()=>lockFree?showUpgrade():ok?startExam(e.id):null;
-    box.appendChild(el);
+    const lock=tier==="premium"&&!isPremium()&&!(kind==="subject"&&boughtSubject(sub));
+    const st=lock?"lock":e?"ready":"wait";
+    const t=document.createElement("button");t.type="button";t.className="stile "+st+" "+tier;
+    t.innerHTML=`<div class="top"><span class="no">${escHtml(label)}</span><span class="tier ${tier==="free"?"fr":"pm"}">${tier==="free"?"Free":"Premium"}</span></div>
+      ${e&&e.title&&!/ชุดที่\s*\d+\s*$/.test(e.title)?`<div class="nm">${escHtml(e.title)}</div>`:""}
+      <div class="info">${lock?`${LOCK}<span>ล็อกอยู่</span>`:e?`${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที`:"รออัปโหลด"}</div>
+      ${best?`<div class="bst">ดีที่สุด ${best.s}/${best.t}</div>`:""}
+      ${st==="ready"?`<span class="cta">${hasSession(e.id)?"ทำต่อ":"เริ่มทำ"} ›</span>`:""}`;
+    if(st==="wait") t.disabled=true;
+    t.onclick=()=>lock?showUpgrade():e?startExam(e.id):null;
+    g.appendChild(t);
   };
   if(kind==="real"){
-    if(!sets.length) card(null,"ข้อสอบจริง"+sub,"premium");
-    sets.forEach(e=>card(e,"","premium"));
+    const g=group("ข้อสอบจริง",sets.length?`${sets.length} ชุด`:"รออัปโหลด");
+    if(!sets.length) tile(g,null,"ชุดที่ 1",1,"premium");
+    sets.forEach((e,i)=>tile(g,e,`ชุดที่ ${i+1}`,i+1,"premium"));
   }else{
-    for(let n=1;n<=SLOTS;n++){
-      const e=sets.find(x=>Number(x.slot)===n)||null;
-      card(e,`${sub} ชุดที่ ${n}`,n<=FREE_SLOTS?"free":"premium");
-    }
-    /* ชุดรายวิชาที่ไม่ได้ระบุช่อง (สร้างก่อนมีช่อง) ต่อท้าย */
-    sets.filter(x=>!(Number(x.slot)>=1&&Number(x.slot)<=SLOTS)).forEach(e=>card(e,"",e.tier==="free"?"free":"premium"));
+    const at=n=>sets.find(x=>Number(x.slot)===n)||null;
+    const ready=(a,b)=>[...Array(b-a+1)].filter((_,i)=>at(a+i)).length;
+    const gf=group("ชุดฟรี",`พร้อมทำ ${ready(1,FREE_SLOTS)} จาก ${FREE_SLOTS} ชุด`);
+    for(let n=1;n<=FREE_SLOTS;n++) tile(gf,at(n),`ชุดที่ ${n}`,n,"free");
+    const gp=group("ชุด Premium",!isPremium()&&!boughtSubject(sub)?"อัปเกรด Premium เพื่อปลดล็อก":`พร้อมทำ ${ready(FREE_SLOTS+1,SLOTS)} จาก ${SLOTS-FREE_SLOTS} ชุด`);
+    for(let n=FREE_SLOTS+1;n<=SLOTS;n++) tile(gp,at(n),`ชุดที่ ${n}`,n,"premium");
+    /* ชุดรายวิชาที่ไม่ได้ระบุช่อง (สร้างก่อนมีช่อง) */
+    const extra=sets.filter(x=>!(Number(x.slot)>=1&&Number(x.slot)<=SLOTS));
+    if(extra.length){const gx=group("ชุดเพิ่มเติม",`${extra.length} ชุด`);extra.forEach(e=>tile(gx,e,e.title,0,e.tier==="free"?"free":"premium"))}
   }
   window.scrollTo(0,0);
 }
