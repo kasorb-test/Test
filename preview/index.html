@@ -2653,6 +2653,16 @@ input{
 .st-coin{position:absolute;z-index:1;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6b0 0 3px,#ffd23a 4px 6px,#f2b400 7px);box-shadow:inset 0 0 0 2px #d99a00;animation:stCoin 1.2s linear infinite}
 @keyframes stCoin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
 .st-me{transform-origin:50% 100%}
+/* เมฆลอยผ่านตลอดจากขวาไปซ้าย (อยู่นอกแผนที่ ไม่เลื่อนตามการปัด) */
+.st-sky{position:absolute;left:0;right:0;top:0;height:45%;z-index:1;pointer-events:none;overflow:hidden}
+.st-sky .st-cloud{left:auto!important;right:-90px;animation:stDrift 28s linear infinite!important}
+.st-sky .c1{top:22px;width:60px}.st-sky .c2{top:56px;width:46px;animation-duration:38s!important;animation-delay:-14s!important}
+.st-sky .c3{top:34px;width:72px;animation-duration:44s!important;animation-delay:-30s!important}.st-sky .c4{top:74px;width:40px;animation-duration:32s!important;animation-delay:-6s!important}
+@keyframes stDrift{from{transform:translateX(0)}to{transform:translateX(calc(-100cqw - 180px))}}
+.stairs{container-type:inline-size}
+.st-track{z-index:2}
+/* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
+@media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
 /* บันไดยศครบทุกขั้น เลื่อนซ้ายขวาได้ + กระโดดเก็บเหรียญ */
 .stairs{height:290px!important}
 .st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
@@ -7244,7 +7254,7 @@ function stairsHtml(lv,xp){
     cols.push(`<div class="st-col ${k}" style="left:${stX(l)}px;width:${ST_CW}px;height:${stH(l)}px">${l===MAX_LEVEL?'<i class="st-goal"></i><i class="st-star"></i>':""}${l===lv+1?'<em class="st-next">ขั้นถัดไป</em>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span></div>`)}
   let coins=0;try{coins=Number(localStorage.getItem("kasorbCoins"))||0}catch(e){}
   const cx=stX(lv)+ST_CW/2;
-  return `<div class="stairs"><div class="st-track" id="stTrack"><div class="st-world" style="width:${W}px"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
+  return `<div class="stairs"><div class="st-sky" aria-hidden="true"><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-cloud c3"></i><i class="st-cloud c4"></i></div><div class="st-track" id="stTrack"><div class="st-world" style="width:${W}px"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
     <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
     <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
     <i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+92}px"></i>
