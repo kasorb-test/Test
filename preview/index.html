@@ -2609,7 +2609,6 @@ input{
 .st-col.top{--f:#f7cf55;--t:#fde38f;--s:#e0b232;color:#5a3b00}
 .st-col b{font-size:13px;letter-spacing:.2px}.st-col span{font-size:10px;opacity:.8}
 @media(max-width:480px){.st-col span{display:none!important}.st-col b{font-size:12px}}
-.st-ladder{width:18px;background:linear-gradient(90deg,#c9a27a 0 3px,transparent 3px calc(100% - 3px),#c9a27a calc(100% - 3px)),repeating-linear-gradient(0deg,transparent 0 7px,#d8b690 7px 9px)}
 .st-me img{border-width:2px;box-shadow:0 6px 14px rgba(22,48,95,.22)}
 .st-cap{font-weight:600;color:#475569}
 /* ฉากธรรมชาติหลังบันไดยศ: ฟ้า ภูเขา เนินหญ้า ต้นไม้ เมฆลอย นก */
@@ -2654,26 +2653,37 @@ input{
 .st-coin{position:absolute;z-index:1;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6b0 0 3px,#ffd23a 4px 6px,#f2b400 7px);box-shadow:inset 0 0 0 2px #d99a00;animation:stCoin 1.2s linear infinite}
 @keyframes stCoin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
 .st-me{transform-origin:50% 100%}
-.st-me.jump{animation:stJump 3.4s ease-in-out infinite}
-@keyframes stJump{0%,14%{transform:translate(0,0) scale(1)}20%{transform:translate(0,2px) scale(1.12,.84)}
- 40%{transform:translate(calc(var(--dx)*.5),calc(-1*var(--dy) - 54px)) scale(.94,1.06)}
- 58%{transform:translate(var(--dx),calc(-1*var(--dy))) scale(1)}62%{transform:translate(var(--dx),calc(-1*var(--dy) + 2px)) scale(1.14,.84)}
- 68%,86%{transform:translate(var(--dx),calc(-1*var(--dy))) scale(1);opacity:1}92%{transform:translate(var(--dx),calc(-1*var(--dy)));opacity:0}
- 95%{transform:translate(0,0);opacity:0}100%{transform:translate(0,0);opacity:1}}
-@media(prefers-reduced-motion:reduce){.st-me.jump,.st-coin,.st-goal:after{animation:none}}
+/* บันไดยศครบทุกขั้น เลื่อนซ้ายขวาได้ + กระโดดเก็บเหรียญ */
+.stairs{height:290px!important}
+.st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
+.st-track:active{cursor:grabbing}
+.st-world{position:relative;height:100%}
+.st-world .st-scene{background:inherit}
+.st-next{position:absolute;left:50%;top:-30px;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#c2410c;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15);animation:gBobS 2s ease-in-out infinite}
+@keyframes gBobS{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
+.st-coin.big{width:22px;height:22px;transition:opacity .2s,transform .2s}
+.st-coin.got{opacity:0;transform:translateY(-24px) scale(1.5)!important;animation:none}
+.st-me{z-index:3}
+.st-me.hop{animation:stHop .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes stHop{0%{transform:translateY(0) scale(1)}12%{transform:translateY(2px) scale(1.12,.86)}45%{transform:translateY(-78px) scale(.95,1.06)}80%{transform:translateY(0) scale(1)}88%{transform:translateY(1px) scale(1.1,.9)}100%{transform:translateY(0) scale(1)}}
+.st-bank{position:absolute;left:10px;top:10px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:13px;color:#8a5a00}
+.st-coin.mini{position:static;width:16px;height:16px;animation:none}
+.st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
+.st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
+.st-plus{position:absolute;left:44px;top:34px;z-index:5;color:#e6a100;font-weight:900;font-size:15px;opacity:0;pointer-events:none}
+.st-plus.on{animation:stPlus .8s ease-out}
+@keyframes stPlus{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+.st-cap small{font-weight:500;color:#94a3b8;font-size:11.5px}
+.st-col span{display:block!important}
+@media(max-width:480px){.st-col span{display:block!important;font-size:9.5px}}
+@media(prefers-reduced-motion:reduce){.st-me.hop,.st-coin,.st-goal:after,.st-next{animation:none}}
 .st-star{display:block;width:16px;height:16px;margin:-2px auto 2px;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:stStar 2.4s ease-in-out infinite}
 @keyframes stStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(12deg)}}
-.st-gap{position:absolute;left:-10px;top:40%;font-style:normal;font-weight:900;color:#c9a14a;letter-spacing:1px}
-.st-ladder{position:absolute;width:24px;z-index:1;background:linear-gradient(90deg,#b07a3c 0 3px,transparent 3px calc(100% - 3px),#b07a3c calc(100% - 3px)),repeating-linear-gradient(0deg,transparent 0 7px,#c8904f 7px 10px)}
 .st-me{position:absolute;z-index:2;width:42px;height:42px;margin-bottom:6px}
 .st-me img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:3px solid #fff;box-shadow:0 4px 12px rgba(226,82,10,.35);display:block}
 .st-me i{position:absolute;left:50%;bottom:-5px;width:26px;height:6px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.12)}
-.st-me.climb{animation:stClimb 4.2s ease-in-out infinite}
-@keyframes stClimb{0%,8%{transform:translate(0,0)}14%{transform:translate(0,-8px)}20%{transform:translate(0,0)}
- 38%{transform:translate(var(--dx),0)}72%{transform:translate(var(--dx),calc(-1*var(--dy) - 4px))}80%{transform:translate(var(--dx),calc(-1*var(--dy) - 4px))}
- 90%{transform:translate(var(--dx),0);opacity:1}94%{transform:translate(var(--dx),0);opacity:0}96%{transform:translate(0,0);opacity:0}100%{transform:translate(0,0);opacity:1}}
 .st-cap{margin:0 0 12px;font-size:12.5px;font-weight:700;color:#16305f;text-align:center}
-@media(prefers-reduced-motion:reduce){.st-me.climb,.st-star{animation:none}}
+@media(prefers-reduced-motion:reduce){.st-star{animation:none}}
 /* นับถอยหลัง: ย่อเล็ก อยู่เหนือสถิติด้านล่างของหน้าแรก */
 #countdownRow{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin:14px 0 10px}
 #countdownRow .countdown-card{padding:12px 14px;min-height:0;border-radius:16px}
@@ -7227,23 +7237,41 @@ const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
 /* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
+const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
 function stairsHtml(lv,xp){
-  const lo=Math.max(0,lv-1),hi=Math.min(MAX_LEVEL,lv+2),lvls=[];
-  for(let l=lo;l<=hi;l++)lvls.push(l);
-  const gap=hi<MAX_LEVEL-1;if(hi<MAX_LEVEL)lvls.push(MAX_LEVEL);
-  const n=lvls.length,W=100/n,ci=lvls.indexOf(lv),top=lv>=MAX_LEVEL;
-  const H=i=>74+i*29;   // ความสูงแต่ละขั้น (px)
-  const cols=lvls.map((l,i)=>{const k=l===lv?"now":l<lv?"done":l===MAX_LEVEL?"top":"next";
-    return `<div class="st-col ${k}" style="left:${i*W}%;width:calc(${W}% - 12px);height:${H(i)}px">${l===MAX_LEVEL?'<i class="st-goal"></i><i class="st-star"></i>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span>${gap&&i===n-1?'<em class="st-gap">&middot;&middot;&middot;</em>':""}</div>`}).join("");
-  const av=escHtml($("topAvatar").src);
-  /* เหรียญลอยตามทางกระโดดไปแท่นถัดไป */
-  const ladder=top?"":[.3,.55,.8].map((f,k)=>`<i class="st-coin" style="left:calc(${(ci+.5+f)*W}% - 9px);bottom:${H(ci)+(H(ci+1)-H(ci))*f+(k===1?58:42)}px;animation-delay:${-k*.25}s"></i>`).join("");
-  const climb=top?"":`--dy:${H(ci+1)-H(ci)}px;--dx:${W}cqw;`;
-  return `<div class="stairs"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
+  const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;
+  const cols=[];for(let l=0;l<=MAX_LEVEL;l++){const k=l===lv?"now":l<lv?"done":l===MAX_LEVEL?"top":"next";
+    cols.push(`<div class="st-col ${k}" style="left:${stX(l)}px;width:${ST_CW}px;height:${stH(l)}px">${l===MAX_LEVEL?'<i class="st-goal"></i><i class="st-star"></i>':""}${l===lv+1?'<em class="st-next">ขั้นถัดไป</em>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span></div>`)}
+  let coins=0;try{coins=Number(localStorage.getItem("kasorbCoins"))||0}catch(e){}
+  const cx=stX(lv)+ST_CW/2;
+  return `<div class="stairs"><div class="st-track" id="stTrack"><div class="st-world" style="width:${W}px"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
     <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
-    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols}${ladder}
-    <div class="st-me${top?"":" jump"}" style="${climb}left:calc(${ci*W+W/2}% - 27px);bottom:${H(ci)}px"><img src="${av}" alt=""><i></i></div></div>
-    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}</p>`;
+    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
+    <i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+92}px"></i>
+    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><img src="${escHtml($("topAvatar").src)}" alt=""><i></i></div></div></div>
+    <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
+    <button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus">+1</span></div>
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>เลื่อนซ้ายขวาเพื่อดูยศทั้งหมด · แตะภาพหรือกดกระโดดเพื่อเก็บเหรียญ</small></p>`;
+}
+/* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดดเก็บเหรียญ (เหรียญเก็บในเครื่องนี้ เล่นสนุก ไม่เกี่ยวกับ XP) */
+function bindStairs(lv){
+  const tr=$("stTrack"),me=$("stMe"),coin=$("stCoin");if(!tr||!me)return;
+  requestAnimationFrame(()=>{tr.scrollLeft=stX(lv)+ST_CW/2-tr.clientWidth/2});
+  let drag=null,moved=false;
+  tr.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;drag={x:e.clientX,l:tr.scrollLeft};moved=false});
+  addEventListener("pointermove",e=>{if(!drag)return;const d=e.clientX-drag.x;if(Math.abs(d)>4)moved=true;tr.scrollLeft=drag.l-d});
+  addEventListener("pointerup",()=>{drag=null});
+  let busy=false;
+  const jump=()=>{if(busy)return;busy=true;me.classList.remove("hop");void me.offsetWidth;me.classList.add("hop");
+    setTimeout(()=>{if(coin&&!coin.classList.contains("got")){coin.classList.add("got");
+      let c=0;try{c=(Number(localStorage.getItem("kasorbCoins"))||0)+1;localStorage.setItem("kasorbCoins",c)}catch(e){c=1}
+      const b=$("stBank")?.querySelector("b");if(b)b.textContent=c.toLocaleString();
+      const pl=$("stPlus");if(pl){pl.classList.remove("on");void pl.offsetWidth;pl.classList.add("on")}
+      setTimeout(()=>{coin.classList.remove("got");coin.style.bottom=(stH(lv)+80+Math.round(Math.random()*24))+"px"},900)}},230);
+    setTimeout(()=>{busy=false},620)};
+  $("stJump").onclick=jump;
+  tr.addEventListener("click",()=>{if(!moved)jump()});
+  tr.tabIndex=0;tr.addEventListener("keydown",e=>{if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();jump()}});
 }
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
@@ -7251,15 +7279,6 @@ async function renderOverview(){
   try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
   const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
   const premium=currentData?.plan==="premium",lv=currentLevel();
-  /* บันไดยศ: เรียงจากสูงลงต่ำ แสดง 2 ขั้นถัดไป ขั้นปัจจุบัน ขั้นก่อนหน้า และยศสูงสุด */
-  const steps=[];
-  const hi=Math.min(MAX_LEVEL,lv+2),lo=Math.max(0,lv-1);
-  if(hi<MAX_LEVEL){steps.push(`<div class="lstep"><b>Lv.${MAX_LEVEL} ${escHtml(rankLabel(MAX_LEVEL))}</b><small>ยศสูงสุด</small></div>`);if(hi<MAX_LEVEL-1)steps.push('<div class="lgap">&middot; &middot; &middot;</div>')}
-  for(let l=hi;l>=lo;l--){
-    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":`อีก ${l-lv} ขั้น`}</small></div>`);
-    else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
-    else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
-  }
   /* เงื่อนไขเลื่อนยศ */
   let next;
   if(!premium) next=`<p class="note">สมาชิก Freeอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุด Freeได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
@@ -7277,10 +7296,11 @@ async function renderOverview(){
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
   const badges=Object.entries(src).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ${mode==="sum"?` · ${v.n} ครั้ง`:v.at?` · ${v.at.toLocaleDateString("th-TH",{day:"numeric",month:"short"})}`:""}</em></div>`}).join("");
-  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}<div class="ladder">${steps.join("")}</div></div>
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}</div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
+  bindStairs(lv);
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
