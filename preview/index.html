@@ -7262,27 +7262,46 @@ const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
 /* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
-/* ===== เหรียญพิเศษ + แลกส่วนลด =====
-   แอดมินกำหนดช่วงเวลาที่เหรียญขึ้นบนบันไดยศ (site/coins.drops) ใครเข้ามาในช่วงนั้นกระโดดเก็บได้ช่วงละ 1 ครั้ง
-   เหรียญแลกโค้ดส่วนลด (coupons) ตามที่แอดมินตั้งไว้ (site/coins.coupons)
-   กฎของ Firebase ตรวจซ้ำทุกครั้ง: เวลาต้องอยู่ในช่วงจริง จำนวนเหรียญและราคาต้องตรงกับที่ตั้งไว้ */
-let coinSite={drops:{},coupons:{}};
-async function loadCoinSite(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};coinSite={drops:d.drops||{},coupons:d.coupons||{}}}catch(e){console.error(e)}}
-function activeDrop(){const now=Date.now(),got=currentData?.claimed||{};
-  return Object.entries(coinSite.drops).map(([id,d])=>({id,...d})).filter(d=>!got[d.id]&&Number(d.start)<=now&&now<=Number(d.end)&&Number(d.amount)>0).sort((x,y)=>x.end-y.end)[0]||null}
+/* ===== เหรียญอัตโนมัติ + แลกส่วนลด =====
+   เช็คอิน: เข้าแอปวันละครั้ง ได้ตามลำดับ 7 วัน (ขาดวันเริ่มนับใหม่) · ขยัน: ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 2 เหรียญ (วันละไม่เกิน 20)
+   เก็บโดยกระโดดบนบันไดยศ · เหรียญแลกโค้ดส่วนลดตามที่แอดมินตั้งไว้ (site/coins.coupons)
+   วันนับตามเวลาไทย กฎของ Firebase ตรวจซ้ำทุกครั้ง */
+const CHECKIN_REWARD=[5,5,10,10,15,15,30],DIL_PER=20,DIL_COIN=2,DIL_MAX=10;
+const thaiDay=()=>Math.floor((Date.now()+7*3600000)/86400000);
+let coinSite={coupons:{}};
+async function loadCoinSite(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};coinSite={coupons:d.coupons||{}}}catch(e){console.error(e)}}
+const checkedToday=()=>Number(currentData?.checkin?.day)===thaiDay();
+function nextStreak(){const c=currentData?.checkin,d=thaiDay();return c&&Number(c.day)===d-1?(Number(c.streak)||0)%7+1:1}
+const todayDone=()=>currentData?.today?.date===todayKey()?Number(currentData.today.count)||0:0;
+const dilHave=()=>Number(currentData?.diligence?.day)===thaiDay()?Number(currentData.diligence.n)||0:0;
+const dilTarget=()=>Math.min(DIL_MAX,Math.floor(todayDone()/DIL_PER));
+/* เหรียญที่รอเก็บอยู่ตอนนี้: เช็คอินก่อน แล้วค่อยเหรียญขยัน */
+function activeDrop(){
+  if(!currentData)return null;
+  if(!checkedToday())return {kind:"ck",amount:CHECKIN_REWARD[nextStreak()-1],label:"เช็คอินวันนี้"};
+  const more=dilTarget()-dilHave();
+  return more>0?{kind:"dil",amount:more*DIL_COIN,label:"เหรียญขยัน"}:null;
+}
 async function claimDrop(){
-  const d=activeDrop();if(!d||!currentUser)return 0;
-  const claimed={...(currentData.claimed||{}),[d.id]:true},coins=coinsOf()+Number(d.amount);
-  try{await updateDoc(doc(db,"users",currentUser.uid),{coins,claimed,lastClaim:d.id})}catch(e){console.error(e);return 0}
-  currentData.coins=coins;currentData.claimed=claimed;return Number(d.amount);
+  const d=activeDrop();if(!d||!currentUser)return 0;const day=thaiDay(),coins=coinsOf()+d.amount;
+  const upd=d.kind==="ck"?{coins,checkin:{day,streak:nextStreak()}}:{coins,diligence:{day,n:dilTarget()}};
+  try{await updateDoc(doc(db,"users",currentUser.uid),upd)}catch(e){console.error(e);return 0}
+  currentData.coins=coins;Object.assign(currentData,d.kind==="ck"?{checkin:upd.checkin}:{diligence:upd.diligence});
+  return d.amount;
 }
 const coinsOf=()=>Number(currentData?.coins)||0;
+function coinNote(d){
+  const st=checkedToday()?Number(currentData.checkin.streak)||1:0,done=todayDone(),left=DIL_PER-(done%DIL_PER);
+  const ck=st?`เช็คอินต่อเนื่อง ${st} วัน พรุ่งนี้ได้ ${CHECKIN_REWARD[st%7]} เหรียญ`:`วันนี้ยังไม่เช็คอิน รับ ${CHECKIN_REWARD[nextStreak()-1]} เหรียญ`;
+  const dil=dilHave()>=DIL_MAX?"วันนี้ได้เหรียญขยันครบแล้ว":`วันนี้ทำข้อสอบ ${done} ข้อ ทำอีก ${left} ข้อ ได้เหรียญขยันเพิ่ม ${DIL_COIN} เหรียญ`;
+  return (d?`มีเหรียญ${d.kind==="ck"?"เช็คอิน":"ขยัน"} ${d.amount} เหรียญรอเก็บบนบันไดยศ · `:"")+ck+" · "+dil;
+}
 function shopHtml(){
   const d=activeDrop();
   const cps=Object.entries(coinSite.coupons).map(([id,c])=>({id,...c})).filter(c=>Number(c.coins)>0&&Number(c.baht)>0).sort((x,y)=>x.coins-y.coins);
   const mine=Object.entries(currentData?.coupons||{}).map(([code,c])=>({code,...c})).sort((x,y)=>(y.at||0)-(x.at||0));
   return `<div class="ovc shop" id="shopBox"><div class="ovh"><h3>เหรียญของฉัน</h3><span class="shop-bal"><i class="st-coin mini"></i><b id="shopBal">${coinsOf().toLocaleString()}</b> เหรียญ</span></div>
-    ${d?`<p class="ck-note on">มีเหรียญพิเศษ ${Number(d.amount)} เหรียญรอเก็บบนบันไดยศ ถึง ${new Date(Number(d.end)).toLocaleString("th-TH",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})} น.</p>`:'<p class="ck-note">เหรียญพิเศษจะขึ้นบนบันไดยศเป็นช่วง ๆ แวะมาบ่อย ๆ จะได้ไม่พลาด</p>'}
+    <p class="ck-note${d?" on":""}">${coinNote(d)}</p>
     ${cps.length?`<h4 class="shop-h">แลกส่วนลด</h4><div class="cp-grid">${cps.map(c=>`<div class="cp-it"><b>ลด ${Number(c.baht).toLocaleString()} บาท</b><span>${escHtml(c.name||"")}</span><button type="button" data-cp="${escHtml(c.id)}"${coinsOf()<c.coins?" disabled":""}><i class="st-coin mini"></i>${Number(c.coins).toLocaleString()}</button></div>`).join("")}</div>`:""}
     ${mine.length?`<h4 class="shop-h">โค้ดส่วนลดของฉัน <small>แจ้งโค้ดนี้ตอนชำระเงิน</small></h4><div class="cp-mine">${mine.map(c=>`<div class="cp-code${c.used?" used":""}"><b>${escHtml(c.code)}</b><span>ลด ${Number(c.baht).toLocaleString()} บาท · ${escHtml(c.name||"")}</span><em>${c.used?"ใช้แล้ว":"ยังไม่ใช้"}</em></div>`).join("")}</div>`:""}
 </div>`;
@@ -7309,13 +7328,13 @@ function stairsHtml(lv,xp){
   return `<div class="stairs"><div class="st-sky" aria-hidden="true"><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-cloud c3"></i><i class="st-cloud c4"></i></div><div class="st-track" id="stTrack"><div class="st-world" style="width:${W}px"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
     <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
     <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
-    ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+92}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+118}px">${escHtml(drop.label||"เหรียญพิเศษ")} +${Number(drop.amount)}</em>`:""}
+    ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+92}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+118}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
     <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><img src="${escHtml($("topAvatar").src)}" alt=""><i></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
     <button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
-    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>เลื่อนซ้ายขวาเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญพิเศษได้เลย":"กระโดดเล่นได้ เหรียญพิเศษจะขึ้นเป็นช่วง ๆ"}</small></p>`;
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>เลื่อนซ้ายขวาเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
 }
-/* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญพิเศษช่วงนี้ จะเก็บเหรียญ */
+/* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
 function bindStairs(lv){
   const tr=$("stTrack"),me=$("stMe"),coin=$("stCoin");if(!tr||!me)return;
   requestAnimationFrame(()=>{tr.scrollLeft=stX(lv)+ST_CW/2-tr.clientWidth/2});
@@ -7328,7 +7347,9 @@ function bindStairs(lv){
     setTimeout(async()=>{if(coin&&!coin.classList.contains("got")){coin.classList.add("got");document.querySelector(".st-cklabel")?.remove();
       const gain=await claimDrop();const pl=$("stPlus");
       if(pl){pl.textContent=gain?`+${gain}`:"เก็บไม่สำเร็จ";pl.classList.remove("on");void pl.offsetWidth;pl.classList.add("on")}
-      if(!gain)coin.classList.remove("got");else refreshShop()}},230);
+      if(!gain){coin.classList.remove("got");return}refreshShop();
+      const nd=activeDrop();if(nd)setTimeout(()=>{coin.classList.remove("got");const x=parseFloat(coin.style.left)+11,y=parseFloat(coin.style.bottom)+26;
+        coin.insertAdjacentHTML("afterend",`<em class="st-cklabel" style="left:${x}px;bottom:${y}px">${escHtml(nd.label)} +${nd.amount}</em>`)},900)}},230);
     setTimeout(()=>{busy=false},620)};
   $("stJump").onclick=jump;
   tr.addEventListener("click",()=>{if(!moved)jump()});
