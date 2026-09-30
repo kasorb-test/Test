@@ -3309,15 +3309,15 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .hh-walker{position:absolute;bottom:0;left:0;width:13%;max-width:72px;animation:hhWalk 14s ease-in-out infinite}
 .hh-mascot{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08))}
 /* ธงเล็กปักบนไม้ ถือไว้ข้างตัว ผืนธงพลิ้วเบา ๆ */
-.hh-sign{position:absolute;left:82%;bottom:52%;width:0;height:0}
+.hh-sign{position:absolute;left:14%;bottom:52%;width:0;height:0}
 .hh-sign::before{content:"";position:absolute;left:-1px;bottom:0;width:2px;height:54px;border-radius:2px;background:#9b7a57}
 .hh-sign::after{content:"";position:absolute;left:-3px;bottom:52px;width:6px;height:6px;border-radius:50%;background:#ff6a00}
-.hh-flag{position:absolute;left:1px;bottom:30px;white-space:nowrap;padding:4px 9px 4px 8px;border-radius:0 7px 7px 0;background:#fff;color:#374151;font-size:10.5px;font-weight:700;line-height:1.25;box-shadow:0 3px 10px rgba(17,17,17,.10);transform-origin:0 50%;animation:hhFlag 1.8s ease-in-out infinite}
-.hh-flag b{color:#e86208;font-weight:900}
-@keyframes hhFlag{0%,100%{transform:skewY(-5deg) scaleX(1)}50%{transform:skewY(4deg) scaleX(.95)}}
-@keyframes hhWalk{0%,6%{left:4%}44%,56%{left:62%}94%,100%{left:4%}}
-@keyframes hhWalkM{0%,6%{left:4%}44%,56%{left:52%}94%,100%{left:4%}}
-@media(prefers-reduced-motion:reduce){.hh-walker,.hh-flag{animation:none}.hh-walker{left:6%}}
+.hh-flag{position:absolute;right:1px;bottom:30px;white-space:nowrap;padding:4px 8px 4px 9px;border-radius:7px 0 0 7px;background:#16305f;color:#fff;font-size:10.5px;font-weight:700;line-height:1.25;box-shadow:0 3px 10px rgba(22,48,95,.25);transform-origin:100% 50%;animation:hhFlag 1.8s ease-in-out infinite}
+.hh-flag b{color:#ffb066;font-weight:900}
+@keyframes hhFlag{0%,100%{transform:skewY(5deg) scaleX(1)}50%{transform:skewY(-4deg) scaleX(.95)}}
+@keyframes hhWalk{0%,6%{left:26%}44%,56%{left:84%}94%,100%{left:26%}}
+@keyframes hhWalkM{0%,6%{left:34%}44%,56%{left:80%}94%,100%{left:34%}}
+@media(prefers-reduced-motion:reduce){.hh-walker,.hh-flag{animation:none}.hh-walker{left:30%}}
 @media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:17%;animation-name:hhWalkM}.hh-flag{font-size:9.5px;padding:3px 7px}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 </style>
