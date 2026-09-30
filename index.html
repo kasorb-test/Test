@@ -4547,7 +4547,7 @@ alert(
 /* LOGOUT */
 $("logoutBtn").addEventListener("click", async () => {
   try {
-    await signOut(auth);
+    await localStore.clear();await signOut(auth);
 
     $("loginEmail").value = "";
     $("loginPassword").value = "";
@@ -6206,7 +6206,7 @@ function stopDeviceWatch(){
 
 function kickOut(message){
   stopDeviceWatch();
-  signOut(auth).catch(()=>{});
+  localStore.clear();signOut(auth).catch(()=>{});
   alert(message);
   openLogin(null,null);
   $("loginMsg").textContent=message;
@@ -6294,8 +6294,31 @@ const escHtml=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">
 /* รูปข้อสอบเก็บใน Firestore (examImg) ตามสิทธิ์ของชุด: โหลดเมื่อเลื่อนมาใกล้ แล้วจำไว้ */
 const imgSrc=k=>/^[0-9a-f]{16,40}$/.test(k||"") ? k : "";
 const imgCache=new Map();
+/* ===== จำข้อสอบและรูปที่เคยโหลดไว้ในเครื่อง (IndexedDB) ลดการอ่านจาก Firebase =====
+   ข้อสอบ: จำแยกตามบัญชี ใช้ของเดิมจนกว่าแอดมินจะแก้ชุดนั้น (updatedAt / keyVersion / count เปลี่ยน)
+   รูป: ชื่อรูปคือรหัสของเนื้อรูป รูปเดิมไม่มีวันเปลี่ยน จำได้เลย
+   ออกจากระบบแล้วล้างทิ้งทั้งหมด */
+const localStore=(()=>{
+  let dbp=null;
+  const open=()=>dbp||(dbp=new Promise((res,rej)=>{if(!("indexedDB" in window)){rej(new Error("no idb"));return}const r=indexedDB.open("kasorb-cache",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
+  const tx=(mode,fn)=>open().then(d=>new Promise(res=>{let out;const t=d.transaction("kv",mode);const st=t.objectStore("kv");const q=fn(st);if(q)q.onsuccess=()=>{out=q.result};t.oncomplete=()=>res(out);t.onerror=t.onabort=()=>res(undefined)})).catch(()=>undefined);
+  return{get:k=>tx("readonly",st=>st.get(k)),set:(k,v)=>tx("readwrite",st=>{st.put(v,k)}),clear:()=>tx("readwrite",st=>{st.clear()})};
+})();
+const itemsVer=m=>`${m?.updatedAt||""}|${m?.keyVersion||1}|${m?.count||0}`;
+async function getExamItems(meta){
+  const k=`items:${currentUser?.uid||"-"}:${meta.id}`,ver=itemsVer(meta);
+  if(currentUser&&canTake(meta)){const c=await localStore.get(k);if(c&&c.ver===ver&&Array.isArray(c.items))return c.items}
+  const snap=await getDoc(doc(db,"examItems",meta.id));
+  if(!snap.exists()) throw new Error("missing");
+  const items=snap.data().items||[];
+  if(currentUser) localStore.set(k,{ver,items});
+  return items;
+}
 function fetchImg(key){
-  if(!imgCache.has(key)) imgCache.set(key,getDoc(doc(db,"examImg",key)).then(s=>s.exists()?s.data().d:"").catch(e=>{console.error(e);imgCache.delete(key);return ""}));
+  if(!imgCache.has(key)) imgCache.set(key,localStore.get("img:"+key).then(c=>{
+    if(typeof c==="string"&&c) return c;
+    return getDoc(doc(db,"examImg",key)).then(s=>{const d=s.exists()?s.data().d:"";if(d)localStore.set("img:"+key,d);return d});
+  }).catch(e=>{console.error(e);imgCache.delete(key);return ""}));
   return imgCache.get(key);
 }
 const imgObserver="IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){imgObserver.unobserve(e.target);loadImgEl(e.target)}}),{rootMargin:"600px 0px"}) : null;
@@ -6673,9 +6696,7 @@ async function startExam(id,pick){
   if(!canTake(meta)){showUpgrade();return;}
   let items;
   try{
-    const snap=await getDoc(doc(db,"examItems",id));
-    if(!snap.exists()) throw new Error("missing");
-    items=snap.data().items||[];
+    items=await getExamItems(meta);
   }catch(e){
     console.error(e);
     if(e.code==="permission-denied") showUpgrade(); else alert("โหลดข้อสอบไม่ได้ กรุณาลองใหม่อีกครั้ง");
@@ -6948,8 +6969,7 @@ async function openAttempt(a,btn){
   if(!meta){alert("ชุดข้อสอบนี้ถูกลบออกจากเว็บแล้ว");return}
   btn.disabled=true;btn.textContent="กำลังเปิด…";
   try{
-    const snap=await getDoc(doc(db,"examItems",a.exam));
-    let items=snap.exists()?snap.data().items||[]:[];
+    let items=await getExamItems(meta).catch(e=>{if(e.message==="missing")return [];throw e});
     if(Array.isArray(a.parts)) items=items.filter(it=>a.parts.includes(secOf(meta,it)));
     if(!Array.isArray(a.ans)||items.length!==a.ans.length){alert("ข้อสอบชุดนี้มีการเพิ่มหรือลบข้อหลังจากที่ทำ จึงเปิดกระดาษคำตอบเดิมไม่ได้");return}
     const correct=items.reduce((n,it,i)=>n+(a.ans[i]===it.a?1:0),0);
@@ -7010,7 +7030,7 @@ async function fillBySec(list){
     if(a.bySec||!a.exam||!Array.isArray(a.ans)) continue;
     const meta=loadCatalogSync(a.exam);if(!meta) continue;
     try{
-      if(!itemsCache.has(a.exam)){const snap=await getDoc(doc(db,"examItems",a.exam));itemsCache.set(a.exam,snap.exists()?snap.data().items||[]:[])}
+      if(!itemsCache.has(a.exam)){itemsCache.set(a.exam,await getExamItems(meta).catch(()=>[]))}
       let items=itemsCache.get(a.exam);
       if(Array.isArray(a.parts)) items=items.filter(it=>a.parts.includes(secOf(meta,it)));
       if(items.length!==a.ans.length) continue;
