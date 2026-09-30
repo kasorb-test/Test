@@ -3305,10 +3305,17 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .hh-art{position:relative}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
 /* มาสคอตเดินไปมาซ้ายขวาบนพื้นห้อง หันหน้าตามทางที่เดิน */
 .hh-walk{position:absolute;left:0;right:0;bottom:-2%;height:0;pointer-events:none}
-.hh-mascot{position:absolute;bottom:0;left:0;width:11%;max-width:60px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08));animation:hhWalk 14s ease-in-out infinite}
-@keyframes hhWalk{0%,6%{left:3%}44%,56%{left:86%}94%,100%{left:3%}}
-@media(prefers-reduced-motion:reduce){.hh-mascot{animation:none;left:4%}}
-@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-mascot{width:12%}}
+/* น้องดินสอถือป้าย "วันนี้ N ข้อ" เดินไปชิดขวาแล้วกลับมาชิดซ้าย */
+.hh-walker{position:absolute;bottom:0;left:0;width:11%;max-width:60px;animation:hhWalk 14s ease-in-out infinite}
+.hh-mascot{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08))}
+.hh-sign{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 9px;border:2px solid #ff6a00;border-radius:9px;background:#fff;color:#16305f;font-size:12px;font-weight:900;line-height:1.2;box-shadow:0 4px 10px rgba(0,0,0,.08);animation:hhSign .5s ease-in-out infinite}
+.hh-sign::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:8px;margin-left:-1px;background:#a0784e}
+.hh-sign b{color:#e86208}
+@keyframes hhSign{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-3px)}}
+@keyframes hhWalk{0%,6%{left:7%}44%,56%{left:82%}94%,100%{left:7%}}
+@keyframes hhWalkM{0%,6%{left:9%}44%,56%{left:74%}94%,100%{left:9%}}
+@media(prefers-reduced-motion:reduce){.hh-walker,.hh-sign{animation:none}.hh-walker{left:7%}}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:15%;animation-name:hhWalkM}.hh-sign{font-size:11px;padding:3px 7px}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 </style>
 </head>
@@ -3581,7 +3588,7 @@ LINE OA @kasorb
 <div class="home-hero">
 <div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
 <div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
-<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></div>
+<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign" id="hhSign" aria-live="polite">มาฝึกกัน!</span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
 </div>
 <div class="news-slider hidden" id="newsSlider" aria-label="ข่าวสารและประกาศ">
 <div class="ns-track" id="newsTrack"></div>
@@ -5970,6 +5977,7 @@ function renderToday(){
   const count=todayCount();
   $("heroTodayCount").textContent=`วันนี้ทำไปแล้ว ${count.toLocaleString()} ข้อ`;
   $("heroTodayCount").classList.toggle("done",count>0);
+  $("hhSign").innerHTML=currentUser?`วันนี้ <b>${count.toLocaleString()}</b> ข้อ`:"มาฝึกกัน!";
   syncTodayCount(count);
 }
 
