@@ -2608,7 +2608,7 @@ input{
 .st-col.next{--f:#fde9d7;--t:#fff4ea;--s:#f6d3b4;color:#c2410c}
 .st-col.top{--f:#f7cf55;--t:#fde38f;--s:#e0b232;color:#5a3b00}
 .st-col b{font-size:13px;letter-spacing:.2px}.st-col span{font-size:10px;opacity:.8}
-@media(max-width:480px){.st-col span{font-size:9px}.st-col b{font-size:12px}}
+@media(max-width:480px){.st-col span{display:none!important}.st-col b{font-size:12px}}
 .st-ladder{width:18px;background:linear-gradient(90deg,#c9a27a 0 3px,transparent 3px calc(100% - 3px),#c9a27a calc(100% - 3px)),repeating-linear-gradient(0deg,transparent 0 7px,#d8b690 7px 9px)}
 .st-me img{border-width:2px;box-shadow:0 6px 14px rgba(22,48,95,.22)}
 .st-cap{font-weight:600;color:#475569}
@@ -2630,6 +2630,37 @@ input{
 .st-floor{background:#7fb877!important;height:8px!important}
 .st-col{box-shadow:0 12px 16px -12px rgba(30,60,30,.45)!important}
 @media(prefers-reduced-motion:reduce){.st-cloud,.st-bird{animation:none}}
+/* ===== บันไดยศแนวเกมกระโดดข้ามแท่น: แท่นดินหญ้าลายบล็อก รูปประจำตัวกระโดดโค้งไปแท่นถัดไป ===== */
+.stairs{background:linear-gradient(180deg,#6ec6ff 0%,#a9dcff 55%,#d6f0ff 100%)!important;box-shadow:none!important;border-radius:16px!important}
+.st-sun{background:#fff6c2!important}
+.st-cloud{height:16px;background:#fff;opacity:1}.st-cloud:before{width:22px;height:22px}.st-cloud:after{width:16px;height:16px;left:26px}
+.st-floor{height:10px!important;background:#6b4424!important}
+.st-col{--dirt:#d08a4c;--line:rgba(90,50,20,.28);--g:#5ccf3f;--gd:#37a52b;
+  background:linear-gradient(var(--g),var(--g)) top/100% 13px no-repeat,linear-gradient(var(--gd),var(--gd)) 0 13px/100% 4px no-repeat,
+  repeating-linear-gradient(90deg,transparent 0 19px,var(--line) 19px 21px),repeating-linear-gradient(0deg,transparent 0 17px,var(--line) 17px 19px),var(--dirt)!important;
+  border:3px solid #5b3718!important;border-bottom:0!important;border-radius:9px 9px 0 0!important;padding-top:20px!important;box-shadow:inset -5px 0 0 rgba(0,0,0,.12),inset 4px 0 0 rgba(255,255,255,.16)!important;color:#fff!important}
+.st-col::before{content:"";position:absolute;left:-3px;right:-3px;top:-7px;height:10px;transform:none;background:radial-gradient(circle at 6px 10px,var(--g) 6px,transparent 6.5px) 0 0/12px 10px repeat-x}
+.st-col::after{content:none}
+.st-col b,.st-col span{text-shadow:none}.st-col b{display:inline-block;padding:1px 7px;border-radius:6px;background:rgba(60,30,10,.5)}.st-col span{display:block;margin:3px 3px 0;padding:1px 3px;border-radius:5px;background:rgba(60,30,10,.35);opacity:1}
+.st-col.top b{background:rgba(120,80,0,.55)}.st-col.top span{background:rgba(120,80,0,.4)}
+.st-col.done{filter:saturate(.55) brightness(1.08)}
+.st-col.now{--g:#6be04c;--gd:#3fb830;box-shadow:0 0 0 3px #fff,0 0 18px 4px rgba(255,210,80,.8),inset -5px 0 0 rgba(0,0,0,.12)!important}
+.st-col.next{--dirt:#c98247}
+.st-col.top{--dirt:#e9b93a;--line:rgba(140,90,0,.3);--g:#ffe066;--gd:#e2b100;border-color:#8a6200!important;color:#fff!important}
+.st-goal{position:absolute;left:50%;top:-58px;width:4px;height:52px;margin-left:-2px;background:#e5e7eb;border-radius:2px}
+.st-goal:after{content:"";position:absolute;left:4px;top:2px;width:22px;height:14px;background:#ff5a36;clip-path:polygon(0 0,100% 50%,0 100%);animation:stFlagW 1.4s ease-in-out infinite;transform-origin:left center}
+@keyframes stFlagW{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.8)}}
+.st-col.top .st-star{position:absolute;left:50%;top:-78px;margin-left:-8px}
+.st-coin{position:absolute;z-index:1;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6b0 0 3px,#ffd23a 4px 6px,#f2b400 7px);box-shadow:inset 0 0 0 2px #d99a00;animation:stCoin 1.2s linear infinite}
+@keyframes stCoin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
+.st-me{transform-origin:50% 100%}
+.st-me.jump{animation:stJump 3.4s ease-in-out infinite}
+@keyframes stJump{0%,14%{transform:translate(0,0) scale(1)}20%{transform:translate(0,2px) scale(1.12,.84)}
+ 40%{transform:translate(calc(var(--dx)*.5),calc(-1*var(--dy) - 54px)) scale(.94,1.06)}
+ 58%{transform:translate(var(--dx),calc(-1*var(--dy))) scale(1)}62%{transform:translate(var(--dx),calc(-1*var(--dy) + 2px)) scale(1.14,.84)}
+ 68%,86%{transform:translate(var(--dx),calc(-1*var(--dy))) scale(1);opacity:1}92%{transform:translate(var(--dx),calc(-1*var(--dy)));opacity:0}
+ 95%{transform:translate(0,0);opacity:0}100%{transform:translate(0,0);opacity:1}}
+@media(prefers-reduced-motion:reduce){.st-me.jump,.st-coin,.st-goal:after{animation:none}}
 .st-star{display:block;width:16px;height:16px;margin:-2px auto 2px;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:stStar 2.4s ease-in-out infinite}
 @keyframes stStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(12deg)}}
 .st-gap{position:absolute;left:-10px;top:40%;font-style:normal;font-weight:900;color:#c9a14a;letter-spacing:1px}
@@ -7201,16 +7232,17 @@ function stairsHtml(lv,xp){
   for(let l=lo;l<=hi;l++)lvls.push(l);
   const gap=hi<MAX_LEVEL-1;if(hi<MAX_LEVEL)lvls.push(MAX_LEVEL);
   const n=lvls.length,W=100/n,ci=lvls.indexOf(lv),top=lv>=MAX_LEVEL;
-  const H=i=>56+i*32;   // ความสูงแต่ละขั้น (px)
+  const H=i=>74+i*29;   // ความสูงแต่ละขั้น (px)
   const cols=lvls.map((l,i)=>{const k=l===lv?"now":l<lv?"done":l===MAX_LEVEL?"top":"next";
-    return `<div class="st-col ${k}" style="left:${i*W}%;width:calc(${W}% - 12px);height:${H(i)}px">${l===MAX_LEVEL?'<i class="st-star"></i>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span>${gap&&i===n-1?'<em class="st-gap">&middot;&middot;&middot;</em>':""}</div>`}).join("");
+    return `<div class="st-col ${k}" style="left:${i*W}%;width:calc(${W}% - 12px);height:${H(i)}px">${l===MAX_LEVEL?'<i class="st-goal"></i><i class="st-star"></i>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span>${gap&&i===n-1?'<em class="st-gap">&middot;&middot;&middot;</em>':""}</div>`}).join("");
   const av=escHtml($("topAvatar").src);
-  const ladder=top?"":`<div class="st-ladder" style="left:calc(${(ci+1)*W}% - 22px);bottom:${H(ci)}px;height:${H(ci+1)-H(ci)+14}px"></div>`;
-  const climb=top?"":`--dy:${H(ci+1)-H(ci)}px;--dx:calc(${W/2}cqw - 8px);`;
+  /* เหรียญลอยตามทางกระโดดไปแท่นถัดไป */
+  const ladder=top?"":[.3,.55,.8].map((f,k)=>`<i class="st-coin" style="left:calc(${(ci+.5+f)*W}% - 9px);bottom:${H(ci)+(H(ci+1)-H(ci))*f+(k===1?58:42)}px;animation-delay:${-k*.25}s"></i>`).join("");
+  const climb=top?"":`--dy:${H(ci+1)-H(ci)}px;--dx:${W}cqw;`;
   return `<div class="stairs"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
-    <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 70 L38 34 L70 58 L112 22 L160 64 L205 44 L250 76 L300 60 L350 84 L400 74 V200 H0Z" fill="#c7d9ee"/><path d="M112 22 l-13 12 h9 l4-5 5 6 7-4z" fill="#fff" opacity=".85"/><path d="M38 34 l-9 8 h6 l3-3 3 4 5-3z" fill="#fff" opacity=".8"/><path d="M0 104 Q70 76 140 98 T280 96 T400 104 V200 H0Z" fill="#a6cd9d"/><path d="M0 136 Q90 112 190 130 T400 126 V200 H0Z" fill="#8cc284"/></svg>
-    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#5a9a5e"><path d="M8 60 l9-40 9 40z"/><path d="M22 60 l7-30 7 30z"/><path d="M92 60 l8-34 8 34z"/><path d="M104 60 l6-24 6 24z"/></g><g fill="#6fae6f"><circle cx="46" cy="48" r="11"/><circle cx="130" cy="50" r="9"/></g></svg></div><div class="st-floor"></div>${cols}${ladder}
-    <div class="st-me${top?"":" climb"}" style="${climb}left:calc(${ci*W+W/2}% - 27px);bottom:${H(ci)}px"><img src="${av}" alt=""><i></i></div></div>
+    <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
+    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols}${ladder}
+    <div class="st-me${top?"":" jump"}" style="${climb}left:calc(${ci*W+W/2}% - 27px);bottom:${H(ci)}px"><img src="${av}" alt=""><i></i></div></div>
     <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}</p>`;
 }
 async function renderOverview(){
