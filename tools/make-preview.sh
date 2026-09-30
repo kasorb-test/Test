@@ -3,9 +3,11 @@
 # ติดตั้งลงเครื่องแยกจากแอปจริงได้ ชื่อแอป "กะสอบ ทดลอง" และมีป้าย "หน้าทดลอง" มุมจอ
 set -e
 cd "$(dirname "$0")/.."
+# รูปอวตารตัดพื้นหลัง: ใช้ของ root ถ้ามี ถ้ายังไม่เผยแพร่ ใช้ของหน้าทดลองเดิม
+keep=""; if [ ! -d avatar-cut ] && [ -d preview/avatar-cut ]; then keep=$(mktemp -d); cp -r preview/avatar-cut "$keep"/; fi
 rm -rf preview && mkdir preview
 cp index.html admin.html sw.js *.png *.svg preview/
-cp -r avatar-cut preview/
+if [ -d avatar-cut ]; then cp -r avatar-cut preview/; elif [ -n "$keep" ]; then cp -r "$keep"/avatar-cut preview/; rm -rf "$keep"; fi
 sed -e 's/"name": "KASORB TEST"/"name": "KASORB TEST (ทดลอง)"/' -e 's/"short_name": "กะสอบ"/"short_name": "กะสอบ ทดลอง"/' manifest.webmanifest > preview/manifest.webmanifest
 sed -e 's/"name": "กะสอบ แอดมิน"/"name": "กะสอบ แอดมิน (ทดลอง)"/' -e 's/"short_name": "แอดมิน"/"short_name": "แอดมิน ทดลอง"/' admin.webmanifest > preview/admin.webmanifest
 BADGE='<div style="position:fixed;left:8px;bottom:8px;z-index:99999;padding:3px 9px;border-radius:999px;background:#7c3aed;color:#fff;font:700 11px sans-serif;pointer-events:none;opacity:.9">หน้าทดลอง</div>'
