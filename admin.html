@@ -133,6 +133,10 @@
 .xpaper u{text-underline-offset:3px;font-weight:700}
 .xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;white-space:pre-line;font-size:15px;line-height:1.75;text-align:justify}
 .xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xtbl{border-collapse:collapse;font-size:14.5px}.xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5}
+.pubbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 12px;padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px}.pubbar.off{background:#fff4e5;color:#b45309}.pubbar.on{background:#e7f6ec;color:#15803d}.pubbar button{width:auto;margin:0 0 0 auto;padding:9px 16px;border:0;border-radius:10px;font-weight:800;cursor:pointer}.pubbar.off button{background:#ff6a00;color:#fff}.pubbar.on button{background:#fff;color:#c62828;border:1px solid #f3c7c7}
+em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border-radius:999px;font-size:11.5px}em.pub.off{background:#fff4e5;color:#b45309}em.pub.on{background:#e7f6ec;color:#15803d}
+.subs{font-size:12.5px;color:#555;margin-bottom:6px}.subs button{width:auto;margin:0 0 0 4px;padding:3px 9px;font-size:12px;border-radius:8px;background:#eef2fa;color:#16305f;border:0}
+.uidlg .chk{display:grid;gap:6px;margin:6px 0 12px}.uidlg .chk label{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}.uidlg .chk input{width:auto;margin:0}
 .exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.exp .xtbl td{text-align:left}.exp .xet{white-space:pre-line}.xefig{margin:8px 0}.xefig img.eimg{display:block;max-width:100%;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,240px);margin:0}sub{font-size:.72em;vertical-align:sub;line-height:0}
 .xfig{margin:4px 0 12px}.xfig img{max-width:min(100%,520px)}.xq2{font-weight:600}
 .xopts.pics{grid-template-columns:repeat(2,minmax(0,1fr))}.xc.pic img{max-width:100%;max-height:130px;margin:0}
@@ -175,15 +179,15 @@
 <button type="button" class="xnew" id="exNewBtn">+ สร้างชุดข้อสอบใหม่</button>
 <div id="exNew" class="nform hide"><h3>สร้างชุดข้อสอบใหม่</h3>
 <label>ชื่อชุด</label><input id="nTitle" maxlength="80" placeholder="เช่น ข้อสอบเสมือนจริงสายปราบปราม ชุดที่ 1">
-<label>รูปแบบชุด</label><select id="nKind"><option value="mock">ข้อสอบเสมือนจริง (ครบทุกวิชา เหมือนสอบจริง)</option><option value="subject">แบบทดสอบรายวิชา (วิชาเดียว)</option><option value="mixed">ข้อสอบรวม (รวมหลายวิชา ไม่ใช่ชุดเสมือนจริง)</option></select>
-<div id="nSubjBox" class="hide"><label>หมวดวิชา</label><select id="nSubj"></select></div>
+<label>รูปแบบชุด</label><select id="nKind"><option value="mock">ข้อสอบเสมือนจริง (ครบทุกวิชา เหมือนสอบจริง)</option><option value="subject">แบบทดสอบรายวิชา (วิชาเดียว)</option><option value="mixed">ข้อสอบรวม (รวมหลายวิชา ไม่ใช่ชุดเสมือนจริง)</option><option value="real">ข้อสอบจริง (รายวิชา เฉพาะ Premium)</option></select>
+<div id="nSubjBox" class="hide"><div class="row"><div><label>หมวดวิชา</label><select id="nSubj"></select></div><div id="nSlotBox"><label>ช่องที่ (ชุดที่ 1-5 ฟรี · 6-20 Premium)</label><select id="nSlot"></select></div></div></div>
 <label>ใช้กับสายสอบ</label><div class="tracks" id="nTracks"></div>
 <div class="row"><div><label>ประเภท</label><select id="nTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="nMins" type="number" min="1" max="600" value="180"></div></div>
 <div id="nSecsBox"><label>วิชาในชุดนี้ (บรรทัดละ 1 วิชา เรียงตามลำดับ)</label><textarea id="nSecs"></textarea></div>
 <p id="nErr" class="ferr"></p><div class="btns"><button type="button" id="nGo">สร้างชุด</button><button type="button" class="btn-light" id="nCancel">ยกเลิก</button></div></div>
 <h3 style="margin-top:22px">ชุดข้อสอบในเว็บ <span id="examTotal" class="muted" style="font-weight:600;font-size:14px"></span></h3><div id="examList"><p class="muted">กำลังโหลด…</p></div>
 <details class="ximp"><summary>นำเข้าหลายข้อพร้อมกันจากไฟล์ (.json)</summary><div class="imp"><label class="impbtn">เลือกไฟล์ข้อสอบ (.json)<input id="examFiles" type="file" accept=".json,application/json" multiple hidden></label><div id="impList"></div><button type="button" id="impGo" class="hide">นำเข้าข้อสอบ</button><p id="impMsg"></p></div></details></div>
-<div id="exEditView" class="hide"><div class="xtop"><button type="button" class="back" id="exBack">&lsaquo; ชุดทั้งหมด</button><b id="exTitle"></b><span class="st" id="exSt"></span></div>
+<div id="exEditView" class="hide"><div class="xtop"><button type="button" class="back" id="exBack">&lsaquo; ชุดทั้งหมด</button><b id="exTitle"></b><span class="st" id="exSt"></span></div><div class="pubbar" id="pubBar"><span id="pubTxt"></span><button type="button" id="pubBtn"></button></div>
 <details class="xset" id="exSet"><summary>ตั้งค่าชุดข้อสอบ</summary>
 <label>ชื่อชุด</label><input id="sTitle" maxlength="80">
 <label>ใช้กับสายสอบ</label><div class="tracks" id="sTracks"></div>
@@ -199,13 +203,14 @@ function dlg(message,opt){
     const wrap=document.createElement("div");wrap.className="uidlg";wrap.setAttribute("role","dialog");
     const box=document.createElement("div");box.className="box";
     const p=document.createElement("p");p.className="msg";p.textContent=String(message??"");box.appendChild(p);
-    let inp=null;
+    let inp=null,checks=null;
+    if(opt.checks){checks=document.createElement("div");checks.className="chk";opt.checks.forEach(([v,l,on])=>{const lb=document.createElement("label");const c=document.createElement("input");c.type="checkbox";c.value=v;c.checked=!!on;lb.append(c," "+l);checks.appendChild(lb)});box.appendChild(checks)}
     if(opt.input!==undefined){inp=document.createElement("input");inp.type="text";inp.value=opt.input||"";box.appendChild(inp)}
     const act=document.createElement("div");act.className="act";
     const done=v=>{wrap.remove();document.removeEventListener("keydown",key,true);res(v)};
     if(opt.cancel){const n=document.createElement("button");n.type="button";n.className="no";n.textContent=opt.cancel;n.onclick=()=>done(opt.input!==undefined?null:false);act.appendChild(n)}
     const o=document.createElement("button");o.type="button";o.className="ok"+(opt.danger?" danger":"");o.textContent=opt.ok||"ตกลง";
-    o.onclick=()=>done(opt.input!==undefined?inp.value:true);act.appendChild(o);
+    o.onclick=()=>done(checks?[...checks.querySelectorAll("input:checked")].map(c=>c.value):opt.input!==undefined?inp.value:true);act.appendChild(o);
     box.appendChild(act);wrap.appendChild(box);document.body.appendChild(wrap);
     const key=e=>{if(e.key==="Escape"){e.preventDefault();done(opt.cancel?(opt.input!==undefined?null:false):true)}else if(e.key==="Enter"&&document.activeElement!==act.querySelector(".no")){e.preventDefault();o.click()}};
     document.addEventListener("keydown",key,true);
@@ -213,6 +218,7 @@ function dlg(message,opt){
   });
 }
 window.uiAlert=m=>dlg(m,{ok:"ตกลง"});
+window.uiChecks=(m,list)=>dlg(m,{checks:list,ok:"บันทึก",cancel:"ยกเลิก"}).then(v=>Array.isArray(v)?v:null);
 window.uiConfirm=(m,o)=>dlg(m,{ok:(o&&o.ok)||"ตกลง",cancel:(o&&o.cancel)||"ยกเลิก",danger:o&&o.danger});
 window.uiPrompt=(m,v)=>dlg(m,{ok:"บันทึก",cancel:"ยกเลิก",input:v??""});
 window.alert=m=>{uiAlert(m)};
@@ -252,12 +258,12 @@ if(!list.length){$("users").innerHTML='<p class="muted">ไม่พบสมา
 $("users").innerHTML=`<table class="mt"><thead><tr><th>ชื่อเล่น</th><th class="col-mail">อีเมล</th><th>แพ็กเกจ</th><th></th></tr></thead><tbody>${list.map(u=>{const w=wantOf(u);const id=esc(u.id);
 const note=w.changed?`<div class="exp pend-note">ยังไม่ได้บันทึก${w.v==="yearly"?"":` — จะเปลี่ยนเป็น${PLANS.find(p=>p[0]===w.v)[1]}`}</div>`:"";
 const info=w.v==="yearly"?`<div class="exp yearly">${w.changed?"ใช้ได้ถึง":"หมดอายุ"} <input type="date" class="until" data-id="${id}" value="${esc(w.until)}"></div>`:(w.changed?"":`<div class="exp ${w.v}">${planNote(u)}</div>`);
-return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}<span class="mno">${esc(codeOf(u)||"ยังไม่มีรหัส")}</span>${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
+return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}<span class="mno">${esc(codeOf(u)||"ยังไม่มีรหัส")}</span>${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="subs">ซื้อรายวิชา: <b>${(u.subjects||[]).length?esc(u.subjects.join(", ")):"-"}</b> <button type="button" class="sub-edit" data-id="${id}">แก้ไข</button></div><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
 const find=id=>members.find(x=>x.id===id);
 document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{const u=find(b.parentElement.dataset.id);if(u)setPending(u,b.dataset.v)});
 document.querySelectorAll(".until").forEach(i=>i.onchange=()=>{const u=find(i.dataset.id);if(u&&i.value)setPending(u,"yearly",i.value)});
 document.querySelectorAll(".undo-row").forEach(b=>b.onclick=()=>{pending.delete(b.dataset.id);renderMembers()});
-document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.dataset.id));document.querySelectorAll(".rm-photo").forEach(b=>b.onclick=()=>removePhoto(b.dataset.id));
+document.querySelectorAll(".sub-edit").forEach(b=>b.onclick=()=>editSubjects(b.dataset.id));document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.dataset.id));document.querySelectorAll(".rm-photo").forEach(b=>b.onclick=()=>removePhoto(b.dataset.id));
 }
 /* รูปที่นักเรียนอัปโหลด: แอดมินลบได้ถ้าไม่เหมาะสม นักเรียนจะกลับไปใช้รูปการ์ตูนเดิม */
 function hasPhoto(u){return typeof u.photo==="string"&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u.photo)}
@@ -265,6 +271,14 @@ async function removePhoto(id){const u=members.find(x=>x.id===id);if(!u)return;c
 if(!await uiConfirm(`ยืนยันลบรูปที่ ${who} อัปโหลด\nจะกลับไปใช้รูปการ์ตูนเดิม\nใช่หรือไม่?`))return;
 try{await updateDoc(doc(db,"users",id),{photo:""});u.photo="";renderMembers();$("umsg").className="ok";$("umsg").textContent=`ลบรูปของ ${who} แล้ว`}
 catch(e){$("umsg").className="err";$("umsg").textContent=`ลบรูปไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}}
+/* ขายแยกวิชา: เลือกวิชาที่สมาชิกซื้อ ทำได้ทุกชุดของวิชานั้น (ไม่รวมข้อสอบจริง ซึ่งเป็นสิทธิ์ Premium) */
+async function editSubjects(id){
+  const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;const have=new Set(u.subjects||[]);
+  const picked=await uiChecks(`วิชาที่ ${who} ซื้อ`,SUBJECTS.map(x=>[x,x,have.has(x)]));
+  if(!picked)return;
+  try{await updateDoc(doc(db,"users",id),{subjects:picked});u.subjects=picked;renderMembers();$("umsg").className="ok";$("umsg").textContent=`บันทึกแล้ว: ${who} ซื้อ ${picked.length?picked.join(", "):"ไม่มีวิชา"}`}
+  catch(e){$("umsg").className="err";$("umsg").textContent=`บันทึกไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}
+}
 async function saveRow(id){
 const u=members.find(x=>x.id===id);const p=pending.get(id);if(!u||!p)return;
 const who=u.nickname||u.email,label=PLANS.find(x=>x[0]===p.v)[1];
@@ -461,7 +475,7 @@ $("impGo").onclick=async()=>{
       for(const key of imgKeys){k++;$("impMsg").textContent=`กำลังนำเข้า ${d.title}… รูป ${k}/${imgKeys.length}`;await setDoc(doc(db,"examImg",key),{exam:d.id,d:imgs[key]})}
       for(const key of oldKeys.filter(x=>!imgKeys.includes(x))){try{await deleteDoc(doc(db,"examImg",key))}catch(e){}}
       await setDoc(doc(db,"examItems",d.id),{items,imgs:imgKeys,keys,updatedAt:new Date().toISOString()});
-      await setDoc(doc(db,"exams",d.id),{title:old?.title||d.title,kind:old?.kind||d.kind||"mock",...((old?.subject||d.subject)?{subject:old?.subject||d.subject}:{}),track:old?.track||d.track||[],tier:old?.tier||d.tier||"premium",
+      await setDoc(doc(db,"exams",d.id),{title:old?.title||d.title,kind:old?.kind||d.kind||"mock",published:old?(old.published!==false):false,...((old?.subject||d.subject)?{subject:old?.subject||d.subject}:{}),track:old?.track||d.track||[],tier:old?.tier||d.tier||"premium",
         minutes:old?.minutes||d.minutes||Math.max(1,items.length),count:items.length,sections:d.sections||[],order:old?.order??d.order??99,keyVersion,updatedAt:new Date().toISOString()});
       done++;
     }
@@ -495,7 +509,7 @@ function renderExams(){
   const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
   $("examTotal").textContent=examSets.length?`${examSets.length} ชุด · ${total.toLocaleString()} ข้อ`:"";
   if(!examSets.length){$("examList").innerHTML='<p class="muted">ยังไม่มีชุดข้อสอบ</p>';return}
-  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span>${esc(KIND_NAME[e.kind]||"เสมือนจริง")}${e.subject?" "+esc(e.subject):""} · ${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
+  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span><em class="pub ${e.published===false?"off":"on"}">${e.published===false?"ฉบับร่าง":"เผยแพร่แล้ว"}</em>${esc(KIND_NAME[e.kind]||"เสมือนจริง")}${e.subject?" "+esc(e.subject):""}${e.slot?" ชุดที่ "+e.slot:""} · ${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
   document.querySelectorAll("#examList .open").forEach(el=>el.onclick=()=>openSet(el.dataset.id));
 }
 async function deleteExam(id){
@@ -508,10 +522,20 @@ async function deleteExam(id){
 
 /* สร้างชุดใหม่: เสมือนจริง / รายวิชา / ข้อสอบรวม */
 const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
-const KIND_NAME={mock:"เสมือนจริง",subject:"รายวิชา",mixed:"ข้อสอบรวม"};
-$("nSubj").innerHTML=SUBJECTS.map(x=>`<option>${esc(x)}</option>`).join("");
-const nKindSync=()=>{const k=$("nKind").value;$("nSubjBox").classList.toggle("hide",k!=="subject");$("nSecsBox").classList.toggle("hide",k==="subject");if(k==="subject"&&+$("nMins").value===180)$("nMins").value=30};
-$("nKind").onchange=nKindSync;
+const REAL_SUBJECTS=["กฎหมาย","ภาษาอังกฤษ","ภาษาไทย","เทคโนโลยีสารสนเทศ","ความสามารถทั่วไป"];
+const KIND_NAME={mock:"เสมือนจริง",subject:"รายวิชา",mixed:"ข้อสอบรวม",real:"ข้อสอบจริง"};
+/* ช่องชุดรายวิชา 1-20 ที่ยังว่าง ของวิชาที่เลือก */
+function fillSlots(){
+  const sub=$("nSubj").value,used=new Set(examSets.filter(e=>e.kind==="subject"&&e.subject===sub).map(e=>Number(e.slot)));
+  const free=[...Array(20)].map((_,i)=>i+1).filter(n=>!used.has(n));
+  $("nSlot").innerHTML=free.length?free.map(n=>`<option value="${n}">ชุดที่ ${n} · ${n<=5?"Free":"Premium"}</option>`).join(""):'<option value="">ครบ 20 ชุดแล้ว</option>';
+}
+const nKindSync=()=>{const k=$("nKind").value,one=k==="subject"||k==="real";
+  $("nSubj").innerHTML=(k==="real"?REAL_SUBJECTS:SUBJECTS).map(x=>`<option>${esc(x)}</option>`).join("");
+  $("nSubjBox").classList.toggle("hide",!one);$("nSlotBox").classList.toggle("hide",k!=="subject");$("nSecsBox").classList.toggle("hide",one);
+  $("nTier").closest("div").classList.toggle("hide",one);
+  if(one&&+$("nMins").value===180)$("nMins").value=30;if(!one&&+$("nMins").value===30)$("nMins").value=180;fillSlots()};
+$("nKind").onchange=nKindSync;$("nSubj").onchange=fillSlots;
 $("exNewBtn").onclick=()=>{
   $("nKind").value="mock";nKindSync();
   $("nTitle").value="";$("nTracks").innerHTML=tracksHtml([]);$("nTier").value="premium";$("nMins").value=180;$("nSecs").value=DEFAULT_SECS.join("\n");$("nErr").textContent="";
@@ -519,15 +543,16 @@ $("exNewBtn").onclick=()=>{
 };
 $("nCancel").onclick=()=>{$("exNew").classList.add("hide");$("exNewBtn").classList.remove("hide")};
 $("nGo").onclick=async()=>{
-  const kind=$("nKind").value,subject=kind==="subject"?$("nSubj").value:"";
-  const title=$("nTitle").value.trim().slice(0,80),track=readTracks("nTracks"),secs=kind==="subject"?[subject]:$("nSecs").value.split("\n").map(x=>x.trim()).filter(Boolean);
+  const kind=$("nKind").value,one=kind==="subject"||kind==="real",subject=one?$("nSubj").value:"",slot=kind==="subject"?Number($("nSlot").value)||0:0;
+  if(kind==="subject"&&!slot){$("nErr").textContent="วิชานี้ครบ 20 ชุดแล้ว";return}
+  const title=$("nTitle").value.trim().slice(0,80),track=readTracks("nTracks"),secs=one?[subject]:$("nSecs").value.split("\n").map(x=>x.trim()).filter(Boolean);
   const err=!title?"กรุณาใส่ชื่อชุด":!track.length?"กรุณาเลือกสายสอบอย่างน้อย 1 สาย":!secs.length?"กรุณาใส่วิชาอย่างน้อย 1 วิชา":"";
   $("nErr").textContent=err;if(err)return;
   const id="set"+Date.now().toString(36),order=Math.max(0,...examSets.map(e=>Number(e.order)||0))+1,now=new Date().toISOString();
   $("nGo").disabled=true;
   try{
     await setDoc(doc(db,"examItems",id),{items:[],imgs:[],keys:"",updatedAt:now});
-    await setDoc(doc(db,"exams",id),{title,kind,...(subject?{subject}:{}),track,tier:$("nTier").value,minutes:clampMins($("nMins").value),count:0,sections:secs.map(name=>({name,from:1,to:0})),order,keyVersion:1,updatedAt:now});
+    await setDoc(doc(db,"exams",id),{title,kind,...(subject?{subject}:{}),...(slot?{slot}:{}),published:false,track,tier:kind==="subject"?(slot<=5?"free":"premium"):kind==="real"?"premium":$("nTier").value,minutes:clampMins($("nMins").value),count:0,sections:secs.map(name=>({name,from:1,to:0})),order,keyVersion:1,updatedAt:now});
     $("exNew").classList.add("hide");$("exNewBtn").classList.remove("hide");
     await loadExams();await openSet(id);
   }catch(e){$("nErr").textContent=`สร้างไม่สำเร็จ (${e.code||e.message})`}
@@ -585,7 +610,23 @@ $("exBack").onclick=async()=>{
   if(edit&&!await uiConfirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ออกจากหน้านี้ใช่หรือไม่?"))return;
   ed=null;edit=null;$("exEditView").classList.add("hide");$("exListView").classList.remove("hide");renderExams();window.scrollTo(0,0);
 };
-function fillSettings(){
+/* เผยแพร่: ชุดใหม่เป็นฉบับร่างก่อน ตรวจแล้วค่อยกดเผยแพร่ให้นักเรียนเห็น (ชุดเดิมที่ไม่มีค่านี้ถือว่าเผยแพร่แล้ว) */
+const isPub=m=>m.published!==false;
+function drawPub(){
+  const on=isPub(ed.meta);$("pubBar").className="pubbar "+(on?"on":"off");
+  $("pubTxt").textContent=on?"เผยแพร่แล้ว — นักเรียนเห็นและทำชุดนี้ได้":"ฉบับร่าง — นักเรียนยังไม่เห็นชุดนี้ ตรวจแล้วกดเผยแพร่";
+  $("pubBtn").textContent=on?"ยกเลิกการเผยแพร่":"เผยแพร่ให้นักเรียน";
+}
+$("pubBtn").onclick=async()=>{
+  const on=!isPub(ed.meta);
+  if(on&&!ed.items.length){alert("ชุดนี้ยังไม่มีข้อสอบ");return}
+  if(!await uiConfirm(on?`เผยแพร่ "${ed.meta.title}" ให้นักเรียนทำ\nใช่หรือไม่?`:`ยกเลิกการเผยแพร่ "${ed.meta.title}"\nนักเรียนจะไม่เห็นชุดนี้จนกว่าจะเผยแพร่อีกครั้ง\nใช่หรือไม่?`,{ok:on?"เผยแพร่":"ยกเลิกการเผยแพร่",cancel:"ไม่ใช่"}))return;
+  $("pubBtn").disabled=true;
+  try{await updateDoc(doc(db,"exams",ed.id),{published:on});ed.meta.published=on;const x=examSets.find(e=>e.id===ed.id);if(x)x.published=on;drawPub();edStatus(on?"เผยแพร่แล้ว":"ยกเลิกการเผยแพร่แล้ว")}
+  catch(e){edStatus("บันทึกไม่สำเร็จ",true)}
+  $("pubBtn").disabled=false;
+};
+function fillSettings(){drawPub();
   const m=ed.meta;$("sTitle").value=m.title||"";$("sTracks").innerHTML=tracksHtml(m.track||[]);$("sTier").value=m.tier==="free"?"free":"premium";$("sMins").value=Number(m.minutes)||180;
 }
 $("sSave").onclick=async()=>{
