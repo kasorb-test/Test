@@ -1387,6 +1387,38 @@ input{
     max-width:none !important;
   }
 }
+
+/* ===== หน้าเข้าสู่ระบบ / สมัครสมาชิก: บล็อกโปร่งบนพื้นพีช ===== */
+#authShell{min-height:100vh;background:radial-gradient(520px 320px at 50% 0,rgba(255,150,100,.32),transparent 70%),linear-gradient(180deg,#fff6f0 0%,#fbf4f0 55%,#eef1f8 100%)}
+#authShell .auth-main{max-width:500px;padding:56px 18px 40px}
+#authShell .brand-title{margin-bottom:2px}#authShell .subtitle{margin-bottom:26px}
+.au{display:flex;flex-direction:column;gap:14px}
+.au-blk{background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 12px 34px rgba(232,98,8,.08),0 2px 6px rgba(0,0,0,.03);backdrop-filter:blur(10px)}
+.au-head{display:flex;align-items:center;gap:16px;padding:18px 20px}
+.au-ic{flex:0 0 auto;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ff8a3d,#ff5a1f);box-shadow:0 10px 22px rgba(255,90,31,.35)}
+.au-ic svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.au-ht{flex:1;min-width:0}.au-ht h2{margin:0;font-size:24px;font-weight:900;color:#141414;line-height:1.25}.au-ht p{margin:3px 0 0;color:#6b7280;font-weight:600;font-size:14.5px}
+.au-go{flex:0 0 auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff1e8;border:1px solid #ffd3b8}
+.au-go svg{width:20px;height:20px;fill:none;stroke:#ff6a00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.au-fields{padding:6px 14px}
+.au-row{display:flex;align-items:center;gap:14px;padding:8px 0;position:relative;cursor:text}
+.au-row+.au-row::before{content:"";position:absolute;left:62px;right:4px;top:0;height:1px;background:#eee}
+.au-fi{flex:0 0 auto;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.au-fi svg{width:22px;height:22px;fill:none;stroke:#ff6a00;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.au-row input{flex:1;min-width:0;margin:0!important;padding:12px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:16.5px;color:#111;outline:none}
+.au-row input::placeholder{color:#8a8f98}
+.au-row .password-eye{position:static;transform:none;flex:0 0 auto;width:40px;height:40px;background:none;border:0;display:grid;place-items:center}
+.au-row .password-eye svg{width:22px;height:22px;fill:none;stroke:#555;stroke-width:1.8}
+.au-forgot{text-align:right;margin:-4px 6px 0}.au-forgot button,.au-link button{border:0;background:none;padding:0;font:inherit;font-weight:800;color:#5b6170;cursor:pointer}
+.au-main{width:100%;padding:16px;border:0;border-radius:999px;background:linear-gradient(90deg,#ff9a6c,#ff6a2b);color:#fff;font:inherit;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 12px 26px rgba(255,106,43,.3);transition:transform .12s,box-shadow .12s}
+.au-main:hover{transform:translateY(-1px);box-shadow:0 16px 30px rgba(255,106,43,.36)}.au-main:disabled{opacity:.6}
+.au-or{display:flex;align-items:center;gap:12px;color:#8a8f98;font-weight:700;font-size:13px;letter-spacing:1px}.au-or::before,.au-or::after{content:"";flex:1;height:1px;background:#e8e3df}
+.au-alt{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border:1px solid #fff;border-radius:999px;background:rgba(255,255,255,.85);color:#374151;font:inherit;font-size:16.5px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.au-alt svg{width:22px;height:22px;fill:none;stroke:#ff6a00;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.au-pad{padding:18px 20px}.au-pad h3{margin:14px 0 10px;font-size:15px}
+.au-link{text-align:center;margin:2px 0 0;color:#6b7280;font-weight:600}.au-link button{color:#ff6a00}
+.au-msg{text-align:center;margin:0}
+@media(max-width:480px){#authShell .auth-main{padding-top:36px}.au-head{padding:14px 16px;gap:12px}.au-ic{width:52px;height:52px}.au-ht h2{font-size:21px}.au-fi{width:42px;height:42px}.au-row+.au-row::before{left:56px}}
 </style>
 
 <style id="kasorb-gender-rank-layout">
@@ -3196,7 +3228,7 @@ body.guest .hb-guest button{flex:1;padding:9px 10px;border:0;border-radius:11px;
 body.guest .hb-guest button.reg{background:#16305f}
 @media(max-width:760px){body.guest .hb-guest{flex:1 1 100%}}
 body:not(.on-home).guest .hb .hb-guest{flex:1 1 auto;margin-left:auto;max-width:380px}
-#authShell.over{position:fixed;inset:0;z-index:200;overflow:auto;background:#f6f6f6}
+#authShell.over{position:fixed;inset:0;z-index:900;overflow:auto;background:radial-gradient(520px 320px at 50% 0,rgba(255,150,100,.32),transparent 70%),linear-gradient(180deg,#fff6f0 0%,#fbf4f0 55%,#eef1f8 100%)}
 .auth-close{display:inline-block;margin:0 0 8px;padding:9px 14px;border:1px solid #f1d9c6;border-radius:11px;background:#fff6ef;color:#e86208;font-weight:800;cursor:pointer;font-family:inherit}
 .auth-why{margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#fff1e6;color:#c2410c;font-weight:700;font-size:14px;text-align:center}
 /* กล่องทักทาย I WANNA BE... แสดงเฉพาะหน้าหลัก */
@@ -3275,50 +3307,45 @@ window.alert=m=>{uiAlert(m)};
 <p class="auth-why hidden" id="authWhy">เข้าสู่ระบบหรือสมัครสมาชิกก่อน เพื่อใช้งานส่วนนี้</p>
 <h1 class="brand-title"><span class="brand-name">กะสอบ</span> <span class="brand-test">TEST</span></h1>
 <p class="subtitle">ระบบฝึกทำแบบทดสอบออนไลน์</p>
-<section class="card" id="loginPage">
-<h2>เข้าสู่ระบบ</h2>
-<input id="loginEmail" placeholder="อีเมล" type="email"/>
-<div class="password-wrap">
-<input id="loginPassword" placeholder="รหัสผ่าน" type="password"/>
+<section class="au" id="loginPage">
+<div class="au-blk au-head"><div class="au-ic"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4 3 7 7 9 4-2 7-5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><div class="au-ht"><h2>ยินดีต้อนรับกลับ</h2><p>เข้าสู่ระบบเพื่อฝึกต่อ</p></div><span class="au-go"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M14 4h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5"/></svg></span></div>
+<div class="au-blk au-fields">
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><input id="loginEmail" placeholder="อีเมล" type="email" autocomplete="email"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><input id="loginPassword" placeholder="รหัสผ่าน" type="password" autocomplete="current-password"/>
 <button aria-label="แสดงหรือซ่อนรหัสผ่าน" class="password-eye" id="toggleLoginPassword" type="button">
 <svg id="eyeIcon" viewbox="0 0 24 24">
 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
 <circle cx="12" cy="12" r="3"></circle>
 </svg>
-</button>
+</button></label>
 </div>
-<button class="btn primary" id="loginBtn">
-เข้าสู่ระบบ
-</button>
-<button class="btn" id="goRegisterBtn" style="background:#22c55e;color:white;font-weight:700;">
-สมัครสมาชิก
-</button>
-<button class="btn" id="forgotBtn" style="background:#f3f4f6;color:#666;border:1px solid #e5e7eb;">
-ลืมรหัสผ่าน
-</button>
-<p class="small" id="loginMsg"></p>
+<div class="au-forgot"><button type="button" id="forgotBtn">ลืมรหัสผ่าน?</button></div>
+<button class="au-main" id="loginBtn" type="button">เข้าสู่ระบบ</button>
+<div class="au-or"><span>หรือ</span></div>
+<button class="au-alt" id="goRegisterBtn" type="button"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 12-5M18 14v6M15 17h6"/></svg>สมัครสมาชิกใหม่</button>
+<p class="small au-msg" id="loginMsg"></p>
 </section>
-<section class="card hidden" id="registerPage">
-<h2>สมัครสมาชิก</h2>
-<input id="regEmail" placeholder="อีเมล" type="email"/>
-<input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password"/>
-<input id="regNickname" maxlength="20" placeholder="ชื่อเล่น (ไม่เกิน 20 ตัวอักษร)" type="text"/>
+<section class="au hidden" id="registerPage">
+<div class="au-blk au-head"><div class="au-ic"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 12-5M18 14v6M15 17h6"/></svg></div><div class="au-ht"><h2>สมัครสมาชิก</h2><p>สร้างบัญชีฟรี เริ่มฝึกทำข้อสอบได้ทันที</p></div></div>
+<div class="au-blk au-fields">
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><input id="regEmail" placeholder="อีเมล" type="email" autocomplete="email"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><input id="regPassword" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" type="password" autocomplete="new-password"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><input id="regNickname" maxlength="20" placeholder="ชื่อเล่น (ไม่เกิน 20 ตัวอักษร)" type="text"/></label>
+<label class="au-row"><span class="au-fi"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></span><input id="regQuote" maxlength="50" placeholder="คติประจำตัว (ไม่บังคับ)" type="text"/></label>
+</div>
+<div class="au-blk au-pad">
 <div class="gender-register" aria-label="เพศ">
   <span class="gender-label">เพศ</span>
   <label><input type="radio" name="regGender" value="male"/> ชาย</label>
   <label><input type="radio" name="regGender" value="female"/> หญิง</label>
   <label><input type="radio" name="regGender" value="unspecified" checked/> ไม่ระบุ</label>
 </div>
-<input id="regQuote" maxlength="50" placeholder="คำคม / คำคม/คติประจำตัว (ไม่บังคับ)" type="text"/>
 <h3>เลือกรูปโปรไฟล์</h3>
 <div class="avatar-grid" id="registerAvatarGrid"></div>
-<button class="btn primary" id="registerBtn">
-สร้างบัญชี
-</button>
-<button class="btn secondary" id="backLoginBtn">
-กลับหน้าเข้าสู่ระบบ
-</button>
-<p class="small" id="registerMsg"></p>
+</div>
+<button class="au-main" id="registerBtn" type="button">สร้างบัญชี</button>
+<p class="au-link">มีบัญชีแล้ว? <button type="button" id="backLoginBtn">เข้าสู่ระบบ</button></p>
+<p class="small au-msg" id="registerMsg"></p>
 </section>
 </main>
 </div>
