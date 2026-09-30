@@ -2678,6 +2678,10 @@ input{
 .st-track{z-index:2}
 /* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
 @media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
+/* ตัวละครจากรูปอวตารจริง: ครึ่งบนเป็นรูปอวตารที่ตัดพื้นหลัง ต่อขาที่เดินได้ */
+.st-kid.cut .st-legs{position:absolute;left:1px;bottom:0;width:52px;height:26px;overflow:visible}
+.st-kid.cut .st-bust{position:absolute;left:50%;bottom:22px;width:70px!important;height:auto!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;object-fit:contain;display:block;transform:translateX(-50%);filter:drop-shadow(0 3px 5px rgba(22,48,95,.25));pointer-events:none;-webkit-user-drag:none}
+.st-kid.cut.flip .st-legs{transform:scaleX(-1)}
 /* หันตัว / หมุนตัวแบบ 3 มิติ */
 #stMe{perspective:520px}
 .st-turn{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 60%}
@@ -7355,6 +7359,24 @@ function bindShop(){
     catch(e){console.error(e);btn.disabled=false;alert("แลกไม่สำเร็จ ลองใหม่อีกครั้ง")}
   });
 }
+/* ตัวละครบนบันไดยศ: รูปอวตารคน/สัตว์ (avatar01-12) ใช้รูปที่ตัดพื้นหลังแล้วเป็นตัวจริงครึ่งบน ต่อขาที่เดินได้
+   รูปอวตารแบบสิ่งของ และรูปที่อัปโหลดเอง ใช้หัววงกลมบนตัวการ์ตูนเครื่องแบบ */
+function stCharHtml(){
+  const src=$("topAvatar").src||"",m=/(?:^|\/)avatar(\d{2})\.png(?:$|\?)/.exec(src),n=m?Number(m[1]):0;
+  const legs='<g class="k-leg l"><rect x="20" y="2" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="23.5" cy="24" rx="7" ry="4" fill="#111"/></g><g class="k-leg r"><rect x="31" y="2" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="36.5" cy="24" rx="7" ry="4" fill="#111"/></g><rect x="18" y="0" width="24" height="7" rx="3" fill="#27324a"/>';
+  if(!src.startsWith("data:")&&n>=1&&n<=12)
+    return `<div class="st-kid cut"><svg class="st-legs" viewBox="0 0 60 30" aria-hidden="true">${legs}</svg><img class="st-bust" src="avatar-cut/avatar${m[1]}.png" alt="" onerror="this.closest('.st-turn').innerHTML=stCharFallback()"></div>`;
+  return stCharFallback();
+}
+function stCharFallback(){return `<div class="st-kid"><svg class="st-body" viewBox="0 0 60 64" aria-hidden="true">
+      <g class="k-arm l"><path d="M16 12 Q8 24 10 34" stroke="#1f3b73" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="10" cy="35" r="4.5" fill="#f6d2b0"/></g>
+      <g class="k-arm r"><path d="M44 12 Q52 24 50 34" stroke="#1f3b73" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="50" cy="35" r="4.5" fill="#f6d2b0"/></g>
+      <g class="k-leg l"><rect x="20" y="36" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="23.5" cy="58" rx="7" ry="4" fill="#111"/></g>
+      <g class="k-leg r"><rect x="31" y="36" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="36.5" cy="58" rx="7" ry="4" fill="#111"/></g>
+      <path d="M15 12 Q15 4 30 4 Q45 4 45 12 L44 40 H16 Z" fill="#16305f"/><path d="M26 4 L30 14 L34 4" fill="#fff"/><path d="M29 6 L30 16 L31 6" fill="#e11d48"/>
+      <rect x="16" y="34" width="28" height="4" fill="#0f2449"/><rect x="28" y="34" width="4" height="4" fill="#f5b301"/><path d="M36 17 l3 1.5 3-1.5 v4 l-3 2-3-2z" fill="#f5b301"/></svg>
+      <img class="st-head" src="${escHtml($("topAvatar").src)}" alt=""></div>`}
+window.stCharFallback=stCharFallback;
 const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
 function stairsHtml(lv,xp){
   const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;
@@ -7366,14 +7388,7 @@ function stairsHtml(lv,xp){
     <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
     <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
     ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+128}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+154}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
-    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn"><div class="st-kid"><svg class="st-body" viewBox="0 0 60 64" aria-hidden="true">
-      <g class="k-arm l"><path d="M16 12 Q8 24 10 34" stroke="#1f3b73" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="10" cy="35" r="4.5" fill="#f6d2b0"/></g>
-      <g class="k-arm r"><path d="M44 12 Q52 24 50 34" stroke="#1f3b73" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="50" cy="35" r="4.5" fill="#f6d2b0"/></g>
-      <g class="k-leg l"><rect x="20" y="36" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="23.5" cy="58" rx="7" ry="4" fill="#111"/></g>
-      <g class="k-leg r"><rect x="31" y="36" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="36.5" cy="58" rx="7" ry="4" fill="#111"/></g>
-      <path d="M15 12 Q15 4 30 4 Q45 4 45 12 L44 40 H16 Z" fill="#16305f"/><path d="M26 4 L30 14 L34 4" fill="#fff"/><path d="M29 6 L30 16 L31 6" fill="#e11d48"/>
-      <rect x="16" y="34" width="28" height="4" fill="#0f2449"/><rect x="28" y="34" width="4" height="4" fill="#f5b301"/><path d="M36 17 l3 1.5 3-1.5 v4 l-3 2-3-2z" fill="#f5b301"/></svg>
-      <img class="st-head" src="${escHtml($("topAvatar").src)}" alt=""></div></div><i class="st-shadow"></i></div></div></div>
+    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn">${stCharHtml()}</div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
     <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
     <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
