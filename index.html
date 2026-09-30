@@ -6085,13 +6085,16 @@ function renderStats(home){
   loadOnlineCount();
 }
 
-/* กำลังใช้งาน: สมาชิกที่เปิดเว็บภายใน 10 นาทีล่าสุด (ส่งสัญญาณทุก 5 นาที) */
-const ONLINE_WINDOW_MS=10*60*1000;
-const HEARTBEAT_MS=5*60*1000;
+/* กำลังใช้งาน: สมาชิกที่เปิดเว็บภายใน 20 นาทีล่าสุด
+   ส่งสัญญาณทุก 15 นาที เฉพาะตอนหน้าเว็บเปิดอยู่ และไม่ส่งซ้ำถ้าเพิ่งส่งไป (รีเฟรช / เปิดหลายแท็บ) เพื่อลดการบันทึก */
+const ONLINE_WINDOW_MS=20*60*1000;
+const HEARTBEAT_MS=15*60*1000;
 let heartbeatTimer=null;
 
 async function sendHeartbeat(){
   if(!currentUser || document.visibilityState==="hidden") return;
+  const key="kasorbBeat:"+currentUser.uid;
+  try{if(Date.now()-Number(localStorage.getItem(key)||0)<HEARTBEAT_MS-60000) return;localStorage.setItem(key,String(Date.now()))}catch(e){}
   try{
     await setDoc(doc(db,"presence",currentUser.uid),{lastSeen:serverTimestamp()});
   }catch(error){
