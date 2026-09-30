@@ -257,7 +257,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon", "outfit"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -277,6 +277,9 @@ service cloud.firestore {
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["answered"])
             || (request.resource.data.answered is int && request.resource.data.answered >= 0
                 && request.resource.data.answered <= 20000))
+        // ชุดตัวละครบนบันไดยศ (ของแต่งตัว ไม่มีผลกับคะแนน)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["outfit"])
+            || request.resource.data.outfit in ["tee", "student", "track", "cadet", "khaki", "white", "navy", "gold"])
         // เหรียญ: เปลี่ยนได้ 3 ทางเท่านั้น คือเช็คอินรายวัน เหรียญขยัน และแลกโค้ดส่วนลด
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin"])
             || validCheckin(request.resource.data, resource.data))
