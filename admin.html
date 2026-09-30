@@ -130,6 +130,17 @@
 .ferr{color:#c62828;font-weight:700;font-size:14px;margin:8px 0 0}
 @media(max-width:760px){.xtop{margin:-20px -14px 0;padding:10px 14px}.xpaper{padding:2px 12px 14px}.xq{padding-right:0;margin-top:34px}.qtools{top:12px}.xset .row3{grid-template-columns:1fr}}
 #shell .content{min-width:0}.mno{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#16305f;letter-spacing:.03em}
+.uidlg{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);animation:uidIn .15s ease-out}
+@keyframes uidIn{from{opacity:0}to{opacity:1}}
+.uidlg .box{width:100%;max-width:400px;padding:22px 20px 16px;border-radius:18px;background:#fff;box-shadow:0 24px 60px rgba(0,0,0,.28);font-family:inherit;animation:uidUp .18s ease-out}
+@keyframes uidUp{from{transform:translateY(10px)}to{transform:none}}
+.uidlg .msg{margin:0 0 16px;font-size:15.5px;line-height:1.65;color:#1f2937;white-space:pre-line;font-weight:600}
+.uidlg input{width:100%;box-sizing:border-box;margin:0 0 14px;padding:12px;border:1.5px solid #e5e7eb;border-radius:12px;font:inherit;font-size:15px}
+.uidlg input:focus{outline:none;border-color:#ff6a00}
+.uidlg .act{display:flex;gap:8px;justify-content:flex-end}
+.uidlg .act button{min-width:96px;margin:0;padding:11px 18px;border:0;border-radius:12px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;width:auto}
+.uidlg .ok{background:#ff6a00;color:#fff}.uidlg .ok.danger{background:#c62828}
+.uidlg .no{background:#f1f3f6;color:#374151}
 </style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>แบบทดสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แต่ละส่วนมีปุ่มบันทึกของตัวเอง แก้ส่วนไหนก็กดบันทึกเฉพาะส่วนนั้น</p><div class="hsec">
 <h3>การ์ดนับถอยหลัง</h3>
 <div class="row"><div><label>การ์ดที่ 1: สายงาน</label><input id="exam0Title"></div><div><label>วันสอบ</label><input id="exam0Date" type="date"></div></div>
@@ -165,6 +176,34 @@
 <div class="row3"><div><label>ประเภท</label><select id="sTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="sMins" type="number" min="1" max="600"></div></div>
 <div class="btns" style="margin-bottom:12px"><button type="button" class="btn-navy" id="sSave">บันทึกการตั้งค่า</button><button type="button" class="btn-red" id="sDel">ลบชุดนี้</button></div></details>
 <div class="chips" id="exChips"></div><div class="xpaper" id="exPaper"></div></div></div></section></div>
+<script>
+/* กล่องข้อความในหน้าเว็บ แทนกล่องของเบราว์เซอร์ (alert / confirm / prompt) */
+(function(){
+function dlg(message,opt){
+  opt=opt||{};
+  return new Promise(res=>{
+    const wrap=document.createElement("div");wrap.className="uidlg";wrap.setAttribute("role","dialog");
+    const box=document.createElement("div");box.className="box";
+    const p=document.createElement("p");p.className="msg";p.textContent=String(message??"");box.appendChild(p);
+    let inp=null;
+    if(opt.input!==undefined){inp=document.createElement("input");inp.type="text";inp.value=opt.input||"";box.appendChild(inp)}
+    const act=document.createElement("div");act.className="act";
+    const done=v=>{wrap.remove();document.removeEventListener("keydown",key,true);res(v)};
+    if(opt.cancel){const n=document.createElement("button");n.type="button";n.className="no";n.textContent=opt.cancel;n.onclick=()=>done(opt.input!==undefined?null:false);act.appendChild(n)}
+    const o=document.createElement("button");o.type="button";o.className="ok"+(opt.danger?" danger":"");o.textContent=opt.ok||"ตกลง";
+    o.onclick=()=>done(opt.input!==undefined?inp.value:true);act.appendChild(o);
+    box.appendChild(act);wrap.appendChild(box);document.body.appendChild(wrap);
+    const key=e=>{if(e.key==="Escape"){e.preventDefault();done(opt.cancel?(opt.input!==undefined?null:false):true)}else if(e.key==="Enter"&&document.activeElement!==act.querySelector(".no")){e.preventDefault();o.click()}};
+    document.addEventListener("keydown",key,true);
+    setTimeout(()=>(inp||o).focus(),30);
+  });
+}
+window.uiAlert=m=>dlg(m,{ok:"ตกลง"});
+window.uiConfirm=(m,o)=>dlg(m,{ok:(o&&o.ok)||"ตกลง",cancel:(o&&o.cancel)||"ยกเลิก",danger:o&&o.danger});
+window.uiPrompt=(m,v)=>dlg(m,{ok:"บันทึก",cancel:"ยกเลิก",input:v??""});
+window.alert=m=>{uiAlert(m)};
+})();
+</script>
 <script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";import{getFirestore,collection,getDocs,doc,updateDoc,getDoc,setDoc,deleteDoc,runTransaction,deleteField}from"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";const firebaseConfig={apiKey:"AIzaSyAE7MoJ1ccr5Pf2pYr6JMyvnPPmBfxd_RE",authDomain:"kasorb-test-ad000.firebaseapp.com",projectId:"kasorb-test-ad000",storageBucket:"kasorb-test-ad000.firebasestorage.app",messagingSenderId:"999267444865",appId:"1:999267444865:web:5509772cd5f94af768c580"};/* แยกการล็อกอินของแอดมินจากหน้าเว็บหลัก (ตั้งชื่อ app ต่างกัน ระบบจะจำ session แยกกัน) */
 const app=initializeApp(firebaseConfig,"kasorb-admin"),auth=getAuth(app),db=getFirestore(app),$=x=>document.getElementById(x),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 const ADMIN="thananitwit@gmail.com";
@@ -209,7 +248,7 @@ document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.datase
 /* รูปที่นักเรียนอัปโหลด: แอดมินลบได้ถ้าไม่เหมาะสม นักเรียนจะกลับไปใช้รูปการ์ตูนเดิม */
 function hasPhoto(u){return typeof u.photo==="string"&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u.photo)}
 async function removePhoto(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;
-if(!confirm(`ยืนยันลบรูปที่ ${who} อัปโหลด\nจะกลับไปใช้รูปการ์ตูนเดิม\nใช่หรือไม่?`))return;
+if(!await uiConfirm(`ยืนยันลบรูปที่ ${who} อัปโหลด\nจะกลับไปใช้รูปการ์ตูนเดิม\nใช่หรือไม่?`))return;
 try{await updateDoc(doc(db,"users",id),{photo:""});u.photo="";renderMembers();$("umsg").className="ok";$("umsg").textContent=`ลบรูปของ ${who} แล้ว`}
 catch(e){$("umsg").className="err";$("umsg").textContent=`ลบรูปไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}}
 async function saveRow(id){
@@ -217,7 +256,7 @@ const u=members.find(x=>x.id===id);const p=pending.get(id);if(!u||!p)return;
 const who=u.nickname||u.email,label=PLANS.find(x=>x[0]===p.v)[1];
 const data=p.v==="free"?{plan:"free",planType:null,premiumUntil:null}:p.v==="lifetime"?{plan:"premium",planType:"lifetime",premiumUntil:null}:{plan:"premium",planType:"yearly",premiumUntil:p.until};
 const detail=p.v==="yearly"?`\nใช้ได้ถึง ${thDate(p.until)}`:p.v==="lifetime"?"\nไม่มีวันหมดอายุ":"";
-if(!confirm(`ยืนยันบันทึก ${who} เป็น ${label}${detail}\nใช่หรือไม่?`))return;
+if(!await uiConfirm(`ยืนยันบันทึก ${who} เป็น ${label}${detail}\nใช่หรือไม่?`))return;
 await savePlan(document.querySelector(`.seg[data-id="${CSS.escape(id)}"]`),u,data,p.v);
 }
 async function savePlan(seg,u,data,v){const who=u.nickname||u.email;
@@ -240,12 +279,12 @@ document.querySelectorAll(".rm-dev").forEach(b=>b.onclick=()=>removeDevice(b.dat
 }
 async function loadDevices(){try{const s=await getDocs(collection(db,"devices"));devices=new Map();s.forEach(d=>devices.set(d.id,d.data()));renderDevices()}catch(e){$("devList").innerHTML=`<p class="muted">โหลดข้อมูลอุปกรณ์ไม่ได้ (${esc(e.code||e.message)}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว</p>`}}
 async function removeDevice(uid,devId){const u=members.find(x=>x.id===uid);const d=devices.get(uid);if(!u||!d||!d.ids||!d.ids[devId])return;const who=u.nickname||u.email;const name=d.ids[devId].name||"อุปกรณ์";const wasActive=d.active===devId;
-if(!confirm(`ยืนยันลบ "${name}" ออกจากบัญชีของ ${who}${wasActive?"\nเครื่องนี้กำลังใช้งานอยู่ จะออกจากระบบทันที":""}\nใช่หรือไม่?`))return;
+if(!await uiConfirm(`ยืนยันลบ "${name}" ออกจากบัญชีของ ${who}${wasActive?"\nเครื่องนี้กำลังใช้งานอยู่ จะออกจากระบบทันที":""}\nใช่หรือไม่?`))return;
 const ids={...d.ids};delete ids[devId];const rest=Object.keys(ids);
 try{if(!rest.length){await deleteDoc(doc(db,"devices",uid));devices.delete(uid)}else{const next={ids,active:wasActive?null:d.active};await updateDoc(doc(db,"devices",uid),next);devices.set(uid,{...d,...next})}
 renderDevices();$("dmsg").className="ok";$("dmsg").textContent=`ลบ "${name}" ของ ${who} แล้ว`}catch(e){$("dmsg").className="";$("dmsg").textContent=`ลบไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}}
 async function resetDevices(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;
-if(!confirm(`ยืนยันลบอุปกรณ์ทั้งหมดของ ${who}\nเครื่องที่ผูกไว้ทั้งหมดจะถูกลบ และเครื่องที่กำลังใช้งานอยู่จะออกจากระบบ\nใช่หรือไม่?`))return;
+if(!await uiConfirm(`ยืนยันลบอุปกรณ์ทั้งหมดของ ${who}\nเครื่องที่ผูกไว้ทั้งหมดจะถูกลบ และเครื่องที่กำลังใช้งานอยู่จะออกจากระบบ\nใช่หรือไม่?`))return;
 try{await deleteDoc(doc(db,"devices",id));devices.delete(id);renderDevices();$("dmsg").className="ok";$("dmsg").textContent=`ลบอุปกรณ์ทั้งหมดของ ${who} แล้ว`}catch(e){$("dmsg").className="";$("dmsg").textContent=`รีเซ็ตไม่สำเร็จ (${e.code||e.message})`}}
 $("dq").oninput=renderDevices;
 async function load(){try{let s=await getDocs(collection(db,"users")),a=[];s.forEach(d=>{let u=d.data();if(u.role!=="admin"&&(u.email||"").toLowerCase()!==ADMIN)a.push({id:d.id,...u})});a.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9)||(x.email||"").localeCompare(y.email||""));members=a;setDoc(doc(db,"site","home"),{members:a.length},{merge:true}).catch(()=>{});renderMembers();loadDevices();backfillMemberNo()}catch(e){$("users").textContent="โหลดรายชื่อไม่ได้"}}
@@ -364,7 +403,7 @@ $("impGo").onclick=async()=>{
   const ok=pendingExams.filter(p=>!p.errs.length);
   if(!ok.length) return;
   const exist=ok.filter(p=>examSets.some(e=>e.id===p.d.id));
-  if(exist.length&&!confirm(`มีชุดเดิมอยู่แล้ว ${exist.length} ชุด (${exist.map(p=>p.d.title).join(", ")})\nนำเข้าทับของเดิมใช่หรือไม่?`)) return;
+  if(exist.length&&!await uiConfirm(`มีชุดเดิมอยู่แล้ว ${exist.length} ชุด (${exist.map(p=>p.d.title).join(", ")})\nนำเข้าทับของเดิมใช่หรือไม่?`)) return;
   $("impGo").disabled=true;$("impMsg").className="ok";
   let done=0;
   try{
@@ -423,7 +462,7 @@ function renderExams(){
 }
 async function deleteExam(id){
   const e=examSets.find(x=>x.id===id);if(!e)return false;
-  if(!confirm(`ยืนยันลบ "${e.title}" (${e.count} ข้อ)\nนักเรียนจะทำชุดนี้ไม่ได้อีก\nใช่หรือไม่?`))return false;
+  if(!await uiConfirm(`ยืนยันลบ "${e.title}" (${e.count} ข้อ)\nนักเรียนจะทำชุดนี้ไม่ได้อีก\nใช่หรือไม่?`))return false;
   try{try{const o=await getDoc(doc(db,"examItems",id));for(const key of (o.exists()&&o.data().imgs)||[]) await deleteDoc(doc(db,"examImg",key))}catch(e){}
     await deleteDoc(doc(db,"examItems",id));await deleteDoc(doc(db,"exams",id));await loadExams();return true}
   catch(err){alert(`ลบไม่สำเร็จ (${err.code||err.message})`);return false}
@@ -479,8 +518,8 @@ async function openSet(id){
     edit=null;fillSettings();renderPaper();edStatus("");
   }catch(e){$("exPaper").innerHTML=`<p class="err">โหลดข้อสอบไม่ได้ (${esc(e.code||e.message)})</p>`;edStatus("")}
 }
-$("exBack").onclick=()=>{
-  if(edit&&!confirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ออกจากหน้านี้ใช่หรือไม่?"))return;
+$("exBack").onclick=async()=>{
+  if(edit&&!await uiConfirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ออกจากหน้านี้ใช่หรือไม่?"))return;
   ed=null;edit=null;$("exEditView").classList.add("hide");$("exListView").classList.remove("hide");renderExams();window.scrollTo(0,0);
 };
 function fillSettings(){
@@ -641,31 +680,31 @@ async function saveForm(btn){
 $("exPaper").addEventListener("click",async ev=>{
   const b=ev.target.closest("button[data-a]");if(!b)return;
   const a=b.dataset.a,si=Number(b.dataset.s),it=ed.items.find(x=>x.n===Number(b.dataset.n));
-  if(edit&&["edit","add"].includes(a)&&!confirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ทิ้งการแก้ไขนั้นใช่หรือไม่?"))return;
+  if(edit&&["edit","add"].includes(a)&&!await uiConfirm("ยังไม่ได้บันทึกข้อที่กำลังแก้ ทิ้งการแก้ไขนั้นใช่หรือไม่?"))return;
   if(a==="edit") startEdit(it,it.sec);
   else if(a==="add") startEdit(null,si);
   else if(a==="fcancel"){edit=null;renderPaper()}
   else if(a==="fsave") saveForm(b);
   else if(a==="rmimg"){keepForm();edit.imgs[b.closest(".imgpick").dataset.f]="";renderPaper()}
   else if(a==="del"){
-    if(!confirm(`ลบข้อ ${it.n} ใช่หรือไม่?\nข้อถัดไปจะเลื่อนเลขขึ้นมาแทน`))return;
+    if(!await uiConfirm(`ลบข้อ ${it.n} ใช่หรือไม่?\nข้อถัดไปจะเลื่อนเลขขึ้นมาแทน`))return;
     const i=ed.items.indexOf(it);ed.items.splice(i,1);
     if(!(await saveSet())){ed.items.splice(i,0,it);return}
     renderPaper();
   }
   else if(a==="rsec"){
-    const t=prompt("ชื่อวิชา",ed.meta.sections[si].name);if(t==null||!t.trim())return;
+    const t=await uiPrompt("ชื่อวิชา",ed.meta.sections[si].name);if(t==null||!t.trim())return;
     const old=ed.meta.sections[si].name;ed.meta.sections[si].name=t.trim().slice(0,80);
     if(!(await saveSet())){ed.meta.sections[si].name=old;return}
     renderPaper();
   }
   else if(a==="dsec"){
-    if(!confirm(`ลบวิชา "${ed.meta.sections[si].name}" ใช่หรือไม่?`))return;
+    if(!await uiConfirm(`ลบวิชา "${ed.meta.sections[si].name}" ใช่หรือไม่?`))return;
     ed.meta.sections.splice(si,1);ed.items.forEach(x=>{if(x.sec>si)x.sec--});
     await saveSet();renderPaper();
   }
   else if(a==="addsec"){
-    const t=prompt("ชื่อวิชาใหม่");if(t==null||!t.trim())return;
+    const t=await uiPrompt("ชื่อวิชาใหม่");if(t==null||!t.trim())return;
     ed.meta.sections.push({name:t.trim().slice(0,80),from:1,to:0});
     if(!(await saveSet())){ed.meta.sections.pop();return}
     renderPaper();$("xs"+(ed.meta.sections.length-1))?.scrollIntoView({behavior:"smooth"});
