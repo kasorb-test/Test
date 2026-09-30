@@ -175,9 +175,11 @@
 <button type="button" class="xnew" id="exNewBtn">+ สร้างชุดข้อสอบใหม่</button>
 <div id="exNew" class="nform hide"><h3>สร้างชุดข้อสอบใหม่</h3>
 <label>ชื่อชุด</label><input id="nTitle" maxlength="80" placeholder="เช่น ข้อสอบเสมือนจริงสายปราบปราม ชุดที่ 1">
+<label>รูปแบบชุด</label><select id="nKind"><option value="mock">ข้อสอบเสมือนจริง (ครบทุกวิชา เหมือนสอบจริง)</option><option value="subject">แบบทดสอบรายวิชา (วิชาเดียว)</option><option value="mixed">ข้อสอบรวม (รวมหลายวิชา ไม่ใช่ชุดเสมือนจริง)</option></select>
+<div id="nSubjBox" class="hide"><label>หมวดวิชา</label><select id="nSubj"></select></div>
 <label>ใช้กับสายสอบ</label><div class="tracks" id="nTracks"></div>
 <div class="row"><div><label>ประเภท</label><select id="nTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="nMins" type="number" min="1" max="600" value="180"></div></div>
-<label>วิชาในชุดนี้ (บรรทัดละ 1 วิชา เรียงตามลำดับ)</label><textarea id="nSecs"></textarea>
+<div id="nSecsBox"><label>วิชาในชุดนี้ (บรรทัดละ 1 วิชา เรียงตามลำดับ)</label><textarea id="nSecs"></textarea></div>
 <p id="nErr" class="ferr"></p><div class="btns"><button type="button" id="nGo">สร้างชุด</button><button type="button" class="btn-light" id="nCancel">ยกเลิก</button></div></div>
 <h3 style="margin-top:22px">ชุดข้อสอบในเว็บ <span id="examTotal" class="muted" style="font-weight:600;font-size:14px"></span></h3><div id="examList"><p class="muted">กำลังโหลด…</p></div>
 <details class="ximp"><summary>นำเข้าหลายข้อพร้อมกันจากไฟล์ (.json)</summary><div class="imp"><label class="impbtn">เลือกไฟล์ข้อสอบ (.json)<input id="examFiles" type="file" accept=".json,application/json" multiple hidden></label><div id="impList"></div><button type="button" id="impGo" class="hide">นำเข้าข้อสอบ</button><p id="impMsg"></p></div></details></div>
@@ -459,7 +461,7 @@ $("impGo").onclick=async()=>{
       for(const key of imgKeys){k++;$("impMsg").textContent=`กำลังนำเข้า ${d.title}… รูป ${k}/${imgKeys.length}`;await setDoc(doc(db,"examImg",key),{exam:d.id,d:imgs[key]})}
       for(const key of oldKeys.filter(x=>!imgKeys.includes(x))){try{await deleteDoc(doc(db,"examImg",key))}catch(e){}}
       await setDoc(doc(db,"examItems",d.id),{items,imgs:imgKeys,keys,updatedAt:new Date().toISOString()});
-      await setDoc(doc(db,"exams",d.id),{title:old?.title||d.title,kind:d.kind||"mock",track:old?.track||d.track||[],tier:old?.tier||d.tier||"premium",
+      await setDoc(doc(db,"exams",d.id),{title:old?.title||d.title,kind:old?.kind||d.kind||"mock",...((old?.subject||d.subject)?{subject:old?.subject||d.subject}:{}),track:old?.track||d.track||[],tier:old?.tier||d.tier||"premium",
         minutes:old?.minutes||d.minutes||Math.max(1,items.length),count:items.length,sections:d.sections||[],order:old?.order??d.order??99,keyVersion,updatedAt:new Date().toISOString()});
       done++;
     }
@@ -493,7 +495,7 @@ function renderExams(){
   const total=examSets.reduce((n,e)=>n+(Number(e.count)||0),0);
   $("examTotal").textContent=examSets.length?`${examSets.length} ชุด · ${total.toLocaleString()} ข้อ`:"";
   if(!examSets.length){$("examList").innerHTML='<p class="muted">ยังไม่มีชุดข้อสอบ</p>';return}
-  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span>${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
+  $("examList").innerHTML=examSets.map(e=>`<div class="erow"><div class="t"><b>${esc(e.title)}</b><span>${esc(KIND_NAME[e.kind]||"เสมือนจริง")}${e.subject?" "+esc(e.subject):""} · ${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที · ${e.tier==="free"?"Free":"Premium"}${(e.track||[]).length?" · "+esc(e.track.map(trackName).join(", ")):""}</span></div><div class="ctl"><button type="button" class="open" data-id="${esc(e.id)}">เปิดแก้ไข</button></div></div>`).join("");
   document.querySelectorAll("#examList .open").forEach(el=>el.onclick=()=>openSet(el.dataset.id));
 }
 async function deleteExam(id){
@@ -504,21 +506,28 @@ async function deleteExam(id){
   catch(err){alert(`ลบไม่สำเร็จ (${err.code||err.message})`);return false}
 }
 
-/* สร้างชุดใหม่ */
+/* สร้างชุดใหม่: เสมือนจริง / รายวิชา / ข้อสอบรวม */
+const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+const KIND_NAME={mock:"เสมือนจริง",subject:"รายวิชา",mixed:"ข้อสอบรวม"};
+$("nSubj").innerHTML=SUBJECTS.map(x=>`<option>${esc(x)}</option>`).join("");
+const nKindSync=()=>{const k=$("nKind").value;$("nSubjBox").classList.toggle("hide",k!=="subject");$("nSecsBox").classList.toggle("hide",k==="subject");if(k==="subject"&&+$("nMins").value===180)$("nMins").value=30};
+$("nKind").onchange=nKindSync;
 $("exNewBtn").onclick=()=>{
+  $("nKind").value="mock";nKindSync();
   $("nTitle").value="";$("nTracks").innerHTML=tracksHtml([]);$("nTier").value="premium";$("nMins").value=180;$("nSecs").value=DEFAULT_SECS.join("\n");$("nErr").textContent="";
   $("exNew").classList.remove("hide");$("exNewBtn").classList.add("hide");$("nTitle").focus();
 };
 $("nCancel").onclick=()=>{$("exNew").classList.add("hide");$("exNewBtn").classList.remove("hide")};
 $("nGo").onclick=async()=>{
-  const title=$("nTitle").value.trim().slice(0,80),track=readTracks("nTracks"),secs=$("nSecs").value.split("\n").map(x=>x.trim()).filter(Boolean);
+  const kind=$("nKind").value,subject=kind==="subject"?$("nSubj").value:"";
+  const title=$("nTitle").value.trim().slice(0,80),track=readTracks("nTracks"),secs=kind==="subject"?[subject]:$("nSecs").value.split("\n").map(x=>x.trim()).filter(Boolean);
   const err=!title?"กรุณาใส่ชื่อชุด":!track.length?"กรุณาเลือกสายสอบอย่างน้อย 1 สาย":!secs.length?"กรุณาใส่วิชาอย่างน้อย 1 วิชา":"";
   $("nErr").textContent=err;if(err)return;
   const id="set"+Date.now().toString(36),order=Math.max(0,...examSets.map(e=>Number(e.order)||0))+1,now=new Date().toISOString();
   $("nGo").disabled=true;
   try{
     await setDoc(doc(db,"examItems",id),{items:[],imgs:[],keys:"",updatedAt:now});
-    await setDoc(doc(db,"exams",id),{title,kind:"mock",track,tier:$("nTier").value,minutes:clampMins($("nMins").value),count:0,sections:secs.map(name=>({name,from:1,to:0})),order,keyVersion:1,updatedAt:now});
+    await setDoc(doc(db,"exams",id),{title,kind,...(subject?{subject}:{}),track,tier:$("nTier").value,minutes:clampMins($("nMins").value),count:0,sections:secs.map(name=>({name,from:1,to:0})),order,keyVersion:1,updatedAt:now});
     $("exNew").classList.add("hide");$("exNewBtn").classList.remove("hide");
     await loadExams();await openSet(id);
   }catch(e){$("nErr").textContent=`สร้างไม่สำเร็จ (${e.code||e.message})`}

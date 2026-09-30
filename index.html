@@ -2952,6 +2952,7 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 .xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;background:#fff;white-space:pre-line;font-size:15.5px;line-height:1.75;color:#000;text-align:justify}
 .xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xwrap>*,.xpaper{min-width:0}@media(max-width:600px){.xtbl{font-size:13px}.xtbl th,.xtbl td{padding:5px 6px}}
 .xtbl{border-collapse:collapse;font-size:15px;min-width:50%}
+#subjList .list-button{display:flex;justify-content:space-between;align-items:center;gap:10px}.subj-n{color:#999;font-weight:600;font-size:12.5px;white-space:nowrap}.subj-h{margin:10px 0 12px;font-size:18px}#subjSets{display:grid;gap:12px}.tier.mx{background:#eef2fa;color:#16305f;margin-left:4px}
 .rv .exp mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}.rv .exp .xtblw{margin:6px 0 8px;white-space:normal}.rv .exp .xtbl{font-size:14.5px;line-height:1.5;background:#fff}.rv .exp .xtbl td{text-align:left}
 .xefig{margin:8px 0;white-space:normal}.xefig img.eimg{display:block;max-width:100%;height:auto;margin:0 auto}.xefig.many{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}.xefig.many img.eimg{max-width:min(100%,260px);margin:0}
 sub{font-size:.72em;vertical-align:sub;line-height:0}
@@ -3659,32 +3660,8 @@ LINE OA @kasorb
 <p class="page-desc">
 เลือกวิชาที่ต้องการฝึกทำแบบทดสอบ
 </p>
-<div class="card">
-<button class="list-button">
-ความสามารถทั่วไป / คณิตศาสตร์
-</button>
-<button class="list-button">
-ภาษาไทย
-</button>
-<button class="list-button">
-ภาษาอังกฤษ
-</button>
-<button class="list-button">
-คอมพิวเตอร์สำนักงาน
-</button>
-<button class="list-button">
-กฎหมายที่ประชาชนควรรู้
-</button>
-<button class="list-button">
-สังคม วัฒนธรรม และอาเซียน
-</button>
-<button class="list-button">
-งานสารบรรณ
-</button>
-<button class="list-button">
-ลักษณะที่ 54
-</button>
-</div>
+<div class="card" id="subjList"></div>
+<div class="hidden" id="subjSetsBox"><button class="set-back" id="subjBack" type="button">เลือกวิชาอื่น</button><h3 id="subjName" class="subj-h"></h3><div id="subjSets"></div></div>
 </section>
 <!-- MOCK -->
 <section class="app-page" id="mockPage">
@@ -4720,6 +4697,7 @@ closeSidebar();
 window.scrollTo(0,0);
 if(pageId!=="reviewPage") document.body.classList.remove("review-mode");
 if(pageId==="mockPage") renderMockPage();
+if(pageId==="subjectPage") renderSubjectPage();
 
 
 if(
@@ -6501,7 +6479,7 @@ async function openTrack(id){
     const best=prog.best[e.id];
     const secBest=(e.sections||[]).map((x,i)=>{const b=prog.best[`${e.id}:s${i}`];return b?`${escHtml(shortSec(x.name))} ${b.s}/${b.t}`:""}).filter(Boolean);
     const el=document.createElement("div");el.className="setc";
-    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span></h4>
+    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span>${e.kind==="mixed"?'<span class="tier mx">ข้อสอบรวม</span>':""}</h4>
       <div class="meta">${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที</div>
       ${best?`<div class="best">ทำครบชุด ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}
       ${secBest.length?`<div class="best sb">รายวิชาดีที่สุด: ${secBest.join(" · ")}</div>`:""}</div>
@@ -6512,6 +6490,41 @@ async function openTrack(id){
   window.scrollTo(0,0);
 }
 $("setBack").onclick=()=>renderMockPage();
+/* ===== แบบทดสอบรายวิชา: ชุดที่แอดมินสร้างแบบ "รายวิชา" แยกตามหมวดวิชา ===== */
+const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
+let subjToken=0;
+async function renderSubjectPage(){
+  const my=++subjToken;
+  $("subjSetsBox").classList.add("hidden");const box=$("subjList");box.classList.remove("hidden");box.innerHTML='<p class="small">กำลังโหลด…</p>';
+  let list=[];try{list=(await loadCatalog()).filter(e=>e.kind==="subject")}catch(e){console.error(e)}
+  if(my!==subjToken) return;
+  box.innerHTML="";
+  SUBJECTS.forEach(sub=>{
+    const n=list.filter(e=>e.subject===sub).length;
+    const b=document.createElement("button");b.type="button";b.className="list-button";
+    b.innerHTML=`<span>${escHtml(sub)}</span><small class="subj-n">${n?n+" ชุด":"เร็ว ๆ นี้"}</small>`;
+    b.onclick=()=>openSubject(sub,list.filter(e=>e.subject===sub));
+    box.appendChild(b);
+  });
+}
+async function openSubject(sub,sets){
+  $("subjList").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");$("subjName").textContent=sub;
+  const box=$("subjSets");box.innerHTML="";
+  if(!sets.length){box.innerHTML='<p class="note">ยังไม่มีแบบทดสอบของวิชานี้ แอดมินกำลังเพิ่มเร็ว ๆ นี้</p>';return}
+  const prog=await loadProgress().catch(()=>({best:{}}));
+  sets.forEach(e=>{
+    const best=(prog.best||{})[e.id];
+    const el=document.createElement("div");el.className="setc";
+    el.innerHTML=`<div><h4>${escHtml(e.title)}<span class="tier ${e.tier==="free"?"fr":"pm"}">${e.tier==="free"?"Free":"Premium"}</span></h4>
+      <div class="meta">${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที</div>
+      ${best?`<div class="best">ทำแล้ว ${best.n} ครั้ง · คะแนนดีที่สุด ${best.s}/${best.t}</div>`:""}</div>
+      <button class="go${canTake(e)?"":" lock"}" type="button">${canTake(e)?(hasSession(e.id)?"ทำต่อ":"เริ่มทำแบบทดสอบ"):"สำหรับสมาชิกพรีเมียม"}</button>`;
+    el.querySelector(".go").onclick=()=>canTake(e)?startExam(e.id):showUpgrade();
+    box.appendChild(el);
+  });
+  window.scrollTo(0,0);
+}
+$("subjBack").onclick=()=>renderSubjectPage();
 /* ชื่อวิชาแบบสั้น ใช้บนการ์ดชุดข้อสอบ */
 function shortSec(n){return ({"คอมพิวเตอร์และเทคโนโลยีสารสนเทศ":"คอมพิวเตอร์","ระเบียบงานสารบรรณและระเบียบการตำรวจ":"ระเบียบงานสารบรรณ","กฎหมายที่ประชาชนควรรู้":"กฎหมาย"})[n]||n}
 const secMinutes=(e,n)=>Math.max(1,Math.round((Number(e.minutes)||Number(e.count)||n)*n/(Number(e.count)||n)));
@@ -6785,7 +6798,7 @@ function renderAnswerSheet(){
 let sheetW=window.innerWidth;
 window.addEventListener("resize",()=>{if(Math.abs(window.innerWidth-sheetW)>40&&$("resultPage").classList.contains("active")){sheetW=window.innerWidth;renderAnswerSheet();}});
 
-$("rBack").onclick=()=>{if(lastResult?.from==="history"){showAppPage("historyPage","ประวัติการทำแบบทดสอบ");return}const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
+$("rBack").onclick=()=>{if(lastResult?.from==="history"){showAppPage("historyPage","ประวัติการทำแบบทดสอบ");return}if(lastResult?.meta?.kind==="subject"){showAppPage("subjectPage","แบบทดสอบรายวิชา");return}const t=currentTrack;showAppPage("mockPage","แบบทดสอบเสมือนจริง");if(t)openTrack(t);};
 
 /* ===== ประวัติการทำแบบทดสอบ ===== */
 let attemptsCache=null,histShown=20;
