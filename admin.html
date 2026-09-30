@@ -127,6 +127,15 @@
 .imgpick button{width:auto;margin:0;padding:8px 12px;font-size:13px}
 .imgpick img{display:block;max-width:100%;max-height:220px;border:1px solid #eee;border-radius:8px}
 .imgpick .note{font-size:12px;color:#888;width:100%}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;margin:0 3px;font-size:.88em;line-height:1.15;text-align:center}.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px 1px}
+.xpaper u{text-underline-offset:3px;font-weight:700}
+.xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;white-space:pre-line;font-size:15px;line-height:1.75;text-align:justify}
+.xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xtbl{border-collapse:collapse;font-size:14.5px}.xtbl th,.xtbl td{border:1px solid #444;padding:6px 10px;text-align:center}.xtbl th{background:#f5f5f5}
+.xfig{margin:4px 0 12px}.xfig img{max-width:min(100%,520px)}.xq2{font-weight:600}
+.xopts.pics{grid-template-columns:repeat(2,minmax(0,1fr))}.xc.pic img{max-width:100%;max-height:130px;margin:0}
+.fhelp{margin:-2px 0 6px;font-size:12px;color:#888}
+.cthumb{flex:1;min-width:0}.cthumb img{max-height:70px;max-width:100%;border:1px solid #eee;border-radius:6px}
+.cpick{display:inline-flex;gap:4px;flex:0 0 auto}.cpick .pick{padding:8px 10px;border-radius:9px;background:#eef2fa;color:#16305f;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap}.cpick button{width:auto;margin:0;padding:8px 10px;font-size:12px}
 .ferr{color:#c62828;font-weight:700;font-size:14px;margin:8px 0 0}
 @media(max-width:760px){.xtop{margin:-20px -14px 0;padding:10px 14px}.xpaper{padding:2px 12px 14px}.xq{padding-right:0;margin-top:34px}.qtools{top:12px}.xset .row3{grid-template-columns:1fr}}
 #shell .content{min-width:0}.mno{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#16305f;letter-spacing:.03em}
@@ -411,7 +420,8 @@ $("impGo").onclick=async()=>{
       const d=p.d,old=examSets.find(e=>e.id===d.id);
       $("impMsg").textContent=`กำลังนำเข้า ${d.title}…`;
       const items=d.items.map((it,i)=>({n:it.n||i+1,sec:it.sec??0,q:String(it.q||""),c:it.c.map(String),a:it.a,exp:String(it.exp||""),eng:!!it.eng,
-        ...(it.img?{img:it.img}:{}),...(it.expImg?{expImg:it.expImg}:{}),...(it.passage?{passage:it.passage}:{}),...(it.passageImg?{passageImg:it.passageImg}:{}),...(it.group?{group:it.group}:{}),...(it.fig?{fig:true}:{})}));
+        ...(it.img?{img:it.img}:{}),...(it.expImg?{expImg:it.expImg}:{}),...(it.passage?{passage:it.passage}:{}),...(it.passageImg?{passageImg:it.passageImg}:{}),...(it.group?{group:it.group}:{}),...(it.fig?{fig:true}:{}),
+        ...(it.q2?{q2:String(it.q2)}:{}),...(it.box?{box:String(it.box)}:{}),...(it.tbl?{tbl:String(it.tbl)}:{}),...(it.qfig?{qfig:it.qfig}:{}),...(Array.isArray(it.cimg)?{cimg:it.cimg}:{})}));
       const keys=items.map(it=>it.a).join("");
       /* รูปประกอบข้อสอบ/คำอธิบาย: เก็บใน examImg (อ่านได้ตามสิทธิ์ของชุด) ไม่เก็บในเว็บที่ใครก็เปิดได้ */
       const imgs=d.images&&typeof d.images==="object"?d.images:{};
@@ -500,7 +510,13 @@ function getImg(v){
 }
 /* ตัดคำไทยแล้วคั่นด้วยช่องว่างขนาด 0 ให้จัดแบบกระจายเต็มบรรทัดเหมือนหน้านักเรียน */
 const thaiSeg="Segmenter" in Intl?new Intl.Segmenter("th",{granularity:"word"}):null;
-function dist(text){text=String(text??"");if(!thaiSeg||!/[\u0E00-\u0E7F]/.test(text))return esc(text);let out="",first=true;for(const {segment} of thaiSeg.segment(text)){if(!first&&!/^\s/.test(segment))out+='<span class="z"> </span>';out+=esc(segment);first=/\s$/.test(segment)}return out}
+/* รูปแบบข้อความเหมือนหน้านักเรียน: [a/b] เศษส่วน · __คำ__ ขีดเส้นใต้ · ~~คำ~~ ขีดฆ่า · ^{x} ตัวยก */
+const RICH=/(\[[^\]\/\n]{1,12}\/[^\]\n]{1,12}\]|__[^\n]+?__|~~[^\n]+?~~|\^\{[^}\n]+\})/g;
+function rich(text){return String(text??"").split(RICH).map((p,i)=>{if(!p)return"";if(i%2===0)return distPlain(p);
+  if(p[0]==="["){const [a,b]=p.slice(1,-1).split("/");return `<span class="frac"><span>${esc(a.trim())}</span><span>${esc(b.trim())}</span></span>`}
+  if(p.startsWith("__"))return `<u>${esc(p.slice(2,-2))}</u>`;if(p.startsWith("~~"))return `<s>${esc(p.slice(2,-2))}</s>`;return `<sup>${esc(p.slice(2,-1))}</sup>`}).join("")}
+const dist=t=>rich(t);
+function distPlain(text){text=String(text??"");if(!thaiSeg||!/[\u0E00-\u0E7F]/.test(text))return esc(text);let out="",first=true;for(const {segment} of thaiSeg.segment(text)){if(!first&&!/^\s/.test(segment))out+='<span class="z"> </span>';out+=esc(segment);first=/\s$/.test(segment)}return out}
 const imgTag=v=>`<img class="eimg" data-k="${esc(v)}" alt="">`;
 function loadImgs(root){return Promise.all([...root.querySelectorAll("img.eimg:not([src])")].map(el=>getImg(el.dataset.k).then(src=>{if(!/^data:image\/(png|jpeg);base64,/.test(src)){el.alt="โหลดรูปไม่ได้";return}el.src=src;return el.decode().catch(()=>{})})))}
 function edStatus(t,bad){$("exSt").textContent=t;$("exSt").className="st"+(bad?" err":"")}
@@ -556,7 +572,7 @@ async function saveSet(){
   const items=ed.items.map(it=>{const o={...it};Object.keys(o).forEach(k=>{if(o[k]===undefined||o[k]==="")delete o[k]});o.q=it.q||"";o.exp=it.exp||"";return o});
   const keys=items.map(it=>it.a).join("");
   const keyVersion=keys===ed.keys?(ed.meta.keyVersion||1):(ed.meta.keyVersion||1)+1;
-  const imgs=[...new Set(items.flatMap(it=>[it.img,it.expImg,it.passageImg]).filter(isImgKey))];
+  const imgs=[...new Set(items.flatMap(it=>[it.img,it.expImg,it.passageImg,...[].concat(it.qfig||[]),...(it.cimg||[])]).filter(isImgKey))];
   const now=new Date().toISOString();
   edStatus("กำลังบันทึก…");
   try{
@@ -571,10 +587,12 @@ async function saveSet(){
 
 function qView(it){
   const lab=k=>it.eng?"abcd"[k]:String(k+1),im=isImgKey(it.img)||/^data:/.test(it.img||"");
-  const q=im?imgTag(it.img):`<p class="xq"><em>${it.n}.</em>${dist(it.q)}</p>`;
-  const opts=it.c.map((c,k)=>`<div class="xc${k===it.a?" ok":""}"><b>${lab(k)}</b>${im?"":`<span class="t">${dist(c)}</span>`}</div>`).join("");
+  const tbl=t=>`<div class="xtblw"><table class="xtbl">${String(t).split("\n").map((r,ri)=>`<tr>${r.split("|").map(c=>ri?`<td>${rich(c.trim())}</td>`:`<th>${rich(c.trim())}</th>`).join("")}</tr>`).join("")}</table></div>`;
+  const q=im?imgTag(it.img):`<p class="xq"><em>${it.n}.</em>${dist(it.q)}</p>${it.box?`<div class="xbox">${rich(it.box)}</div>`:""}${it.tbl?tbl(it.tbl):""}${[].concat(it.qfig||[]).filter(Boolean).map(k=>`<div class="xfig">${imgTag(k)}</div>`).join("")}${it.q2?`<p class="xq xq2">${rich(it.q2)}</p>`:""}`;
+  const pics=Array.isArray(it.cimg)&&it.cimg.some(Boolean);
+  const opts=it.c.map((c,k)=>`<div class="xc${k===it.a?" ok":""}${pics&&it.cimg[k]?" pic":""}"><b>${lab(k)}</b>${im?"":pics&&it.cimg[k]?imgTag(it.cimg[k]):`<span class="t">${dist(c)}</span>`}</div>`).join("");
   const eim=it.expImg?imgTag(it.expImg):"";
-  return `${im?`<p class="xq" style="margin-bottom:0"><em>${it.n}.</em></p>`:""}${q}<div class="xopts${im?" row":""}">${opts}</div>
+  return `${im?`<p class="xq" style="margin-bottom:0"><em>${it.n}.</em></p>`:""}${q}<div class="xopts${im?" row":pics?" pics":""}">${opts}</div>
   <div class="exp"><b class="h">เฉลยข้อ ${lab(it.a)} · คำอธิบาย</b>${eim||dist(it.exp||"-")}</div>
   <div class="qtools"><button type="button" class="ed" data-a="edit" data-n="${it.n}">แก้ไข</button><button type="button" class="rm" data-a="del" data-n="${it.n}">ลบ</button></div>`;
 }
@@ -594,9 +612,14 @@ function formView(){
   return `<div class="qform" id="qform"><h4>${edit.it?`แก้ไขข้อ ${it.n}`:`เพิ่มข้อสอบใหม่ · วิชา${esc(secName)}`}</h4>
   ${it.group?`<label>บทอ่านที่ใช้ร่วมกัน (ข้อ ${it.group[0]}-${it.group[1]})</label><textarea id="fP">${esc(it.passage||"")}</textarea>${imgPick("passageImg","รูปบทอ่าน (ถ้ามี)","")}`:""}
   <label>โจทย์</label><textarea id="fQ" placeholder="พิมพ์โจทย์">${esc(it.q)}</textarea>
-  ${imgPick("img","รูปโจทย์ (ถ้ามี)","ถ้าใส่รูป นักเรียนจะเห็นรูปแทนข้อความโจทย์และตัวเลือก")}
+  <p class="fhelp">พิมพ์ [1/2] = เศษส่วน · __คำ__ = ขีดเส้นใต้ · ~~คำ~~ = ขีดฆ่า · 2^{x} = ตัวยก</p>
+  <label>ข้อความในกรอบ (ถ้ามี)</label><textarea id="fB" placeholder="บทความ บทกลอน หรือบทสนทนา ที่แสดงในกรอบใต้โจทย์">${esc(it.box||"")}</textarea>
+  <label>ตาราง (ถ้ามี)</label><textarea id="fT" placeholder="แถวละบรรทัด คั่นช่องด้วย | แถวแรกเป็นหัวตาราง เช่น&#10;กลุ่ม|จำนวนคน&#10;ชาย|20">${esc(it.tbl||"")}</textarea>
+  ${imgPick("qfig","รูปประกอบโจทย์ (ถ้ามี)","แสดงใต้โจทย์ ตัวเลือกยังเป็นข้อความ")}
+  <label>ข้อความหลังกรอบ/รูป (ถ้ามี)</label><textarea id="fQ2" placeholder="เช่น คำถามที่ตามหลังบทความ">${esc(it.q2||"")}</textarea>
+  ${imgPick("img","รูปแทนทั้งข้อ (ไม่แนะนำ)","ถ้าใส่รูป นักเรียนจะเห็นรูปแทนข้อความโจทย์และตัวเลือกทั้งหมด")}
   <label>ตัวเลือก (กด "ถูก" หน้าตัวเลือกที่เป็นเฉลย)</label>
-  ${[0,1,2,3].map(k=>`<div class="chrow"><label class="rad"><input type="radio" name="fA" value="${k}"${it.a===k?" checked":""}>ถูก</label><b class="fl">${lab(k)}</b><input type="text" id="fC${k}" value="${esc(it.c[k]||"")}" placeholder="ตัวเลือกที่ ${lab(k)}"></div>`).join("")}
+  ${[0,1,2,3].map(k=>`<div class="chrow"><label class="rad"><input type="radio" name="fA" value="${k}"${it.a===k?" checked":""}>ถูก</label><b class="fl">${lab(k)}</b>${edit.cimgs[k]?`<span class="cthumb">${imgTag(edit.cimgs[k])}</span>`:`<input type="text" id="fC${k}" value="${esc(it.c[k]||"")}" placeholder="ตัวเลือกที่ ${lab(k)}">`}<span class="cpick" data-k="${k}"><label class="pick">${edit.cimgs[k]?"เปลี่ยนรูป":"ใช้รูป"}<input type="file" accept="image/png,image/jpeg" hidden></label>${edit.cimgs[k]?`<button type="button" class="btn-red" data-a="rmcimg" data-k="${k}">ลบรูป</button>`:""}</span></div>`).join("")}
   <label>คำอธิบายเฉลย</label><textarea id="fE" placeholder="อธิบายว่าทำไมข้อนี้ถูก">${esc(it.exp||"")}</textarea>
   ${imgPick("expImg","รูปคำอธิบาย (ถ้ามี)","ถ้าใส่รูป นักเรียนจะเห็นรูปแทนข้อความคำอธิบาย")}
   <label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="fEng" style="width:auto;margin:0"${it.eng?" checked":""}>ข้อภาษาอังกฤษ (ตัวเลือก a b c d)</label>
@@ -618,7 +641,7 @@ function renderPaper(){
     h+=edit&&!edit.it&&edit.sec===si?formView():`<button type="button" class="addq" data-a="add" data-s="${si}">+ เพิ่มข้อสอบในวิชา${esc(x.name)}</button>`;
   });
   h+=`<button type="button" class="addq" data-a="addsec" style="margin-top:22px;border-color:#c9d3e8;background:#f5f7fc;color:#16305f">+ เพิ่มวิชา</button>`;
-  paper.innerHTML=h;return loadImgs(paper);
+  paper.innerHTML=h;const loaded=loadImgs(paper);
   const f=$("qform");
   if(f){
     f.querySelectorAll(".imgpick input[type=file]").forEach(inp=>inp.onchange=async()=>{
@@ -626,13 +649,19 @@ function renderPaper(){
       try{keepForm();edit.imgs[field]=await fileToData(file);renderPaper()}catch(e){$("fErr").textContent=e.message||"เปิดรูปไม่ได้"}
     });
     $("fEng").onchange=()=>{const e=$("fEng").checked;f.querySelectorAll(".fl").forEach((b,k)=>b.textContent=e?"abcd"[k]:k+1)};
+    f.querySelectorAll(".cpick input[type=file]").forEach(inp=>inp.onchange=async()=>{
+      const file=inp.files[0];if(!file)return;const k=Number(inp.closest(".cpick").dataset.k);
+      try{keepForm();edit.cimgs[k]=await fileToData(file);renderPaper()}catch(e){$("fErr").textContent=e.message||"เปิดรูปไม่ได้"}
+    });
   }
+  return loaded;
 }
 /* จำค่าที่พิมพ์ไว้ก่อนวาดฟอร์มใหม่ (เช่น ตอนเลือกรูป) */
 function keepForm(){
   if(!$("qform"))return;
   const it=edit.draft=edit.draft||{};
-  it.q=$("fQ").value;it.c=[0,1,2,3].map(k=>$("fC"+k).value);it.exp=$("fE").value;it.eng=$("fEng").checked;
+  it.q=$("fQ").value;it.c=[0,1,2,3].map(k=>$("fC"+k)?$("fC"+k).value:(it.c||[])[k]||"");it.exp=$("fE").value;it.eng=$("fEng").checked;
+  it.box=$("fB").value;it.tbl=$("fT").value;it.q2=$("fQ2").value;
   const a=document.querySelector('#qform input[name=fA]:checked');it.a=a?Number(a.value):-1;
   if($("fP"))it.passage=$("fP").value;
 }
@@ -653,22 +682,25 @@ async function uploadImg(v){
   const k=await imgKeyOf(v);await setDoc(doc(db,"examImg",k),{exam:ed.id,d:v});imgCache.set(k,Promise.resolve(v));return k;
 }
 function startEdit(it,sec){
-  edit={it,sec,imgs:{img:it?.img||"",expImg:it?.expImg||"",passageImg:it?.passageImg||""}};
+  edit={it,sec,imgs:{img:it?.img||"",expImg:it?.expImg||"",passageImg:it?.passageImg||"",qfig:[].concat(it?.qfig||[])[0]||""},cimgs:[0,1,2,3].map(k=>(it?.cimg||[])[k]||""),qfigMore:[].concat(it?.qfig||[]).slice(1)};
   const done=renderPaper(),go=()=>$("qform")?.scrollIntoView({block:"start"});
   go();$("fQ")?.focus({preventScroll:true});done.then(go);  // รูปด้านบนโหลดเสร็จแล้วตำแหน่งเลื่อน: เลื่อนกลับมาที่ฟอร์มอีกครั้ง
 }
 async function saveForm(btn){
   keepForm();const d=edit.draft,has=v=>String(v||"").trim()!=="";
   const qImg=edit.imgs.img;
-  const err=!has(d.q)&&!qImg?"กรุณาพิมพ์โจทย์ หรือใส่รูปโจทย์"
-    :!qImg&&d.c.some(c=>!has(c))?"กรุณาใส่ตัวเลือกให้ครบ 4 ข้อ"
+  const err=!has(d.q)&&!has(d.box)&&!has(d.q2)&&!qImg&&!edit.imgs.qfig?"กรุณาพิมพ์โจทย์ หรือใส่รูปโจทย์"
+    :!qImg&&d.c.some((c,k)=>!has(c)&&!edit.cimgs[k])?"กรุณาใส่ตัวเลือกให้ครบ 4 ข้อ (ข้อความหรือรูป)"
     :d.a<0?'กรุณากด "ถูก" หน้าตัวเลือกที่เป็นเฉลย':"";
   $("fErr").textContent=err;if(err)return;
   btn.disabled=true;edStatus("กำลังบันทึก…");
   try{
-    const up={};for(const f of ["img","expImg","passageImg"]) up[f]=await uploadImg(edit.imgs[f]);
+    const up={};for(const f of ["img","expImg","passageImg","qfig"]) up[f]=await uploadImg(edit.imgs[f]);
+    const cimg=[];for(const v of edit.cimgs) cimg.push(await uploadImg(v));
     const it=edit.it||{sec:edit.sec};
-    Object.assign(it,{q:d.q.trim(),c:d.c.map(c=>c.trim()),a:d.a,exp:d.exp.trim(),eng:d.eng,img:up.img,expImg:up.expImg});
+    const qfig=up.qfig?[up.qfig,...edit.qfigMore]:[];
+    Object.assign(it,{q:d.q.trim(),c:d.c.map((c,k)=>cimg[k]?"":c.trim()),a:d.a,exp:d.exp.trim(),eng:d.eng,img:up.img,expImg:up.expImg,
+      box:d.box.trim(),tbl:d.tbl.trim(),q2:d.q2.trim(),qfig:qfig.length>1?qfig:qfig[0]||"",cimg:cimg.some(Boolean)?cimg:undefined});
     if(it.group){ed.items.filter(x=>x.group&&x.group.join()===it.group.join()).forEach(x=>{x.passage=(d.passage||"").trim();x.passageImg=up.passageImg})}
     const isNew=!edit.it;if(isNew)ed.items.push(it);
     const prev=edit;edit=null;
@@ -685,7 +717,8 @@ $("exPaper").addEventListener("click",async ev=>{
   else if(a==="add") startEdit(null,si);
   else if(a==="fcancel"){edit=null;renderPaper()}
   else if(a==="fsave") saveForm(b);
-  else if(a==="rmimg"){keepForm();edit.imgs[b.closest(".imgpick").dataset.f]="";renderPaper()}
+  else if(a==="rmimg"){keepForm();const f=b.closest(".imgpick").dataset.f;edit.imgs[f]="";if(f==="qfig")edit.qfigMore=[];renderPaper()}
+  else if(a==="rmcimg"){keepForm();edit.cimgs[Number(b.dataset.k)]="";renderPaper()}
   else if(a==="del"){
     if(!await uiConfirm(`ลบข้อ ${it.n} ใช่หรือไม่?\nข้อถัดไปจะเลื่อนเลขขึ้นมาแทน`))return;
     const i=ed.items.indexOf(it);ed.items.splice(i,1);
