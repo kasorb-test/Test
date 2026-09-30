@@ -2589,26 +2589,81 @@ input{
 .countdown-days{font-size:56px;font-weight:900;line-height:1}
 .countdown-unit{font-size:18px;font-weight:800}
 .countdown-date{font-size:13px;font-weight:600;opacity:.92}
-/* บันไดยศแบบรูป */
-.stairs{position:relative;height:250px;margin:4px 0 6px;container-type:inline-size;overflow:hidden;border-radius:14px;background:linear-gradient(#fff7ef,#fff 70%)}
-.st-floor{position:absolute;left:0;right:0;bottom:0;height:6px;background:#efe6da}
-.st-col{position:absolute;bottom:6px;box-sizing:border-box;padding:9px 4px 0;border-radius:10px 10px 0 0;text-align:center;border:1px solid rgba(0,0,0,.04);border-bottom:0}
-.st-col b{display:block;font-size:12.5px;line-height:1.2}.st-col span{display:block;font-size:10px;line-height:1.25;opacity:.85;overflow-wrap:anywhere}
-.st-col.done{background:#e3e9f5;color:#16305f}.st-col.now{background:linear-gradient(160deg,#ff9a45,#ff6a00);color:#fff}
-.st-col.next{background:#ffe8d4;color:#c2410c}.st-col.top{background:linear-gradient(160deg,#ffe07a,#f5b301);color:#5a3b00}
-.st-star{display:block;width:16px;height:16px;margin:-2px auto 2px;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:stStar 2.4s ease-in-out infinite}
-@keyframes stStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(12deg)}}
-.st-gap{position:absolute;left:-10px;top:40%;font-style:normal;font-weight:900;color:#c9a14a;letter-spacing:1px}
-.st-ladder{position:absolute;width:24px;z-index:1;background:linear-gradient(90deg,#b07a3c 0 3px,transparent 3px calc(100% - 3px),#b07a3c calc(100% - 3px)),repeating-linear-gradient(0deg,transparent 0 7px,#c8904f 7px 10px)}
-.st-me{position:absolute;z-index:2;width:42px;height:42px;margin-bottom:6px}
-.st-me img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:3px solid #fff;box-shadow:0 4px 12px rgba(226,82,10,.35);display:block}
-.st-me i{position:absolute;left:50%;bottom:-5px;width:26px;height:6px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.12)}
-.st-me.climb{animation:stClimb 4.2s ease-in-out infinite}
-@keyframes stClimb{0%,8%{transform:translate(0,0)}14%{transform:translate(0,-8px)}20%{transform:translate(0,0)}
- 38%{transform:translate(var(--dx),0)}72%{transform:translate(var(--dx),calc(-1*var(--dy) - 4px))}80%{transform:translate(var(--dx),calc(-1*var(--dy) - 4px))}
- 90%{transform:translate(var(--dx),0);opacity:1}94%{transform:translate(var(--dx),0);opacity:0}96%{transform:translate(0,0);opacity:0}100%{transform:translate(0,0);opacity:1}}
-.st-cap{margin:0 0 12px;font-size:12.5px;font-weight:700;color:#16305f;text-align:center}
-@media(prefers-reduced-motion:reduce){.st-me.climb,.st-star{animation:none}}
+.ptr-tip{position:fixed;left:50%;top:6px;z-index:9999;padding:6px 14px;border-radius:999px;background:#16305f;color:#fff;font-size:12.5px;font-weight:700;opacity:0;transform:translate(-50%,0);pointer-events:none;transition:opacity .1s}
+/* ===== เส้นทางยศแบบเกม ===== */
+#gameBox{margin-bottom:14px}
+.gcard{padding:16px;border-radius:18px;background:#fff;border:1px solid #eee;box-shadow:0 4px 14px rgba(20,34,60,.05)}
+.ghead{display:flex;align-items:center;gap:10px;margin-bottom:10px}.ghead h3{margin:0;font-size:16px;color:#16305f;flex:1}
+.gstat{display:flex;gap:8px;align-items:center}
+.gbag{padding:5px 11px;border-radius:999px;background:#fff1e6;color:#e86208;font-size:12.5px;font-weight:800}
+.ghome-btn{padding:7px 14px;border:0;border-radius:999px;background:#16305f;color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+.gview{position:relative;height:300px;border-radius:16px;overflow:hidden;outline:none;touch-action:pan-y;user-select:none;-webkit-user-select:none;background:linear-gradient(#bfe3ff,#e8f6ff 60%,#f4fbff)}
+.gsky{position:absolute;inset:0;pointer-events:none}
+.gsun{position:absolute;right:8%;top:22px;width:46px;height:46px;border-radius:50%;background:#fff1a8;box-shadow:0 0 0 10px rgba(255,241,168,.35)}
+.gcloud{position:absolute;height:22px;border-radius:22px;background:#fff;opacity:.95;animation:gCloud 38s linear infinite}
+.gcloud:before,.gcloud:after{content:"";position:absolute;bottom:6px;border-radius:50%;background:#fff}
+.gcloud:before{left:12px;width:28px;height:28px}.gcloud:after{left:34px;width:22px;height:22px}
+.gcloud.c1{top:26px;width:80px;left:10%}.gcloud.c2{top:62px;width:64px;left:55%;animation-duration:52s;animation-delay:-20s}.gcloud.c3{top:40px;width:90px;left:85%;animation-duration:46s;animation-delay:-8s}
+@keyframes gCloud{from{transform:translateX(0)}to{transform:translateX(-120vw)}}
+.gworld{position:absolute;left:0;top:0;bottom:0;will-change:transform;transition:transform .12s linear}
+.ghills{position:absolute;left:0;right:0;bottom:92px;height:110px;background:radial-gradient(120px 90px at 80px 110px,#a8d8a0 98%,transparent) 0 0/260px 110px repeat-x,radial-gradient(160px 110px at 200px 120px,#95cd8c 98%,transparent) 0 0/340px 110px repeat-x}
+.gtrees{position:absolute;left:0;right:0;bottom:92px;height:70px;background:radial-gradient(22px 26px at 30px 30px,#5fa866 98%,transparent) 0 0/190px 70px repeat-x,linear-gradient(#8a6a48,#8a6a48) 28px 50px/5px 20px repeat-x;opacity:.95}
+.groad{position:absolute;left:0;right:0;bottom:0;height:96px;background:linear-gradient(#7cc47a 0 22px,#e9d3a8 22px 70px,#7cc47a 70px);}
+.groad:after{content:"";position:absolute;left:0;right:0;top:44px;height:4px;background:repeating-linear-gradient(90deg,#fff 0 26px,transparent 26px 52px);opacity:.7}
+.ghouse{position:absolute;bottom:66px;width:150px;height:130px;cursor:pointer}
+.gh-roof{position:absolute;left:-8px;right:-8px;top:0;height:58px;background:#e86a4a;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.gh-body{position:absolute;left:10px;right:10px;top:56px;bottom:0;background:#fff7ec;border:3px solid #e8d9c4;border-bottom:0;border-radius:4px 4px 0 0}
+.gh-win{position:absolute;left:12px;top:12px;width:34px;height:28px;border-radius:4px;background:#bfe3ff;border:3px solid #fff}
+.gh-door{position:absolute;right:16px;bottom:0;width:30px;height:48px;border-radius:14px 14px 0 0;background:#b0713c}
+.gh-sign{position:absolute;left:50%;top:-24px;transform:translateX(-50%);white-space:nowrap;padding:3px 10px;border-radius:999px;background:#16305f;color:#fff;font-size:11.5px;font-weight:800;animation:gBob 2.4s ease-in-out infinite}
+.gg{position:absolute;bottom:62px;width:0}
+.gg-post{position:absolute;left:-3px;bottom:0;width:6px;height:96px;border-radius:3px;background:#6b7280}
+.gg-flag{position:absolute;left:3px;bottom:52px;min-width:74px;padding:5px 8px;border-radius:0 8px 8px 0;background:#16305f;color:#fff;white-space:nowrap;transform-origin:left center;animation:gFlag 3s ease-in-out infinite}
+.gg-flag b{display:block;font-size:12.5px}.gg-flag span{display:block;font-size:10px;opacity:.85}
+.gg.pass .gg-flag{background:linear-gradient(135deg,#ff8a2b,#e2520a)}
+.gg.lock .gg-flag{background:#9ca3af}.gg.lock.next .gg-flag{background:#16305f}
+.gg-bar{position:absolute;left:-6px;bottom:22px;width:12px;height:60px;border-radius:4px;background:repeating-linear-gradient(0deg,#e11d48 0 10px,#fff 10px 20px);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+@keyframes gFlag{0%,100%{transform:skewY(0)}50%{transform:skewY(-3deg)}}
+.gitem{position:absolute;bottom:40px;width:40px;height:40px;margin-left:-20px;animation:gBob 1.8s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18))}
+.gitem svg{width:100%;height:100%}
+.gitem i{position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,150,.8),transparent 65%);z-index:-1;animation:gGlow 1.8s ease-in-out infinite}
+.gitem.got{animation:gGot .6s ease-out forwards}
+@keyframes gBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes gGlow{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes gGot{to{transform:translateY(-70px) scale(1.4);opacity:0}}
+.gplayer{position:absolute;bottom:34px;width:48px;height:78px;z-index:3;pointer-events:none}
+.gplayer img{position:absolute;left:4px;top:0;width:40px;height:40px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.18);z-index:2}
+.gp-body{position:absolute;left:12px;top:34px;width:24px;height:28px;border-radius:9px 9px 6px 6px;background:#16305f}
+.gp-l,.gp-r{position:absolute;bottom:-12px;width:8px;height:14px;border-radius:4px;background:#1f2937}
+.gp-l{left:3px}.gp-r{right:3px}
+.gp-shadow{position:absolute;left:8px;bottom:-16px;width:32px;height:7px;border-radius:50%;background:rgba(0,0,0,.16)}
+.gplayer.walk{animation:gStep .32s ease-in-out infinite}
+.gplayer.walk .gp-l{animation:gLeg .32s ease-in-out infinite}.gplayer.walk .gp-r{animation:gLeg .32s ease-in-out infinite reverse}
+.gplayer.flip img{transform:scaleX(-1)}
+@keyframes gStep{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes gLeg{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-18deg)}}
+.gbtn{position:absolute;bottom:12px;z-index:4;width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 4px 12px rgba(0,0,0,.15);cursor:pointer;touch-action:none}
+.gbtn:before{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;border-top:4px solid #16305f;border-left:4px solid #16305f;margin:-7px 0 0 -4px;transform:rotate(-45deg)}
+.gbtn.gl{left:12px}.gbtn.gr{right:12px}.gbtn.gr:before{margin-left:-10px;transform:rotate(135deg)}
+.gtoast{position:absolute;left:50%;top:14px;z-index:5;max-width:86%;padding:8px 14px;border-radius:999px;background:rgba(22,48,95,.94);color:#fff;font-size:13px;font-weight:700;text-align:center;opacity:0;transform:translate(-50%,-10px);pointer-events:none}
+.gtoast.on{animation:gToast 2.6s ease forwards}
+@keyframes gToast{0%{opacity:0;transform:translate(-50%,-10px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-6px)}}
+.gnote{margin:10px 2px 0;font-size:12.5px;color:#6b7280}
+.ghouse-ov{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.55)}
+.ghouse-in{width:min(640px,100%);max-height:92vh;overflow:auto;border-radius:20px;background:#fff;padding:14px}
+.ghi-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.ghi-head b{font-size:17px;color:#16305f}.ghi-head span{flex:1;font-size:13px;color:#e86208;font-weight:800}
+.ghi-head button{padding:7px 14px;border:0;border-radius:999px;background:#f1f5f9;font:inherit;font-weight:800;cursor:pointer}
+.groom{position:relative;aspect-ratio:600/340;border-radius:14px;overflow:hidden}
+.gr-wall{position:absolute;left:0;right:0;top:0;height:62%;background:#f6f1ea}.gr-floor{position:absolute;left:0;right:0;bottom:0;height:38%;background:#e6d6bf}
+.gr-it{position:absolute;transform:translate(-50%,-50%);animation:gPop .5s ease-out}.gr-it svg{display:block;width:100%;height:auto}
+@keyframes gPop{from{transform:translate(-50%,-50%) scale(.3);opacity:0}}
+.gr-empty{position:absolute;left:10%;right:10%;top:38%;margin:0;text-align:center;color:#6b7280;font-size:13.5px;font-weight:700}
+.gr-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:12px}
+.gr-slot{padding:8px 4px;border-radius:12px;background:#f8fafc;text-align:center;opacity:.35;filter:grayscale(1)}
+.gr-slot.on{opacity:1;filter:none;background:#fff7ed}
+.gr-slot svg{width:36px;height:36px}.gr-slot span{display:block;font-size:11px;font-weight:700;color:#374151}
+@media(prefers-reduced-motion:reduce){.gcloud,.gitem,.gitem i,.gg-flag,.gh-sign,.gplayer.walk,.gplayer.walk .gp-l,.gplayer.walk .gp-r{animation:none}}
+@media(max-width:600px){.gview{height:270px}.gcard{padding:12px}}
 /* นับถอยหลัง: ย่อเล็ก อยู่เหนือสถิติด้านล่างของหน้าแรก */
 #countdownRow{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin:14px 0 10px}
 #countdownRow .countdown-card{padding:12px 14px;min-height:0;border-radius:16px}
@@ -3794,6 +3849,7 @@ LINE OA @kasorb
 <section class="app-page" id="scorePage">
 <h2 class="page-heading">ภาพรวมผลการทดสอบ</h2>
 <p class="page-desc">สรุป XP ยศ ความคืบหน้า และคะแนนรายวิชา</p>
+<div id="gameBox"></div>
 <div id="ovBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- PREMIUM -->
@@ -4825,6 +4881,18 @@ renderMembershipStatus();
 }
 
 
+/* แอปที่ติดตั้งบน iPhone/iPad ไม่มีการลากลงเพื่อรีเฟรช: ลากลงจากบนสุดเกิน 80px แล้วปล่อย = โหลดหน้าใหม่ (ยกเว้นตอนทำข้อสอบ) */
+(()=>{
+  const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  if(!standalone) return;
+  const tip=document.createElement("div");tip.className="ptr-tip";tip.textContent="ลากลงเพื่อรีเฟรช";document.body.appendChild(tip);
+  let y0=null,d=0;
+  const busy=()=>!!document.querySelector(".xpaper")&&document.querySelector(".xpaper").offsetParent!==null;
+  addEventListener("touchstart",e=>{y0=(scrollY<=0&&e.touches.length===1&&!busy()&&!e.target.closest(".gview,.ghouse-ov"))?e.touches[0].clientY:null;d=0},{passive:true});
+  addEventListener("touchmove",e=>{if(y0==null)return;d=e.touches[0].clientY-y0;if(d<=0){tip.style.opacity=0;return}
+    tip.style.opacity=Math.min(1,d/80);tip.style.transform=`translate(-50%,${Math.min(d,110)*.6}px)`;tip.textContent=d>80?"ปล่อยเพื่อรีเฟรช":"ลากลงเพื่อรีเฟรช"},{passive:true});
+  addEventListener("touchend",()=>{if(y0!=null&&d>80){tip.textContent="กำลังโหลด…";location.reload()}else{tip.style.opacity=0;tip.style.transform=""}y0=null},{passive:true});
+})();
 /* ติดตั้งลงหน้าจอ (PWA): ซ่อนปุ่มเมื่อเปิดจากไอคอนบนหน้าจออยู่แล้ว */
 (()=>{
   if("serviceWorker" in navigator){
@@ -7149,21 +7217,109 @@ async function openAttempt(a,btn){
 const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
-/* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
-function stairsHtml(lv,xp){
-  const lo=Math.max(0,lv-1),hi=Math.min(MAX_LEVEL,lv+2),lvls=[];
-  for(let l=lo;l<=hi;l++)lvls.push(l);
-  const gap=hi<MAX_LEVEL-1;if(hi<MAX_LEVEL)lvls.push(MAX_LEVEL);
-  const n=lvls.length,W=100/n,ci=lvls.indexOf(lv),top=lv>=MAX_LEVEL;
-  const H=i=>40+i*34;   // ความสูงแต่ละขั้น (px)
-  const cols=lvls.map((l,i)=>{const k=l===lv?"now":l<lv?"done":l===MAX_LEVEL?"top":"next";
-    return `<div class="st-col ${k}" style="left:${i*W}%;width:${W}%;height:${H(i)}px">${l===MAX_LEVEL?'<i class="st-star"></i>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span>${gap&&i===n-1?'<em class="st-gap">&middot;&middot;&middot;</em>':""}</div>`}).join("");
-  const av=escHtml($("topAvatar").src);
-  const ladder=top?"":`<div class="st-ladder" style="left:calc(${(ci+1)*W}% - 14px);bottom:${H(ci)}px;height:${H(ci+1)-H(ci)+14}px"></div>`;
-  const climb=top?"":`--dy:${H(ci+1)-H(ci)}px;--dx:calc(${W/2}cqw - 8px);`;
-  return `<div class="stairs"><div class="st-floor"></div>${cols}${ladder}
-    <div class="st-me${top?"":" climb"}" style="${climb}left:calc(${ci*W+W/2}% - 21px);bottom:${H(ci)}px"><img src="${av}" alt=""><i></i></div></div>
-    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}</p>`;
+/* ===== เส้นทางยศแบบเกม: เดินจากบ้านผ่านด่านยศ เก็บไอเทมที่ได้จากการทำข้อสอบ แล้วเอาไปแต่งบ้าน =====
+   ทุก ๆ 20 ข้อที่ทำ ได้ไอเทม 1 ชิ้น วางอยู่บนทางให้เดินไปเก็บ เก็บแล้วจะไปอยู่ในบ้าน (users/{uid}.items)
+   ด่านยศที่ยังไม่ถึงปิดไว้ เดินผ่านไม่ได้จนกว่าจะเลื่อนยศ */
+const GAME_PER_ITEM=20;
+const GAME_ITEMS=[
+  {id:"rug",name:"พรมปูพื้น",svg:'<ellipse cx="30" cy="36" rx="27" ry="12" fill="#e7a0a6"/><ellipse cx="30" cy="36" rx="19" ry="7" fill="#f6d1d4"/>',at:[50,86,34]},
+  {id:"plant",name:"ต้นไม้ในกระถาง",svg:'<path d="M30 34q-16-10-8-28 10 12 8 28zM30 34q14-12 24-6-8 12-24 6zM30 34q-14-6-22-2 8 10 22 2z" fill="#6fae78"/><path d="M20 34h20l-3 20H23z" fill="#c98a5a"/>',at:[88,62,14]},
+  {id:"lamp",name:"โคมไฟ",svg:'<path d="M18 22h24l-6-16H24z" fill="#16305f"/><rect x="28" y="22" width="4" height="26" fill="#555"/><rect x="20" y="48" width="20" height="6" rx="3" fill="#555"/><ellipse cx="30" cy="24" rx="12" ry="3" fill="#ffe9a8"/>',at:[12,54,13]},
+  {id:"shelf",name:"ชั้นหนังสือ",svg:'<rect x="8" y="4" width="44" height="52" rx="3" fill="#d9c7b0"/><rect x="12" y="8" width="36" height="12" fill="#fff"/><rect x="12" y="24" width="36" height="12" fill="#fff"/><rect x="12" y="40" width="36" height="12" fill="#fff"/><g fill="#16305f"><rect x="14" y="10" width="4" height="10"/><rect x="26" y="26" width="4" height="10"/></g><g fill="#ff8a3d"><rect x="19" y="11" width="4" height="9"/><rect x="36" y="42" width="4" height="10"/></g><g fill="#9cc5a1"><rect x="31" y="10" width="4" height="10"/><rect x="15" y="42" width="5" height="10"/></g>',at:[74,40,22]},
+  {id:"desk",name:"โต๊ะอ่านหนังสือ",svg:'<rect x="4" y="24" width="52" height="7" rx="2" fill="#b98a5c"/><rect x="8" y="31" width="5" height="24" fill="#9c7248"/><rect x="47" y="31" width="5" height="24" fill="#9c7248"/><rect x="14" y="16" width="16" height="8" rx="1" fill="#fff" stroke="#ddd"/><rect x="36" y="14" width="6" height="10" rx="2" fill="#ffb21e"/>',at:[30,60,24]},
+  {id:"clock",name:"นาฬิกาแขวน",svg:'<circle cx="30" cy="30" r="22" fill="#fff" stroke="#16305f" stroke-width="5"/><path d="M30 30V16M30 30l9 6" stroke="#16305f" stroke-width="4" stroke-linecap="round"/>',at:[52,18,9]},
+  {id:"frame",name:"รูปติดผนัง",svg:'<rect x="6" y="10" width="48" height="38" rx="3" fill="#c98a5a"/><rect x="11" y="15" width="38" height="28" fill="#dcebf2"/><path d="M11 43l12-14 9 9 6-6 11 11z" fill="#6fae78"/><circle cx="40" cy="22" r="4" fill="#fff4c9"/>',at:[28,20,14]},
+  {id:"sofa",name:"โซฟา",svg:'<rect x="6" y="20" width="48" height="22" rx="8" fill="#16305f"/><rect x="2" y="28" width="12" height="20" rx="5" fill="#1f3b73"/><rect x="46" y="28" width="12" height="20" rx="5" fill="#1f3b73"/><rect x="12" y="34" width="36" height="12" rx="4" fill="#2a4a8a"/><rect x="10" y="48" width="4" height="6" fill="#555"/><rect x="46" y="48" width="4" height="6" fill="#555"/>',at:[52,66,26]},
+  {id:"bed",name:"เตียงนอน",svg:'<rect x="4" y="30" width="52" height="16" rx="4" fill="#fff" stroke="#e5ddd0"/><rect x="4" y="38" width="52" height="10" rx="3" fill="#e6ddd0"/><rect x="2" y="16" width="7" height="38" rx="2" fill="#d9c7b0"/><rect x="10" y="24" width="16" height="9" rx="4" fill="#fbf7f1" stroke="#eadfcf"/>',at:[12,76,28]},
+  {id:"trophy",name:"ถ้วยรางวัล",svg:'<path d="M18 8h24v12a12 12 0 0 1-24 0z" fill="#f5b301"/><path d="M18 12h-7a7 7 0 0 0 7 10M42 12h7a7 7 0 0 1-7 10" fill="none" stroke="#f5b301" stroke-width="4"/><rect x="27" y="31" width="6" height="10" fill="#d99a00"/><rect x="18" y="41" width="24" height="8" rx="2" fill="#16305f"/>',at:[74,20,11]},
+  {id:"cat",name:"แมวส้ม",svg:'<ellipse cx="32" cy="42" rx="18" ry="11" fill="#ff9a45"/><circle cx="18" cy="30" r="10" fill="#ff9a45"/><path d="M10 24l2-10 7 7zM26 24l-2-10-7 7z" fill="#ff9a45"/><circle cx="15" cy="29" r="1.6" fill="#333"/><circle cx="21" cy="29" r="1.6" fill="#333"/><path d="M48 42q10-2 6-14" stroke="#ff9a45" stroke-width="5" fill="none" stroke-linecap="round"/>',at:[70,84,16]},
+  {id:"flag",name:"ธงกะสอบ TEST",svg:'<rect x="12" y="6" width="4" height="50" fill="#777"/><path d="M16 8h32l-6 10 6 10H16z" fill="#ff6a00"/><rect x="21" y="13" width="18" height="8" rx="4" fill="#16305f"/>',at:[92,34,12]}
+];
+const gameState={x:0,target:null,dir:1,keys:{},raf:0,last:0,collected:[],saveT:0};
+const GX=l=>360+l*170;          // ตำแหน่งด่านยศแต่ละขั้น
+function gameEarned(){return Math.min(GAME_ITEMS.length,Math.floor((answeredCount()||0)/GAME_PER_ITEM))}
+function renderGame(lv){
+  const box=$("gameBox");if(!box)return;
+  cancelAnimationFrame(gameState.raf);
+  gameState.collected=Array.isArray(currentData?.items)?currentData.items.filter(id=>GAME_ITEMS.some(t=>t.id===id)):[];
+  const W=GX(MAX_LEVEL)+320,maxX=lv>=MAX_LEVEL?W-80:GX(lv+1)-46;
+  gameState.lv=lv;gameState.W=W;gameState.maxX=maxX;
+  if(!gameState.x||gameState.x>maxX)gameState.x=Math.max(170,GX(lv)+60);
+  const earned=gameEarned(),left=GAME_ITEMS.slice(0,earned).filter(t=>!gameState.collected.includes(t.id));
+  /* ไอเทมที่ยังไม่เก็บ วางกระจายบนทางระหว่างบ้านกับด่านถัดไป */
+  const span=Math.max(260,maxX-250);
+  gameState.items=left.map((t,i)=>({...t,x:Math.round(250+span*(i+1)/(left.length+1)+((i*53)%40)-20)}));
+  const gates=[];for(let l=0;l<=MAX_LEVEL;l++){
+    const k=l<=lv?"pass":l===lv+1?"lock next":"lock";
+    gates.push(`<div class="gg ${k}" style="left:${GX(l)}px"><div class="gg-post"></div><div class="gg-flag"><b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span></div>${l>lv?'<div class="gg-bar"></div>':""}</div>`);
+  }
+  box.innerHTML=`<div class="gcard"><div class="ghead"><h3>เส้นทางยศของคุณ</h3><div class="gstat"><span class="gbag" id="gBag">ไอเทม ${gameState.collected.length}/${GAME_ITEMS.length}</span><button type="button" class="ghome-btn" id="gHomeBtn">เข้าบ้าน</button></div></div>
+  <div class="gview" id="gView" tabindex="0" aria-label="แผนที่เส้นทางยศ ใช้ปุ่มลูกศรเพื่อเดิน">
+    <div class="gsky"><i class="gcloud c1"></i><i class="gcloud c2"></i><i class="gcloud c3"></i><i class="gsun"></i></div>
+    <div class="gworld" id="gWorld" style="width:${W}px">
+      <div class="ghills"></div><div class="gtrees"></div><div class="groad"></div>
+      <div class="ghouse" id="gHouse" style="left:40px"><div class="gh-roof"></div><div class="gh-body"><i class="gh-win"></i><i class="gh-door"></i></div><span class="gh-sign">บ้านของฉัน</span></div>
+      ${gates.join("")}
+      ${gameState.items.map(t=>`<div class="gitem" data-id="${t.id}" style="left:${t.x}px" title="${escHtml(t.name)}"><svg viewBox="0 0 60 60">${t.svg}</svg><i></i></div>`).join("")}
+      <div class="gplayer" id="gPlayer"><img src="${escHtml($("topAvatar").src)}" alt=""><div class="gp-body"><i class="gp-l"></i><i class="gp-r"></i></div><div class="gp-shadow"></div></div>
+    </div>
+    <button type="button" class="gbtn gl" id="gLeft" aria-label="เดินซ้าย"></button><button type="button" class="gbtn gr" id="gRight" aria-label="เดินขวา"></button>
+    <div class="gtoast" id="gToast"></div>
+  </div>
+  <p class="gnote">${earned>=GAME_ITEMS.length&&!left.length?"เก็บไอเทมครบทุกชิ้นแล้ว":`ทำข้อสอบครบทุก ${GAME_PER_ITEM} ข้อ จะมีไอเทมใหม่ให้เดินไปเก็บ (อีก ${GAME_PER_ITEM-((answeredCount()||0)%GAME_PER_ITEM)} ข้อ)`} · กดลูกศร หรือแตะบนทางเพื่อเดิน</p></div>`;
+  const view=$("gView"),hold=(el,d)=>{const on=e=>{e.preventDefault();gameState.keys[d]=1;gameState.target=null;gameLoop()},off=()=>{gameState.keys[d]=0};el.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>el.addEventListener(ev,off))};
+  hold($("gLeft"),"l");hold($("gRight"),"r");
+  view.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();gameState.keys[e.key==="ArrowLeft"?"l":"r"]=1;gameState.target=null;gameLoop()}});
+  view.addEventListener("keyup",e=>{if(e.key==="ArrowLeft")gameState.keys.l=0;if(e.key==="ArrowRight")gameState.keys.r=0});
+  $("gWorld").addEventListener("click",e=>{if(e.target.closest("#gHouse")){openHouse();return}const r=$("gWorld").getBoundingClientRect();gameState.target=e.clientX-r.left;gameLoop()});
+  $("gHomeBtn").onclick=openHouse;
+  gameDraw(true);
+}
+function gameToast(t){const el=$("gToast");if(!el)return;el.textContent=t;el.classList.remove("on");void el.offsetWidth;el.classList.add("on")}
+function gameDraw(snap){
+  const view=$("gView"),world=$("gWorld"),pl=$("gPlayer");if(!view||!world||!pl)return;
+  const vw=view.clientWidth,cam=Math.max(0,Math.min(gameState.W-vw,gameState.x-vw*.42));
+  world.style.transform=`translateX(${-cam}px)`;world.style.transition=snap?"none":"";
+  pl.style.left=(gameState.x-24)+"px";pl.classList.toggle("flip",gameState.dir<0);
+  view.style.setProperty("--par",(-cam*.25)+"px");
+}
+function gameLoop(){
+  if(gameState.raf)return;
+  gameState.last=performance.now();
+  const step=now=>{
+    const dt=Math.min(.05,(now-gameState.last)/1000);gameState.last=now;
+    let v=0;
+    if(gameState.keys.l)v=-1;else if(gameState.keys.r)v=1;
+    else if(gameState.target!=null){const d=gameState.target-gameState.x;if(Math.abs(d)<4)gameState.target=null;else v=Math.sign(d)}
+    const pl=$("gPlayer");
+    if(!v||!pl){pl?.classList.remove("walk");gameState.raf=0;return}
+    const nx=Math.max(120,Math.min(gameState.maxX,gameState.x+v*210*dt));
+    if(nx===gameState.x){pl.classList.remove("walk");gameState.raf=0;gameState.target=null;
+      if(v>0&&gameState.lv<MAX_LEVEL)gameToast(`ด่าน Lv.${gameState.lv+1} ยังปิดอยู่ เลื่อนยศก่อนถึงจะผ่านได้`);return}
+    gameState.x=nx;gameState.dir=v;pl.classList.add("walk");
+    gameState.items=gameState.items.filter(t=>{if(Math.abs(t.x-gameState.x)>26)return true;collectItem(t);return false});
+    gameDraw();gameState.raf=requestAnimationFrame(step);
+  };
+  gameState.raf=requestAnimationFrame(step);
+}
+function collectItem(t){
+  document.querySelector(`.gitem[data-id="${t.id}"]`)?.classList.add("got");
+  if(!gameState.collected.includes(t.id))gameState.collected.push(t.id);
+  if(currentData)currentData.items=[...gameState.collected];
+  const bag=$("gBag");if(bag)bag.textContent=`ไอเทม ${gameState.collected.length}/${GAME_ITEMS.length}`;
+  gameToast(`ได้ ${t.name} แล้ว เข้าบ้านไปดูได้เลย`);
+  clearTimeout(gameState.saveT);
+  gameState.saveT=setTimeout(()=>{if(currentUser)updateDoc(doc(db,"users",currentUser.uid),{items:[...gameState.collected]}).catch(e=>console.error(e))},800);
+}
+function openHouse(){
+  const have=GAME_ITEMS.filter(t=>gameState.collected.includes(t.id));
+  const ov=document.createElement("div");ov.className="ghouse-ov";
+  ov.innerHTML=`<div class="ghouse-in"><div class="ghi-head"><b>บ้านของฉัน</b><span>${have.length}/${GAME_ITEMS.length} ชิ้น</span><button type="button" aria-label="ปิด">ปิด</button></div>
+  <div class="groom"><div class="gr-wall"></div><div class="gr-floor"></div>${have.map(t=>`<div class="gr-it" style="left:${t.at[0]}%;top:${t.at[1]}%;width:${t.at[2]}%"><svg viewBox="0 0 60 60">${t.svg}</svg></div>`).join("")}
+  ${have.length?"":'<p class="gr-empty">บ้านยังว่างอยู่ ทำข้อสอบแล้วเดินไปเก็บไอเทมมาแต่งบ้านกัน</p>'}</div>
+  <div class="gr-list">${GAME_ITEMS.map(t=>`<div class="gr-slot${gameState.collected.includes(t.id)?" on":""}"><svg viewBox="0 0 60 60">${t.svg}</svg><span>${escHtml(t.name)}</span></div>`).join("")}</div></div>`;
+  ov.addEventListener("click",e=>{if(e.target===ov||e.target.closest(".ghi-head button"))ov.remove()});
+  document.body.appendChild(ov);
 }
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
@@ -7171,6 +7327,7 @@ async function renderOverview(){
   try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
   const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
   const premium=currentData?.plan==="premium",lv=currentLevel();
+  try{renderGame(lv)}catch(e){console.error(e)}
   /* บันไดยศ: เรียงจากสูงลงต่ำ แสดง 2 ขั้นถัดไป ขั้นปัจจุบัน ขั้นก่อนหน้า และยศสูงสุด */
   const steps=[];
   const hi=Math.min(MAX_LEVEL,lv+2),lo=Math.max(0,lv-1);
@@ -7197,7 +7354,7 @@ async function renderOverview(){
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
   const badges=Object.entries(src).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ${mode==="sum"?` · ${v.n} ครั้ง`:v.at?` · ${v.at.toLocaleDateString("th-TH",{day:"numeric",month:"short"})}`:""}</em></div>`}).join("");
-  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}<div class="ladder">${steps.join("")}</div></div>
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;

@@ -209,7 +209,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -229,6 +229,11 @@ service cloud.firestore {
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["answered"])
             || (request.resource.data.answered is int && request.resource.data.answered >= 0
                 && request.resource.data.answered <= 20000))
+        // ไอเทมในเกมเส้นทางยศ: ได้ 1 ชิ้นต่อทุก 20 ข้อที่ทำ (สูงสุด 12 ชิ้น)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["items"])
+            || (request.resource.data.items is list
+                && request.resource.data.items.size() <= 12
+                && request.resource.data.items.size() <= request.resource.data.get("answered", 0) / 20 + 1))
         && validProfileText(request.resource.data)
         // วันนี้ทำข้อสอบไปกี่ข้อ: {date: "YYYY-MM-DD", count: 0-2000}
         // daily / dailyChoice: ข้อสอบประจำวันที่ตอบแล้ว (กันนับซ้ำเมื่อเปิดหลายเครื่อง)
