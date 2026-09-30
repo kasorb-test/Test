@@ -3325,11 +3325,11 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .hh-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .hh-go,.hh-alt{padding:11px 18px;border-radius:999px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer}
 .hh-go{border:0;background:#111;color:#fff}.hh-alt{border:1px solid #e5e1dc;background:#fff;color:#111}
-.hh-art{position:relative}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
+.hh-art{position:relative;container-type:inline-size}.hh-art img:first-child{display:block;width:100%;height:auto;border-radius:18px}
 /* มาสคอตเดินไปมาซ้ายขวาบนพื้นห้อง หันหน้าตามทางที่เดิน */
-.hh-walk{position:absolute;left:0;right:0;bottom:-2%;height:0;pointer-events:none}
+.hh-walk{position:absolute;left:0;right:0;bottom:1%;height:0;pointer-events:none}
 /* น้องดินสอถือป้าย "วันนี้ N ข้อ" เดินไปชิดขวาแล้วกลับมาชิดซ้าย */
-.hh-walker{--pole:168px;position:absolute;bottom:0;left:0;width:13%;max-width:72px;animation:hhWalk 14s ease-in-out infinite}
+.hh-walker{--pole:34cqw;position:absolute;bottom:0;left:0;width:13%;max-width:96px;animation:hhWalk 18s ease-in-out infinite}
 .hh-mascot{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08))}
 /* ธงเล็กปักบนไม้ ถือไว้ข้างตัว ผืนธงพลิ้วเบา ๆ */
 .hh-sign{position:absolute;left:82.5%;bottom:calc(63% - 10px);width:0;height:0;z-index:0}
@@ -3339,10 +3339,12 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 .hh-flag{position:absolute;right:1.5px;bottom:calc(var(--pole,104px) - 26px);white-space:nowrap;padding:4px 8px 4px 9px;border-radius:7px 0 0 7px;background:#16305f;color:#fff;font-size:10.5px;font-weight:700;line-height:1.25;box-shadow:0 3px 10px rgba(22,48,95,.25);transform-origin:100% 50%;animation:hhFlag 1.8s ease-in-out infinite}
 .hh-flag b{color:#ffb066;font-weight:900}
 @keyframes hhFlag{0%,100%{transform:skewY(5deg) scaleX(1)}50%{transform:skewY(-4deg) scaleX(.95)}}
-@keyframes hhWalk{0%,6%{left:26%}44%,56%{left:84%}94%,100%{left:26%}}
-@keyframes hhWalkM{0%,6%{left:34%}44%,56%{left:80%}94%,100%{left:34%}}
+@keyframes hhWalk{0%,4%{left:0}46%,54%{left:calc(100% - min(13%,96px))}96%,100%{left:0}}
+@keyframes hhWalkM{0%,4%{left:0}46%,54%{left:calc(100% - 17%)}96%,100%{left:0}}
+/* หน้าแรก: ภาพห้องเต็มกรอบ ไม่มีข้อความด้านซ้าย */
+.home-hero{grid-template-columns:1fr!important;padding:0!important}.home-hero .hh-text{display:none}.home-hero .hh-art img:first-child{border-radius:0}
 @media(prefers-reduced-motion:reduce){.hh-walker,.hh-flag{animation:none}.hh-walker{left:30%}}
-@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:17%;animation-name:hhWalkM;--pole:112px}.hh-flag{font-size:9.5px;padding:3px 7px}}
+@media(max-width:760px){.home-hero{grid-template-columns:1fr;padding:18px}.hh-text h2{font-size:25px}.hh-art{order:-1}.hh-walker{width:17%;animation-name:hhWalkM;--pole:33cqw}.hh-flag{font-size:9.5px;padding:3px 7px}}
 .au-mascot{flex:0 0 auto;width:62px;height:62px;border-radius:50%;background:#fff4df;display:grid;place-items:center;overflow:hidden}.au-mascot img{width:44px;height:auto;margin-top:6px}
 
 /* มุมมองคอมบนมือถือ: ไม่ให้เบราว์เซอร์ขยายตัวหนังสือเอง */
