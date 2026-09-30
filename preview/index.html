@@ -2590,101 +2590,133 @@ input{
 .countdown-unit{font-size:18px;font-weight:800}
 .countdown-date{font-size:13px;font-weight:600;opacity:.92}
 .ptr-tip{position:fixed;left:50%;top:6px;z-index:9999;padding:6px 14px;border-radius:999px;background:#16305f;color:#fff;font-size:12.5px;font-weight:700;opacity:0;transform:translate(-50%,0);pointer-events:none;transition:opacity .1s}
-/* ===== หมู่บ้านกะสอบ ===== */
-#gameBox{margin-bottom:14px}
-.gcard{padding:16px;border-radius:18px;background:#fff;border:1px solid #eee;box-shadow:0 4px 14px rgba(20,34,60,.05)}
-.ghead{display:flex;align-items:center;gap:10px;margin-bottom:10px}.ghead h3{margin:0;font-size:16px;color:#16305f;flex:1}
-.gstat{display:flex;gap:8px;align-items:center}
-.gbag{padding:5px 11px;border-radius:999px;background:#fff1e6;color:#e86208;font-size:12.5px;font-weight:800}
-.ghome-btn{padding:7px 14px;border:0;border-radius:999px;background:#16305f;color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
-.gview{position:relative;height:300px;border-radius:16px;overflow:hidden;outline:none;touch-action:pan-y;user-select:none;-webkit-user-select:none;background:linear-gradient(#bfe3ff,#e8f6ff 60%,#f4fbff)}
-.gworld{position:absolute;left:0;top:0;bottom:0;will-change:transform;transition:transform .12s linear}
-.gitem{position:absolute;bottom:40px;width:40px;height:40px;margin-left:-20px;animation:gBob 1.8s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18))}
-.gitem svg{width:100%;height:100%}
-.gitem i{position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,150,.8),transparent 65%);z-index:-1;animation:gGlow 1.8s ease-in-out infinite}
-.gitem.got{animation:gGot .6s ease-out forwards}
-@keyframes gBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes gGlow{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes gGot{to{transform:translateY(-70px) scale(1.4);opacity:0}}
-.gplayer{position:absolute;bottom:34px;width:48px;height:78px;z-index:3;pointer-events:none}
-.gplayer img{position:absolute;left:4px;top:0;width:40px;height:40px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.18);z-index:2}
-.gp-body{position:absolute;left:12px;top:34px;width:24px;height:28px;border-radius:9px 9px 6px 6px;background:#16305f}
-.gp-l,.gp-r{position:absolute;bottom:-12px;width:8px;height:14px;border-radius:4px;background:#1f2937}
-.gp-l{left:3px}.gp-r{right:3px}
-.gp-shadow{position:absolute;left:8px;bottom:-16px;width:32px;height:7px;border-radius:50%;background:rgba(0,0,0,.16)}
-.gplayer.walk{animation:gStep .32s ease-in-out infinite}
-.gplayer.walk .gp-l{animation:gLeg .32s ease-in-out infinite}.gplayer.walk .gp-r{animation:gLeg .32s ease-in-out infinite reverse}
-.gplayer.flip img{transform:scaleX(-1)}
-@keyframes gStep{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@keyframes gLeg{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-18deg)}}
-.gtoast{position:absolute;left:50%;top:14px;z-index:5;max-width:86%;padding:8px 14px;border-radius:999px;background:rgba(22,48,95,.94);color:#fff;font-size:13px;font-weight:700;text-align:center;opacity:0;transform:translate(-50%,-10px);pointer-events:none}
-.gtoast.on{animation:gToast 2.6s ease forwards}
-@keyframes gToast{0%{opacity:0;transform:translate(-50%,-10px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-6px)}}
-.gnote{margin:10px 2px 0;font-size:12.5px;color:#6b7280}
-.ghouse-ov{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.55)}
-.ghouse-in{width:min(640px,100%);max-height:92vh;overflow:auto;border-radius:20px;background:#fff;padding:14px}
-.ghi-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.ghi-head b{font-size:17px;color:#16305f}.ghi-head span{flex:1;font-size:13px;color:#e86208;font-weight:800}
-.ghi-head button{padding:7px 14px;border:0;border-radius:999px;background:#f1f5f9;font:inherit;font-weight:800;cursor:pointer}
-.groom{position:relative;aspect-ratio:600/340;border-radius:14px;overflow:hidden}
-.gr-wall{position:absolute;left:0;right:0;top:0;height:62%;background:#f6f1ea}.gr-floor{position:absolute;left:0;right:0;bottom:0;height:38%;background:#e6d6bf}
-.gr-it{position:absolute;transform:translate(-50%,-50%);animation:gPop .5s ease-out}.gr-it svg{display:block;width:100%;height:auto}
-@keyframes gPop{from{transform:translate(-50%,-50%) scale(.3);opacity:0}}
-.gr-empty{position:absolute;left:10%;right:10%;top:38%;margin:0;text-align:center;color:#6b7280;font-size:13.5px;font-weight:700}
-.gr-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:12px}
-.gr-slot{padding:8px 4px;border-radius:12px;background:#f8fafc;text-align:center;opacity:.35;filter:grayscale(1)}
-.gr-slot.on{opacity:1;filter:none;background:#fff7ed}
-.gr-slot svg{width:36px;height:36px}.gr-slot span{display:block;font-size:11px;font-weight:700;color:#374151}
-@media(prefers-reduced-motion:reduce){.gitem,.gitem i,.gplayer.walk,.gplayer.walk .gp-l,.gplayer.walk .gp-r{animation:none}}
-@media(max-width:600px){.gview{height:270px}.gcard{padding:12px}}
-
-.gtitle{flex:1;min-width:0}.gtitle h3{margin:0;font-size:16px;color:#16305f}.gtitle span{display:block;font-size:12px;color:#6b7280;margin-top:2px}
-.ghead{flex-wrap:wrap}.gsec-btn{padding:7px 12px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#16305f;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
-.vview{height:420px;background:#8fcf86}
-.vworld{transition:transform .1s linear}
-.v-grass{position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.12) 0 2px,transparent 3px) 0 0/34px 34px,linear-gradient(#9bd892,#86c97c)}
-.v-road{position:absolute;left:0;right:0;background:#d8d2c6;border-top:8px solid #efeae0;border-bottom:8px solid #efeae0}
-.v-road:after{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#fff 0 30px,transparent 30px 60px)}
-.v-sign{position:absolute;z-index:2;padding:5px 12px;border-radius:8px;background:#16305f;color:#fff;font-size:13px;font-weight:800;box-shadow:0 3px 8px rgba(0,0,0,.15)}
-.v-plot{position:absolute;cursor:pointer}
-.v-yard{position:absolute;inset:0;border-radius:10px;background:#b8e3ae;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
-.v-plot.mine .v-yard{background:#ffe7cf;box-shadow:inset 0 0 0 3px #ff9a45}
-.v-house{position:absolute;left:20px;right:20px;height:96px}
-.v-plot.top .v-house{top:10px}.v-plot.bot .v-house{bottom:50px}
-.v-roof{position:absolute;left:-8px;right:-8px;top:0;height:40px;clip-path:polygon(50% 0,100% 100%,0 100%)}
-.v-wall{position:absolute;left:0;right:0;top:38px;bottom:0;background:#fff8ee;border:2px solid #eadcc6;border-radius:3px}
-.v-win{position:absolute;left:9px;top:10px;width:24px;height:20px;border-radius:3px;background:#bfe3ff;border:3px solid #fff}
-.v-door{position:absolute;right:11px;bottom:0;width:20px;height:34px;border-radius:10px 10px 0 0;background:#b0713c}
-.v-plot.empty .v-house{opacity:.45;filter:grayscale(.6)}
-.v-fence{position:absolute;left:0;right:0;height:18px;background:repeating-linear-gradient(90deg,#fff 0 6px,transparent 6px 12px);border-top:3px solid #fff;border-bottom:3px solid #fff;-webkit-mask:linear-gradient(90deg,#000 0 calc(50% - 16px),transparent calc(50% - 16px) calc(50% + 16px),#000 calc(50% + 16px));mask:linear-gradient(90deg,#000 0 calc(50% - 16px),transparent calc(50% - 16px) calc(50% + 16px),#000 calc(50% + 16px))}
-.v-plot.top .v-fence{bottom:4px}.v-plot.bot .v-fence{top:4px}
-.v-no{position:absolute;right:6px;width:20px;height:20px;border-radius:50%;background:#16305f;color:#fff;font-size:11px;font-weight:800;line-height:20px;text-align:center}
-.v-plot.top .v-no{top:6px}.v-plot.bot .v-no{bottom:6px}
-.v-plate{position:absolute;left:50%;transform:translateX(-50%);max-width:112px;padding:2px 8px;border-radius:6px;background:#fff;color:#111;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 5px rgba(0,0,0,.12)}
-.v-plate b{margin-left:4px;color:#e86208}.v-plate.free{color:#9ca3af}
-.v-plot.top .v-plate{bottom:26px}.v-plot.bot .v-plate{top:26px}
-.v-npc{position:absolute;left:calc(50% + 26px);width:34px;height:34px}
-.v-plot.top .v-npc{bottom:44px}.v-plot.bot .v-npc{top:44px}
-.v-npc img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:3px solid #fff;background:#ffd9c2;box-shadow:0 3px 6px rgba(0,0,0,.18);animation:gBob 2.6s ease-in-out infinite}
-.v-on{position:absolute;right:-1px;bottom:1px;width:11px;height:11px;border-radius:50%;background:#22c55e;border:2px solid #fff}
-.v-dec{position:absolute;width:30px;height:30px}
-.v-plot.top .v-dec{bottom:30px}.v-plot.bot .v-dec{top:30px}
-.v-dec.d0{left:4px}.v-dec.d1{left:30px}.v-dec.d2{right:6px}
-.v-plot.top .v-dec.d2{bottom:80px}.v-plot.bot .v-dec.d2{top:80px}
-.v-mine{position:absolute;left:50%;transform:translateX(-50%);padding:3px 10px;border-radius:999px;background:#ff6a00;color:#fff;font-size:11px;font-weight:800;white-space:nowrap;animation:gBob 2.4s ease-in-out infinite}
-.v-plot.top .v-mine{top:-10px}.v-plot.bot .v-mine{bottom:-10px}
-.vitem{bottom:auto;margin-left:-20px}
-.vplayer{bottom:auto;z-index:4}
-.vpad{position:absolute;right:12px;bottom:12px;z-index:5;display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px)}
-.vpad button{border:0;border-radius:12px;background:rgba(255,255,255,.92);box-shadow:0 3px 10px rgba(0,0,0,.15);cursor:pointer;touch-action:none;position:relative}
-.vpad button:before{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;border-top:4px solid #16305f;border-left:4px solid #16305f}
-.vpad [data-d=u]{grid-area:1/2}.vpad [data-d=l]{grid-area:2/1}.vpad [data-d=r]{grid-area:2/3}.vpad [data-d=d]{grid-area:3/2}
-.vpad [data-d=u]:before{margin:-3px 0 0 -7px;transform:rotate(45deg)}.vpad [data-d=d]:before{margin:-10px 0 0 -7px;transform:rotate(-135deg)}
-.vpad [data-d=l]:before{margin:-7px 0 0 -3px;transform:rotate(-45deg)}.vpad [data-d=r]:before{margin:-7px 0 0 -10px;transform:rotate(135deg)}
-.vcard{position:absolute;left:12px;top:12px;z-index:6;display:flex;gap:10px;align-items:center;max-width:calc(100% - 24px);padding:10px 12px;border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.18)}
-.vcard img{width:42px;height:42px;border-radius:50%;object-fit:cover;flex:0 0 auto}
-.vcard b{display:block;font-size:14px;color:#16305f}.vcard span{display:block;font-size:12px;color:#374151}.vcard em{display:block;font-size:11px;color:#9ca3af;font-style:normal}
-.vhide{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12.5px;color:#374151}.vhide input{width:auto;margin:0}
-@media(max-width:600px){.vview{height:400px}.ghead{align-items:flex-start}.gtitle{flex-basis:100%}.gstat{flex-wrap:wrap}.gtoast{top:auto;bottom:140px}.vpad{grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,38px)}}
+/* บันไดยศแบบรูป */
+.stairs{position:relative;height:250px;margin:4px 0 6px;container-type:inline-size;overflow:hidden;border-radius:14px;background:linear-gradient(#fff7ef,#fff 70%)}
+.st-floor{position:absolute;left:0;right:0;bottom:0;height:6px;background:#efe6da}
+.st-col{position:absolute;bottom:6px;box-sizing:border-box;padding:9px 4px 0;border-radius:10px 10px 0 0;text-align:center;border:1px solid rgba(0,0,0,.04);border-bottom:0}
+.st-col b{display:block;font-size:12.5px;line-height:1.2}.st-col span{display:block;font-size:10px;line-height:1.25;opacity:.85;overflow-wrap:anywhere}
+.st-col.done{background:#e3e9f5;color:#16305f}.st-col.now{background:linear-gradient(160deg,#ff9a45,#ff6a00);color:#fff}
+.st-col.next{background:#ffe8d4;color:#c2410c}.st-col.top{background:linear-gradient(160deg,#ffe07a,#f5b301);color:#5a3b00}
+/* บันไดยศแบบมีมิติ มินิมอล: ด้านหน้า + ผิวบน + ด้านข้าง ไล่เฉดสีเดียวกัน */
+.stairs{--d:12px;height:270px!important;background:linear-gradient(180deg,#fbf8f4,#f3eee7);box-shadow:inset 0 0 0 1px #efe8de}
+.st-floor{height:6px;background:#e9e1d6}
+.st-col{--f:#e6ebf3;--t:#f4f7fb;--s:#cfd8e6;background:var(--f)!important;border:0;border-radius:0;overflow:visible;padding-top:12px;box-shadow:0 10px 18px -12px rgba(22,48,95,.35)}
+.st-col::before{content:"";position:absolute;left:0;right:0;top:calc(-1*var(--d));height:var(--d);background:var(--t);transform:skewX(-45deg);transform-origin:bottom left}
+.st-col::after{content:"";position:absolute;top:calc(-1*var(--d));right:calc(-1*var(--d));bottom:var(--d);width:var(--d);background:var(--s);transform:skewY(-45deg);transform-origin:bottom left;top:0;bottom:0}
+.st-col.done{--f:#e6ebf3;--t:#f4f7fb;--s:#cfd8e6;color:#16305f}
+.st-col.now{--f:#ff7a1a;--t:#ffa35c;--s:#e2600a;color:#fff}
+.st-col.next{--f:#fde9d7;--t:#fff4ea;--s:#f6d3b4;color:#c2410c}
+.st-col.top{--f:#f7cf55;--t:#fde38f;--s:#e0b232;color:#5a3b00}
+.st-col b{font-size:13px;letter-spacing:.2px}.st-col span{font-size:10px;opacity:.8}
+@media(max-width:480px){.st-col span{display:none!important}.st-col b{font-size:12px}}
+.st-me img{border-width:2px;box-shadow:0 6px 14px rgba(22,48,95,.22)}
+.st-cap{font-weight:600;color:#475569}
+/* ฉากธรรมชาติหลังบันไดยศ: ฟ้า ภูเขา เนินหญ้า ต้นไม้ เมฆลอย นก */
+.stairs{background:linear-gradient(180deg,#dcefff 0%,#eef7ff 45%,#f6fbf2 100%)!important;box-shadow:inset 0 0 0 1px #e3ecf3!important}
+.st-scene{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.st-land{position:absolute;left:0;right:0;bottom:0;width:100%;height:92%}
+.st-trees{position:absolute;left:0;width:100%;bottom:calc(56px + 48px);height:40px}
+.st-sun{position:absolute;right:14%;top:16px;width:34px;height:34px;border-radius:50%;background:#fff1b8;box-shadow:0 0 0 8px rgba(255,241,184,.35),0 0 30px rgba(255,220,120,.5)}
+.st-cloud{position:absolute;height:14px;border-radius:14px;background:#fff;opacity:.9;animation:stCloud 34s linear infinite}
+.st-cloud:before,.st-cloud:after{content:"";position:absolute;bottom:4px;border-radius:50%;background:#fff}
+.st-cloud:before{left:8px;width:18px;height:18px}.st-cloud:after{left:22px;width:14px;height:14px}
+.st-cloud.c1{top:26px;width:54px;left:8%}.st-cloud.c2{top:52px;width:44px;left:48%;animation-duration:46s;animation-delay:-18s}
+@keyframes stCloud{0%{transform:translateX(0)}50%{transform:translateX(40px)}100%{transform:translateX(0)}}
+.st-bird{position:absolute;width:12px;height:5px;border-top:2px solid #64748b;border-radius:50% 50% 0 0;opacity:.6;animation:stBird 7s ease-in-out infinite}
+.st-bird:after{content:"";position:absolute;left:10px;top:-2px;width:12px;height:5px;border-top:2px solid #64748b;border-radius:50% 50% 0 0}
+.st-bird.b1{left:30%;top:30px}.st-bird.b2{left:36%;top:42px;transform:scale(.8);animation-delay:-3s}
+@keyframes stBird{0%,100%{translate:0 0}50%{translate:14px -6px}}
+.st-floor{background:#7fb877!important;height:8px!important}
+.st-col{box-shadow:0 12px 16px -12px rgba(30,60,30,.45)!important}
+@media(prefers-reduced-motion:reduce){.st-cloud,.st-bird{animation:none}}
+/* ===== บันไดยศแนวเกมกระโดดข้ามแท่น: แท่นดินหญ้าลายบล็อก รูปประจำตัวกระโดดโค้งไปแท่นถัดไป ===== */
+.stairs{background:linear-gradient(180deg,#6ec6ff 0%,#a9dcff 55%,#d6f0ff 100%)!important;box-shadow:none!important;border-radius:16px!important}
+.st-sun{background:#fff6c2!important}
+.st-cloud{height:16px;background:#fff;opacity:1}.st-cloud:before{width:22px;height:22px}.st-cloud:after{width:16px;height:16px;left:26px}
+.st-floor{height:10px!important;background:#6b4424!important}
+.st-col{--dirt:#d08a4c;--line:rgba(90,50,20,.28);--g:#5ccf3f;--gd:#37a52b;
+  background:linear-gradient(var(--g),var(--g)) top/100% 13px no-repeat,linear-gradient(var(--gd),var(--gd)) 0 13px/100% 4px no-repeat,
+  repeating-linear-gradient(90deg,transparent 0 19px,var(--line) 19px 21px),repeating-linear-gradient(0deg,transparent 0 17px,var(--line) 17px 19px),var(--dirt)!important;
+  border:3px solid #5b3718!important;border-bottom:0!important;border-radius:9px 9px 0 0!important;padding-top:20px!important;box-shadow:inset -5px 0 0 rgba(0,0,0,.12),inset 4px 0 0 rgba(255,255,255,.16)!important;color:#fff!important}
+.st-col::before{content:"";position:absolute;left:-3px;right:-3px;top:-7px;height:10px;transform:none;background:radial-gradient(circle at 6px 10px,var(--g) 6px,transparent 6.5px) 0 0/12px 10px repeat-x}
+.st-col::after{content:none}
+.st-col b,.st-col span{text-shadow:none}.st-col b{display:inline-block;padding:1px 7px;border-radius:6px;background:rgba(60,30,10,.5)}.st-col span{display:block;margin:3px 3px 0;padding:1px 3px;border-radius:5px;background:rgba(60,30,10,.35);opacity:1}
+.st-col.top b{background:rgba(120,80,0,.55)}.st-col.top span{background:rgba(120,80,0,.4)}
+.st-col.done{filter:saturate(.55) brightness(1.08)}
+.st-col.now{--g:#6be04c;--gd:#3fb830;box-shadow:0 0 0 3px #fff,0 0 18px 4px rgba(255,210,80,.8),inset -5px 0 0 rgba(0,0,0,.12)!important}
+.st-col.next{--dirt:#c98247}
+.st-col.top{--dirt:#e9b93a;--line:rgba(140,90,0,.3);--g:#ffe066;--gd:#e2b100;border-color:#8a6200!important;color:#fff!important}
+.st-goal{position:absolute;left:50%;top:-58px;width:4px;height:52px;margin-left:-2px;background:#e5e7eb;border-radius:2px}
+.st-goal:after{content:"";position:absolute;left:4px;top:2px;width:22px;height:14px;background:#ff5a36;clip-path:polygon(0 0,100% 50%,0 100%);animation:stFlagW 1.4s ease-in-out infinite;transform-origin:left center}
+@keyframes stFlagW{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.8)}}
+.st-col.top .st-star{position:absolute;left:50%;top:-78px;margin-left:-8px}
+.st-coin{position:absolute;z-index:1;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6b0 0 3px,#ffd23a 4px 6px,#f2b400 7px);box-shadow:inset 0 0 0 2px #d99a00;animation:stCoin 1.2s linear infinite}
+@keyframes stCoin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
+.st-me{transform-origin:50% 100%}
+/* เช็คอินรายวัน + ร้านแลกของสะสม */
+.st-cklabel{position:absolute;z-index:3;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#b45309;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.st-plus{left:auto!important;right:0;width:100%;top:44%!important;text-align:center;font-size:22px!important;text-shadow:0 2px 0 #fff}
+.shop .ovh{display:flex;align-items:center;gap:10px;margin-bottom:10px}.shop .ovh h3{margin:0;flex:1}
+.shop-bal{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:#fff7e0;color:#8a5a00;font-size:13px}.shop-bal b{font-size:15px}
+.ck-note{margin:0 0 14px;font-size:12.5px;color:#64748b}.ck-note.on{padding:8px 12px;border-radius:10px;background:#fff7e0;color:#8a5a00;font-weight:700}
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.cp-it{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:14px;border:1.5px dashed #fdba74;background:#fff7ed}
+.cp-it b{font-size:15px;color:#c2410c}.cp-it span{font-size:12px;color:#64748b;min-height:16px}
+.cp-it button{align-self:flex-start;display:flex;align-items:center;gap:4px;margin-top:4px;padding:5px 12px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}.cp-it button:disabled{background:#e5e7eb;color:#9ca3af}
+.cp-mine{display:grid;gap:8px;margin-bottom:14px}
+.cp-code{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;padding:10px 12px;border-radius:12px;background:#f0fdf4;border:1px solid #bbf7d0}
+.cp-code b{font-family:monospace;font-size:15px;letter-spacing:1px;color:#15803d}.cp-code span{flex:1;font-size:12.5px;color:#374151}.cp-code em{font-style:normal;font-size:12px;font-weight:800;color:#15803d}
+.cp-code.used{background:#f8fafc;border-color:#e5e7eb;opacity:.7}.cp-code.used b,.cp-code.used em{color:#94a3b8}
+.shop-h{margin:0 0 10px;font-size:14px;color:#16305f}.shop-h small{color:#94a3b8;font-weight:600}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.shop-it{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:14px;background:#f8fafc;border:1px solid #eef2f7;text-align:center}
+.shop-it svg{width:48px;height:48px;filter:grayscale(1) opacity(.45)}
+.shop-it b{font-size:12px;color:#334155;line-height:1.3}
+.shop-it.has{background:linear-gradient(180deg,#fffaf0,#fff);border-color:#fde68a;box-shadow:0 4px 12px rgba(245,179,1,.15)}.shop-it.has svg{filter:drop-shadow(0 3px 4px rgba(0,0,0,.15))}
+.shop-it button{display:flex;align-items:center;gap:4px;padding:5px 12px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.shop-it button:disabled{background:#e5e7eb;color:#9ca3af;cursor:default}
+.shop-it .own{font-size:12px;font-weight:800;color:#15803d}
+/* เมฆลอยผ่านตลอดจากขวาไปซ้าย (อยู่นอกแผนที่ ไม่เลื่อนตามการปัด) */
+.st-sky{position:absolute;left:0;right:0;top:0;height:45%;z-index:1;pointer-events:none;overflow:hidden}
+.st-sky .st-cloud{left:auto!important;right:-90px;animation:stDrift 28s linear infinite!important}
+.st-sky .c1{top:22px;width:60px}.st-sky .c2{top:56px;width:46px;animation-duration:38s!important;animation-delay:-14s!important}
+.st-sky .c3{top:34px;width:72px;animation-duration:44s!important;animation-delay:-30s!important}.st-sky .c4{top:74px;width:40px;animation-duration:32s!important;animation-delay:-6s!important}
+@keyframes stDrift{from{transform:translateX(0)}to{transform:translateX(calc(-100cqw - 180px))}}
+.stairs{container-type:inline-size}
+.st-track{z-index:2}
+/* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
+@media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
+/* บันไดยศครบทุกขั้น เลื่อนซ้ายขวาได้ + กระโดดเก็บเหรียญ */
+.stairs{height:290px!important}
+.st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
+.st-track:active{cursor:grabbing}
+.st-world{position:relative;height:100%}
+.st-world .st-scene{background:inherit}
+.st-next{position:absolute;left:50%;top:-30px;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#c2410c;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15);animation:gBobS 2s ease-in-out infinite}
+@keyframes gBobS{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
+.st-coin.big{width:22px;height:22px;transition:opacity .2s,transform .2s}
+.st-coin.got{opacity:0;transform:translateY(-24px) scale(1.5)!important;animation:none}
+.st-me{z-index:3}
+.st-me.hop{animation:stHop .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes stHop{0%{transform:translateY(0) scale(1)}12%{transform:translateY(2px) scale(1.12,.86)}45%{transform:translateY(-78px) scale(.95,1.06)}80%{transform:translateY(0) scale(1)}88%{transform:translateY(1px) scale(1.1,.9)}100%{transform:translateY(0) scale(1)}}
+.st-bank{position:absolute;left:10px;top:10px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:13px;color:#8a5a00}
+.st-coin.mini{position:static;width:16px;height:16px;animation:none}
+.st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
+.st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
+.st-plus{position:absolute;left:44px;top:34px;z-index:5;color:#e6a100;font-weight:900;font-size:15px;opacity:0;pointer-events:none}
+.st-plus.on{animation:stPlus .8s ease-out}
+@keyframes stPlus{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+.st-cap small{font-weight:500;color:#94a3b8;font-size:11.5px}
+.st-col span{display:block!important}
+@media(max-width:480px){.st-col span{display:block!important;font-size:9.5px}}
+@media(prefers-reduced-motion:reduce){.st-me.hop,.st-coin,.st-goal:after,.st-next{animation:none}}
+.st-star{display:block;width:16px;height:16px;margin:-2px auto 2px;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:stStar 2.4s ease-in-out infinite}
+@keyframes stStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(12deg)}}
+.st-me{position:absolute;z-index:2;width:42px;height:42px;margin-bottom:6px}
+.st-me img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:3px solid #fff;box-shadow:0 4px 12px rgba(226,82,10,.35);display:block}
+.st-me i{position:absolute;left:50%;bottom:-5px;width:26px;height:6px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.12)}
+.st-cap{margin:0 0 12px;font-size:12.5px;font-weight:700;color:#16305f;text-align:center}
+@media(prefers-reduced-motion:reduce){.st-star{animation:none}}
 /* นับถอยหลัง: ย่อเล็ก อยู่เหนือสถิติด้านล่างของหน้าแรก */
 #countdownRow{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin:14px 0 10px}
 #countdownRow .countdown-card{padding:12px 14px;min-height:0;border-radius:16px}
@@ -3870,7 +3902,6 @@ LINE OA @kasorb
 <section class="app-page" id="scorePage">
 <h2 class="page-heading">ภาพรวมผลการทดสอบ</h2>
 <p class="page-desc">สรุป XP ยศ ความคืบหน้า และคะแนนรายวิชา</p>
-<div id="gameBox"></div>
 <div id="ovBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- PREMIUM -->
@@ -4107,7 +4138,6 @@ doc,
 getDoc,
 setDoc,
 updateDoc,
-deleteDoc,
 serverTimestamp,
 Timestamp,
 collection,
@@ -7239,230 +7269,110 @@ async function openAttempt(a,btn){
 const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
-/* ไอเทมแต่งบ้าน: ทุก ๆ 20 ข้อที่ทำ ได้ 1 ชิ้น วางบนถนนในหมู่บ้านให้เดินไปเก็บ (users/{uid}.items) */
-const GAME_PER_ITEM=20;
-const GAME_ITEMS=[
-  {id:"rug",name:"พรมปูพื้น",svg:'<ellipse cx="30" cy="36" rx="27" ry="12" fill="#e7a0a6"/><ellipse cx="30" cy="36" rx="19" ry="7" fill="#f6d1d4"/>',at:[50,86,34]},
-  {id:"plant",name:"ต้นไม้ในกระถาง",svg:'<path d="M30 34q-16-10-8-28 10 12 8 28zM30 34q14-12 24-6-8 12-24 6zM30 34q-14-6-22-2 8 10 22 2z" fill="#6fae78"/><path d="M20 34h20l-3 20H23z" fill="#c98a5a"/>',at:[88,62,14]},
-  {id:"lamp",name:"โคมไฟ",svg:'<path d="M18 22h24l-6-16H24z" fill="#16305f"/><rect x="28" y="22" width="4" height="26" fill="#555"/><rect x="20" y="48" width="20" height="6" rx="3" fill="#555"/><ellipse cx="30" cy="24" rx="12" ry="3" fill="#ffe9a8"/>',at:[12,54,13]},
-  {id:"shelf",name:"ชั้นหนังสือ",svg:'<rect x="8" y="4" width="44" height="52" rx="3" fill="#d9c7b0"/><rect x="12" y="8" width="36" height="12" fill="#fff"/><rect x="12" y="24" width="36" height="12" fill="#fff"/><rect x="12" y="40" width="36" height="12" fill="#fff"/><g fill="#16305f"><rect x="14" y="10" width="4" height="10"/><rect x="26" y="26" width="4" height="10"/></g><g fill="#ff8a3d"><rect x="19" y="11" width="4" height="9"/><rect x="36" y="42" width="4" height="10"/></g><g fill="#9cc5a1"><rect x="31" y="10" width="4" height="10"/><rect x="15" y="42" width="5" height="10"/></g>',at:[74,40,22]},
-  {id:"desk",name:"โต๊ะอ่านหนังสือ",svg:'<rect x="4" y="24" width="52" height="7" rx="2" fill="#b98a5c"/><rect x="8" y="31" width="5" height="24" fill="#9c7248"/><rect x="47" y="31" width="5" height="24" fill="#9c7248"/><rect x="14" y="16" width="16" height="8" rx="1" fill="#fff" stroke="#ddd"/><rect x="36" y="14" width="6" height="10" rx="2" fill="#ffb21e"/>',at:[30,60,24]},
-  {id:"clock",name:"นาฬิกาแขวน",svg:'<circle cx="30" cy="30" r="22" fill="#fff" stroke="#16305f" stroke-width="5"/><path d="M30 30V16M30 30l9 6" stroke="#16305f" stroke-width="4" stroke-linecap="round"/>',at:[52,18,9]},
-  {id:"frame",name:"รูปติดผนัง",svg:'<rect x="6" y="10" width="48" height="38" rx="3" fill="#c98a5a"/><rect x="11" y="15" width="38" height="28" fill="#dcebf2"/><path d="M11 43l12-14 9 9 6-6 11 11z" fill="#6fae78"/><circle cx="40" cy="22" r="4" fill="#fff4c9"/>',at:[28,20,14]},
-  {id:"sofa",name:"โซฟา",svg:'<rect x="6" y="20" width="48" height="22" rx="8" fill="#16305f"/><rect x="2" y="28" width="12" height="20" rx="5" fill="#1f3b73"/><rect x="46" y="28" width="12" height="20" rx="5" fill="#1f3b73"/><rect x="12" y="34" width="36" height="12" rx="4" fill="#2a4a8a"/><rect x="10" y="48" width="4" height="6" fill="#555"/><rect x="46" y="48" width="4" height="6" fill="#555"/>',at:[52,66,26]},
-  {id:"bed",name:"เตียงนอน",svg:'<rect x="4" y="30" width="52" height="16" rx="4" fill="#fff" stroke="#e5ddd0"/><rect x="4" y="38" width="52" height="10" rx="3" fill="#e6ddd0"/><rect x="2" y="16" width="7" height="38" rx="2" fill="#d9c7b0"/><rect x="10" y="24" width="16" height="9" rx="4" fill="#fbf7f1" stroke="#eadfcf"/>',at:[12,76,28]},
-  {id:"trophy",name:"ถ้วยรางวัล",svg:'<path d="M18 8h24v12a12 12 0 0 1-24 0z" fill="#f5b301"/><path d="M18 12h-7a7 7 0 0 0 7 10M42 12h7a7 7 0 0 1-7 10" fill="none" stroke="#f5b301" stroke-width="4"/><rect x="27" y="31" width="6" height="10" fill="#d99a00"/><rect x="18" y="41" width="24" height="8" rx="2" fill="#16305f"/>',at:[74,20,11]},
-  {id:"cat",name:"แมวส้ม",svg:'<ellipse cx="32" cy="42" rx="18" ry="11" fill="#ff9a45"/><circle cx="18" cy="30" r="10" fill="#ff9a45"/><path d="M10 24l2-10 7 7zM26 24l-2-10-7 7z" fill="#ff9a45"/><circle cx="15" cy="29" r="1.6" fill="#333"/><circle cx="21" cy="29" r="1.6" fill="#333"/><path d="M48 42q10-2 6-14" stroke="#ff9a45" stroke-width="5" fill="none" stroke-linecap="round"/>',at:[70,84,16]},
-  {id:"flag",name:"ธงกะสอบ TEST",svg:'<rect x="12" y="6" width="4" height="50" fill="#777"/><path d="M16 8h32l-6 10 6 10H16z" fill="#ff6a00"/><rect x="21" y="13" width="18" height="8" rx="4" fill="#16305f"/>',at:[92,34,12]}
+/* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
+/* ===== เหรียญพิเศษ + แลกของสะสม + แลกส่วนลด =====
+   แอดมินกำหนดช่วงเวลาที่เหรียญขึ้นบนบันไดยศ (site/coins.drops) ใครเข้ามาในช่วงนั้นกระโดดเก็บได้ช่วงละ 1 ครั้ง
+   เหรียญแลกของสะสม (owned) หรือแลกโค้ดส่วนลด (coupons) ตามที่แอดมินตั้งไว้ (site/coins.coupons)
+   กฎของ Firebase ตรวจซ้ำทุกครั้ง: เวลาต้องอยู่ในช่วงจริง จำนวนเหรียญและราคาต้องตรงกับที่ตั้งไว้ */
+let coinSite={drops:{},coupons:{}};
+async function loadCoinSite(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};coinSite={drops:d.drops||{},coupons:d.coupons||{}}}catch(e){console.error(e)}}
+function activeDrop(){const now=Date.now(),got=currentData?.claimed||{};
+  return Object.entries(coinSite.drops).map(([id,d])=>({id,...d})).filter(d=>!got[d.id]&&Number(d.start)<=now&&now<=Number(d.end)&&Number(d.amount)>0).sort((x,y)=>x.end-y.end)[0]||null}
+async function claimDrop(){
+  const d=activeDrop();if(!d||!currentUser)return 0;
+  const claimed={...(currentData.claimed||{}),[d.id]:true},coins=coinsOf()+Number(d.amount);
+  try{await updateDoc(doc(db,"users",currentUser.uid),{coins,claimed,lastClaim:d.id})}catch(e){console.error(e);return 0}
+  currentData.coins=coins;currentData.claimed=claimed;return Number(d.amount);
+}
+const SHOP_ITEMS=[
+  {id:"badge",name:"ตราโล่ตำรวจ",price:30,svg:'<path d="M30 4l22 8v16c0 14-10 24-22 28C18 52 8 42 8 28V12z" fill="#16305f"/><path d="M30 10l16 6v12c0 10-7 18-16 21-9-3-16-11-16-21V16z" fill="#f5b301"/><circle cx="30" cy="28" r="7" fill="#16305f"/>'},
+  {id:"whistle",name:"นกหวีดทอง",price:40,svg:'<rect x="10" y="22" width="30" height="18" rx="9" fill="#f5b301"/><rect x="36" y="24" width="16" height="10" rx="3" fill="#e0a000"/><circle cx="22" cy="31" r="4" fill="#fff4c2"/><path d="M12 22q-6-14 8-16" stroke="#16305f" stroke-width="3" fill="none"/>'},
+  {id:"pencil",name:"ดินสอ 2B ทองคำ",price:50,svg:'<rect x="24" y="4" width="12" height="38" rx="2" fill="#f5b301"/><rect x="24" y="4" width="12" height="7" fill="#f7a8b8"/><rect x="24" y="10" width="12" height="4" fill="#c9ced6"/><path d="M24 42h12l-6 14z" fill="#f3d3a6"/><path d="M28 50h4l-2 6z" fill="#333"/>'},
+  {id:"cap",name:"หมวกนายสิบ",price:60,svg:'<path d="M8 34q22-30 44 0z" fill="#16305f"/><rect x="6" y="32" width="48" height="8" rx="4" fill="#0f2449"/><path d="M16 40q14 10 28 0z" fill="#111"/><circle cx="30" cy="24" r="5" fill="#f5b301"/>'},
+  {id:"medal",name:"เหรียญเกียรติยศ",price:80,svg:'<path d="M20 4h8l4 18h-8zM40 4h-8l-4 18h8z" fill="#e11d48"/><circle cx="30" cy="38" r="16" fill="#f5b301"/><circle cx="30" cy="38" r="10" fill="#ffd84a"/><path d="M30 31l2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8z" fill="#fff"/>'},
+  {id:"book",name:"ตำรากฎหมายปกทอง",price:100,svg:'<rect x="10" y="8" width="38" height="46" rx="4" fill="#7c2d12"/><rect x="14" y="8" width="34" height="46" rx="3" fill="#9a3412"/><rect x="20" y="18" width="22" height="4" rx="2" fill="#f5b301"/><rect x="20" y="26" width="16" height="3" rx="1.5" fill="#f5b301"/><rect x="10" y="50" width="38" height="4" fill="#fde68a"/>'},
+  {id:"star",name:"ดาวประดับบ่า",price:120,svg:'<path d="M30 6l7 15 16 2-12 11 3 16-14-8-14 8 3-16L7 23l16-2z" fill="#f5b301" stroke="#d99a00" stroke-width="2"/>'},
+  {id:"trophy",name:"ถ้วยแชมป์ข้อสอบ",price:150,svg:'<path d="M18 8h24v12a12 12 0 0 1-24 0z" fill="#f5b301"/><path d="M18 12h-7a7 7 0 0 0 7 10M42 12h7a7 7 0 0 1-7 10" fill="none" stroke="#f5b301" stroke-width="4"/><rect x="27" y="31" width="6" height="10" fill="#d99a00"/><rect x="18" y="41" width="24" height="8" rx="2" fill="#16305f"/>'},
+  {id:"shield",name:"โล่ผู้พิทักษ์",price:200,svg:'<path d="M30 4l22 8v14c0 16-10 26-22 30C18 52 8 42 8 26V12z" fill="#94a3b8"/><path d="M30 10l16 6v10c0 12-7 20-16 24-9-4-16-12-16-24V16z" fill="#e2e8f0"/><path d="M22 28l6 6 12-12" stroke="#16305f" stroke-width="5" fill="none" stroke-linecap="round"/>'},
+  {id:"crown",name:"มงกุฎคนขยัน",price:250,svg:'<path d="M8 44l4-26 12 12 6-18 6 18 12-12 4 26z" fill="#f5b301" stroke="#d99a00" stroke-width="2"/><rect x="8" y="44" width="44" height="8" rx="2" fill="#d99a00"/><circle cx="30" cy="36" r="4" fill="#e11d48"/>'},
+  {id:"gem",name:"เพชรแห่งความเพียร",price:300,svg:'<path d="M14 18h32l8 10-24 26L6 28z" fill="#38bdf8"/><path d="M14 18l6 10h20l6-10M6 28h48M20 28l10 26 10-26" stroke="#e0f2fe" stroke-width="2" fill="none"/>'},
+  {id:"rocket",name:"จรวดติดยศ",price:400,svg:'<path d="M30 4c10 8 12 22 8 34H22c-4-12-2-26 8-34z" fill="#f1f5f9" stroke="#16305f" stroke-width="2"/><circle cx="30" cy="20" r="5" fill="#38bdf8"/><path d="M22 30l-8 12h8zM38 30l8 12h-8z" fill="#ff6a00"/><path d="M26 40h8l-4 14z" fill="#f5b301"/>'}
 ];
-function gameEarned(){return Math.min(GAME_ITEMS.length,Math.floor((answeredCount()||0)/GAME_PER_ITEM))}
-/* ===== หมู่บ้านกะสอบ: บ้านจัดสรรหมู่บ้านละ 20 หลัง เดินได้ทั่วหมู่บ้าน เห็นเพื่อนบ้านยืนหน้าบ้าน เข้าได้เฉพาะบ้านตัวเอง =====
-   ข้อมูล: villages/{vid} {name,n} · villages/{vid}/slots/{0-19} {uid} (กันจองหลังเดียวกันซ้ำ) · villages/{vid}/plots/{uid} ข้อมูลหน้าบ้าน
-   users/{uid}.village / .plot = หมู่บ้านและเลขบ้านของตัวเอง · ลิงก์ชวน ?v=รหัสหมู่บ้าน
-   อ่านข้อมูลครั้งละประมาณ 21 ครั้งต่อการเปิดหมู่บ้าน ไม่มีการส่งตำแหน่งเดินแบบสด จึงอยู่ในแพ็กเกจฟรีของ Firebase */
-const VILLAGE_SIZE=20;
-const VILLAGE_NAMES=["สุขใจ","ตั้งใจ","มุ่งมั่น","ติดยศ","ใฝ่ฝัน","ขยัน","เพียรพยายาม","พิชิตฝัน","ร่มเย็น","สามัคคี"];
-const V_ROOFS=["#e86a4a","#16305f","#2f7d45","#b45309","#7c3aed","#0e7490","#be185d","#4b5563","#ca8a04","#1d4ed8"];
-const vs={x:0,y:0,tx:null,ty:null,keys:{},raf:0,last:0,plots:[],vid:null,slot:-1,collected:[],items:[],saveT:0};
-const VW=1440,VH=560,ROAD_T=236,ROAD_B=330;               // ขนาดแผนที่ และถนนกลางหมู่บ้าน
-const plotRect=s=>{const top=s<10,i=s%10;return {x:40+i*136,y:top?36:ROAD_B+10,w:124,h:190,top}};
-const gateOf=s=>{const r=plotRect(s);return {x:r.x+r.w/2,y:r.top?ROAD_T+8:ROAD_B-8}};
-(()=>{try{const v=new URLSearchParams(location.search).get("v");if(v&&/^v[0-9a-z]{4,20}$/.test(v)){localStorage.setItem("kasorbInvite",v);const u=new URL(location.href);u.searchParams.delete("v");history.replaceState(null,"",u)}}catch(e){}})();
-function thumbOf(src){return new Promise(res=>{if(!/^data:image\//.test(src||""))return res("");const im=new Image();im.onload=()=>{try{const c=document.createElement("canvas");c.width=c.height=64;const g=c.getContext("2d"),s=Math.min(im.width,im.height);g.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,64,64);res(c.toDataURL("image/jpeg",.7))}catch(e){res("")}};im.onerror=()=>res("");im.src=src})}
-async function villageName(vid){const s=await getDoc(doc(db,"villages",vid));return s.exists()?s.data().name:""}
-/* จองบ้านว่างในหมู่บ้าน vid: ลองทีละหลังที่ยังว่าง ถ้ามีคนจองตัดหน้าก็ลองหลังถัดไป */
-async function claimPlot(vid,create){
-  const uid=currentUser.uid,taken=new Set();
-  if(!create){const ss=await getDocs(collection(db,"villages",vid,"slots"));ss.forEach(d=>taken.add(Number(d.id)))}
-  for(let s=0;s<VILLAGE_SIZE;s++){
-    if(taken.has(s))continue;
-    try{
-      await runTransaction(db,async tx=>{
-        const sref=doc(db,"villages",vid,"slots",String(s)),vref=doc(db,"villages",vid);
-        const [sd,vd]=await Promise.all([tx.get(sref),tx.get(vref)]);
-        if(sd.exists())throw new Error("taken");
-        if(vd.exists())tx.update(vref,{n:Math.min(VILLAGE_SIZE,(Number(vd.data().n)||0)+1)});
-        else tx.set(vref,{name:create||"หมู่บ้านกะสอบ",n:1,createdAt:serverTimestamp()});
-        tx.set(sref,{uid});
-        tx.update(doc(db,"users",uid),{village:vid,plot:s});
-      });
-      currentData.village=vid;currentData.plot=s;return true;
-    }catch(e){if(String(e.message)!=="taken")console.error(e);if(create)return false}
-  }
-  return false;
+const coinsOf=()=>Number(currentData?.coins)||0;
+function shopHtml(){
+  const own=currentData?.owned||{},n=SHOP_ITEMS.filter(t=>own[t.id]).length,d=activeDrop();
+  const cps=Object.entries(coinSite.coupons).map(([id,c])=>({id,...c})).filter(c=>Number(c.coins)>0&&Number(c.baht)>0).sort((x,y)=>x.coins-y.coins);
+  const mine=Object.entries(currentData?.coupons||{}).map(([code,c])=>({code,...c})).sort((x,y)=>(y.at||0)-(x.at||0));
+  return `<div class="ovc shop" id="shopBox"><div class="ovh"><h3>เหรียญของฉัน</h3><span class="shop-bal"><i class="st-coin mini"></i><b id="shopBal">${coinsOf().toLocaleString()}</b> เหรียญ</span></div>
+    ${d?`<p class="ck-note on">มีเหรียญพิเศษ ${Number(d.amount)} เหรียญรอเก็บบนบันไดยศ ถึง ${new Date(Number(d.end)).toLocaleString("th-TH",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})} น.</p>`:'<p class="ck-note">เหรียญพิเศษจะขึ้นบนบันไดยศเป็นช่วง ๆ แวะมาบ่อย ๆ จะได้ไม่พลาด</p>'}
+    ${cps.length?`<h4 class="shop-h">แลกส่วนลด</h4><div class="cp-grid">${cps.map(c=>`<div class="cp-it"><b>ลด ${Number(c.baht).toLocaleString()} บาท</b><span>${escHtml(c.name||"")}</span><button type="button" data-cp="${escHtml(c.id)}"${coinsOf()<c.coins?" disabled":""}><i class="st-coin mini"></i>${Number(c.coins).toLocaleString()}</button></div>`).join("")}</div>`:""}
+    ${mine.length?`<h4 class="shop-h">โค้ดส่วนลดของฉัน <small>แจ้งโค้ดนี้ตอนชำระเงิน</small></h4><div class="cp-mine">${mine.map(c=>`<div class="cp-code${c.used?" used":""}"><b>${escHtml(c.code)}</b><span>ลด ${Number(c.baht).toLocaleString()} บาท · ${escHtml(c.name||"")}</span><em>${c.used?"ใช้แล้ว":"ยังไม่ใช้"}</em></div>`).join("")}</div>`:""}
+    <h4 class="shop-h">ตู้โชว์ของสะสม <small>${n}/${SHOP_ITEMS.length} ชิ้น</small></h4>
+    <div class="shop-grid">${SHOP_ITEMS.map(t=>{const has=!!own[t.id];
+      return `<div class="shop-it${has?" has":""}"><svg viewBox="0 0 60 60">${t.svg}</svg><b>${escHtml(t.name)}</b>${has?'<span class="own">มีแล้ว</span>':`<button type="button" data-id="${t.id}"${coinsOf()<t.price?" disabled":""}><i class="st-coin mini"></i>${t.price}</button>`}</div>`}).join("")}</div></div>`;
 }
-async function leavePlot(){
-  const vid=currentData.village,s=currentData.plot;if(!vid||!Number.isInteger(s))return;
-  try{await deleteDoc(doc(db,"villages",vid,"plots",currentUser.uid))}catch(e){}
-  try{await runTransaction(db,async tx=>{const vref=doc(db,"villages",vid),vd=await tx.get(vref);tx.delete(doc(db,"villages",vid,"slots",String(s)));if(vd.exists())tx.update(vref,{n:Math.max(0,(Number(vd.data().n)||1)-1)})})}catch(e){console.error(e)}
-  currentData.village=null;currentData.plot=null;
+function refreshShop(){const b=$("shopBox");if(!b)return;b.outerHTML=shopHtml();bindShop();const bank=$("stBank")?.querySelector("b");if(bank)bank.textContent=coinsOf().toLocaleString()}
+function bindShop(){
+  $("shopBox")?.querySelectorAll(".cp-it button").forEach(btn=>btn.onclick=async()=>{
+    const id=btn.dataset.cp,c=coinSite.coupons[id];if(!c||coinsOf()<c.coins)return;
+    if(!confirm(`แลกส่วนลด ${c.baht} บาท ใช้ ${c.coins} เหรียญ?\nจะได้โค้ดไว้แจ้งตอนชำระเงิน`))return;
+    btn.disabled=true;
+    const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let code="KS";for(let i=0;i<6;i++)code+=A[Math.floor(Math.random()*A.length)];
+    const coupons={...(currentData.coupons||{}),[code]:{cid:id,baht:Number(c.baht),name:String(c.name||"").slice(0,40),used:false,at:Date.now()}},coins=coinsOf()-Number(c.coins);
+    try{await updateDoc(doc(db,"users",currentUser.uid),{coins,coupons,lastCoupon:code});currentData.coins=coins;currentData.coupons=coupons;refreshShop();alert(`ได้โค้ดส่วนลด ${code}\nแจ้งโค้ดนี้ตอนชำระเงิน`)}
+    catch(e){console.error(e);btn.disabled=false;alert("แลกไม่สำเร็จ ลองใหม่อีกครั้ง")}
+  });
+  $("shopBox")?.querySelectorAll(".shop-it button").forEach(btn=>btn.onclick=async()=>{
+    const t=SHOP_ITEMS.find(x=>x.id===btn.dataset.id);if(!t||coinsOf()<t.price)return;
+    if(!confirm(`แลก ${t.name} ใช้ ${t.price} เหรียญ?`))return;
+    btn.disabled=true;
+    const owned={...(currentData.owned||{}),[t.id]:true},coins=coinsOf()-t.price;
+    try{await updateDoc(doc(db,"users",currentUser.uid),{coins,owned,lastBuy:t.id});currentData.coins=coins;currentData.owned=owned;refreshShop()}
+    catch(e){console.error(e);btn.disabled=false;alert("แลกไม่สำเร็จ ลองใหม่อีกครั้ง")}
+  });
 }
-async function ensureVillage(){
-  let invite="";try{invite=localStorage.getItem("kasorbInvite")||""}catch(e){}
-  if(currentData.village&&invite&&invite!==currentData.village){
-    const nm=await villageName(invite).catch(()=>"");
-    try{localStorage.removeItem("kasorbInvite")}catch(e){}
-    if(nm&&confirm(`ย้ายไปอยู่ ${nm} ตามลิงก์ที่เพื่อนชวนไหม\n(บ้านหลังเดิมจะว่างให้คนอื่น ของในบ้านยังอยู่ครบ)`)){
-      const old={v:currentData.village,p:currentData.plot};await leavePlot();
-      if(!(await claimPlot(invite))){alert("หมู่บ้านนี้เต็มแล้ว จึงอยู่หมู่บ้านเดิม");await claimPlot(old.v)}
-    }
-  }else if(invite){try{localStorage.removeItem("kasorbInvite")}catch(e){}}
-  if(currentData.village)return currentData.village;
-  if(invite&&(await claimPlot(invite)))return currentData.village;
-  const q=await getDocs(query(collection(db,"villages"),where("n","<",VILLAGE_SIZE),limit(5)));
-  const open=[];q.forEach(d=>open.push(d.id));
-  for(const vid of open){if(await claimPlot(vid))return currentData.village}
-  for(let k=0;k<3;k++){const vid="v"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-    const name="หมู่บ้าน"+VILLAGE_NAMES[Math.floor(Math.random()*VILLAGE_NAMES.length)];
-    if(await claimPlot(vid,name))return currentData.village}
-  return null;
+const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
+function stairsHtml(lv,xp){
+  const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;
+  const cols=[];for(let l=0;l<=MAX_LEVEL;l++){const k=l===lv?"now":l<lv?"done":l===MAX_LEVEL?"top":"next";
+    cols.push(`<div class="st-col ${k}" style="left:${stX(l)}px;width:${ST_CW}px;height:${stH(l)}px">${l===MAX_LEVEL?'<i class="st-goal"></i><i class="st-star"></i>':""}${l===lv+1?'<em class="st-next">ขั้นถัดไป</em>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span></div>`)}
+  const coins=coinsOf(),drop=activeDrop(),ck=!!drop;
+  const cx=stX(lv)+ST_CW/2;
+  return `<div class="stairs"><div class="st-sky" aria-hidden="true"><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-cloud c3"></i><i class="st-cloud c4"></i></div><div class="st-track" id="stTrack"><div class="st-world" style="width:${W}px"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
+    <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
+    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
+    ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+92}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+118}px">${escHtml(drop.label||"เหรียญพิเศษ")} +${Number(drop.amount)}</em>`:""}
+    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><img src="${escHtml($("topAvatar").src)}" alt=""><i></i></div></div></div>
+    <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
+    <button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>เลื่อนซ้ายขวาเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญพิเศษได้เลย":"กระโดดเล่นได้ เหรียญพิเศษจะขึ้นเป็นช่วง ๆ"}</small></p>`;
 }
-async function renderGame(lv){
-  const box=$("gameBox");if(!box||!currentUser||!currentData)return;
-  cancelAnimationFrame(vs.raf);vs.raf=0;
-  vs.collected=Array.isArray(currentData.items)?currentData.items.filter(id=>GAME_ITEMS.some(t=>t.id===id)):[];
-  box.innerHTML='<div class="gcard"><p class="gnote">กำลังพาไปที่หมู่บ้าน…</p></div>';
-  let vid=null;try{vid=await ensureVillage()}catch(e){console.error(e)}
-  if(!vid){box.innerHTML='<div class="gcard"><p class="gnote">เปิดหมู่บ้านไม่ได้ในตอนนี้ ลองใหม่อีกครั้ง</p></div>';return}
-  vs.vid=vid;vs.slot=currentData.plot;
-  /* อัปเดตหน้าบ้านตัวเอง (ชื่อ ยศ รูป ของแต่งบ้าน เวลาเข้าล่าสุด) แล้วอ่านบ้านทุกหลังในหมู่บ้าน */
-  const me={slot:vs.slot,nickname:String(currentData.nickname||"สมาชิก").slice(0,20),lv,rank:rankLabel(lv).slice(0,30),
-    avatar:/^avatar\d{2}\.png$/.test(currentData.avatar||"")?currentData.avatar:"avatar20.png",photo:await thumbOf(currentData.photo),
-    items:vs.collected.slice(0,12),hidden:!!currentData.villageHidden,seen:Date.now()};
-  try{await setDoc(doc(db,"villages",vid,"plots",currentUser.uid),me)}catch(e){console.error(e)}
-  let name="หมู่บ้านกะสอบ";const plots=[];
-  try{const [vd,ps]=await Promise.all([getDoc(doc(db,"villages",vid)),getDocs(collection(db,"villages",vid,"plots"))]);
-    if(vd.exists())name=vd.data().name||name;ps.forEach(d=>{const p=d.data();if(Number.isInteger(p.slot))plots.push({...p,uid:d.id})})}catch(e){console.error(e)}
-  vs.plots=plots;vs.name=name;
-  const bySlot={};plots.forEach(p=>{if(!bySlot[p.slot]||p.uid===currentUser.uid)bySlot[p.slot]=p});bySlot[vs.slot]={...me,uid:currentUser.uid};
-  const g=gateOf(vs.slot);if(!vs.x){vs.x=g.x;vs.y=(ROAD_T+ROAD_B)/2}
-  /* ไอเทมที่ได้จากการทำข้อสอบ วางบนถนนในหมู่บ้านให้เดินไปเก็บ */
-  const earned=gameEarned(),left=GAME_ITEMS.slice(0,earned).filter(t=>!vs.collected.includes(t.id));
-  vs.items=left.map((t,i)=>({...t,x:Math.round(120+(VW-240)*(i+1)/(left.length+1)),y:ROAD_T+30+((i*37)%60)}));
-  const houses=[];for(let s=0;s<VILLAGE_SIZE;s++)houses.push(houseHtml(s,bySlot[s]));
-  const online=plots.filter(p=>p.uid!==currentUser.uid&&!p.hidden&&Date.now()-(Number(p.seen)||0)<15*60000).length;
-  box.innerHTML=`<div class="gcard"><div class="ghead"><div class="gtitle"><h3>${escHtml(name)}</h3><span>บ้านเลขที่ ${vs.slot+1} · เพื่อนบ้าน ${plots.filter(p=>p.uid!==currentUser.uid).length} คน${online?` · ออนไลน์ ${online}`:""}</span></div>
-    <div class="gstat"><span class="gbag" id="gBag">ไอเทม ${vs.collected.length}/${GAME_ITEMS.length}</span><button type="button" class="gsec-btn" id="gInvite">ชวนเพื่อน</button><button type="button" class="ghome-btn" id="gHomeBtn">เข้าบ้าน</button></div></div>
-  <div class="gview vview" id="gView" tabindex="0" aria-label="แผนที่หมู่บ้าน ใช้ปุ่มลูกศรเพื่อเดิน">
-    <div class="gworld vworld" id="gWorld" style="width:${VW}px;height:${VH}px">
-      <div class="v-grass"></div><div class="v-road" style="top:${ROAD_T}px;height:${ROAD_B-ROAD_T}px"></div>
-      <div class="v-sign" style="left:14px;top:${ROAD_T-34}px">${escHtml(name)}</div>
-      ${houses.join("")}
-      ${vs.items.map(t=>`<div class="gitem vitem" data-id="${t.id}" style="left:${t.x}px;top:${t.y-20}px" title="${escHtml(t.name)}"><svg viewBox="0 0 60 60">${t.svg}</svg><i></i></div>`).join("")}
-      <div class="gplayer vplayer" id="gPlayer"><img src="${escHtml($("topAvatar").src)}" alt=""><div class="gp-body"><i class="gp-l"></i><i class="gp-r"></i></div><div class="gp-shadow"></div></div>
-    </div>
-    <div class="vpad"><button type="button" data-d="u" aria-label="ขึ้น"></button><button type="button" data-d="l" aria-label="ซ้าย"></button><button type="button" data-d="r" aria-label="ขวา"></button><button type="button" data-d="d" aria-label="ลง"></button></div>
-    <div class="gtoast" id="gToast"></div><div class="vcard hidden" id="vCard"></div>
-  </div>
-  <p class="gnote">${earned>=GAME_ITEMS.length&&!left.length?"เก็บไอเทมครบทุกชิ้นแล้ว":`ทำข้อสอบครบทุก ${GAME_PER_ITEM} ข้อ จะมีไอเทมใหม่วางบนถนนให้เดินไปเก็บ (อีก ${GAME_PER_ITEM-((answeredCount()||0)%GAME_PER_ITEM)} ข้อ)`} · แตะบ้านเพื่อนเพื่อดูชื่อและยศ
-  <label class="vhide"><input type="checkbox" id="vHide"${me.hidden?" checked":""}> ไม่แสดงชื่อและรูปของฉันที่หน้าบ้าน</label></p></div>`;
-  bindVillage();vDraw(true);
-}
-function houseHtml(s,p){
-  const r=plotRect(s),mine=s===vs.slot,show=p&&(!p.hidden||mine),roof=V_ROOFS[s%V_ROOFS.length];
-  const on=p&&!mine&&Date.now()-(Number(p.seen)||0)<15*60000;
-  const pic=show?(p.photo||(p.avatar?p.avatar:"avatar20.png")):"";
-  const decor=show?(p.items||[]).slice(0,3).map((id,i)=>{const t=GAME_ITEMS.find(x=>x.id===id);return t?`<svg class="v-dec d${i}" viewBox="0 0 60 60">${t.svg}</svg>`:""}).join(""):"";
-  return `<div class="v-plot${r.top?" top":" bot"}${mine?" mine":""}${p?"":" empty"}" data-s="${s}" style="left:${r.x}px;top:${r.y}px;width:${r.w}px;height:${r.h}px">
-    <div class="v-yard"></div>
-    <div class="v-house"><div class="v-roof" style="background:${roof}"></div><div class="v-wall"><i class="v-win"></i><i class="v-door"></i></div></div>
-    ${decor}<div class="v-fence"></div><span class="v-no">${s+1}</span>
-    ${p?`<div class="v-plate">${show?`${escHtml(p.nickname||"")}<b>Lv.${Number(p.lv)||0}</b>`:"เพื่อนบ้าน"}</div>`:'<div class="v-plate free">บ้านว่าง</div>'}
-    ${show&&!mine?`<div class="v-npc"><img src="${escHtml(pic)}" alt="">${on?'<i class="v-on"></i>':""}</div>`:""}
-    ${mine?'<span class="v-mine">บ้านของฉัน</span>':""}</div>`;
-}
-function vToast(t){const el=$("gToast");if(!el)return;el.textContent=t;el.classList.remove("on");void el.offsetWidth;el.classList.add("on")}
-function bindVillage(){
-  const view=$("gView");
-  view.querySelectorAll(".vpad button").forEach(b=>{const d=b.dataset.d,on=e=>{e.preventDefault();vs.keys[d]=1;vs.tx=null;vLoop()},off=()=>{vs.keys[d]=0};
-    b.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>b.addEventListener(ev,off))});
-  const K={ArrowLeft:"l",ArrowRight:"r",ArrowUp:"u",ArrowDown:"d"};
-  view.addEventListener("keydown",e=>{if(K[e.key]){e.preventDefault();vs.keys[K[e.key]]=1;vs.tx=null;vLoop()}});
-  view.addEventListener("keyup",e=>{if(K[e.key])vs.keys[K[e.key]]=0});
-  $("gWorld").addEventListener("click",e=>{
-    const pl=e.target.closest(".v-plot"),r=$("gWorld").getBoundingClientRect();
-    if(pl){const s=Number(pl.dataset.s),g=gateOf(s);vs.tx=g.x;vs.ty=g.y;vs.goal=s;vLoop();return}
-    vs.goal=null;vs.tx=e.clientX-r.left;vs.ty=e.clientY-r.top;vLoop()});
-  $("gHomeBtn").onclick=()=>{const g=gateOf(vs.slot);if(Math.hypot(vs.x-g.x,vs.y-g.y)<70)openHouse();else{vs.tx=g.x;vs.ty=g.y;vs.goal=vs.slot;vLoop();vToast("กำลังเดินกลับบ้าน")}};
-  $("gInvite").onclick=async()=>{
-    const url=`${location.origin}${location.pathname}?v=${vs.vid}`,text=`มาอยู่${vs.name}กับฉันใน กะสอบ TEST`;
-    try{if(navigator.share){await navigator.share({title:"กะสอบ TEST",text,url});return}}catch(e){if(e.name==="AbortError")return}
-    try{await navigator.clipboard.writeText(url);vToast("คัดลอกลิงก์ชวนเพื่อนแล้ว")}catch(e){prompt("คัดลอกลิงก์นี้ส่งให้เพื่อน",url)}};
-  $("vHide").onchange=async e=>{currentData.villageHidden=e.target.checked;
-    try{await updateDoc(doc(db,"users",currentUser.uid),{villageHidden:e.target.checked});await updateDoc(doc(db,"villages",vs.vid,"plots",currentUser.uid),{hidden:e.target.checked});vToast(e.target.checked?"ซ่อนชื่อและรูปที่หน้าบ้านแล้ว":"แสดงชื่อและรูปที่หน้าบ้านแล้ว")}catch(err){console.error(err)}};
-}
-function vDraw(snap){
-  const view=$("gView"),world=$("gWorld"),pl=$("gPlayer");if(!view||!world||!pl)return;
-  const cw=view.clientWidth,ch=view.clientHeight;
-  const cx=Math.max(0,Math.min(VW-cw,vs.x-cw/2)),cy=Math.max(0,Math.min(VH-ch,vs.y-ch*.55));
-  world.style.transition=snap?"none":"";world.style.transform=`translate(${-cx}px,${-cy}px)`;
-  pl.style.left=(vs.x-24)+"px";pl.style.top=(vs.y-70)+"px";pl.classList.toggle("flip",vs.dir<0);
-}
-/* เดินได้บนถนนและทางเท้าหน้าบ้าน (หน้ารั้ว) ทั่วหมู่บ้าน */
-const clampWalk=(x,y)=>[Math.max(24,Math.min(VW-24,x)),Math.max(ROAD_T-6,Math.min(ROAD_B+6,y))];
-function vLoop(){
-  if(vs.raf)return;vs.last=performance.now();$("vCard")?.classList.add("hidden");
-  const step=now=>{
-    const dt=Math.min(.05,(now-vs.last)/1000);vs.last=now;
-    let dx=(vs.keys.r?1:0)-(vs.keys.l?1:0),dy=(vs.keys.d?1:0)-(vs.keys.u?1:0);
-    if(!dx&&!dy&&vs.tx!=null){const [tx,ty]=clampWalk(vs.tx,vs.ty),ex=tx-vs.x,ey=ty-vs.y,dist=Math.hypot(ex,ey);
-      if(dist<5){vs.tx=null;arrive()}else{dx=ex/dist;dy=ey/dist}}
-    const pl=$("gPlayer");
-    if((!dx&&!dy)||!pl){pl?.classList.remove("walk");vs.raf=0;return}
-    const len=Math.hypot(dx,dy)||1,[nx,ny]=clampWalk(vs.x+dx/len*220*dt,vs.y+dy/len*220*dt);
-    if(dx)vs.dir=Math.sign(dx);
-    if(nx===vs.x&&ny===vs.y){pl.classList.remove("walk");vs.raf=0;vs.tx=null;return}
-    vs.x=nx;vs.y=ny;pl.classList.add("walk");
-    vs.items=vs.items.filter(t=>{if(Math.hypot(t.x-vs.x,t.y-vs.y)>34)return true;collectItem(t);return false});
-    vDraw();vs.raf=requestAnimationFrame(step);
-  };
-  vs.raf=requestAnimationFrame(step);
-}
-function arrive(){
-  const s=vs.goal;vs.goal=null;if(!Number.isInteger(s))return;
-  if(s===vs.slot){openHouse();return}
-  const p=vs.plots.find(x=>x.slot===s&&x.uid!==currentUser.uid),card=$("vCard");if(!card)return;
-  card.innerHTML=!p?`<b>บ้านเลขที่ ${s+1}</b><span>บ้านว่าง ชวนเพื่อนมาอยู่ได้</span>`:p.hidden?`<b>บ้านเลขที่ ${s+1}</b><span>เจ้าของบ้านไม่แสดงชื่อ</span>`:
-    `<img src="${escHtml(p.photo||p.avatar||"avatar20.png")}" alt=""><div><b>${escHtml(p.nickname||"")}</b><span>Lv.${Number(p.lv)||0} ${escHtml(p.rank||"")} · ไอเทม ${(p.items||[]).length} ชิ้น</span><em>เข้าบ้านคนอื่นไม่ได้ ดูได้จากหน้าบ้าน</em></div>`;
-  card.classList.remove("hidden");
-}
-function collectItem(t){
-  document.querySelector(`.gitem[data-id="${t.id}"]`)?.classList.add("got");
-  if(!vs.collected.includes(t.id))vs.collected.push(t.id);
-  currentData.items=[...vs.collected];
-  const bag=$("gBag");if(bag)bag.textContent=`ไอเทม ${vs.collected.length}/${GAME_ITEMS.length}`;
-  vToast(`ได้ ${t.name} แล้ว เข้าบ้านไปดูได้เลย`);
-  clearTimeout(vs.saveT);
-  vs.saveT=setTimeout(()=>{const it=[...vs.collected];
-    updateDoc(doc(db,"users",currentUser.uid),{items:it}).catch(e=>console.error(e));
-    updateDoc(doc(db,"villages",vs.vid,"plots",currentUser.uid),{items:it}).catch(e=>console.error(e))},800);
-}
-function openHouse(){
-  const have=GAME_ITEMS.filter(t=>vs.collected.includes(t.id));
-  const ov=document.createElement("div");ov.className="ghouse-ov";
-  ov.innerHTML=`<div class="ghouse-in"><div class="ghi-head"><b>บ้านของฉัน · เลขที่ ${vs.slot+1}</b><span>${have.length}/${GAME_ITEMS.length} ชิ้น</span><button type="button" aria-label="ปิด">ปิด</button></div>
-  <div class="groom"><div class="gr-wall"></div><div class="gr-floor"></div>${have.map(t=>`<div class="gr-it" style="left:${t.at[0]}%;top:${t.at[1]}%;width:${t.at[2]}%"><svg viewBox="0 0 60 60">${t.svg}</svg></div>`).join("")}
-  ${have.length?"":'<p class="gr-empty">บ้านยังว่างอยู่ ทำข้อสอบแล้วเดินไปเก็บไอเทมมาแต่งบ้านกัน</p>'}</div>
-  <div class="gr-list">${GAME_ITEMS.map(t=>`<div class="gr-slot${vs.collected.includes(t.id)?" on":""}"><svg viewBox="0 0 60 60">${t.svg}</svg><span>${escHtml(t.name)}</span></div>`).join("")}</div></div>`;
-  ov.addEventListener("click",e=>{if(e.target===ov||e.target.closest(".ghi-head button"))ov.remove()});
-  document.body.appendChild(ov);
+/* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญพิเศษช่วงนี้ จะเก็บเหรียญ */
+function bindStairs(lv){
+  const tr=$("stTrack"),me=$("stMe"),coin=$("stCoin");if(!tr||!me)return;
+  requestAnimationFrame(()=>{tr.scrollLeft=stX(lv)+ST_CW/2-tr.clientWidth/2});
+  let drag=null,moved=false;
+  tr.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;drag={x:e.clientX,l:tr.scrollLeft};moved=false});
+  addEventListener("pointermove",e=>{if(!drag)return;const d=e.clientX-drag.x;if(Math.abs(d)>4)moved=true;tr.scrollLeft=drag.l-d});
+  addEventListener("pointerup",()=>{drag=null});
+  let busy=false;
+  const jump=()=>{if(busy)return;busy=true;me.classList.remove("hop");void me.offsetWidth;me.classList.add("hop");
+    setTimeout(async()=>{if(coin&&!coin.classList.contains("got")){coin.classList.add("got");document.querySelector(".st-cklabel")?.remove();
+      const gain=await claimDrop();const pl=$("stPlus");
+      if(pl){pl.textContent=gain?`+${gain}`:"เก็บไม่สำเร็จ";pl.classList.remove("on");void pl.offsetWidth;pl.classList.add("on")}
+      if(!gain)coin.classList.remove("got");else refreshShop()}},230);
+    setTimeout(()=>{busy=false},620)};
+  $("stJump").onclick=jump;
+  tr.addEventListener("click",()=>{if(!moved)jump()});
+  tr.tabIndex=0;tr.addEventListener("keydown",e=>{if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();jump()}});
 }
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
   let list=[];
   try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
   const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
+  await loadCoinSite();
   const premium=currentData?.plan==="premium",lv=currentLevel();
-  renderGame(lv).catch(e=>console.error(e));
-  /* บันไดยศ: เรียงจากสูงลงต่ำ แสดง 2 ขั้นถัดไป ขั้นปัจจุบัน ขั้นก่อนหน้า และยศสูงสุด */
-  const steps=[];
-  const hi=Math.min(MAX_LEVEL,lv+2),lo=Math.max(0,lv-1);
-  if(hi<MAX_LEVEL){steps.push(`<div class="lstep"><b>Lv.${MAX_LEVEL} ${escHtml(rankLabel(MAX_LEVEL))}</b><small>ยศสูงสุด</small></div>`);if(hi<MAX_LEVEL-1)steps.push('<div class="lgap">&middot; &middot; &middot;</div>')}
-  for(let l=hi;l>=lo;l--){
-    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":`อีก ${l-lv} ขั้น`}</small></div>`);
-    else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
-    else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
-  }
   /* เงื่อนไขเลื่อนยศ */
   let next;
   if(!premium) next=`<p class="note">สมาชิก Freeอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุด Freeได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
@@ -7480,10 +7390,12 @@ async function renderOverview(){
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
   const badges=Object.entries(src).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ${mode==="sum"?` · ${v.n} ครั้ง`:v.at?` · ${v.at.toLocaleDateString("th-TH",{day:"numeric",month:"short"})}`:""}</em></div>`}).join("");
-  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}</div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
+  box.insertAdjacentHTML("beforeend",shopHtml());bindShop();
+  bindStairs(lv);
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
