@@ -163,6 +163,8 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <div class="row"><div><label>การ์ดที่ 2: สายงาน</label><input id="exam1Title"></div><div><label>วันสอบ</label><input id="exam1Date" type="date"></div></div>
 <label>จำนวนข้อสอบทั้งหมดในเว็บ</label><input id="totalQuestions" type="number" readonly style="background:#f6f6f6;color:#777"><p class="muted" style="margin:-4px 0 10px;font-size:13px">นับให้อัตโนมัติจากหน้า "แบบทดสอบ"</p>
 <div class="hsave"><button type="button" id="saveCount">บันทึกการ์ดนับถอยหลัง</button><span id="countMsg"></span></div></div>
+<div class="hsec"><h3>สายที่เปิดให้นักเรียน</h3><p class="muted">สายที่ไม่ได้เลือก จะไม่แสดงในหน้าแบบทดสอบของนักเรียน</p><div class="tracks" id="openTracks"></div>
+<div class="hsave"><button type="button" id="saveTracks">บันทึกสายที่เปิด</button><span id="tracksMsg"></span></div></div>
 <div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
 <div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
 <div class="hsec"><h3>ข้อสอบประจำวัน</h3>
@@ -173,14 +175,14 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <label>คำอธิบายเฉลย (ไม่บังคับ)</label><textarea id="dailyExp"></textarea>
 <div class="hsave"><button type="button" id="saveDaily">บันทึกข้อสอบประจำวัน</button><span id="dailyMsg"></span></div></div><p id="homeMsg"></p></div>
 <div id="panel" class="card page" data-page="members"><h2>สมาชิก</h2><p class="muted">หลังลูกค้าชำระเงิน เลือกแพ็กเกจ แล้วกด บันทึก ที่แถวของคนนั้น (รายปีนับ 1 ปีจากวันที่เลือก แก้วันได้)</p>
-<div class="stick"><div id="tabs" class="tabs"><button type="button" data-f="all" class="on">ทั้งหมด <b>0</b></button><button type="button" data-f="free">ฟรี <b>0</b></button><button type="button" data-f="yearly">รายปี <b>0</b></button><button type="button" data-f="lifetime">ตลอดชีพ <b>0</b></button></div>
+<div class="stick"><div id="tabs" class="tabs"><button type="button" data-f="all" class="on">ทั้งหมด <b>0</b></button><button type="button" data-f="free">Free <b>0</b></button><button type="button" data-f="yearly">รายปี <b>0</b></button><button type="button" data-f="lifetime">ตลอดชีพ <b>0</b></button></div>
 <input id="q" type="search" placeholder="ค้นหาอีเมล ชื่อเล่น หรือรหัสสมาชิก"><p id="umsg" class="ok"></p></div>
 <div id="users"></div></div><div id="devicesCard" class="card page" data-page="devices"><h2>อุปกรณ์</h2><p class="muted">สมาชิก 1 คนผูกได้ 2 เครื่อง ใช้ได้ทีละเครื่อง ถ้านักเรียนติดต่อมาว่าเข้าเครื่องใหม่ไม่ได้ กด ลบ ที่เครื่องที่ไม่ใช้แล้ว (หรือ ลบทั้งหมด) แล้วเครื่องที่ล็อกอินครั้งถัดไปจะถูกผูกใหม่</p><div class="stick"><input id="dq" type="search" placeholder="ค้นหาอีเมลหรือชื่อเล่น"><p id="dmsg" class="ok"></p></div><div id="devList"><p class="muted">กำลังโหลด…</p></div></div><div id="examsCard" class="card page" data-page="exams"><div id="exListView"><h2>แบบทดสอบ</h2><p class="muted">เลือกชุดข้อสอบเพื่อดูและแก้ไข หน้าตาเหมือนที่นักเรียนเห็น เพิ่มข้อสอบได้ทีละข้อในวิชาที่ต้องการ</p>
 <button type="button" class="xnew" id="exNewBtn">+ สร้างชุดข้อสอบใหม่</button>
 <div id="exNew" class="nform hide"><h3>สร้างชุดข้อสอบใหม่</h3>
 <label>ชื่อชุด</label><input id="nTitle" maxlength="80" placeholder="เช่น ข้อสอบเสมือนจริงสายปราบปราม ชุดที่ 1">
 <label>รูปแบบชุด</label><select id="nKind"><option value="mock">ข้อสอบเสมือนจริง (ครบทุกวิชา เหมือนสอบจริง)</option><option value="subject">แบบทดสอบรายวิชา (วิชาเดียว)</option><option value="mixed">ข้อสอบรวม (รวมหลายวิชา ไม่ใช่ชุดเสมือนจริง)</option><option value="real">ข้อสอบจริง (รายวิชา เฉพาะ Premium)</option></select>
-<div id="nSubjBox" class="hide"><div class="row"><div><label>หมวดวิชา</label><select id="nSubj"></select></div><div id="nSlotBox"><label>ช่องที่ (ชุดที่ 1-5 ฟรี · 6-20 Premium)</label><select id="nSlot"></select></div></div></div>
+<div id="nSubjBox" class="hide"><div class="row"><div><label>หมวดวิชา</label><select id="nSubj"></select></div><div id="nSlotBox"><label>ช่องที่ (ชุดที่ 1-5 Free · 6-20 Premium)</label><select id="nSlot"></select></div></div></div>
 <label>ใช้กับสายสอบ</label><div class="tracks" id="nTracks"></div>
 <div class="row"><div><label>ประเภท</label><select id="nTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="nMins" type="number" min="1" max="600" value="180"></div></div>
 <div id="nSecsBox"><label>วิชาในชุดนี้ (บรรทัดละ 1 วิชา เรียงตามลำดับ)</label><textarea id="nSecs"></textarea></div>
@@ -239,7 +241,7 @@ const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${Str
 const thDate=s=>new Date(`${s}T00:00:00`).toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
 const planOf=u=>{if(u.plan!=="premium")return"free";if(u.planType==="yearly")return u.premiumUntil&&u.premiumUntil<ymd(new Date())?"expired":"yearly";return"lifetime"};
 const groupOf=u=>{const p=planOf(u);return p==="expired"?"free":p};
-const PLANS=[["free","ฟรี"],["yearly","รายปี"],["lifetime","ตลอดชีพ"]];
+const PLANS=[["free","Free"],["yearly","รายปี"],["lifetime","ตลอดชีพ"]];
 function planNote(u){const p=planOf(u);if(p==="yearly")return`หมดอายุ ${thDate(u.premiumUntil)}`;if(p==="lifetime")return"ใช้ได้ตลอดชีพ";if(p==="expired")return`รายปีหมดอายุแล้ว ${thDate(u.premiumUntil)}`;return""}
 /* เลือกแพ็กเกจไว้ก่อน (ยังไม่บันทึก) แล้วกดปุ่มบันทึกของแถวนั้น + ถามยืนยัน */
 const pending=new Map();
@@ -335,7 +337,7 @@ addEventListener("resize",measureSticky);
 if(window.ResizeObserver){const ro=new ResizeObserver(measureSticky);document.querySelectorAll(".stick").forEach(el=>ro.observe(el))}
 function showShell(on){$("boot").classList.add("hide");document.querySelector("main").classList.toggle("hide",on);$("shell").classList.toggle("hide",!on);document.body.classList.toggle("in",on)}
 onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
-async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
+async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};$("openTracks").innerHTML=tracksHtml(Array.isArray(h.tracks)&&h.tracks.length?h.tracks:DEFAULT_OPEN);const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
 /* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
 function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;r._pos=newsPos(n.pos);drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
 /* รูปข่าว: อัปโหลดจากเครื่อง (ย่อรูปแล้วเก็บใน siteImg) หรือใส่ลิงก์รูปแบบเดิม */
@@ -399,6 +401,8 @@ async function saveHomePart(data,msgId){
   try{await setDoc(doc(db,"site","home"),{...data,updatedAt:new Date().toISOString()},{merge:true});m.textContent="บันทึกแล้ว";return true}
   catch(e){m.className="err";m.textContent="บันทึกไม่สำเร็จ (ตรวจสอบ Firestore Rules)";return false}
 }
+const DEFAULT_OPEN=["amnuay","pisut","prab"];
+$("saveTracks").onclick=()=>{const t=readTracks("openTracks");if(!t.length){$("tracksMsg").className="err";$("tracksMsg").textContent="เลือกอย่างน้อย 1 สาย";return}return saveHomePart({tracks:t},"tracksMsg")};
 $("saveCount").onclick=()=>saveHomePart({exams:[0,1].map(i=>({title:$("exam"+i+"Title").value.trim(),date:$("exam"+i+"Date").value})).filter(e=>e.title)},"countMsg");
 $("saveNews").onclick=async()=>{
   const old=await getDoc(doc(db,"site","home")).then(s=>s.exists()?s.data():{}).catch(()=>({}));
