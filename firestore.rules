@@ -16,6 +16,35 @@ service cloud.firestore {
         && request.auth.token.email == "thananitwit@gmail.com";
     }
 
+    // เช็คอินรายวัน: วัน = จำนวนวันนับจาก 1970 ตามเวลาไทย ต้องเป็นวันนี้จริง และยังไม่เคยเช็คอินวันนี้
+    function thaiDayNow() {
+      return int((request.time.toMillis() + 25200000) / 86400000);
+    }
+    function validCheckin(n, o) {
+      let c = n.checkin;
+      let prev = o.get("checkin", {"day": 0, "streak": 0});
+      let streak = prev.day == c.day - 1 ? prev.streak % 7 + 1 : 1;
+      return c.keys().hasOnly(["day", "streak"])
+        && c.day is int && c.day == thaiDayNow() && c.day > prev.day
+        && c.streak == streak
+        && n.get("coins", 0) == o.get("coins", 0) + [5, 5, 10, 10, 15, 15, 30][streak - 1]
+        && !n.diff(o).affectedKeys().hasAny(["owned", "lastBuy"]);
+    }
+    // แลกของสะสม: เพิ่มได้ครั้งละ 1 ชิ้น (lastBuy) หักเหรียญตามราคา และต้องมีเหรียญพอ
+    function validBuy(n, o) {
+      let prices = {"badge": 30, "whistle": 40, "pencil": 50, "cap": 60, "medal": 80, "book": 100,
+                    "star": 120, "trophy": 150, "shield": 200, "crown": 250, "gem": 300, "rocket": 400};
+      let before = o.get("owned", {});
+      return n.lastBuy is string && n.lastBuy in prices
+        && !(n.lastBuy in before)
+        && n.owned is map && n.owned.keys().hasOnly(before.keys().concat([n.lastBuy]))
+        && n.owned.keys().hasAll(before.keys().concat([n.lastBuy]))
+        && n.owned[n.lastBuy] == true
+        && n.get("coins", 0) == o.get("coins", 0) - prices[n.lastBuy]
+        && n.get("coins", 0) >= 0
+        && !n.diff(o).affectedKeys().hasAny(["checkin"]);
+    }
+
     function isOwner(uid) {
       return request.auth != null && request.auth.uid == uid;
     }
@@ -209,7 +238,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "owned", "lastBuy"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -229,6 +258,13 @@ service cloud.firestore {
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["answered"])
             || (request.resource.data.answered is int && request.resource.data.answered >= 0
                 && request.resource.data.answered <= 20000))
+        // เหรียญ: เปลี่ยนได้ 2 ทางเท่านั้น 1) เช็คอินวันละครั้ง (วันตามเวลาไทย) ได้ตามแถบ 7 วัน 2) แลกของสะสมตามราคาที่กำหนด
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin"])
+            || validCheckin(request.resource.data, resource.data))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["owned", "lastBuy"])
+            || validBuy(request.resource.data, resource.data))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["coins"])
+            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin", "owned"]))
         // หมู่บ้าน: รหัสหมู่บ้าน เลขบ้าน 0-19 ต้องเป็นหลังที่ตัวเองจองไว้ในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["village", "plot"])
             || (request.resource.data.village is string && request.resource.data.village.matches("v[0-9a-z]{4,20}")
