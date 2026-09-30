@@ -3133,6 +3133,10 @@ body:not(.review-mode) .rvbar{display:none}
 /* มือถือ: ข้อสอบประจำวันตัวเล็กลง */
 @media(max-width:600px){#dailyCard{padding:14px 16px}#dailyCard .daily-question{font-size:15.5px;line-height:1.55}#dailyCard .daily-choice{font-size:14.5px;padding-top:8px;padding-bottom:8px;line-height:1.45}#dailyCard .choice-letter{width:22px;height:22px;min-width:22px;font-size:11px}#dailyCard .daily-result{font-size:14px}}
 body.exam-mode .topnav{display:none}
+/* มือถือ: ปุ่มสามขีดซ้ายสุดเปิดแถบข้าง (มีออกจากระบบ) แทนปุ่มติดต่อเรา */
+.tn-side{display:none!important}
+@media(max-width:760px){.tn-side{display:inline-flex!important}.topnav .tn-item[data-menu="contact"]{display:none!important}}
+@media(max-width:560px){.tn-side{display:flex!important}}
 @media(max-width:760px){.tn-item{padding:6px 10px;font-size:12.5px}.tn-item .lg{display:none}.tn-item .sm{display:inline}}@media(max-width:560px){.topnav{gap:4px;overflow:visible}.tn-item{flex:1 1 0;min-width:0;flex-direction:column;justify-content:center;gap:2px;padding:6px 2px 5px;border-radius:12px;font-size:11.5px}.tn-item svg{display:none}.tn-item svg.ti{display:block;width:18px;height:18px}.tn-item span{overflow:hidden;text-overflow:ellipsis;max-width:100%}}
 .uidlg{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);animation:uidIn .15s ease-out}
 @keyframes uidIn{from{opacity:0}to{opacity:1}}
@@ -3427,6 +3431,7 @@ LINE OA @kasorb
 <div class="app-main">
 <header class="hb">
 <nav class="topnav" id="topNav" aria-label="เมนูหลัก">
+<button type="button" class="tn-item tn-side" id="tnSide" aria-label="เปิดแถบเมนู"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 6h16M4 12h16M4 18h16"></path> </svg><span>เมนู</span></button>
 <button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M3 11.5 12 4l9 7.5"></path> <path d="M5.5 10.5V20h13v-9.5"></path> <path d="M9.5 20v-5h5v5"></path> </svg><span>หน้าหลัก</span></button>
 <button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">แบบทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="results"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 19V9"></path> <path d="M10 19V5"></path> <path d="M16 19v-7"></path> <path d="M22 19H2"></path> </svg><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -3974,6 +3979,8 @@ collection,
 query,
 where,
 getCountFromServer,
+getAggregateFromServer,
+sum,
 onSnapshot,
 getDocs,
 addDoc,
@@ -4635,6 +4642,12 @@ sidebarOverlay
 sidebarOverlay
 .onclick=
 ()=>closeSidebar();
+
+$("tnSide").onclick=()=>{
+  closeTopMenu();
+  sidebar.classList.add("open");
+  sidebarOverlay.classList.add("open");
+};
 
   
 
@@ -5907,6 +5920,10 @@ function renderNews(home){
     const slide=document.createElement(link ? "a" : "div");
     slide.className="ns-slide c"+(i%3);
     if(link){ slide.href=link; slide.target="_blank"; slide.rel="noopener"; }
+    /* ส่วนของรูปที่แอดมินเลือกไว้ */
+    const pm=/^(\d{1,3}) (\d{1,3})$/.exec(n.pos||"");
+    slide.style.backgroundSize="cover";
+    slide.style.backgroundPosition=pm?`${Math.min(100,+pm[1])}% ${Math.min(100,+pm[2])}%`:"50% 50%";
     const img=httpsUrl(n.image);
     if(img){
       slide.classList.add("img");
@@ -5982,6 +5999,18 @@ function renderToday(){
   const count=todayCount();
   $("heroTodayCount").textContent=`วันนี้ทำไปแล้ว ${count.toLocaleString()} ข้อ`;
   $("heroTodayCount").classList.toggle("done",count>0);
+  syncTodayCount(count);
+}
+
+/* ส่งยอดของวันนี้ที่ทำไว้ก่อนมีตัวรวมทั้งเว็บ (ส่งครั้งเดียวต่อยอด) */
+let syncedToday="";
+function syncTodayCount(count){
+  if(!currentUser || count<=0) return;
+  const key=`${currentUser.uid}:${todayKey()}:${count}`;
+  if(syncedToday===key) return;
+  syncedToday=key;
+  setDoc(doc(db,"todayCount",currentUser.uid),{date:todayKey(),count})
+    .then(()=>loadTodayTotal()).catch(e=>console.error(e));
 }
 
 /* extra: ข้อมูลเพิ่ม เช่น ข้อสอบประจำวันที่ตอบแล้ว (จำไว้ในบัญชี ไม่ใช่แค่ในเครื่อง) */
@@ -6087,11 +6116,7 @@ function renderStats(home){
   const num=v=>Number.isFinite(Number(v)) && Number(v)>0 ? Number(v).toLocaleString() : "—";
   $("statQuestions").textContent=num(home.totalQuestions);
   $("statMembers").textContent=num(home.members);
-  /* ยังไม่มีระบบทำข้อสอบ จึงเป็น 0 จนกว่าจะเชื่อมกับระบบข้อสอบ */
-  const testsToday=home.testsToday && home.testsToday.date===todayKey()
-    ? Number(home.testsToday.count)||0
-    : 0;
-  $("statTestsToday").textContent=testsToday.toLocaleString();
+  loadTodayTotal();
   loadOnlineCount();
 }
 
@@ -6123,6 +6148,22 @@ function stopPresence(){
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="visible") sendHeartbeat();
 });
+
+/* ทำแบบทดสอบแล้ววันนี้ (ทั้งเว็บ): ผลรวมจำนวนข้อที่สมาชิกทุกคนทำในวันนี้ */
+async function loadTodayTotal(){
+  const own=todayCount();
+  $("statTestsToday").textContent=currentUser ? own.toLocaleString() : "—";
+  if(!currentUser) return;
+  try{
+    const snap=await getAggregateFromServer(
+      query(collection(db,"todayCount"),where("date","==",todayKey())),
+      {n:sum("count")}
+    );
+    $("statTestsToday").textContent=Math.max(own,Number(snap.data().n)||0).toLocaleString();
+  }catch(error){
+    console.error(error);
+  }
+}
 
 async function loadOnlineCount(){
   try{

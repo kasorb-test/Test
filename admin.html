@@ -33,7 +33,9 @@
 .nimg{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0}
 .nimg .pick{display:inline-block;padding:9px 14px;border-radius:9px;background:#eef2fa;color:#16305f;font-weight:700;font-size:13px;cursor:pointer}
 .nimg button{width:auto;margin:0;padding:9px 12px;font-size:13px;background:#fdecec;color:#c62828}
-.nimg img{display:block;width:100%;max-width:360px;aspect-ratio:16/7;object-fit:cover;border-radius:10px;border:1px solid #eee}
+.npos{display:flex;flex-wrap:wrap;gap:10px;width:100%}.npos>div{display:flex;flex-direction:column;gap:3px;font-size:12px;color:#666;font-weight:700}.npos small{width:100%;font-size:12px;color:#888}
+.nf{display:block;height:110px;border-radius:10px;border:1px solid #e5e5e5;background:#f3f3f3 50% 50%/cover no-repeat;cursor:grab;touch-action:none;user-select:none}.nf:active{cursor:grabbing}
+.npos>div{flex:0 1 330px;min-width:0}.npos>div:nth-child(2){flex-basis:220px}.nf.nd{width:100%;height:auto;aspect-ratio:330/103}.nf.nm{width:100%;height:auto;aspect-ratio:2/1}
 .nimg .or{font-size:12px;color:#888;width:100%}
 .uph{width:34px;height:34px;margin-right:8px;vertical-align:middle;border-radius:50%;object-fit:cover;border:1px solid #eee}.rm-photo{margin-left:8px!important;vertical-align:middle;width:auto;margin:0;padding:3px 8px;border-radius:8px;background:#fdecec;color:#c62828;font-size:12px;font-weight:700}
 /* โลโก้แบบไอคอนแอปแอดมิน: กรอบกรมท่า กะสอบ สีขาว + ADMIN กรอบส้ม */
@@ -318,21 +320,44 @@ function showShell(on){$("boot").classList.add("hide");document.querySelector("m
 onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
 async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
 /* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
-function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
+function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;r._pos=newsPos(n.pos);drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
 /* รูปข่าว: อัปโหลดจากเครื่อง (ย่อรูปแล้วเก็บใน siteImg) หรือใส่ลิงก์รูปแบบเดิม */
 const siteImgCache=new Map();
 function siteImg(k){if(!siteImgCache.has(k))siteImgCache.set(k,getDoc(doc(db,"siteImg",k)).then(s=>s.exists()?s.data().d:"").catch(()=>{siteImgCache.delete(k);return ""}));return siteImgCache.get(k)}
+/* ส่วนของรูปที่แสดงในข่าว: ตำแหน่ง x y เป็นเปอร์เซ็นต์ (เหมือน background-position) */
+function newsPos(p){const m=/^(\d{1,3}) (\d{1,3})$/.exec(p||"");return m?[Math.min(100,+m[1]),Math.min(100,+m[2])]:[50,50]}
+function dragNewsPos(r,frames){
+  const paint=()=>frames.forEach(f=>f.style.backgroundPosition=`${r._pos[0]}% ${r._pos[1]}%`);paint();
+  frames.forEach(f=>{
+    f.onpointerdown=e=>{
+      e.preventDefault();f.setPointerCapture(e.pointerId);
+      const im=f._im,start=[e.clientX,e.clientY,...r._pos];
+      if(!im) return;
+      /* ส่วนที่รูปเกินกรอบ (cover) ใช้คำนวณว่าลากกี่พิกเซลเท่ากับกี่เปอร์เซ็นต์ */
+      const sc=Math.max(f.clientWidth/im.naturalWidth,f.clientHeight/im.naturalHeight);
+      const ox=im.naturalWidth*sc-f.clientWidth,oy=im.naturalHeight*sc-f.clientHeight;
+      f.onpointermove=ev=>{
+        const x=ox>1?start[2]-(ev.clientX-start[0])/ox*100:start[2],y=oy>1?start[3]-(ev.clientY-start[1])/oy*100:start[3];
+        r._pos=[Math.round(Math.max(0,Math.min(100,x))),Math.round(Math.max(0,Math.min(100,y)))];paint();
+      };
+      f.onpointerup=f.onpointercancel=()=>{f.onpointermove=null};
+    };
+  });
+}
 function drawNewsImg(r){
   const box=r.querySelector(".nimg"),v=r._img;
-  box.innerHTML=`${v?'<img alt="">':""}<label class="pick">${v?"เปลี่ยนรูป":"อัปโหลดรูปจากเครื่อง"}<input type="file" accept="image/png,image/jpeg,image/webp" hidden></label>${v?'<button type="button">ลบรูป</button>':""}<details class="or"><summary>หรือใส่ลิงก์รูป</summary><input class="ni" placeholder="https://..." value="${esc(v?.url||"")}"></details>`;
-  const im=box.querySelector("img");
-  if(im){if(v.key)siteImg(v.key).then(d=>{if(/^data:image\//.test(d))im.src=d});else im.src=v.url}
-  box.querySelector("button")?.addEventListener("click",()=>{r._img=null;drawNewsImg(r)});
+  box.innerHTML=`${v?'<div class="npos"><div><span>คอมพิวเตอร์</span><i class="nf nd"></i></div><div><span>มือถือ</span><i class="nf nm"></i></div><small>ลากรูปในกรอบเพื่อเลือกส่วนที่จะแสดงในข่าว</small></div>':""}<label class="pick">${v?"เปลี่ยนรูป":"อัปโหลดรูปจากเครื่อง"}<input type="file" accept="image/png,image/jpeg,image/webp" hidden></label>${v?'<button type="button">ลบรูป</button>':""}<details class="or"><summary>หรือใส่ลิงก์รูป</summary><input class="ni" placeholder="https://..." value="${esc(v?.url||"")}"></details>`;
+  const frames=[...box.querySelectorAll(".nf")];
+  if(frames.length){
+    const show=src=>{const im=new Image();im.onload=()=>frames.forEach(f=>f._im=im);im.src=src;frames.forEach(f=>f.style.backgroundImage=`url("${src}")`);dragNewsPos(r,frames)};
+    if(v.key)siteImg(v.key).then(d=>{if(/^data:image\//.test(d))show(d)});else show(v.url);
+  }
+  box.querySelector("button")?.addEventListener("click",()=>{r._img=null;r._pos=[50,50];drawNewsImg(r)});
   box.querySelector(".ni").onchange=e=>{const u=e.target.value.trim();r._img=u?{url:u}:null;drawNewsImg(r)};
   box.querySelector("input[type=file]").onchange=async e=>{
     const f=e.target.files[0];if(!f)return;
     const pick=box.querySelector(".pick");pick.textContent="กำลังอัปโหลด…";
-    try{const d=await newsImgData(f);const k=await sha24(d);await setDoc(doc(db,"siteImg",k),{d});siteImgCache.set(k,Promise.resolve(d));r._img={key:k};drawNewsImg(r);$("newsMsg").className="";$("newsMsg").textContent='อัปโหลดรูปแล้ว กด "บันทึกข่าวสาร" เพื่อใช้รูปนี้'}
+    try{const d=await newsImgData(f);const k=await sha24(d);await setDoc(doc(db,"siteImg",k),{d});siteImgCache.set(k,Promise.resolve(d));r._img={key:k};r._pos=[50,50];drawNewsImg(r);$("newsMsg").className="";$("newsMsg").textContent='อัปโหลดรูปแล้ว กด "บันทึกข่าวสาร" เพื่อใช้รูปนี้'}
     catch(err){$("newsMsg").className="err";$("newsMsg").textContent=err.code==="permission-denied"?"อัปโหลดไม่ได้ ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว":(err.message||"อัปโหลดไม่สำเร็จ");drawNewsImg(r)}
   };
 }
@@ -349,7 +374,7 @@ async function newsImgData(f){
 async function sha24(d){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(d));return [...new Uint8Array(b)].slice(0,12).map(x=>x.toString(16).padStart(2,"0")).join("")}
 function numberNews(){const rows=[...$("newsRows").children];rows.forEach((r,i)=>r.querySelector("b").textContent="ข่าวที่ "+(i+1));$("newsAdd").style.display=rows.length>=10?"none":""}
 function setNewsRows(list){$("newsRows").innerHTML="";(list.length?list:[{}]).slice(0,10).forEach(newsRow)}
-function readNewsRows(){return[...$("newsRows").children].map(r=>{const n={text:r.querySelector(".nt").value.trim()},l=r.querySelector(".nl").value.trim();if(r._img?.key)n.imageKey=r._img.key;else if(r._img?.url)n.image=r._img.url;if(l)n.link=l;return n}).filter(n=>n.text).slice(0,10)}
+function readNewsRows(){return[...$("newsRows").children].map(r=>{const n={text:r.querySelector(".nt").value.trim()},l=r.querySelector(".nl").value.trim();if(r._img?.key)n.imageKey=r._img.key;else if(r._img?.url)n.image=r._img.url;if(r._img&&(r._pos[0]!==50||r._pos[1]!==50))n.pos=r._pos.join(" ");if(l)n.link=l;return n}).filter(n=>n.text).slice(0,10)}
 $("newsAdd").onclick=()=>newsRow();setNewsRows([]);
 /* หน้าหลัก: บันทึกแยกทีละส่วน (merge เฉพาะฟิลด์ของส่วนนั้น) */
 async function saveHomePart(data,msgId){
