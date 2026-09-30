@@ -2929,7 +2929,7 @@ body.exam-mode .hb .hb-ctog{display:flex;align-items:center;gap:2px;flex:0 0 aut
 .hb-ctog svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
 body.exam-card-open .hb-ctog svg{transform:rotate(180deg)}
 body.exam-mode:not(.exam-card-open) .hb .hb-card{display:none}
-body.exam-mode .hb .hb-card{order:5;flex:1 1 100%}
+body.exam-mode:not(.on-home) .hb .hb-card{order:-2;flex:0 0 100%!important;max-width:none;margin:0!important;pointer-events:auto;cursor:pointer}body.exam-mode:not(.on-home) .hb .hb-exam{flex:1 1 0!important;min-width:0}
 body.exam-mode .xttl b{display:none}
 body.exam-mode .xttl span{font-size:13px;color:#16305f;font-weight:700;overflow:visible;text-overflow:clip}
 }
@@ -4782,10 +4782,14 @@ btn.dataset.title
 
 $("topProfileBtn")
 .onclick=
-()=>showAppPage(
-"myInfoPage",
-"ข้อมูลของฉัน"
-);
+()=>{
+/* ระหว่างทำข้อสอบบนมือถือ: แตะการ์ดสมาชิกเพื่อย่อเก็บ ไม่ออกจากหน้าข้อสอบ */
+if(document.body.classList.contains("exam-mode")){
+  if(document.body.classList.contains("exam-card-open")){document.body.classList.remove("exam-card-open");$("hbCardToggle").setAttribute("aria-expanded","false")}
+  return;
+}
+showAppPage("myInfoPage","ข้อมูลของฉัน");
+};
 
 
 /*/* PROGRESS + SCORE + XP */
