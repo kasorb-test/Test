@@ -185,10 +185,9 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <div class="hsave"><button type="button" id="saveTS">บันทึกสายและรายวิชา</button><span id="tsMsg"></span></div></div>
 <div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
 <div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
-<div class="hsec"><h3>เหรียญพิเศษและส่วนลด</h3><p class="muted">กำหนดช่วงเวลาที่เหรียญจะขึ้นบนบันไดยศของนักเรียน ใครเข้ามาในช่วงนั้นกระโดดเก็บได้ช่วงละ 1 ครั้ง และตั้งส่วนลดที่ใช้เหรียญแลกได้ นักเรียนจะได้โค้ดไว้แจ้งตอนชำระเงิน (ดูโค้ดและกดใช้แล้วได้ที่หน้าสมาชิก)</p>
-<h4 class="tsh">ช่วงเหรียญพิเศษ</h4><div id="dropRows"></div><button type="button" class="addbtn" id="dropAdd">+ เพิ่มช่วงเหรียญ</button>
-<h4 class="tsh">ส่วนลดที่แลกได้</h4><div id="cpRows"></div><button type="button" class="addbtn" id="cpAdd">+ เพิ่มส่วนลด</button>
-<div class="hsave"><button type="button" id="saveCoins">บันทึกเหรียญและส่วนลด</button><span id="coinsMsg"></span></div></div>
+<div class="hsec"><h3>ส่วนลดที่แลกด้วยเหรียญ</h3><p class="muted">นักเรียนได้เหรียญอัตโนมัติจากการเช็คอินรายวัน (ลำดับ 7 วัน: 5, 5, 10, 10, 15, 15, 30) และจากความขยัน (ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 2 เหรียญ วันละไม่เกิน 20) ตั้งส่วนลดที่ใช้เหรียญแลกได้ที่นี่ นักเรียนจะได้โค้ดไว้แจ้งตอนชำระเงิน (ดูโค้ดและกดใช้แล้วได้ที่หน้าสมาชิก)</p>
+<div id="cpRows"></div><button type="button" class="addbtn" id="cpAdd">+ เพิ่มส่วนลด</button>
+<div class="hsave"><button type="button" id="saveCoins">บันทึกส่วนลด</button><span id="coinsMsg"></span></div></div>
 <div class="hsec"><h3>ข้อสอบประจำวัน</h3>
 <label>คำถาม</label><textarea id="dailyQ"></textarea>
 <label style="font-weight:400"><input id="dailyEng" type="checkbox" style="width:auto"> ข้อสอบภาษาอังกฤษ (ตัวเลือกเป็น A B C D แทน 1 2 3 4)</label>
@@ -289,30 +288,20 @@ document.querySelectorAll(".until").forEach(i=>i.onchange=()=>{const u=find(i.da
 document.querySelectorAll(".undo-row").forEach(b=>b.onclick=()=>{pending.delete(b.dataset.id);renderMembers()});
 document.querySelectorAll(".sub-edit").forEach(b=>b.onclick=()=>editSubjects(b.dataset.id));document.querySelectorAll(".cp-edit").forEach(b=>b.onclick=()=>editCoupons(b.dataset.id));document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.dataset.id));document.querySelectorAll(".rm-photo").forEach(b=>b.onclick=()=>removePhoto(b.dataset.id));
 }
-/* ===== เหรียญพิเศษและส่วนลด (site/coins) ===== */
-const toLocal=ms=>{if(!ms)return"";const d=new Date(Number(ms)-new Date().getTimezoneOffset()*60000);return d.toISOString().slice(0,16)};
+/* ===== ส่วนลดที่แลกด้วยเหรียญ (site/coins.coupons) ===== */
 const rid=()=>Math.random().toString(36).slice(2,10);
-function dropRow(id,d={}){const now=Date.now(),st=!d.start?"":now<d.start?"ยังไม่ถึงเวลา":now>d.end?"หมดเวลาแล้ว":"กำลังเปิดให้เก็บ";
-  return `<div class="crow" data-id="${esc(id)}"><div><label>ชื่อที่แสดง</label><input class="dl" maxlength="30" value="${esc(d.label||"เหรียญพิเศษ")}"></div>
-  <div><label>เริ่ม</label><input class="ds" type="datetime-local" value="${toLocal(d.start)}"></div><div><label>สิ้นสุด</label><input class="de" type="datetime-local" value="${toLocal(d.end)}"></div>
-  <div><label>จำนวนเหรียญ</label><input class="da" type="number" min="1" max="500" value="${Number(d.amount)||10}"></div><button type="button" class="rm">ลบ</button>${st?`<span class="st">${st}</span>`:""}</div>`}
 function cpRow(id,c={}){return `<div class="crow cp" data-id="${esc(id)}"><div><label>ชื่อส่วนลด (เช่น ใช้กับ Premium รายปี)</label><input class="cn" maxlength="40" value="${esc(c.name||"")}"></div>
   <div><label>ลด (บาท)</label><input class="cb" type="number" min="1" max="5000" value="${Number(c.baht)||20}"></div><div><label>ใช้เหรียญ</label><input class="cc" type="number" min="1" max="100000" value="${Number(c.coins)||100}"></div><button type="button" class="rm">ลบ</button></div>`}
-function bindCoinRows(){document.querySelectorAll("#dropRows .rm,#cpRows .rm").forEach(b=>b.onclick=()=>b.closest(".crow").remove())}
+function bindCoinRows(){document.querySelectorAll("#cpRows .rm").forEach(b=>b.onclick=()=>b.closest(".crow").remove())}
 async function loadCoins(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};
-  $("dropRows").innerHTML=Object.entries(d.drops||{}).sort((a,b)=>a[1].start-b[1].start).map(([id,x])=>dropRow(id,x)).join("");
   $("cpRows").innerHTML=Object.entries(d.coupons||{}).sort((a,b)=>a[1].coins-b[1].coins).map(([id,x])=>cpRow(id,x)).join("");bindCoinRows()}catch(e){console.error(e)}}
-$("dropAdd").onclick=()=>{const t=new Date();t.setMinutes(0,0,0);$("dropRows").insertAdjacentHTML("beforeend",dropRow(rid(),{start:t.getTime(),end:t.getTime()+86400000,amount:10}));bindCoinRows()};
 $("cpAdd").onclick=()=>{$("cpRows").insertAdjacentHTML("beforeend",cpRow(rid(),{}));bindCoinRows()};
-$("saveCoins").onclick=async()=>{const msg=$("coinsMsg"),drops={},coupons={};let bad="";
-  document.querySelectorAll("#dropRows .crow").forEach(r=>{const st=Date.parse(r.querySelector(".ds").value),en=Date.parse(r.querySelector(".de").value),am=Math.round(Number(r.querySelector(".da").value));
-    if(!st||!en||en<=st||!(am>0)){bad="ช่วงเหรียญต้องมีเวลาเริ่ม-สิ้นสุด (สิ้นสุดหลังเริ่ม) และจำนวนเหรียญมากกว่า 0";return}
-    drops[r.dataset.id]={label:r.querySelector(".dl").value.trim().slice(0,30)||"เหรียญพิเศษ",start:st,end:en,amount:Math.min(500,am)}});
+$("saveCoins").onclick=async()=>{const msg=$("coinsMsg"),coupons={};let bad="";
   document.querySelectorAll("#cpRows .crow").forEach(r=>{const b=Math.round(Number(r.querySelector(".cb").value)),c=Math.round(Number(r.querySelector(".cc").value));
     if(!(b>0)||!(c>0)){bad="ส่วนลดต้องมีจำนวนบาทและจำนวนเหรียญมากกว่า 0";return}
     coupons[r.dataset.id]={name:r.querySelector(".cn").value.trim().slice(0,40),baht:b,coins:c}});
   if(bad){msg.className="err";msg.textContent=bad;return}
-  try{await setDoc(doc(db,"site","coins"),{drops,coupons});msg.className="ok";msg.textContent="บันทึกแล้ว";loadCoins()}catch(e){msg.className="err";msg.textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`}};
+  try{await setDoc(doc(db,"site","coins"),{coupons});msg.className="ok";msg.textContent="บันทึกแล้ว";loadCoins()}catch(e){msg.className="err";msg.textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`}};
 /* โค้ดส่วนลดของสมาชิก: แอดมินกดว่าใช้แล้วตอนรับชำระเงิน */
 async function editCoupons(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email,cs=u.coupons||{};
   const list=Object.entries(cs).map(([code,c])=>[code,`${code} · ลด ${c.baht} บาท ${c.name?"· "+c.name:""}`,!!c.used]);
