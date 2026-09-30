@@ -4093,7 +4093,17 @@ $("authClose").onclick=closeLogin;
 
 /* เมนูที่ส่วนหัว: ดึงรายการย่อยจากเมนูด้านข้าง ให้ตรงกันเสมอ */
 let tnY=0;
-$("hbCardToggle").onclick=()=>{const open=document.body.classList.toggle("exam-card-open");$("hbCardToggle").setAttribute("aria-expanded",open)};
+/* เปิด/ย่อการ์ดสมาชิกระหว่างทำข้อสอบ: ข้อสอบที่อ่านอยู่เลื่อนลงตามความสูงที่เพิ่ม ไม่ถูกแถบด้านบนบัง */
+function setExamCard(open){
+  const hb=document.querySelector(".hb"),h0=hb.offsetHeight;
+  const q=[...document.querySelectorAll("#xPaper .xi")].find(e=>e.getBoundingClientRect().bottom>h0+80);
+  const t0=q?q.getBoundingClientRect().top:0;
+  document.body.classList.toggle("exam-card-open",open);$("hbCardToggle").setAttribute("aria-expanded",open);
+  if(!q) return;
+  const d=hb.offsetHeight-h0,t1=q.getBoundingClientRect().top;
+  window.scrollBy(0,t1-(t0+d));
+}
+$("hbCardToggle").onclick=()=>setExamCard(!document.body.classList.contains("exam-card-open"));
 document.body.appendChild($("tnPanel"));  // อยู่นอกแถบหัว ไม่ให้ถูกตัดขอบเมื่อแถบหัวย่อ
 const TN_SRC={tests:'[data-group="tests"] .submenu',results:'[data-group="results"] .submenu',account:'[data-group="account"] .submenu',contact:'[data-group="contact"] .submenu'};
 function closeTopMenu(){$("tnPanel").classList.add("hidden");document.querySelectorAll(".tn-group.open").forEach(b=>b.classList.remove("open"))}
@@ -4785,7 +4795,7 @@ $("topProfileBtn")
 ()=>{
 /* ระหว่างทำข้อสอบบนมือถือ: แตะการ์ดสมาชิกเพื่อย่อเก็บ ไม่ออกจากหน้าข้อสอบ */
 if(document.body.classList.contains("exam-mode")){
-  if(document.body.classList.contains("exam-card-open")){document.body.classList.remove("exam-card-open");$("hbCardToggle").setAttribute("aria-expanded","false")}
+  if(document.body.classList.contains("exam-card-open")) setExamCard(false);
   return;
 }
 showAppPage("myInfoPage","ข้อมูลของฉัน");
