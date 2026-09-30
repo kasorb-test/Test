@@ -16,19 +16,40 @@ service cloud.firestore {
         && request.auth.token.email == "thananitwit@gmail.com";
     }
 
-    // เช็คอินรายวัน: วัน = จำนวนวันนับจาก 1970 ตามเวลาไทย ต้องเป็นวันนี้จริง และยังไม่เคยเช็คอินวันนี้
-    function thaiDayNow() {
-      return int((request.time.toMillis() + 25200000) / 86400000);
+    // เหรียญพิเศษที่แอดมินตั้งไว้ใน site/coins: เก็บได้เฉพาะช่วงเวลาที่กำหนด ช่วงละครั้ง ได้ตามจำนวนที่ตั้งไว้
+    function coinSite() {
+      return get(/databases/$(database)/documents/site/coins).data;
     }
-    function validCheckin(n, o) {
-      let c = n.checkin;
-      let prev = o.get("checkin", {"day": 0, "streak": 0});
-      let streak = prev.day == c.day - 1 ? prev.streak % 7 + 1 : 1;
-      return c.keys().hasOnly(["day", "streak"])
-        && c.day is int && c.day == thaiDayNow() && c.day > prev.day
-        && c.streak == streak
-        && n.get("coins", 0) == o.get("coins", 0) + [5, 5, 10, 10, 15, 15, 30][streak - 1]
-        && !n.diff(o).affectedKeys().hasAny(["owned", "lastBuy"]);
+    function validClaim(n, o) {
+      let drops = coinSite().drops;
+      let before = o.get("claimed", {});
+      let d = drops[n.lastClaim];
+      return n.lastClaim is string && n.lastClaim in drops
+        && !(n.lastClaim in before)
+        && n.claimed is map
+        && n.claimed.keys().hasOnly(before.keys().concat([n.lastClaim]))
+        && n.claimed.keys().hasAll(before.keys().concat([n.lastClaim]))
+        && request.time.toMillis() >= d.start && request.time.toMillis() <= d.end
+        && n.get("coins", 0) == o.get("coins", 0) + d.amount
+        && !n.diff(o).affectedKeys().hasAny(["owned", "lastBuy", "coupons", "lastCoupon"]);
+    }
+    // แลกโค้ดส่วนลด: เพิ่มโค้ดใหม่ครั้งละ 1 โค้ด ราคาและจำนวนบาทตรงกับที่แอดมินตั้งไว้ โค้ดเดิมแก้ไม่ได้
+    function validCoupon(n, o) {
+      let cps = coinSite().coupons;
+      let before = o.get("coupons", {});
+      let c = n.coupons[n.lastCoupon];
+      return n.lastCoupon is string && n.lastCoupon.matches("KS[A-Z0-9]{6}")
+        && !(n.lastCoupon in before)
+        && n.coupons is map
+        && n.coupons.diff(before).affectedKeys().hasOnly([n.lastCoupon])
+        && n.coupons.diff(before).addedKeys().hasOnly([n.lastCoupon])
+        && c.keys().hasOnly(["cid", "baht", "name", "used", "at"])
+        && c.cid is string && c.cid in cps
+        && c.baht == cps[c.cid].baht && c.used == false
+        && c.name is string && c.name.size() <= 40 && c.at is int
+        && n.get("coins", 0) == o.get("coins", 0) - cps[c.cid].coins
+        && n.get("coins", 0) >= 0
+        && !n.diff(o).affectedKeys().hasAny(["owned", "lastBuy", "claimed", "lastClaim"]);
     }
     // แลกของสะสม: เพิ่มได้ครั้งละ 1 ชิ้น (lastBuy) หักเหรียญตามราคา และต้องมีเหรียญพอ
     function validBuy(n, o) {
@@ -42,7 +63,7 @@ service cloud.firestore {
         && n.owned[n.lastBuy] == true
         && n.get("coins", 0) == o.get("coins", 0) - prices[n.lastBuy]
         && n.get("coins", 0) >= 0
-        && !n.diff(o).affectedKeys().hasAny(["checkin"]);
+        && !n.diff(o).affectedKeys().hasAny(["claimed", "lastClaim", "coupons", "lastCoupon"]);
     }
 
     function isOwner(uid) {
@@ -238,7 +259,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "owned", "lastBuy"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "claimed", "lastClaim", "owned", "lastBuy", "coupons", "lastCoupon"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -258,13 +279,15 @@ service cloud.firestore {
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["answered"])
             || (request.resource.data.answered is int && request.resource.data.answered >= 0
                 && request.resource.data.answered <= 20000))
-        // เหรียญ: เปลี่ยนได้ 2 ทางเท่านั้น 1) เช็คอินวันละครั้ง (วันตามเวลาไทย) ได้ตามแถบ 7 วัน 2) แลกของสะสมตามราคาที่กำหนด
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin"])
-            || validCheckin(request.resource.data, resource.data))
+        // เหรียญ: เปลี่ยนได้ 3 ทางเท่านั้น คือเก็บเหรียญพิเศษ แลกของสะสม และแลกโค้ดส่วนลด
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["claimed", "lastClaim"])
+            || validClaim(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["owned", "lastBuy"])
             || validBuy(request.resource.data, resource.data))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["coupons", "lastCoupon"])
+            || validCoupon(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["coins"])
-            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin", "owned"]))
+            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["lastClaim", "lastBuy", "lastCoupon"]))
         // หมู่บ้าน: รหัสหมู่บ้าน เลขบ้าน 0-19 ต้องเป็นหลังที่ตัวเองจองไว้ในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["village", "plot"])
             || (request.resource.data.village is string && request.resource.data.village.matches("v[0-9a-z]{4,20}")
@@ -326,6 +349,12 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["memberNo", "memberDate"])
         && request.resource.data.get("memberNo", 1) is int && request.resource.data.get("memberNo", 1) > 0
         && request.resource.data.get("memberDate", "000000").matches("[0-9]{6}");
+
+      // แอดมินกดว่าโค้ดส่วนลดใช้แล้ว (แก้ได้เฉพาะสถานะ used ของโค้ดที่มีอยู่)
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["coupons"])
+        && request.resource.data.coupons.keys().hasOnly(resource.data.get("coupons", {}).keys())
+        && resource.data.get("coupons", {}).keys().hasOnly(request.resource.data.coupons.keys());
 
       // แอดมินลบรูปที่ไม่เหมาะสม (กลับไปใช้รูปการ์ตูน)
       allow update: if isAdmin()

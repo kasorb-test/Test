@@ -26,6 +26,10 @@
 .mt th{top:calc(var(--mtopH,62px) + var(--stickH,0px))}
 }
 .nrow{position:relative;margin:10px 0;padding:12px 14px;border:1px solid #eee;border-radius:12px;background:#fcfcfc}.nrow b{display:block;margin-bottom:4px;color:#e86208;font-size:13px}.nrow label{margin-top:8px}.nrow .ndel{position:absolute;right:10px;top:8px;width:auto;margin:0;padding:5px 10px;background:#fdecec;color:#c62828;font-size:13px}.nadd{width:auto;background:#fff2e8;color:#e86208}
+.crow{display:grid;grid-template-columns:1.4fr 1fr 1fr 90px auto;gap:8px;align-items:end;margin:0 0 8px;padding:10px;border:1px solid #eee;border-radius:12px;background:#fafafa}
+.crow label{margin:0 0 3px;font-size:12px}.crow input{margin:0}.crow .rm{width:auto;padding:8px 12px;background:#fee2e2;color:#b91c1c;border:0;border-radius:10px;font-weight:800}
+.crow.cp{grid-template-columns:1.6fr 110px 110px auto}.crow .st{grid-column:1/-1;font-size:12px;color:#64748b}
+@media(max-width:700px){.crow,.crow.cp{grid-template-columns:1fr 1fr}.crow .rm{grid-column:1/-1}}
 .hsec{margin:16px 0 0;padding:4px 16px 16px;border:1px solid #eee;border-radius:14px}
 .hsec h3{margin:14px 0 6px}
 .hsave{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px}.hsave button{width:auto;margin:0;padding:11px 18px}
@@ -181,6 +185,10 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <div class="hsave"><button type="button" id="saveTS">บันทึกสายและรายวิชา</button><span id="tsMsg"></span></div></div>
 <div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
 <div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
+<div class="hsec"><h3>เหรียญพิเศษและส่วนลด</h3><p class="muted">กำหนดช่วงเวลาที่เหรียญจะขึ้นบนบันไดยศของนักเรียน ใครเข้ามาในช่วงนั้นกระโดดเก็บได้ช่วงละ 1 ครั้ง และตั้งส่วนลดที่ใช้เหรียญแลกได้ นักเรียนจะได้โค้ดไว้แจ้งตอนชำระเงิน (ดูโค้ดและกดใช้แล้วได้ที่หน้าสมาชิก)</p>
+<h4 class="tsh">ช่วงเหรียญพิเศษ</h4><div id="dropRows"></div><button type="button" class="addbtn" id="dropAdd">+ เพิ่มช่วงเหรียญ</button>
+<h4 class="tsh">ส่วนลดที่แลกได้</h4><div id="cpRows"></div><button type="button" class="addbtn" id="cpAdd">+ เพิ่มส่วนลด</button>
+<div class="hsave"><button type="button" id="saveCoins">บันทึกเหรียญและส่วนลด</button><span id="coinsMsg"></span></div></div>
 <div class="hsec"><h3>ข้อสอบประจำวัน</h3>
 <label>คำถาม</label><textarea id="dailyQ"></textarea>
 <label style="font-weight:400"><input id="dailyEng" type="checkbox" style="width:auto"> ข้อสอบภาษาอังกฤษ (ตัวเลือกเป็น A B C D แทน 1 2 3 4)</label>
@@ -268,19 +276,50 @@ const q=$("q").value.trim().toLowerCase();
 const counts={all:members.length,free:0,yearly:0,lifetime:0};
 members.forEach(u=>counts[groupOf(u)]++);
 document.querySelectorAll("#tabs button").forEach(t=>{t.classList.toggle("on",t.dataset.f===filter);t.querySelector("b").textContent=counts[t.dataset.f]});
-const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)||codeOf(u).includes(q.replace(/^#/,""))));
+const list=members.filter(u=>(filter==="all"||groupOf(u)===filter)&&(!q||(u.email||"").toLowerCase().includes(q)||(u.nickname||"").toLowerCase().includes(q)||codeOf(u).includes(q.replace(/^#/,""))||Object.keys(u.coupons||{}).some(c=>c.toLowerCase().includes(q))));
 if(!members.length){$("users").innerHTML='<p class="muted">ยังไม่มีสมาชิก</p>';return}
 if(!list.length){$("users").innerHTML='<p class="muted">ไม่พบสมาชิก</p>';return}
 $("users").innerHTML=`<table class="mt"><thead><tr><th>ชื่อเล่น</th><th class="col-mail">อีเมล</th><th>แพ็กเกจ</th><th></th></tr></thead><tbody>${list.map(u=>{const w=wantOf(u);const id=esc(u.id);
 const note=w.changed?`<div class="exp pend-note">ยังไม่ได้บันทึก${w.v==="yearly"?"":` — จะเปลี่ยนเป็น${PLANS.find(p=>p[0]===w.v)[1]}`}</div>`:"";
 const info=w.v==="yearly"?`<div class="exp yearly">${w.changed?"ใช้ได้ถึง":"หมดอายุ"} <input type="date" class="until" data-id="${id}" value="${esc(w.until)}"></div>`:(w.changed?"":`<div class="exp ${w.v}">${planNote(u)}</div>`);
-return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}<span class="mno">${esc(codeOf(u)||"ยังไม่มีรหัส")}</span>${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="subs">ซื้อรายวิชา: <b>${(u.subjects||[]).length?esc(u.subjects.join(", ")):"-"}</b> <button type="button" class="sub-edit" data-id="${id}">แก้ไข</button></div><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
+return`<tr class="${w.changed?"changed":""}"><td><div class="name">${hasPhoto(u)?`<img class="uph" src="${esc(u.photo)}" alt="">`:""}${esc(u.nickname||"-")}<span class="mno">${esc(codeOf(u)||"ยังไม่มีรหัส")}</span>${hasPhoto(u)?`<button type="button" class="rm-photo" data-id="${id}">ลบรูป</button>`:""}<span class="mail mail-sm" style="display:none">${esc(u.email)}</span></div></td><td class="mail col-mail">${esc(u.email)}</td><td class="pc"><div class="subs">ซื้อรายวิชา: <b>${(u.subjects||[]).length?esc(u.subjects.join(", ")):"-"}</b> <button type="button" class="sub-edit" data-id="${id}">แก้ไข</button>${Object.keys(u.coupons||{}).length?`<button type="button" class="sub-edit cp-edit" data-id="${id}">โค้ดส่วนลด · ยังไม่ใช้ ${Object.values(u.coupons).filter(c=>!c.used).length}</button>`:""}</div><div class="seg" data-id="${id}">${PLANS.map(([v,l])=>`<button type="button" data-v="${v}" class="${w.v===v?"on "+v+(w.changed?" pend":""):""}">${l}</button>`).join("")}</div>${info}${note}</td><td class="sc"><div class="acts"><button type="button" class="save-row" data-id="${id}" ${w.changed?"":"disabled"}>บันทึก</button><button type="button" class="undo-row" data-id="${id}" ${w.changed?"":"disabled"}>ยกเลิก</button></div></td></tr>`}).join("")}</tbody></table>`;
 const find=id=>members.find(x=>x.id===id);
 document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{const u=find(b.parentElement.dataset.id);if(u)setPending(u,b.dataset.v)});
 document.querySelectorAll(".until").forEach(i=>i.onchange=()=>{const u=find(i.dataset.id);if(u&&i.value)setPending(u,"yearly",i.value)});
 document.querySelectorAll(".undo-row").forEach(b=>b.onclick=()=>{pending.delete(b.dataset.id);renderMembers()});
-document.querySelectorAll(".sub-edit").forEach(b=>b.onclick=()=>editSubjects(b.dataset.id));document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.dataset.id));document.querySelectorAll(".rm-photo").forEach(b=>b.onclick=()=>removePhoto(b.dataset.id));
+document.querySelectorAll(".sub-edit").forEach(b=>b.onclick=()=>editSubjects(b.dataset.id));document.querySelectorAll(".cp-edit").forEach(b=>b.onclick=()=>editCoupons(b.dataset.id));document.querySelectorAll(".save-row").forEach(b=>b.onclick=()=>saveRow(b.dataset.id));document.querySelectorAll(".rm-photo").forEach(b=>b.onclick=()=>removePhoto(b.dataset.id));
 }
+/* ===== เหรียญพิเศษและส่วนลด (site/coins) ===== */
+const toLocal=ms=>{if(!ms)return"";const d=new Date(Number(ms)-new Date().getTimezoneOffset()*60000);return d.toISOString().slice(0,16)};
+const rid=()=>Math.random().toString(36).slice(2,10);
+function dropRow(id,d={}){const now=Date.now(),st=!d.start?"":now<d.start?"ยังไม่ถึงเวลา":now>d.end?"หมดเวลาแล้ว":"กำลังเปิดให้เก็บ";
+  return `<div class="crow" data-id="${esc(id)}"><div><label>ชื่อที่แสดง</label><input class="dl" maxlength="30" value="${esc(d.label||"เหรียญพิเศษ")}"></div>
+  <div><label>เริ่ม</label><input class="ds" type="datetime-local" value="${toLocal(d.start)}"></div><div><label>สิ้นสุด</label><input class="de" type="datetime-local" value="${toLocal(d.end)}"></div>
+  <div><label>จำนวนเหรียญ</label><input class="da" type="number" min="1" max="500" value="${Number(d.amount)||10}"></div><button type="button" class="rm">ลบ</button>${st?`<span class="st">${st}</span>`:""}</div>`}
+function cpRow(id,c={}){return `<div class="crow cp" data-id="${esc(id)}"><div><label>ชื่อส่วนลด (เช่น ใช้กับ Premium รายปี)</label><input class="cn" maxlength="40" value="${esc(c.name||"")}"></div>
+  <div><label>ลด (บาท)</label><input class="cb" type="number" min="1" max="5000" value="${Number(c.baht)||20}"></div><div><label>ใช้เหรียญ</label><input class="cc" type="number" min="1" max="100000" value="${Number(c.coins)||100}"></div><button type="button" class="rm">ลบ</button></div>`}
+function bindCoinRows(){document.querySelectorAll("#dropRows .rm,#cpRows .rm").forEach(b=>b.onclick=()=>b.closest(".crow").remove())}
+async function loadCoins(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};
+  $("dropRows").innerHTML=Object.entries(d.drops||{}).sort((a,b)=>a[1].start-b[1].start).map(([id,x])=>dropRow(id,x)).join("");
+  $("cpRows").innerHTML=Object.entries(d.coupons||{}).sort((a,b)=>a[1].coins-b[1].coins).map(([id,x])=>cpRow(id,x)).join("");bindCoinRows()}catch(e){console.error(e)}}
+$("dropAdd").onclick=()=>{const t=new Date();t.setMinutes(0,0,0);$("dropRows").insertAdjacentHTML("beforeend",dropRow(rid(),{start:t.getTime(),end:t.getTime()+86400000,amount:10}));bindCoinRows()};
+$("cpAdd").onclick=()=>{$("cpRows").insertAdjacentHTML("beforeend",cpRow(rid(),{}));bindCoinRows()};
+$("saveCoins").onclick=async()=>{const msg=$("coinsMsg"),drops={},coupons={};let bad="";
+  document.querySelectorAll("#dropRows .crow").forEach(r=>{const st=Date.parse(r.querySelector(".ds").value),en=Date.parse(r.querySelector(".de").value),am=Math.round(Number(r.querySelector(".da").value));
+    if(!st||!en||en<=st||!(am>0)){bad="ช่วงเหรียญต้องมีเวลาเริ่ม-สิ้นสุด (สิ้นสุดหลังเริ่ม) และจำนวนเหรียญมากกว่า 0";return}
+    drops[r.dataset.id]={label:r.querySelector(".dl").value.trim().slice(0,30)||"เหรียญพิเศษ",start:st,end:en,amount:Math.min(500,am)}});
+  document.querySelectorAll("#cpRows .crow").forEach(r=>{const b=Math.round(Number(r.querySelector(".cb").value)),c=Math.round(Number(r.querySelector(".cc").value));
+    if(!(b>0)||!(c>0)){bad="ส่วนลดต้องมีจำนวนบาทและจำนวนเหรียญมากกว่า 0";return}
+    coupons[r.dataset.id]={name:r.querySelector(".cn").value.trim().slice(0,40),baht:b,coins:c}});
+  if(bad){msg.className="err";msg.textContent=bad;return}
+  try{await setDoc(doc(db,"site","coins"),{drops,coupons});msg.className="ok";msg.textContent="บันทึกแล้ว";loadCoins()}catch(e){msg.className="err";msg.textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`}};
+/* โค้ดส่วนลดของสมาชิก: แอดมินกดว่าใช้แล้วตอนรับชำระเงิน */
+async function editCoupons(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email,cs=u.coupons||{};
+  const list=Object.entries(cs).map(([code,c])=>[code,`${code} · ลด ${c.baht} บาท ${c.name?"· "+c.name:""}`,!!c.used]);
+  const picked=await uiChecks(`โค้ดส่วนลดของ ${who} (ติ๊ก = ใช้แล้ว)`,list);if(!picked)return;
+  const next={};Object.entries(cs).forEach(([code,c])=>next[code]={...c,used:picked.includes(code)});
+  try{await updateDoc(doc(db,"users",id),{coupons:next});u.coupons=next;renderMembers();$("umsg").className="ok";$("umsg").textContent=`บันทึกโค้ดส่วนลดของ ${who} แล้ว`}
+  catch(e){$("umsg").className="err";$("umsg").textContent=`บันทึกไม่สำเร็จ (${e.code||e.message}) — ตรวจสอบว่า Publish firestore.rules ล่าสุดแล้ว`}}
 /* รูปที่นักเรียนอัปโหลด: แอดมินลบได้ถ้าไม่เหมาะสม นักเรียนจะกลับไปใช้รูปการ์ตูนเดิม */
 function hasPhoto(u){return typeof u.photo==="string"&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u.photo)}
 async function removePhoto(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email;
@@ -351,7 +390,7 @@ addEventListener("resize",measureSticky);
 if(window.ResizeObserver){const ro=new ResizeObserver(measureSticky);document.querySelectorAll(".stick").forEach(el=>ro.observe(el))}
 function showShell(on){$("boot").classList.add("hide");document.querySelector("main").classList.toggle("hide",on);$("shell").classList.toggle("hide",!on);document.body.classList.toggle("in",on)}
 onAuthStateChanged(auth,async u=>{if(!u){showShell(false);return}if((u.email||"").toLowerCase()!==ADMIN){await signOut(auth);say("อีเมลนี้ไม่ใช่บัญชีแอดมิน","err");return}say("");showShell(true);let last="home";try{last=localStorage.getItem("kasorbAdminPage")||"home"}catch(e){}goPage(last);load();loadHome();loadExams()});
-async function loadHome(){try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};fillTS(h);const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
+async function loadHome(){loadCoins();try{const s=await getDoc(doc(db,"site","home"));const h=s.exists()?s.data():{};fillTS(h);const ex=(h.exams&&h.exams.length)?h.exams:[{title:"สายอำนวยการ และสายพิสูจน์หลักฐาน",date:"2026-11-29"},{title:"สายปราบปราม",date:"2027-01-17"}];[0,1].forEach(i=>{$("exam"+i+"Title").value=(ex[i]||{}).title||"";$("exam"+i+"Date").value=(ex[i]||{}).date||""});$("totalQuestions").value=h.totalQuestions||"";setNewsRows(h.news||[]);const d=h.daily||{};$("dailyQ").value=d.question||"";[0,1,2,3].forEach(i=>$("dailyC"+i).value=(d.choices||[])[i]||"");$("dailyAns").value=String(d.answer??0);$("dailyExp").value=d.explanation||"";$("dailyEng").checked=!!d.english}catch(e){$("homeMsg").textContent="โหลดข้อมูลหน้าหลักไม่ได้"}}
 /* สไลด์ข่าว: แต่ละข่าวมี ข้อความ รูป (ไม่บังคับ) ลิงก์ (ไม่บังคับ) */
 function newsRow(n={}){const r=document.createElement("div");r.className="nrow";r.innerHTML=`<b></b><button type="button" class="ndel">ลบ</button><label>ข้อความข่าว</label><input class="nt" placeholder="เปิดรับสมัครสอบนายสิบตำรวจแล้ว"><label>รูปข่าว (ไม่บังคับ)</label><div class="nimg"></div><label>ลิงก์เมื่อกดข่าว (ไม่บังคับ)</label><input class="nl" placeholder="https://...">`;r.querySelector(".nt").value=n.text||"";r.querySelector(".nl").value=n.link||"";r._img=n.imageKey?{key:n.imageKey}:n.image?{url:n.image}:null;r._pos=newsPos(n.pos);r._posM=newsPos(n.posM||n.pos);drawNewsImg(r);r.querySelector(".ndel").onclick=()=>{r.remove();numberNews()};$("newsRows").appendChild(r);numberNews()}
 /* รูปข่าว: อัปโหลดจากเครื่อง (ย่อรูปแล้วเก็บใน siteImg) หรือใส่ลิงก์รูปแบบเดิม */
