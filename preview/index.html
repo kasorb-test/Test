@@ -2678,6 +2678,17 @@ input{
 .st-track{z-index:2}
 /* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
 @media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
+/* รูปประจำตัวแบบเหรียญมีความหนา: ยืนรอเอียงไปมา กระโดดหมุนรอบตัว 1 รอบ ด้านหลังเป็นป้ายยศ */
+.st-me{perspective:420px}
+.st-disc{position:relative;width:42px;height:42px;transform-style:preserve-3d;animation:stSway 3.2s ease-in-out infinite}
+.st-disc img{position:absolute;inset:0;transform:translateZ(3px);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.st-edge{position:absolute;inset:0;border-radius:50%;background:#e2600a;transform:translateZ(calc(3px - var(--z)*1.2px));box-shadow:inset 0 0 0 3px #c24e00}
+.st-back{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffb066,#ff6a00 60%,#e2520a);border:3px solid #fff;box-sizing:border-box;color:#fff;font-size:11px;font-weight:900;transform:rotateY(180deg) translateZ(3.5px);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.st-me i.st-shadow{position:absolute;left:50%;bottom:-5px;width:26px;height:6px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.14)}
+@keyframes stSway{0%,100%{transform:rotateY(-28deg)}50%{transform:rotateY(28deg)}}
+.st-me.hop .st-disc{animation:stSpin .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes stSpin{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+@media(prefers-reduced-motion:reduce){.st-disc,.st-me.hop .st-disc{animation:none}}
 /* บันไดยศครบทุกขั้น เลื่อนซ้ายขวาได้ + กระโดดเก็บเหรียญ */
 .stairs{height:290px!important}
 .st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
@@ -7329,7 +7340,7 @@ function stairsHtml(lv,xp){
     <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
     <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
     ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+92}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+118}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
-    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><img src="${escHtml($("topAvatar").src)}" alt=""><i></i></div></div></div>
+    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-disc">${[1,2,3,4,5].map(z=>`<b class="st-edge" style="--z:${z}"></b>`).join("")}<img src="${escHtml($("topAvatar").src)}" alt=""><span class="st-back">Lv.${lv}</span></div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
     <button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
     <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>เลื่อนซ้ายขวาเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
