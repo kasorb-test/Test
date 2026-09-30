@@ -2678,6 +2678,20 @@ input{
 .st-track{z-index:2}
 /* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
 @media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
+/* ปุ่มเดินซ้ายขวา + ท่าเดิน */
+.st-pad{position:absolute;left:10px;bottom:14px;z-index:5;display:flex;gap:8px}
+.st-mv{width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 4px 0 #cbd5e1,0 6px 12px rgba(0,0,0,.15);cursor:pointer;touch-action:none;position:relative}
+.st-mv:active{transform:translateY(3px);box-shadow:0 1px 0 #cbd5e1}
+.st-mv:before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;border-top:4px solid #16305f;border-left:4px solid #16305f;margin:-7px 0 0 -4px;transform:rotate(-45deg)}
+.st-mv.r:before{margin-left:-10px;transform:rotate(135deg)}
+.st-kid.flip .st-body{transform:scaleX(-1)}
+.st-me.walk .k-leg.l{animation:kWalkL .36s ease-in-out infinite}.st-me.walk .k-leg.r{animation:kWalkR .36s ease-in-out infinite}
+.st-me.walk .k-arm.l{animation:kWalkR .36s ease-in-out infinite}.st-me.walk .k-arm.r{animation:kWalkL .36s ease-in-out infinite}
+.st-me.walk .st-kid{animation:kBob .36s ease-in-out infinite}
+@keyframes kWalkL{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-20deg)}}@keyframes kWalkR{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
+@keyframes kBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.st-me.air .k-arm.l{transform:rotate(150deg);animation:none}.st-me.air .k-arm.r{transform:rotate(-150deg);animation:none}
+.st-me.hop{animation:none!important}
 /* ตัวละครคนการ์ตูน: หัวเป็นรูปประจำตัว ตัวใส่เครื่องแบบ ยืนรอแกว่งแขน กระโดดยกแขนงอเข่าและหมุนรอบตัว */
 #stMe.st-me{width:54px;height:98px;margin-left:0}
 .st-kid{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 60%}
@@ -7354,29 +7368,58 @@ function stairsHtml(lv,xp){
       <rect x="16" y="34" width="28" height="4" fill="#0f2449"/><rect x="28" y="34" width="4" height="4" fill="#f5b301"/><path d="M36 17 l3 1.5 3-1.5 v4 l-3 2-3-2z" fill="#f5b301"/></svg>
       <img class="st-head" src="${escHtml($("topAvatar").src)}" alt=""></div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
-    <button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
-    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>เลื่อนซ้ายขวาเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
+    <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
 }
 /* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
+/* เดินแบบเกม: ปุ่มซ้าย/ขวา (หรือลูกศร) เดิน ปุ่มกระโดด (หรือเว้นวรรค/ลูกศรขึ้น) กระโดด เดินขึ้นแท่นที่สูงกว่าได้เอง เดินลงแล้วตก
+   เดินได้ถึงแท่นยศของตัวเองเท่านั้น กระโดดชนเหรียญเหนือแท่นยศของตัวเองเพื่อเก็บเหรียญ */
 function bindStairs(lv){
-  const tr=$("stTrack"),me=$("stMe"),coin=$("stCoin");if(!tr||!me)return;
-  requestAnimationFrame(()=>{tr.scrollLeft=stX(lv)+ST_CW/2-tr.clientWidth/2});
+  const tr=$("stTrack"),me=$("stMe"),kid=me?.querySelector(".st-kid");if(!tr||!me)return;
+  const P=ST_CW+ST_GAP,top=lv>=MAX_LEVEL,minX=stX(0)+14,maxX=stX(lv)+ST_CW-14;
+  const ground=x=>stH(Math.max(0,Math.min(MAX_LEVEL,Math.floor((x-ST_GAP/2)/P))));
+  const g={x:stX(lv)+ST_CW/2,y:stH(lv),vy:0,air:false,dir:1,keys:{},raf:0,last:0,warned:0};
+  requestAnimationFrame(()=>{tr.scrollLeft=g.x-tr.clientWidth/2});
   let drag=null,moved=false;
   tr.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;drag={x:e.clientX,l:tr.scrollLeft};moved=false});
   addEventListener("pointermove",e=>{if(!drag)return;const d=e.clientX-drag.x;if(Math.abs(d)>4)moved=true;tr.scrollLeft=drag.l-d});
   addEventListener("pointerup",()=>{drag=null});
-  let busy=false;
-  const jump=()=>{if(busy)return;busy=true;me.classList.remove("hop");void me.offsetWidth;me.classList.add("hop");
-    setTimeout(async()=>{if(coin&&!coin.classList.contains("got")){coin.classList.add("got");document.querySelector(".st-cklabel")?.remove();
-      const gain=await claimDrop();const pl=$("stPlus");
-      if(pl){pl.textContent=gain?`+${gain}`:"เก็บไม่สำเร็จ";pl.classList.remove("on");void pl.offsetWidth;pl.classList.add("on")}
-      if(!gain){coin.classList.remove("got");return}refreshShop();
-      const nd=activeDrop();if(nd)setTimeout(()=>{coin.classList.remove("got");const x=parseFloat(coin.style.left)+11,y=parseFloat(coin.style.bottom)+26;
-        coin.insertAdjacentHTML("afterend",`<em class="st-cklabel" style="left:${x}px;bottom:${y}px">${escHtml(nd.label)} +${nd.amount}</em>`)},900)}},230);
-    setTimeout(()=>{busy=false},620)};
-  $("stJump").onclick=jump;
+  const say=t=>{const pl=$("stPlus");if(!pl)return;pl.textContent=t;pl.classList.remove("on");void pl.offsetWidth;pl.classList.add("on")};
+  let claiming=false;
+  const tryCoin=async()=>{const coin=$("stCoin");if(!coin||claiming||coin.classList.contains("got"))return;
+    const cx=parseFloat(coin.style.left)+11,cb=parseFloat(coin.style.bottom);
+    if(Math.abs(g.x-cx)>26||g.y+98<cb)return;
+    claiming=true;coin.classList.add("got");document.querySelector(".st-cklabel")?.remove();
+    const gain=await claimDrop();say(gain?`+${gain}`:"เก็บไม่สำเร็จ");claiming=false;
+    if(!gain){coin.classList.remove("got");return}refreshShop();
+    const nd=activeDrop();if(nd)setTimeout(()=>{coin.classList.remove("got");coin.insertAdjacentHTML("afterend",`<em class="st-cklabel" style="left:${cx}px;bottom:${cb+26}px">${escHtml(nd.label)} +${nd.amount}</em>`)},900)};
+  const draw=()=>{me.style.left=(g.x-27)+"px";me.style.bottom=g.y+"px";kid?.classList.toggle("flip",g.dir<0);
+    const vw=tr.clientWidth,l=tr.scrollLeft;if(g.x<l+70||g.x>l+vw-70)tr.scrollLeft=g.x-vw/2};
+  const step=now=>{
+    const dt=Math.min(.04,(now-g.last)/1000);g.last=now;
+    const v=(g.keys.r?1:0)-(g.keys.l?1:0);
+    if(v){g.dir=v;let nx=g.x+v*150*dt;
+      if(nx>maxX){nx=maxX;if(!top&&now-g.warned>1500){g.warned=now;say(`Lv.${lv+1} ต้องเลื่อนยศก่อน`)}}
+      g.x=Math.max(minX,nx)}
+    const gr=ground(g.x);
+    if(g.air||g.y>gr+.5){g.vy-=1500*dt;g.y+=g.vy*dt;if(g.y<=gr){g.y=gr;g.vy=0;g.air=false}}
+    else g.y=gr;                                  // เดินขึ้นแท่นที่สูงกว่า (สูงกว่าทีละไม่กี่พิกเซล) ได้เอง
+    me.classList.toggle("walk",!!v&&!g.air);me.classList.toggle("air",g.air);
+    if(g.air)tryCoin();
+    draw();
+    if(v||g.air||g.y>ground(g.x)+.5)g.raf=requestAnimationFrame(step);else g.raf=0;
+  };
+  const go=()=>{if(!g.raf){g.last=performance.now();g.raf=requestAnimationFrame(step)}};
+  const jump=()=>{if(g.air)return;g.air=true;g.vy=430;me.classList.remove("hop");void me.offsetWidth;me.classList.add("hop");go()};
+  const hold=(el,k)=>{if(!el)return;const on=e=>{e.preventDefault();e.stopPropagation();g.keys[k]=1;go()},off=()=>{g.keys[k]=0};
+    el.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>el.addEventListener(ev,off));el.addEventListener("click",e=>e.stopPropagation())};
+  hold($("stLeft"),"l");hold($("stRight"),"r");
+  $("stJump").onclick=e=>{e.stopPropagation();jump()};
   tr.addEventListener("click",()=>{if(!moved)jump()});
-  tr.tabIndex=0;tr.addEventListener("keydown",e=>{if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();jump()}});
+  tr.tabIndex=0;const K={ArrowLeft:"l",ArrowRight:"r"};
+  tr.addEventListener("keydown",e=>{if(K[e.key]){e.preventDefault();g.keys[K[e.key]]=1;go()}else if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();jump()}});
+  tr.addEventListener("keyup",e=>{if(K[e.key])g.keys[K[e.key]]=0});
+  draw();
 }
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
