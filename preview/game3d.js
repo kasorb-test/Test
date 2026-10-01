@@ -199,22 +199,88 @@ export function startGame(root,api){
     for(let k=0;k<5;k++){const r=new THREE.Mesh(new THREE.ConeGeometry(.05,.8,4),M(0x3f8f2a));const a=rand(0,6);r.position.set(Math.cos(a)*2.2,.4,Math.sin(a)*1.1);g.add(r)}return g}
   function tuft(){const g=new THREE.Group(),m=M(TH.tuft,{flat:true});for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.ConeGeometry(.06,.35,3),m);c.position.set(k*.08-.08,.17,0);c.rotation.z=(k-1)*.3;g.add(c)}return g}
   /* โลกเลื่อนไปทางขวา (+x): ชิ้นทางยาว 10 หน่วย */
-  let flowerBoost=0;
-  /* ทุ่งดอกไม้: ดอกไม้ขึ้นเป็นกอ ๆ สีเดียวกันในกอ ทั้งหน้าและหลังทาง */
+    /* ทุ่งดอกไม้: ดอกไม้ขึ้นเป็นกอ ๆ สีเดียวกันในกอ ทั้งหน้าและหลังทาง */
   function addFlowerField(g,n){let k=0;while(k<n){const front=Math.random()<.22,cx=rand(0,SEG),cz=front?rand(1.7,2.6):-rand(1.7,11),col=pick(PETALS),m=Math.min(n-k,6+Math.floor(Math.random()*6));
     for(let j=0;j<m;j++){const f=flower(col);f.position.set(cx+rand(-.9,.9),0,cz+rand(-.4,.4));f.scale.setScalar(front?rand(.9,1.2):rand(1.5,2.4));g.add(f)}k+=m}}
   const SEG=10,world=new THREE.Group();scene.add(world);const segs=[];let segX=-20,segN=0;
+  /* ===== ฉากตามด่าน (วน 5 แบบ): 1 ทุ่งหญ้า 2 ทุ่งดอกไม้ 3 คลองกับสะพาน มีปลากระโดด 4 ฟาร์มสัตว์กินหญ้า 5 ชายหาด มีเรือ ปู หมึก ===== */
+  const BIOMES=["meadow","flowers","canal","farm","beach"],biomeOf=st=>BIOMES[(Math.max(1,st)-1)%BIOMES.length];
+  let curBiome=biomeOf(api.best()+1);
+  const anim=[],bridges=[];   // anim: {seg,obj,kind,...} ของที่ขยับได้, bridges: ช่วงสะพาน (พิกัดโลก)
+  const live=a=>a.seg.parent===world;
+  const sandMat=M(0xf3dca2,{roughness:1}),wetSand=M(0xe0c48a,{roughness:1}),waterMat=M(0x3fb6e8,{roughness:.2,metalness:.1,transparent:true,opacity:.92}),canalMat=M(0x46a9d8,{roughness:.2,metalness:.1});
+  function fish(){const g=new THREE.Group(),c=pick([0xff8a3d,0xffc400,0x7dd3fc,0xff6fa5]);const b=new THREE.Mesh(new THREE.SphereGeometry(.18,10,8),M(c,{roughness:.4}));b.scale.set(1.6,1,.6);g.add(b);
+    const t=new THREE.Mesh(new THREE.ConeGeometry(.14,.22,4),M(c));t.rotation.z=Math.PI/2;t.position.x=-.36;g.add(t);const e=new THREE.Mesh(new THREE.SphereGeometry(.03,6,4),M(0x111111));e.position.set(.17,.05,.09);g.add(e);return g}
+  function quad(body,head,legC,{wool=false,spots=false}={}){const g=new THREE.Group(),bm=M(body,{flat:true});
+    const b=wool?new THREE.Mesh(new THREE.IcosahedronGeometry(.55,1),bm):new THREE.Mesh(new THREE.BoxGeometry(1.25,.6,.62),bm);if(wool)b.scale.set(1.25,.9,.85);b.position.y=.75;b.castShadow=true;g.add(b);
+    if(spots)for(let k=0;k<4;k++){const sp=new THREE.Mesh(new THREE.CircleGeometry(rand(.1,.16),8),M(0x222222));const side=k%2?1:-1;sp.position.set(rand(-.45,.45),.75+rand(-.15,.15),side*.315);if(side<0)sp.rotation.y=Math.PI;g.add(sp)}
+    for(const[x,z]of[[.42,.2],[.42,-.2],[-.42,.2],[-.42,-.2]]){const l=new THREE.Mesh(new THREE.CylinderGeometry(.07,.06,.5,6),M(legC));l.position.set(x,.25,z);g.add(l)}
+    const hp=new THREE.Group();hp.position.set(.6,.85,0);g.add(hp);const h=new THREE.Mesh(new THREE.BoxGeometry(.38,.32,.32),M(head,{flat:true}));h.position.set(.2,-.05,0);hp.add(h);
+    if(!wool){const sn=new THREE.Mesh(new THREE.BoxGeometry(.12,.18,.28),M(0xf4a3b4));sn.position.set(.42,-.12,0);hp.add(sn);for(const z of[-.16,.16]){const hn=new THREE.Mesh(new THREE.ConeGeometry(.04,.16,5),M(0xeeeeee));hn.position.set(.12,.18,z);hp.add(hn)}}
+    for(const z of[-.12,.12]){const e=new THREE.Mesh(new THREE.SphereGeometry(.035,6,4),M(0x111111));e.position.set(.36,.05,z);hp.add(e)}
+    g.userData.head=hp;return g}
+  const cow=()=>quad(0xffffff,0xffffff,0x444444,{spots:true}),sheep=()=>quad(0xf5f5f0,0x2b2b2b,0x2b2b2b,{wool:true}),goat=()=>quad(0xc8a27a,0xb48a60,0x6b4a2f);
+  function palm(){const g=new THREE.Group(),s=rand(1,1.4),tm=M(0xa0743f,{flat:true});let x=0,y=0;for(let k=0;k<6;k++){const seg=new THREE.Mesh(new THREE.CylinderGeometry(.13*s,.16*s,.55*s,7),tm);x+=.07*k*s;y+=.52*s;seg.position.set(x,y,0);seg.rotation.z=-.12*k;seg.castShadow=true;g.add(seg)}
+    for(let k=0;k<7;k++){const a=k/7*Math.PI*2,lf=new THREE.Mesh(new THREE.ConeGeometry(.28*s,1.9*s,4),M(pick([0x3f9a2a,0x4caf32,0x5cb82f]),{flat:true}));lf.scale.z=.25;lf.position.set(x+Math.cos(a)*.75*s,y+.15*s,Math.sin(a)*.75*s);lf.rotation.set(Math.sin(a)*1.1,0,-Math.cos(a)*1.1);lf.castShadow=true;g.add(lf)}
+    for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.SphereGeometry(.12*s,8,6),M(0x6b4a1f));c.position.set(x+rand(-.15,.15),y-.1,rand(-.15,.15));g.add(c)}return g}
+  function boat(){const g=new THREE.Group(),hc=pick([0xd84315,0x1e88e5,0xffffff,0x43a047]);const h=new THREE.Mesh(new THREE.CylinderGeometry(.9,.5,.5,4,1),M(hc,{flat:true}));h.rotation.y=Math.PI/4;h.scale.set(2,1,.7);h.position.y=.15;g.add(h);
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,2.4,6),M(0x8b5a2b));m.position.y=1.5;g.add(m);const sh=new THREE.Shape();sh.moveTo(0,0);sh.lineTo(0,2);sh.lineTo(1.3,0);sh.lineTo(0,0);
+    const sl=new THREE.Mesh(new THREE.ShapeGeometry(sh),new THREE.MeshStandardMaterial({color:pick([0xffffff,0xfff3c4,0xffd0d8]),side:THREE.DoubleSide}));sl.position.set(.06,.45,0);g.add(sl);return g}
+  function crab(){const g=new THREE.Group(),m=M(0xe53935,{flat:true});const b=new THREE.Mesh(new THREE.SphereGeometry(.22,10,6),m);b.scale.set(1.3,.6,1);b.position.y=.16;g.add(b);
+    for(const z of[-1,1]){for(let k=0;k<3;k++){const l=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.22,4),m);l.position.set(-.12+k*.12,.08,z*.24);l.rotation.x=z*.8;g.add(l)}
+      const cl=new THREE.Mesh(new THREE.SphereGeometry(.08,8,6),m);cl.scale.set(1.3,.8,1);cl.position.set(.3,.2,z*.18);g.add(cl);const ey=new THREE.Mesh(new THREE.SphereGeometry(.035,6,4),M(0x111111));ey.position.set(.14,.3,z*.07);g.add(ey)}
+    g.rotation.y=Math.PI/2;return g}
+  function squid(){const g=new THREE.Group(),c=pick([0xff8fb8,0xb48ce8,0xff9e6b]),m=M(c,{roughness:.5});const b=new THREE.Mesh(new THREE.SphereGeometry(.3,12,10),m);b.scale.set(1,1.3,1);b.position.y=.62;g.add(b);
+    for(const z of[-.11,.11]){const e=new THREE.Mesh(new THREE.SphereGeometry(.06,8,6),M(0xffffff));e.position.set(.25,.6,z);g.add(e);const pu=new THREE.Mesh(new THREE.SphereGeometry(.03,6,4),M(0x111111));pu.position.set(.3,.6,z);g.add(pu)}
+    const ts=[];for(let k=0;k<8;k++){const a=k/8*Math.PI*2,t=new THREE.Mesh(new THREE.CapsuleGeometry(.04,.32,3,6),m);t.position.set(Math.cos(a)*.18,.2,Math.sin(a)*.18);t.rotation.set(Math.sin(a)*.5,0,-Math.cos(a)*.5);g.add(t);ts.push(t)}g.userData.ts=ts;return g}
+  function bridge(g,x0,L){const deck=M(0xb27a45,{flat:true}),rail=M(0x8b5a2b,{flat:true}),n=10;
+    for(let k=0;k<n;k++){const t=(k+.5)/n,y=.32*Math.sin(Math.PI*t);const pl=new THREE.Mesh(new THREE.BoxGeometry(L/n*.92,.1,2.6),deck);pl.position.set(x0+t*L,y+.05,0);pl.rotation.z=-Math.cos(Math.PI*t)*.12;pl.castShadow=true;pl.receiveShadow=true;g.add(pl)}
+    for(const z of[-1.35,1.35]){for(let k=0;k<=4;k++){const t=k/4,y=.32*Math.sin(Math.PI*t);const po=new THREE.Mesh(new THREE.BoxGeometry(.12,.7,.12),rail);po.position.set(x0+t*L,y+.4,z);g.add(po)}
+      for(let k=0;k<8;k++){const t=(k+.5)/8,y=.32*Math.sin(Math.PI*t);const r=new THREE.Mesh(new THREE.BoxGeometry(L/8,.08,.08),rail);r.position.set(x0+t*L,y+.68,z);r.rotation.z=-Math.cos(Math.PI*t)*.12;g.add(r)}}}
+  const groundY=x=>{for(const b of bridges){if(x>b.x0&&x<b.x1&&b.seg.parent===world)return .32*Math.sin(Math.PI*(x-b.x0)/(b.x1-b.x0))+.1}return 0};
   function addSeg(){
-    const g=new THREE.Group();g.position.x=segX;segN++;
-    const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.4),pathMat);p.position.set(SEG/2,.04,0);p.receiveShadow=true;g.add(p);
-    for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(SEG,.05,.22),pathEdge);e.position.set(SEG/2,.03,zz);g.add(e)}
-    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?anyTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(4.5,13):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
-    const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(1.3,1.9));g.add(f)}if(flowerBoost)addFlowerField(g,flowerBoost);
-    for(let k=0;k<6;k++){const t=tuft();t.position.set(rand(0,SEG),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
-    if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
+    const g=new THREE.Group();g.position.x=segX;segN++;const B=curBiome;
+    const pathPiece=(a,b)=>{const p=new THREE.Mesh(new THREE.BoxGeometry(b-a,.06,2.4),B==="beach"?wetSand:pathMat);p.position.set((a+b)/2,.04,0);p.receiveShadow=true;g.add(p);if(B!=="beach")for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(b-a,.05,.22),pathEdge);e.position.set((a+b)/2,.03,zz);g.add(e)}};
+    if(B==="canal"&&segN%2===0){
+      /* คลองตัดผ่านทาง มีสะพานโค้งให้เดินข้าม ปลากระโดดในคลอง */
+      const cx=5,w=3.2;pathPiece(0,cx-w/2-.4);pathPiece(cx+w/2+.4,SEG);
+      const wt=new THREE.Mesh(new THREE.PlaneGeometry(w,60),canalMat);wt.rotation.x=-Math.PI/2;wt.position.set(cx,.03,-22);g.add(wt);
+      for(const sx of[-1,1]){const bk=new THREE.Mesh(new THREE.BoxGeometry(.3,.12,60),M(0x8a6a3a,{flat:true}));bk.position.set(cx+sx*(w/2+.1),.06,-22);g.add(bk)}
+      bridge(g,cx-w/2-.4,w+.8);bridges.push({seg:g,x0:segX+cx-w/2-.4,x1:segX+cx+w/2+.4});
+      for(let k=0;k<3;k++){const f=fish();g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cx,z:-rand(3,14),ph:rand(0,6),sp:rand(.35,.6)})}
+      for(let k=0;k<4;k++){const r=new THREE.Mesh(new THREE.ConeGeometry(.05,.9,4),M(0x3f8f2a));r.position.set(cx+(Math.random()<.5?-1:1)*(w/2+.3),.45,-rand(2,20));g.add(r)}
+    }else pathPiece(0,SEG);
+    if(B==="beach"){
+      /* ชายหาด: ทรายเต็มพื้น ทะเลด้านหลังทาง คลื่นซัด เรือลอย ปูเดินข้าง หมึกยืนริมน้ำ ต้นมะพร้าว */
+      const sand=new THREE.Mesh(new THREE.BoxGeometry(SEG,.03,16),sandMat);sand.position.set(SEG/2,.015,1.5);sand.receiveShadow=true;g.add(sand);
+      const sea=new THREE.Mesh(new THREE.PlaneGeometry(SEG,90),waterMat);sea.rotation.x=-Math.PI/2;sea.position.set(SEG/2,.06,-51.5);g.add(sea);
+      const foam=new THREE.Mesh(new THREE.BoxGeometry(SEG,.03,.35),M(0xffffff,{roughness:1}));foam.position.set(SEG/2,.07,-6.6);g.add(foam);anim.push({seg:g,obj:foam,kind:"foam",ph:segN});
+      if(segN%2===0){const b=boat();b.position.set(rand(1,9),0,-rand(14,30));b.rotation.y=rand(-.4,.4);g.add(b);anim.push({seg:g,obj:b,kind:"boat",ph:rand(0,6)})}
+      for(let k=0;k<2;k++){const c=crab();const z=Math.random()<.5?rand(1.8,3):-rand(2,5.5);c.position.set(rand(1,9),0,z);g.add(c);anim.push({seg:g,obj:c,kind:"crab",x0:c.position.x,ph:rand(0,6)})}
+      if(Math.random()<.7){const q=squid();q.position.set(rand(1,9),0,-rand(5.6,6.4));q.rotation.y=rand(0,6);g.add(q);anim.push({seg:g,obj:q,kind:"squid",ph:rand(0,6)})}
+      if(Math.random()<.75){const pm=palm();pm.position.set(rand(0,SEG),0,Math.random()<.6?-rand(2.5,5):rand(3,6));pm.rotation.y=rand(0,6);g.add(pm)}
+      for(let k=0;k<3;k++){const sh=new THREE.Mesh(new THREE.SphereGeometry(.07,6,4),M(pick([0xffffff,0xffd6e0,0xffe9b0])));sh.scale.y=.5;sh.position.set(rand(0,SEG),.04,rand(1.6,5));g.add(sh)}
+    }else{
+      for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;if(B==="canal"&&segN%2===0&&Math.abs(x-5)<2.6)continue;const o=r<.6?anyTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(4.5,13):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
+      const wet=B==="canal"&&segN%2===0,okX=()=>{let x;do{x=rand(0,SEG)}while(wet&&Math.abs(x-5)<2.3);return x};
+      const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(okX(),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(1.3,1.9));g.add(f)}
+      if(B==="flowers")addFlowerField(g,60);
+      for(let k=0;k<6;k++){const t=tuft();t.position.set(okX(),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
+      if(B==="farm"){
+        /* ฟาร์ม: วัว แกะ แพะ ก้มกินหญ้า มีรั้วล้อม */
+        for(let k=0;k<3;k++){const a=pick([cow,cow,sheep,sheep,goat])();a.position.set(rand(.5,9.5),0,-rand(3,10));a.rotation.y=rand(0,6.28);a.scale.setScalar(rand(.9,1.15));g.add(a);anim.push({seg:g,obj:a,kind:"graze",ph:rand(0,6)})}
+        const fc=fence();fc.position.set(rand(0,6),0,-11.5);g.add(fc);
+      }
+      if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
+    }
     if(Math.random()<.5){const c=cloud();c.position.set(rand(0,SEG),rand(13,19),-rand(30,55));g.add(c)}
     world.add(g);segs.push(g);segX+=SEG;
   }
+  /* เปลี่ยนฉากเมื่อขึ้นด่านใหม่: สร้างชิ้นทางข้างหน้าใหม่ (เฉพาะส่วนที่ยังไม่เห็นบนจอ) */
+  function setBiome(st){const nb=biomeOf(st);if(nb===curBiome)return;curBiome=nb;
+    const cut=S.x+14;while(segs.length&&segs[segs.length-1].position.x>=cut){const g=segs.pop();world.remove(g);segX-=SEG}
+    for(let i=anim.length-1;i>=0;i--)if(!live(anim[i]))anim.splice(i,1);for(let i=bridges.length-1;i>=0;i--)if(bridges[i].seg.parent!==world)bridges.splice(i,1);
+    while(segX<S.x+60)addSeg()}
   for(let i=0;i<9;i++)addSeg();
   const hills=[];
   /* เปลี่ยนธีมแบบค่อย ๆ ไล่สี 2 วินาที: ท้องฟ้า หมอก พื้น ทาง แสง พระอาทิตย์ ภูเขา เนิน */
@@ -251,8 +317,7 @@ export function startGame(root,api){
   const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.6,t:0,fall:null,hop:null,dir:0,face:1,paused:false};
   const ui=api.ui;
   function stage(st){
-    /* ด่าน 2: ทุ่งดอกไม้ ใส่ดอกไม้เพิ่มทั้งในฉากที่สร้างไว้แล้วข้างหน้าและฉากต่อ ๆ ไป */
-    const nb=st===2?60:0;if(nb>flowerBoost){for(const g of segs){if(g.position.x+SEG<S.x)continue;addFlowerField(g,nb-flowerBoost)}}flowerBoost=nb;
+    setBiome(st);
     S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
@@ -319,7 +384,7 @@ export function startGame(root,api){
     if(S.mode==="jumping"&&S.jump){const j=S.jump;j.t+=dt/j.dur;const t=Math.min(1,j.t);S.x=j.from.x+(j.to.x-j.from.x)*t;S.y=j.from.y+(j.to.y-j.from.y)*t+Math.sin(Math.PI*t)*1.4;if(t>=1){S.jump=null;S.y=j.to.y;j.done()}}
     if(S.mode==="falling"){S.fall.vy-=18*dt;S.y=Math.max(0,S.y+S.fall.vy*dt);if(S.y<=0){S.mode="landed";S.afterFall&&S.afterFall()}}
     if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
-    P.position.set(S.x,S.y,0);
+    P.position.set(S.x,S.y+groundY(S.x),0);
     const ud=P.userData,sw=walking&&!S.hop?Math.sin(S.t*11):0,air=S.mode==="jumping"||S.mode==="falling"||!!S.hop;
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
     ud.body.position.y=.12+(walking?Math.abs(Math.sin(S.t*11))*.08:Math.sin(S.t*3)*.03);ud.body.rotation.z=walking?sw*.05:0;
@@ -340,6 +405,13 @@ export function startGame(root,api){
     stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=curTheme();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
+    for(let i=anim.length-1;i>=0;i--){const a=anim[i];if(!live(a)){anim.splice(i,1);continue}const o=a.obj,t=S.t+a.ph;
+      if(a.kind==="fish"){const c=(t*a.sp)%1;if(c<.35){const k=c/.35;o.visible=true;o.position.set(a.x+Math.sin(a.ph)*.6,Math.sin(Math.PI*k)*1.1-.05,a.z+(k-.5)*1.4);o.rotation.set(0,Math.PI/2,(.5-k)*2.4)}else o.visible=false}
+      else if(a.kind==="graze"){const h=o.userData.head,c=(t*.25)%1;h.rotation.z=c<.6?-.75+Math.sin(t*6)*.06:-.1}
+      else if(a.kind==="boat"){o.position.y=Math.sin(t*1.4)*.12;o.rotation.z=Math.sin(t*1.1)*.06}
+      else if(a.kind==="crab"){o.position.x=a.x0+Math.sin(t*.9)*1.1;o.position.y=Math.abs(Math.sin(t*9))*.03}
+      else if(a.kind==="squid"){o.position.y=Math.abs(Math.sin(t*2))*.18;for(const [k,tt] of o.userData.ts.entries())tt.rotation.y=Math.sin(t*4+k)*.4}
+      else if(a.kind==="foam"){o.scale.z=1+Math.sin(t*1.6)*.6;o.position.z=-6.6+Math.sin(t*1.6)*.35}}
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
     const narrow=W()<600,asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
     const lead=narrow?(asking?4.2:2.2):(asking?4:3),dist=narrow?(asking?14:11):(asking?12:10.5);
@@ -348,5 +420,5 @@ export function startGame(root,api){
     renderer.render(scene,cam);raf=requestAnimationFrame(tick);
   }
   raf=requestAnimationFrame(tick);
-  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length}),goStage:n=>stage(n)};
+  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x)}),goStage:n=>stage(n),warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
 }
