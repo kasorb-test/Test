@@ -7706,8 +7706,8 @@ async function advStart(){
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
   ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-x" id="advX" aria-label="ออกจากเกม">✕</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
-      <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะแท่นคำตอบเพื่อกระโดดขึ้นไป</div></div>
-      <div class="adv-hint" id="advHint">แตะซ้าย/ขวา หรือปัด เพื่อเปลี่ยนเลนเก็บเหรียญ</div>
+      <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
+      <div class="adv-hint" id="advHint">แตะจอเพื่อกระโดดเก็บเหรียญที่ลอยสูง</div>
       <div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
   $("advX").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")};
