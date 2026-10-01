@@ -2806,6 +2806,22 @@ body.adv-on{overflow:hidden}
 .adv-chip.lock{filter:grayscale(.9) brightness(.85);color:#e5e7eb}.adv-chip.lock:after{content:"🔒";position:absolute;right:-6px;top:-9px;font-size:12px;text-shadow:none}
 .adv-chip.prem.lock:after{content:"P";right:-7px;top:-8px;width:16px;height:16px;border-radius:50%;background:#f59e0b;color:#fff;font-size:10px;line-height:16px}
 .adv-lock-note{margin:0 0 4px!important;color:#b45309!important;font-weight:700}.adv-done{margin:0 0 2px!important;color:#15803d!important;font-weight:800;font-size:15px!important}
+.adv-snd{flex:none;width:38px;height:38px;margin-left:6px;border:0;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;cursor:pointer;padding:0}.adv-snd svg{width:22px;height:22px}
+.adv-gear{position:absolute;right:12px;top:200px;z-index:5;display:flex;flex-direction:column;gap:8px}.adv-view.asking .adv-gear{display:none}
+.adv-gs{position:relative;width:46px;height:46px;padding:0;border:3px solid #5a3412;border-radius:12px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);box-shadow:0 3px 0 #3b2109;display:grid;place-items:center;cursor:pointer}
+.adv-gs svg{width:30px;height:30px}.adv-gs.on{outline:3px solid #22c55e;outline-offset:1px}.adv-gs.shop{background:#7a4a1c}
+.adv-gs i{position:absolute;right:-6px;top:-6px;width:16px;height:16px;border-radius:50%;background:#0ea5e9;color:#fff;font:700 10px/16px sans-serif;font-style:normal}
+.adv-near{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:6;padding:10px 18px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;font-size:15px;text-shadow:0 2px 0 #5a3412;box-shadow:0 4px 0 #3b2109;cursor:pointer;white-space:nowrap;animation:advGo 1.2s ease-in-out infinite}
+.adv-shop{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+.adv-shop-box{width:min(420px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto;padding:18px 16px;border-radius:22px;background:#fffaf0;border:4px solid #6b3f17;box-shadow:0 8px 0 #4a2a0d;text-align:center}
+.adv-shop-box h3{margin:0;font-size:22px;color:#6b3f17}.adv-shop-c{margin:4px 0 8px;color:#475569}.adv-shop-msg{margin:0 0 8px;color:#b45309;font-weight:700}
+.adv-shop-list{display:grid;gap:8px;text-align:left}.adv-it{display:flex;align-items:center;gap:10px;padding:8px;border:2px solid #ead7b8;border-radius:14px;background:#fff}.adv-it.focus{border-color:#f59e0b;background:#fff8e1}
+.adv-it-ic{flex:none;width:44px;height:44px;border-radius:12px;background:#f3e3c7;display:grid;place-items:center}.adv-it-ic svg{width:32px;height:32px}
+.adv-it div{flex:1;min-width:0}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
+.adv-it button{flex:none;min-width:74px;padding:7px 10px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;text-shadow:0 2px 0 #5a3412;cursor:pointer}
+.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
+.adv-shop-x{padding:9px 22px;border:3px solid #5a3412;border-radius:10px;background:#7a4a1c;color:#fff4d6;font:inherit;font-weight:800;cursor:pointer}
+@media(max-width:600px){.adv-gear{top:12px;right:8px}.adv-gs{width:42px;height:42px}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
 .adv-ops{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
 .adv-ops button{display:flex;align-items:center;gap:6px;padding:7px 8px;border:2px solid var(--c);border-radius:12px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
@@ -7772,7 +7788,39 @@ function advQuestion(st){
   const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
 /* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
-let adv=null;
+let adv=null,advMod=null;
+/* ไอเทมในเกม: ซื้อด้วยเหรียญครั้งเดียวใช้ได้ตลอด ใส่อัตโนมัติตามสภาพอากาศ/ฉาก หรือแตะที่แถบไอเทมเพื่อใส่/ถอดเอง (ราคาตรงกับ firestore.rules) */
+const ADV_GEAR=[["umbrella","ร่ม","กางเองเวลาฝนตก",30],["cap","หมวกแก๊ป","ใส่เดินเล่นได้ทุกด่าน",20],["straw","หมวกชาวนา","ใส่เองในฟาร์มและหมู่บ้าน",20],["fan","พัด","โบกเองวันที่ร้อนจัด 35 องศาขึ้นไป",25],["coat","เสื้อกันหนาว","ใส่เองวันที่อากาศเย็น",40],["shades","แว่นกันแดด","ใส่เองตอนเดินริมทะเล",30]];
+const ADV_ICON={umbrella:'<svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 6.5 3 11h18c0-4.5-4-8-9-8z" fill="#ff7043"/><path d="M12 11v7a2 2 0 0 1-4 0" stroke="#5d4037" stroke-width="1.8" fill="none"/></svg>',
+  cap:'<svg viewBox="0 0 24 24"><path d="M4 15c0-5 3.5-8 8-8s8 3 8 8z" fill="#1e88e5"/><path d="M12 15h10c0 1.6-1.5 2-3 2h-7z" fill="#1565c0"/></svg>',
+  straw:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="15" rx="10" ry="3" fill="#d9b56a"/><path d="M7 15c0-4 2-7 5-7s5 3 5 7z" fill="#e6c27a"/><rect x="7" y="12" width="10" height="2" fill="#e53935"/></svg>',
+  fan:'<svg viewBox="0 0 24 24"><path d="M12 20L3 9a12 12 0 0 1 18 0z" fill="#ec407a"/><path d="M12 20L7.5 6.5M12 20V5.5M12 20l4.5-13.5" stroke="#fff" stroke-width="1"/></svg>',
+  coat:'<svg viewBox="0 0 24 24"><path d="M8 4l4 3 4-3 4 3-2 4h-1v9H7v-9H6L4 7z" fill="#d32f2f"/><path d="M12 7v13" stroke="#7f1d1d"/><path d="M7 7.5c2 1 8 1 10 0" stroke="#ffeb3b" stroke-width="2" fill="none"/></svg>',
+  shades:'<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="4" fill="#222"/><circle cx="17" cy="12" r="4" fill="#222"/><path d="M11 11h2" stroke="#222" stroke-width="2"/></svg>',
+  shop:'<svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="#fff4d6"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="#fff4d6" stroke-width="2" fill="none"/></svg>',
+  sndOn:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" stroke="#fff" stroke-width="2" fill="none"/></svg>',
+  sndOff:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2"/></svg>'};
+let advPref={},advOn={};try{advPref=JSON.parse(localStorage.getItem("advGearPref")||"{}")||{}}catch(e){}
+const advOwned=()=>window.__advGear||(Array.isArray(currentData?.gear)?currentData.gear:[]);
+const advSavePref=()=>{try{localStorage.setItem("advGearPref",JSON.stringify(advPref))}catch(e){}};
+function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned();
+  bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)}${advPref[id]==null?" (อัตโนมัติ)":""}">${ADV_ICON[id]}${advPref[id]==null?'<i>A</i>':""}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
+  bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.g;if(id==="shop"){advShop();return}
+    if(advPref[id]==null)advPref[id]=advOn[id]?0:1;else delete advPref[id];advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
+function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=coinsOf();
+  sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
+    <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small></div>
+      <button type="button" data-buy="${id}"${has||c<pr||!currentUser?" disabled":""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
+    <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
+  sh.classList.remove("hidden");
+  $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
+  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advBuy(b.dataset.buy))}
+async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===id);if(!it||!currentUser||!currentData)return;const own=advOwned();if(own.includes(id))return;
+  if(coinsOf()<it[3]){advShop(id,"เหรียญยังไม่พอ ผ่านด่านหรือเช็คอินรายวันเพื่อสะสมเหรียญ");return}
+  const gear=[...own,id],coins=coinsOf()-it[3];
+  try{await updateDoc(doc(db,"users",currentUser.uid),{gear,coins});currentData.gear=gear;currentData.coins=coins;advMod?.SND.play("buy");const cc=$("advCoins");if(cc)cc.textContent=coins.toLocaleString();
+    adv?.refreshGear();advGearBar();advShop(id,`ได้${it[1]}แล้ว`)}
+  catch(e){console.error(e);advShop(id,"ซื้อไม่สำเร็จ ลองใหม่อีกครั้ง")}}
 async function advClear(st){
   let gain=0,note="";
   if(st===advBest()+1&&currentUser&&currentData){
@@ -7788,7 +7836,7 @@ async function advClear(st){
 async function advStart(){
   advClose();
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
-  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
+  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-pic hidden" id="advPic"></div><div class="adv-ops hidden" id="advOps"></div><div class="adv-qh" id="advQh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
@@ -7797,13 +7845,14 @@ async function advStart(){
       <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">JUMP</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
         <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
+        <button type="button" data-go="shop">ร้านไอเทม</button>
         <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
         <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
         <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
         <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
         <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
       
-      <div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
+      <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
@@ -7818,9 +7867,9 @@ async function advStart(){
     d.querySelectorAll(".adv-chip").forEach(b=>b.onclick=()=>{const n=+b.dataset.n,note=$("advLockNote");
       if(!advOpen(n)){note.textContent=n>5&&advMax()<10?"ด่าน 6-10 สำหรับสมาชิก Premium":`ผ่านด่าน ${n-1} ก่อน แล้วจะเล่นด่านนี้ได้`;note.classList.remove("hidden");return}
       note.classList.add("hidden");advSel=n;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
-    $("advGo").onclick=()=>{d.remove();adv?.pause(false)}};
+    $("advGo").onclick=()=>{advMod?.SND.unlock();d.remove();adv?.pause(false)}};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
-    if(b.dataset.go==="resume"){resume();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
@@ -7834,14 +7883,17 @@ async function advStart(){
     stage:(st,need,done)=>{$("advSt").textContent=`ด่าน ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
     pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
-    ask:q=>{$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
+    ask:q=>{$("advView").classList.add("asking");$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
       ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);
       ops.querySelectorAll("button").forEach(b=>b.onclick=()=>adv?.choose(+b.dataset.i));
       $("advQh").textContent=q.box?"แตะคำตอบ หรือแตะตัวเลขในฉาก":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
       $("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
+    gear:on=>{advOn=on;advGearBar()},
+    near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${id==="shades"?"ร้านแว่น":"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
+      b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
     finish:st=>{advSel=st;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก":`ผ่านด่าน ${st} แล้ว ด่าน 6-10 สำหรับสมาชิก Premium`)},
-    hideQ:()=>$("advQ").classList.add("hidden"),
+    hideQ:()=>{$("advQ").classList.add("hidden");$("advView").classList.remove("asking")},
     timer:f=>{$("advBar").style.width=f*100+"%"},
     shake:()=>{const v=$("advView");v.classList.remove("hurt");void v.offsetWidth;v.classList.add("hurt")},
     toast:(st,r)=>{const t=$("advToast");t.innerHTML=`<b>ผ่านด่าน ${st}!</b>${r.gain?`<span><i class="st-coin mini"></i> +${r.gain} เหรียญ</span>`:r.note?`<span>${escHtml(r.note)}</span>`:""}`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
@@ -7849,9 +7901,10 @@ async function advStart(){
       $("advRe").onclick=()=>{m.classList.add("hidden");again()};$("advHome").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")}}
   };
   try{
-    const mod=await import("./game3d.js");if(!$("advOv"))return;
+    const mod=await import("./game3d.js");if(!$("advOv"))return;advMod=mod;
+    const snd=$("advSnd"),sndIc=()=>{snd.innerHTML=mod.SND.isOn()?ADV_ICON.sndOn:ADV_ICON.sndOff};sndIc();snd.onclick=()=>{mod.SND.unlock();mod.SND.setOn(!mod.SND.isOn());sndIc()};
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel});window.advGame=adv;startBox();
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref});advGearBar();window.advGame=adv;startBox();
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
