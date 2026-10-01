@@ -7723,7 +7723,7 @@ async function advStart(){
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
-      <div class="adv-hint" id="advHint">กดค้าง ◀ ▶ เพื่อเดิน กด ⤒ เพื่อกระโดดเก็บเหรียญ</div>
+      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง กดค้าง ◀ ถอยกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
       <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">⤒</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
@@ -7761,7 +7761,7 @@ async function advStart(){
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
-      $("advPart").textContent=`${d.getUTCDate()} ${TM[d.getUTCMonth()]} · ${c.partTh} · ${c.seasonTh}${c.rain?" (ฝนตก)":c.mist?" (หมอก)":""}`};
+      $("advPart").textContent=`${d.getUTCDate()} ${TM[d.getUTCMonth()]} · ${c.partTh} · ${c.seasonTh}${c.rain?" · ฝนตก":c.cloudy?" · เมฆมาก":c.mist?" · หมอก":""}${c.temp!=null?` · ${c.temp}°C`:""}`};
     tickClock();advClockT=setInterval(tickClock,1000);
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }

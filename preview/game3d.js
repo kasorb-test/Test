@@ -4,19 +4,27 @@
 import * as THREE from "./vendor/three.module.min.js";
 
 /* ช่วงเวลาและฤดูตามเวลาประเทศไทย (UTC+7) */
-const NIGHT={sky:["#070b24","#121a46","#22306b","#34447f"],fog:0x1a2350,ground:0x2f6438,path:0x8f7f62,pathEdge:0x6f6048,hill1:0x274f34,hill2:0x2f4766,mount:0x27355e,mounts:[0x27355e,0x2d3c68,0x223056,0x31416e],snow:false,water:0x2a4a8a,tuft:0x2f5a2a,
-  hemi:[0x7080c0,0x1a2a1a],hemiI:.55,light:0xaebcff,sunI:.55,sunCore:"#fdfcf2",sunGlow:"#b9c8ff",sunPos:[-18,44],flowers:3,birds:false,birdColor:0x000000,night:true};
+const NIGHT={sky:["#0f1840","#1f2f6e","#33489a","#4d64b0"],fog:0x2c3a72,ground:0x4a8a4a,path:0xb8a882,pathEdge:0x958566,hill1:0x3d7048,hill2:0x45608a,mount:0x3a4c80,mounts:[0x3a4c80,0x43568c,0x34467a,0x4a5d92],snow:false,water:0x2a4a8a,tuft:0x2f5a2a,
+  hemi:[0x9aa8e8,0x3a4a3a],hemiI:1.05,light:0xc8d4ff,sunI:1,sunCore:"#fdfcf2",sunGlow:"#b9c8ff",sunPos:[-18,44],flowers:3,birds:false,birdColor:0x000000,night:true};
 const DAWN={sky:["#5f74c6","#c79ac2","#ffc4a0","#fff0d6"],fog:0xf3d6c8,ground:0x7fc24c,path:0xecd0a0,pathEdge:0xd2ae7c,hill1:0x5ca848,hill2:0x93b88a,mount:0x8c9cc8,mounts:[0x8c9cc8,0x9aa6cf,0x8494c0,0xa4a9cf],snow:false,water:0x8fb7ff,tuft:0x5aa832,
   hemi:[0xffe2d0,0x7a9a6a],hemiI:1,light:0xffcfa0,sunI:1.4,sunCore:"#fff6dc",sunGlow:"#ffc38a",sunPos:[-22,12],flowers:3,birds:true,birdColor:0x3a3a5a};
 const SEASON=[["cool","ฤดูหนาว"],["cool","ฤดูหนาว"],["hot","ฤดูร้อน"],["hot","ฤดูร้อน"],["hot","ฤดูร้อน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["cool","ฤดูหนาว"],["cool","ฤดูหนาว"]];
 export function thaiClock(now=Date.now()){const d=new Date(now+7*3600e3),h=d.getUTCHours()+d.getUTCMinutes()/60,mo=d.getUTCMonth();
   const part=h>=5&&h<7?"dawn":h>=7&&h<16?"day":h>=16&&h<18.6?"sunset":"night",sea=SEASON[mo];
-  return {d,h,part,season:sea[0],seasonTh:sea[1],partTh:{dawn:"เช้าตรู่",day:h<12?"ช่วงเช้า":"ช่วงบ่าย",sunset:"ยามเย็น",night:h>=18.6&&h<22?"หัวค่ำ":"กลางคืน"}[part],rain:sea[0]==="rain"&&h>=14&&h<19,mist:sea[0]==="cool"&&h>=5&&h<9.5};}
+  const w=weatherNow();return {d,h,part,season:sea[0],seasonTh:sea[1],temp:w?w.temp:null,cloudy:w?w.cloudy:false,partTh:{dawn:"เช้าตรู่",day:h<12?"ช่วงเช้า":"ช่วงบ่าย",sunset:"ยามเย็น",night:h>=18.6&&h<22?"หัวค่ำ":"กลางคืน"}[part],rain:w?!!w.rain:sea[0]==="rain"&&h>=14&&h<19,mist:sea[0]==="cool"&&h>=5&&h<9.5};}
+/* สภาพอากาศจริงกรุงเทพฯ จาก Open-Meteo (ฟรี ไม่ต้องใช้คีย์) โหลดใหม่ทุก 10 นาที ถ้าโหลดไม่ได้ใช้ค่าตามฤดูแทน */
+let WX=null,wxAt=0;
+const RAIN_CODES=[51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99];
+export async function loadWeather(){if(Date.now()-wxAt<6e5&&WX)return WX;wxAt=Date.now();
+  try{const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=13.7563&longitude=100.5018&current=temperature_2m,precipitation,weather_code,cloud_cover&timezone=Asia%2FBangkok");
+    const c=(await r.json()).current;WX={rain:(c.precipitation||0)>0.05||RAIN_CODES.includes(c.weather_code),storm:c.weather_code>=95,cloudy:(c.cloud_cover||0)>=70,temp:Math.round(c.temperature_2m)}}catch(e){}
+  return WX}
+export const weatherNow=()=>window.__advWeather||WX;
 const mixHex=(a,b,k)=>new THREE.Color(a).lerp(new THREE.Color(b),k).getHex(),mixStr=(a,b,k)=>"#"+new THREE.Color(a).lerp(new THREE.Color(b),k).getHexString();
 const themeCache={};
-function themeFor(c){const key=[c.part,c.season,c.rain,c.mist].join("-");if(themeCache[key])return themeCache[key];
+function themeFor(c){const key=[c.part,c.season,c.rain,c.mist,c.cloudy].join("-");if(themeCache[key])return themeCache[key];
   const B={dawn:DAWN,day:THEMES.day,sunset:THEMES.sunset,night:NIGHT}[c.part],T={...B,key};
-  if(c.season==="rain"){const k=c.rain?.45:.18;T.sky=B.sky.map(x=>mixStr(x,c.part==="night"?"#0d1226":"#8a95a6",k));T.fog=mixHex(B.fog,0x9aa4b2,k);T.ground=mixHex(B.ground,0x3f9d3a,.35);T.light=mixHex(B.light,0xb8c4d6,k);T.sunI=B.sunI*(1-k*.8);T.hemiI=B.hemiI*(1-k*.3);T.cloudGray=k}
+  if(c.season==="rain"||c.rain||c.cloudy){const k=c.rain?.45:c.cloudy?.22:.18;T.sky=B.sky.map(x=>mixStr(x,c.part==="night"?"#0d1226":"#8a95a6",k));T.fog=mixHex(B.fog,0x9aa4b2,k);T.ground=mixHex(B.ground,0x3f9d3a,.35);T.light=mixHex(B.light,0xb8c4d6,k);T.sunI=B.sunI*(1-k*.8);T.hemiI=B.hemiI*(1-k*.3);T.cloudGray=k}
   if(c.season==="hot"){T.sunI=B.sunI*1.12;T.ground=mixHex(B.ground,0xa9c24a,.25);T.flowers=4}
   if(c.season==="cool"){T.ground=mixHex(B.ground,0xa8c070,.25);T.flowers=8}
   T.fogNear=c.mist?12:c.rain?30:50;T.fogFar=c.mist?80:c.rain?120:190;if(c.mist)T.fog=mixHex(T.fog,0xf2f4f6,.6);
@@ -218,7 +226,7 @@ export function startGame(root,api){
   const RN=900,rainGeo=new THREE.BufferGeometry(),rp=new Float32Array(RN*6);for(let k=0;k<RN;k++){const x=rand(-20,30),y=rand(0,18),z=rand(-14,8);rp.set([x,y,z,x-.15,y-.7,z],k*6)}
   rainGeo.setAttribute("position",new THREE.BufferAttribute(rp,3));const rainMat=new THREE.LineBasicMaterial({color:0xcfe3ff,transparent:true,opacity:TH.rain?.55:0,depthWrite:false});
   const rain=new THREE.LineSegments(rainGeo,rainMat);scene.add(rain);
-  let themeCheck=0;
+  let themeCheck=0;loadWeather().then(()=>{const T=curTheme();if(T!==TH)fadeTo(T)});
   const lamp=new THREE.PointLight(0xfff0c8,0,14,1.6);scene.add(lamp);
   const P=makePencil();scene.add(P);
   const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.6,t:0,fall:null,hop:null,dir:0,face:1,paused:false};
@@ -281,8 +289,8 @@ export function startGame(root,api){
   function tick(now){
     const dt0=Math.min(.05,(now-last)/1000);last=now;if(S.paused){raf=requestAnimationFrame(tick);return}const dt=dt0;S.t+=dt;
     /* เดินเอง: กดค้าง ◀ ▶ หรือลูกศรซ้ายขวา ถอยกลับไปเก็บเหรียญได้ แต่ไม่เกินจุดเริ่มด่านของฉากที่ยังโหลดอยู่ */
-    const mv=S.mode==="cheer"?1:S.mode==="walk"?S.dir:0,walking=mv!==0;if(mv)S.face=mv;
-    if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);
+    const mv=S.mode==="cheer"?1:S.mode==="walk"?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
+    if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);if(mv>0)S.face=1;
       if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop)ask();
       if(S.arch&&S.mode==="walk"&&S.x>=S.archX-.3)passArch()}
     if(S.hop){S.hop.vy-=20*dt;S.y=Math.max(0,S.y+S.hop.vy*dt);if(S.y<=0)S.hop=null}
@@ -307,7 +315,7 @@ export function startGame(root,api){
     while(segX<S.x+60)addSeg();
     while(segs.length&&segs[0].position.x+SEG<S.x-45){world.remove(segs.shift())}
     for(const L of layers)for(const m of L.items){if(m.position.x<S.x-L.span/2)m.position.x+=L.span}
-    stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;const T=curTheme();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?26:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
+    stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=curTheme();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
