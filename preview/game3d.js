@@ -95,6 +95,8 @@ export const SND=(()=>{let ctx=null,master=null,bgmG=null,on=true,bgmT=0,step=0,
     chime:()=>[84,88,91,96].forEach((n,i)=>Math.random()<.7&&tone(N(n),.9,{type:"sine",v:.025,at:i*.18+Math.random()*.1})),
     gull:()=>{tone(1300,.35,{type:"sine",v:.035,to:900});tone(1250,.3,{type:"sine",v:.03,to:850,at:.4})},
     elephant:()=>{tone(420,.9,{type:"sawtooth",v:.035,to:620})},
+    bigroar:()=>{noise(.9,{v:.55,f:520,q:.6,type:"lowpass"});noise(.7,{v:.3,f:1400,q:1.2,at:.05});for(let i=0;i<6;i++)tone(150-i*9,.22,{type:"sawtooth",v:.16,to:120-i*9,at:i*.13});tone(110,1.1,{type:"sawtooth",v:.12,to:65})},
+    growl:()=>{for(let i=0;i<9;i++)noise(.09,{v:.4,f:380,q:1.5,type:"lowpass",at:i*.08});tone(72,.9,{type:"sawtooth",v:.16,to:55});noise(.35,{v:.35,f:2600,q:.8,at:.6})},
     roar:()=>{noise(1,{v:.08,f:220,q:.8,type:"lowpass"});tone(95,1,{type:"sawtooth",v:.035,to:70})},
     monkey:()=>{for(let i=0;i<4;i++)tone(900+i*120,.12,{type:"square",v:.02,to:1300,at:i*.14})},
     rooster:()=>{[[520,.15],[700,.15],[880,.18],[760,.5]].reduce((t,[f,d])=>{tone(f,d,{type:"sawtooth",v:.03,to:f*1.08,at:t});return t+d},0)},
@@ -1200,7 +1202,7 @@ export function startGame(root,api){
     if(kind==="crab"){const u=P.userData;S.crabHits=(S.crabHits||0)+1;const want=[[u.arms[0],"arm",-1],[u.arms[1],"arm",1]];if(S.crabHits>=2)want.push([u.legs[0],"leg",-1],[u.legs[1],"leg",1]);let n=0;
       for(const[part,pk,side]of want){if(critters.some(c=>c.kind==="crab"&&c.part===part&&!c.off))continue;const o=crab();o.scale.setScalar(2.2);o.position.set(x0+7,0,.5+side*.35);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:-n*.35,x0,part,pk,side});n++}
       SND.play("pinch");return}
-    const o=Math.random()<.5?croc():lion();o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
+    const o=Math.random()<.5?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     }
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
   const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา",
