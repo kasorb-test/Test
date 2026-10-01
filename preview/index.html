@@ -2770,7 +2770,7 @@ body.adv-on{overflow:hidden}
 .adv-msg{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 32px));transform:translate(-50%,-50%);padding:22px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:7}
 .adv-big{display:block;font-size:24px;color:#f57c00;margin-bottom:6px}.adv-msg p{margin:0 0 14px;color:#475569}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
-@media(max-width:600px){.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
+@media(max-width:600px){.adv-q{top:26%}.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
 /* ปุ่มเกมแบบป้ายไม้: แผ่นไม้ทรงลูกศรชี้ทาง ลายไม้แนวนอน ตอกตะปู ขอบน้ำตาลเข้ม (ใช้ทั้งบันไดยศและเกม) ปุ่ม JUMP กับ START เป็นป้ายไม้แผ่นตรง */
 .st-mv,.adv-k[data-h]{position:relative;padding:0;border:0!important;border-radius:0!important;color:transparent!important;font-size:0!important;background:#5a3412!important;box-shadow:none!important;
@@ -2800,6 +2800,11 @@ body.adv-on{overflow:hidden}
 .adv-go{position:relative!important;margin-top:10px;padding:12px 44px;font-size:24px;animation:advGo 1.2s ease-in-out infinite}
 .adv-go:active{transform:translateY(4px)}@keyframes advGo{50%{transform:scale(1.06)}}
 .sb-game{margin-top:10px}
+.gm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.gm-card{display:grid;justify-items:center;gap:6px;padding:18px 14px;border:4px solid #6b3f17;border-radius:20px;background:#fffaf0;box-shadow:0 6px 0 #4a2a0d;font:inherit;text-align:center;cursor:pointer}
+.gm-card img{height:96px}.gm-card b{font-size:20px;color:#6b3f17}.gm-card span{font-size:13.5px;color:#475569}
+.gm-card em{margin-top:4px;padding:7px 22px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font-style:normal;font-weight:900;text-shadow:0 2px 0 #5a3412}
+.gm-card.soon{opacity:.6;cursor:default}.gm-card.soon em{background:#9ca3af;border-color:#6b7280;text-shadow:none}
 .adv-stages{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0 6px}
 .adv-chip{position:relative;height:38px;border:3px solid #5a3412;border-radius:8px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-size:17px;font-weight:900;cursor:pointer;text-shadow:0 2px 0 #5a3412}
 .adv-chip.on{outline:3px solid #ffd23f;outline-offset:1px;transform:translateY(-2px)}
@@ -4112,7 +4117,7 @@ LINE OA @kasorb
 <!-- GAME -->
 <section class="app-page" id="gamePage">
 <h2 class="page-heading">เกม</h2>
-<p class="page-desc">เลือกตัวละคร แล้วเล่นเกมฝึกสมองสั้น ๆ เก็บเหรียญไปเรื่อย ๆ แยกจากการทำแบบทดสอบ</p>
+<p class="page-desc">เลือกเกมที่อยากเล่น ตอบคำถามเก็บเหรียญไปซื้อไอเทม</p>
 <div id="gmBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- HISTORY -->
@@ -7890,6 +7895,7 @@ async function advStart(){
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
         <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
         <button type="button" data-go="shop">ร้านไอเทม</button>
+        <button type="button" data-go="gamePage|เกม">เลือกเกม</button>
         <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
         <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
         <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
@@ -7963,7 +7969,12 @@ let advClockT=0;
 function advClose(){clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
-function renderGamePage(){const box=$("gmBox");if(box)box.innerHTML="";advStart()}
+/* หน้าเลือกเกม: การ์ดเกมที่มี เพิ่มเกมใหม่ได้ภายหลัง */
+const GAMES=[{id:"adv",name:"Pencil Adventure",desc:"น้องดินสอผจญภัย 10 ด่าน ตอบคำถามเก็บเหรียญ",img:"mascot-2b.svg",play:()=>advStart()},
+  {id:"village",name:"Village Quest",desc:"เลือกทางไปหมู่บ้านอังกฤษ ภาษาไทย หรือคณิต",img:"mascot-2b-walk.svg",soon:true}];
+function renderGamePage(){const box=$("gmBox");if(!box)return;
+  box.innerHTML=`<div class="gm-list">${GAMES.map(g=>`<button type="button" class="gm-card${g.soon?" soon":""}" data-g="${g.id}"${g.soon?" disabled":""}><img src="${g.img}" alt=""><b>${escHtml(g.name)}</b><span>${escHtml(g.desc)}</span><em>${g.soon?"เร็ว ๆ นี้":"เล่นเลย"}</em></button>`).join("")}</div>`;
+  box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play())}
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
 function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
 /* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */
