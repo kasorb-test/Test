@@ -980,7 +980,7 @@ export function startGame(root,api){
     hop();
   }
   /* ลากบนจอเพื่อหมุนกล้องดูรอบตัว 360 องศา ปล่อยแล้วค่อย ๆ กลับมุมเดิม แตะสั้น ๆ ยังเป็นการกระโดด/ตอบคำถาม */
-  const view={yaw:0,pitch:0,drag:null,idle:0},camPiv=new THREE.Vector3(3,1.9,0);
+  const view={yaw:0,pitch:0,drag:null,idle:0},camPiv=new THREE.Vector3(3,1.9,0),camS={lead:3,dist:10.5,ly:1.9,h:3.2};
   renderer.domElement.addEventListener("pointerdown",e=>{view.drag={x:e.clientX,y:e.clientY,yaw:view.yaw,pitch:view.pitch,moved:false,id:e.pointerId}});
   renderer.domElement.addEventListener("pointermove",e=>{const d=view.drag;if(!d||d.id!==e.pointerId)return;const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!d.moved&&Math.hypot(dx,dy)>10)d.moved=true;
     if(d.moved){view.yaw=d.yaw-dx*.008;view.pitch=Math.max(-.25,Math.min(.6,d.pitch+dy*.004));view.idle=0}});
@@ -1021,7 +1021,7 @@ export function startGame(root,api){
     else P.position.set(S.x,S.y+groundY(S.x),S.z);
     const ud=P.userData,sw=walking&&!S.hop?Math.sin(S.t*11):0,air=S.mode==="jumping"||S.mode==="falling"||!!S.hop;
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
-    ud.body.position.y=.12+(walking?Math.abs(Math.sin(S.t*11))*.08:Math.sin(S.t*3)*.03);ud.body.rotation.z=walking?sw*.05:0;
+    ud.body.position.y=.12+(walking?Math.abs(Math.sin(S.t*11))*.045:Math.sin(S.t*3)*.03);ud.body.rotation.z=walking?sw*.05:0;
     const face=S.mode==="pray"||S.mode==="bow"?Math.PI:S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:walking?S.face*Math.PI/2:(S.face>0?Math.PI/2.6:-Math.PI/2.6);P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
     ud.shadow.position.y=.02-S.y;if(ud.av)ud.av.position.y=(ud.avY||3.15)+Math.sin(S.t*3)*.05;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
@@ -1098,17 +1098,20 @@ export function startGame(root,api){
       else if(a.kind==="foam"){o.scale.z=1+Math.sin(t*1.6)*.6;o.position.z=-6.6+Math.sin(t*1.6)*.35}}
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
     const narrow=W()<600,asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
-    const back=S.mode==="walk"&&S.dir<0,lead=narrow?(asking?4.2:back?-.4:2.2):(asking?4:back?-.6:3),dist=narrow?(asking?14:11):(asking?12:10.5);
+    const back=S.mode==="walk"&&S.dir<0,lead=S.inWater||S.mode==="splash"?0:narrow?(asking?4.2:back?-.4:2.2):(asking?4:back?-.6:3),dist=narrow?(asking?14:11):(asking?12:10.5);
     const ly=narrow?4.2:1.9;if(!view.drag){view.idle+=dt;if(view.idle>2.5){view.yaw*=1-Math.min(1,dt*2.5);view.pitch*=1-Math.min(1,dt*2.5)}}
-    const piv=new THREE.Vector3(S.x+lead,ly,0),off=new THREE.Vector3(0,(narrow?3.6:3.2)+S.y*.2-ly+view.pitch*dist,dist).applyAxisAngle(new THREE.Vector3(0,1,0),view.yaw);
-    cam.position.lerp(piv.clone().add(off),Math.min(1,dt*(view.drag?10:3)));camPiv.lerp(piv,Math.min(1,dt*(view.drag?10:3)));cam.lookAt(camPiv);
-    sun.position.set(S.x-4,16,10);sun.target.position.set(S.x+4,0,0);
+    /* กล้องยึดตำแหน่งน้องดินสอแนวนอนตรง ๆ (ไม่หน่วง) จึงไม่ส่ายไปมา ค่อย ๆ ปรับเฉพาะระยะนำหน้า ความไกล และความสูง */
+    const kS=1-Math.exp(-dt*(view.drag?12:2.2));camS.lead+=(lead-camS.lead)*kS;camS.dist+=(dist-camS.dist)*kS;camS.ly+=(ly-camS.ly)*kS;camS.h+=(((narrow?3.6:3.2)+S.y*.2)-camS.h)*(1-Math.exp(-dt*4));
+    const px=(S.mode==="splash"||S.mode==="climb"||S.inWater)?P.position.x:S.x,piv=new THREE.Vector3(px+camS.lead,camS.ly,0),off=new THREE.Vector3(0,camS.h-camS.ly+view.pitch*camS.dist,camS.dist).applyAxisAngle(new THREE.Vector3(0,1,0),view.yaw);
+    cam.position.copy(piv).add(off);camPiv.copy(piv);cam.lookAt(camPiv);
+    /* เงา: ขยับแหล่งแสงเป็นช่วง ๆ ไม่ขยับทุกเฟรม เงาจะได้ไม่สั่นระยิบ */
+    const sx=Math.round(S.x/2)*2;sun.position.set(sx-4,16,10);sun.target.position.set(sx+4,0,0);
     renderer.render(scene,cam);raf=requestAnimationFrame(tick);
   }
   /* เริ่มด่านที่เลือกใหม่ทั้งฉาก (ใช้ตอนเลือกด่านก่อนกด START) */
   function restart(n){for(const g of segs)world.remove(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
     for(const c of S.coins)world.remove(c);S.coins.length=0;for(const a of S.ans)world.remove(a);S.ans=[];if(S.arch){world.remove(S.arch);S.arch=null}if(S.shrine){world.remove(S.shrine);S.shrine=null}clearCritters();
-    Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?4.2:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);cam.position.set(camPiv.x,nw?3.6:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
+    Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?4.2:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.6:3.2});cam.position.set(camPiv.x,nw?3.6:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
   raf=requestAnimationFrame(tick);
   return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
 }
