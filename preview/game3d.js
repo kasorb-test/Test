@@ -130,10 +130,10 @@ export const SND=(()=>{let ctx=null,master=null,bgmG=null,on=true,bgmT=0,step=0,
   let ttsOk=false;const thVoice=()=>{try{const vs=speechSynthesis.getVoices();return vs.find(v=>/^th/i.test(v.lang)&&/female|kanya|narisa|premwadee|pattara/i.test(v.name))||vs.find(v=>/^th/i.test(v.lang))}catch(e){return null}};
   try{if(window.speechSynthesis){speechSynthesis.getVoices();speechSynthesis.addEventListener?.("voiceschanged",()=>speechSynthesis.getVoices())}}catch(e){}
   const speak=(t,force,o={})=>{try{if((!on&&!force)||!window.speechSynthesis)return false;const ss=speechSynthesis;if(ss.speaking||ss.pending)ss.cancel();ss.resume();
-    const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";const v=thVoice();if(v)u.voice=v;u.pitch=o.pitch??.8;u.rate=o.rate??.92;u.volume=1;setTimeout(()=>{try{ss.speak(u)}catch(e){}},60);return true}catch(e){return false}};
+    const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";const v=thVoice();if(v)u.voice=v;u.pitch=o.pitch??.8;u.rate=o.rate??.92;u.volume=1;if(o.onend){u.onend=o.onend;u.onerror=o.onend}setTimeout(()=>{try{ss.speak(u)}catch(e){}},60);return true}catch(e){return false}};
   /* เสียงพูดภาษาอังกฤษสั้น ๆ (แม่ค้าตลาดคำศัพท์) ไม่ตัดเสียงที่กำลังพูด เข้าคิวต่อกันไป */
   const enVoice=()=>{try{const vs=speechSynthesis.getVoices();return vs.find(v=>/^en/i.test(v.lang)&&/female|samantha|karen|zira|susan|victoria|google us/i.test(v.name))||vs.find(v=>/^en/i.test(v.lang))}catch(e){return null}};
-  const speakEn=t=>{try{if(!on||!window.speechSynthesis)return false;const u=new SpeechSynthesisUtterance(t);u.lang="en-US";const v=enVoice();if(v)u.voice=v;u.pitch=1.15;u.rate=1.1;u.volume=1;speechSynthesis.resume();speechSynthesis.speak(u);return true}catch(e){return false}};
+  const speakEn=(t,o={})=>{try{if(!on||!window.speechSynthesis)return false;const u=new SpeechSynthesisUtterance(t);u.lang="en-US";const v=enVoice();if(v)u.voice=v;u.pitch=o.pitch??1.15;u.rate=o.rate??1.1;u.volume=1;speechSynthesis.resume();speechSynthesis.speak(u);return true}catch(e){return false}};
   return {speak,speakEn,hasThai:()=>!!thVoice(),unlock(){if(!ttsOk&&window.speechSynthesis){try{const u=new SpeechSynthesisUtterance("ก");u.lang="th-TH";u.volume=0;u.rate=2;speechSynthesis.speak(u);ttsOk=true}catch(e){}}iosUnlock();init();if(ctx&&ctx.state!=="running")ctx.resume();if(!bgmT)bgmT=setInterval(tick,230);if(ambName&&!amb){const n=ambName;ambName="";ambient(n)}},play(k){try{fx[k]&&fx[k]()}catch(e){}},ambient(n){try{ambient(n)}catch(e){}},
     setOn(v){on=!!v;try{localStorage.setItem("advSound",on?"1":"0")}catch(e){}if(master)master.gain.value=on?.9:0;if(on&&ambName&&!amb){const n=ambName;ambName="";ambient(n)}},isOn:()=>on,state:()=>ctx?ctx.state:"none",
     mode(m){mode=m==="haunt"?"haunt":m==="thai"?"thai":"day"},stop(){try{silentEl&&silentEl.pause()}catch(e){}clearInterval(bgmT);bgmT=0;clearInterval(ambT);ambT=0;if(amb){amb.stop();amb=null}ambName=""}}})();
@@ -1211,7 +1211,7 @@ export function startGame(root,api){
     const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.22,.1),M(0xc62828));bag.position.set(0,.85,-.36);a.add(bag);
     const tag=new THREE.Sprite(new THREE.SpriteMaterial({map:txt("ป้าข้างบ้าน",{size:60,color:"#ffffff",bg:"#d81b60",border:"#ffd23f",w:320,h:110,radius:30}),depthTest:false}));tag.scale.set(1.5,.52,1);tag.position.y=2.35;tag.renderOrder=21;a.add(tag);
     if(!auntDeck.length)auntDeck=AUNT.slice().sort(()=>Math.random()-.5);const line=auntDeck.pop();
-    const say=new THREE.Sprite(new THREE.SpriteMaterial({map:txt(line,{size:52,color:"#4a148c",bg:"#ffffff",border:"#d81b60",w:760,h:120,radius:44}),depthTest:false}));say.scale.set(3.6,.57,1);say.position.set(0,2.95,0);say.renderOrder=21;say.visible=false;a.add(say);
+    const say=new THREE.Sprite(new THREE.SpriteMaterial({map:txt(line,{size:52,color:"#4a148c",bg:"#ffffff",border:"#d81b60",w:760,h:120,radius:44}),depthTest:false}));say.scale.set(3.4,.54,1);say.position.set(0,3.95,0);say.renderOrder=21;say.visible=false;a.add(say);
     a.userData.say=say;a.userData.line=line;return a}
   function clearCritters(){S.scared=0;if(S.bang)S.bang.visible=false;P.userData.face.scale.set(1,1,1);for(const c of critters){c.o.parent&&c.o.parent.remove(c.o)}P.userData.arms[1].rotation.z=0;S.freeze=0;critters.length=0;for(const l of leeches)l.o.parent&&l.o.parent.remove(l.o);leeches.length=0}
   function ripple(pos,r=.35){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.025,4,24),M(0xffffff,{transparent:true,opacity:.7}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0})}
@@ -1259,7 +1259,7 @@ export function startGame(root,api){
     if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);if(mv>0)S.face=1;
       if(S.mode==="walk"&&!S.arch&&!S.hop&&!S.bq&&S.done<S.need&&biomeOf(S.st)==="canal"){const br=bridges.find(b=>b.seg.parent===world&&S.x>b.x0+.7&&S.x<b.x0+2);if(br)ask(br)}
       if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop&&groundY(S.x)<.01&&!(S.freeze>0)&&!critters.some(c=>c.kind==="auntie"||c.kind==="chicks"||c.kind==="vendor"))ask();
-      if(S.shrine&&!S.prayed&&S.mode==="walk"&&S.x>=S.shrineX-.2){S.x=S.shrineX-.2;S.mode="pray";ui.pray&&ui.pray(()=>{if(S.mode==="pray"){S.mode="bow";S.bow={t:0,rang:0}}})}
+      if(S.shrine&&!S.prayed&&S.mode==="walk"&&S.x>=S.shrineX+2.2){S.x=S.shrineX+2.2;S.mode="pray";ui.pray&&ui.pray(()=>{if(S.mode==="pray"){S.mode="bow";S.bow={t:0,rang:0}}})}
       if(S.arch&&S.mode==="walk"&&S.x>=S.archX-.3)passArch()}
     if(S.hop){S.hop.vy-=20*dt;S.y=Math.max(0,S.y+S.hop.vy*dt);if(S.y<=0)S.hop=null}
     if(S.mode==="jumping"&&S.jump){const j=S.jump;j.t+=dt/j.dur;const t=Math.min(1,j.t);S.x=j.from.x+(j.to.x-j.from.x)*t;S.y=j.from.y+(j.to.y-j.from.y)*t+Math.sin(Math.PI*t)*1.4;if(t>=1){S.jump=null;S.y=j.to.y;j.done()}}
@@ -1318,11 +1318,11 @@ export function startGame(root,api){
         if(t>4.2){world.remove(o);critters.splice(i,1)}continue}
       if(c.kind==="auntie"){const u=o.userData,sw=Math.sin(t*8)*.5;
         u.say.visible=t>1.1&&t<5;
-        if(t<1.2){o.position.z=-7+6.6*(t/1.2);o.position.x=S.x+1.4;o.rotation.y=-Math.PI/2;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw}
-        else if(t<5){o.position.x+=(S.x+1.4-o.position.x)*Math.min(1,dt*6);u.legs[0].rotation.z=u.legs[1].rotation.z=0;u.arms[0].rotation.x=-2.3+Math.sin(t*10)*.25;o.rotation.y=Math.PI+Math.sin(t*2)*.15;u.head.rotation.z=Math.sin(t*6)*.08}
+        if(t<1.2){o.position.z=-7+5.4*(t/1.2);o.position.x=S.x+1.9;o.rotation.y=-Math.PI/2;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw}
+        else if(t<5){o.position.x+=(S.x+1.9-o.position.x)*Math.min(1,dt*6);u.legs[0].rotation.z=u.legs[1].rotation.z=0;u.arms[0].rotation.x=-2.3+Math.sin(t*10)*.25;o.rotation.y=Math.PI+Math.sin(t*2)*.15;u.head.rotation.z=Math.sin(t*6)*.08}
         else{u.arms[0].rotation.x=0;o.rotation.y=Math.PI/2;o.position.z-=dt*5;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;if(t>7){world.remove(o);critters.splice(i,1)}}continue}
       if(c.kind==="vendor"){const u=o.userData;u.arms[1].rotation.x=-2.6+Math.abs(Math.sin(t*7))*2;u.say=null;if(t>2.6){o.position.z-=dt*4;o.rotation.y=Math.PI/2}if(t>3.9){world.remove(o);critters.splice(i,1)}continue}
-      if(c.kind==="veg"){if(t<0)continue;if(!c.said){c.said=1;SND.speakEn("Wots!")}if(t<.6){const k=t/.6,tp=new THREE.Vector3();c.part.localToWorld(tp.copy(c.lp));world.worldToLocal(tp);o.position.lerpVectors(c.from,tp,k);o.position.y+=Math.sin(Math.PI*k)*1.5;o.rotation.x+=dt*12}
+      if(c.kind==="veg"){if(t<0)continue;if(!c.said){c.said=1;SND.speakEn("Wots!",{rate:.5,pitch:1.05})}if(t<.6){const k=t/.6,tp=new THREE.Vector3();c.part.localToWorld(tp.copy(c.lp));world.worldToLocal(tp);o.position.lerpVectors(c.from,tp,k);o.position.y+=Math.sin(Math.PI*k)*1.5;o.rotation.x+=dt*12}
         else{critters.splice(i,1);world.remove(o);c.part.add(o);o.position.copy(c.lp);o.rotation.set(rand(-.5,.5),rand(0,6),rand(-.5,.5));leeches.push({o,t:0,veg:1});SND.play("splat");S.ouch=.15}continue}
       if(c.kind==="crab"){const part=c.part,isArm=c.pk==="arm";
         if(t<.9){o.position.x=c.x0+7-6.3*(Math.max(0,t)/.9);o.position.y=Math.abs(Math.sin(t*20))*.05}
@@ -1347,11 +1347,11 @@ export function startGame(root,api){
       if(S.scared<=0){u.arms[0].rotation.z=u.arms[1].rotation.z=0;u.face.scale.set(1,1,1);S.bang.visible=false}}
     if(S.ouch>0){S.ouch-=dt;P.position.x+=Math.sin(S.t*70)*.05;P.position.y+=Math.abs(Math.sin(S.t*20))*.06}
     if(S.shrine){const u=S.shrine.userData;u.aura.material.opacity=.55+Math.sin(S.t*2)*.2;u.smoke.position.y=1.2+((S.t*.4)%1)*1.4;u.smoke.material.opacity=.5*(1-((S.t*.4)%1))}
-    if(S.mode==="bow"){const b=S.bow,u=P.userData;if(!b.ch){b.ch=1;SND.play("chant");SND.speak("นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ",false,{pitch:.35,rate:.55})}b.t+=dt;
+    if(S.mode==="bow"){const b=S.bow,u=P.userData;if(!b.ch){b.ch=1;SND.play("chant");if(!SND.speak("นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ",false,{pitch:.35,rate:.55,onend:()=>{b.done=1}}))b.done=1}b.t+=dt;
       /* ไหว้พระ: พนมมือยื่นไปข้างหน้า แล้วก้มคำนับ 3 ครั้ง */
       u.body.rotation.x=b.t<3?Math.abs(Math.sin(b.t*Math.PI/1))*.6:0;u.arms.forEach((a,i)=>{const s2=i?1:-1;a.rotation.set(-1.45,0,-s2*.5)});
       if(b.t>.5&&!b.rang){b.rang=1;SND.play("bell");burst(new THREE.Vector3(S.shrineX+2.2,2.6,-3))}
-      if(b.t>=3.2){P.userData.body.rotation.x=0;P.userData.arms.forEach((a,i)=>a.rotation.set(0,0,(i?1:-1)*.35));S.prayed=true;S.mode="walk";SND.play("sparkle");burst(new THREE.Vector3(S.shrineX+2.2,3,-3.2));ui.say&&ui.say("ขอให้สอบติด สมหวังทุกประการ")}}
+      if(b.t>=3.2&&(b.done||b.t>16)){P.userData.body.rotation.x=0;P.userData.arms.forEach((a,i)=>a.rotation.set(0,0,(i?1:-1)*.35));S.prayed=true;S.mode="walk";SND.play("sparkle");burst(new THREE.Vector3(S.shrineX+2.2,3,-3.2));ui.say&&ui.say("ขอให้สอบติด สมหวังทุกประการ")}}
     for(let i=ripples.length-1;i>=0;i--){const R=ripples[i];R.t+=dt;R.o.scale.setScalar(1+R.t*3);R.o.material.opacity=Math.max(0,.9-R.t*.8);if(R.t>1.1){world.remove(R.o);ripples.splice(i,1)}}
     for(let i=ghosts.length-1;i>=0;i--){const G=ghosts[i];G.t+=dt;const t=G.t,o=G.o;
       if(t<.45){const k=t/.45;o.position.y=-1.6+k*3.1;o.scale.setScalar(.3+k*.9)}
