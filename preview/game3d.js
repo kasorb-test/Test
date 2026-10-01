@@ -295,7 +295,7 @@ export function startGame(root,api){
   const anim=[],bridges=[],chests=[],shops=[];   // anim: {seg,obj,kind,...} ของที่ขยับได้, bridges: ช่วงสะพาน (พิกัดโลก)
   const live=a=>a.seg.parent===world;
   const sandMat=M(0xf3dca2,{roughness:1}),wetSand=M(0xe0c48a,{roughness:1}),waterMat=M(0x3fb6e8,{roughness:.2,metalness:.1,transparent:true,opacity:.92}),canalMat=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.2,metalness:.1});
-  const clearWater=new THREE.MeshStandardMaterial({color:0x5ec8f0,transparent:true,opacity:.5,roughness:.08,metalness:.15,depthWrite:false}),bedMatC=M(0xcbb98e,{roughness:1});
+  const clearWater=new THREE.MeshStandardMaterial({color:0xbff2ff,emissive:0x2fb8e8,emissiveIntensity:.35,transparent:true,opacity:.45,roughness:.05,metalness:0,depthWrite:false}),bedMatC=M(0xe6d6a8,{roughness:1});
   /* ผิวน้ำไหล: ลายระลอกคลื่นเลื่อนตามทางน้ำ */
   {const c=document.createElement("canvas");c.width=64;c.height=128;const x=c.getContext("2d");x.fillStyle="#3da5d6";x.fillRect(0,0,64,128);for(let i=0;i<70;i++){x.fillStyle=`rgba(${Math.random()<.5?'255,255,255':'120,210,245'},${(.15+Math.random()*.45).toFixed(2)})`;x.fillRect(Math.random()*64,Math.random()*128,4+Math.random()*14,1.5+Math.random()*2)}
     const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;canalMat.map=t}
@@ -602,9 +602,14 @@ export function startGame(root,api){
   /* ด่านสุดท้าย สำนวนไทย: ศาลาไทยหลังคาซ้อนชั้น ช่อฟ้า ใบระกา สระบัว ต้นลีลาวดี เจดีย์ทอง */
   const goldM=M(0xffc107,{metalness:.55,roughness:.35});
   function gable(w,h,d,col){const sh=new THREE.Shape();sh.moveTo(-w/2,0);sh.lineTo(0,h);sh.lineTo(w/2,0);sh.lineTo(-w/2,0);const m=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:d,bevelEnabled:false}),M(col,{flat:true}));m.position.z=-d/2;m.castShadow=true;return m}
+  function seatedMonk(s=1){const g=new THREE.Group();const lap=new THREE.Mesh(new THREE.SphereGeometry(.38,12,8),robeM);lap.scale.set(1,.3,.75);lap.position.y=.12;g.add(lap);
+    const b=new THREE.Mesh(new THREE.CylinderGeometry(.17,.27,.6,10),robeM);b.position.y=.45;b.castShadow=true;g.add(b);const sh=new THREE.Mesh(new THREE.BoxGeometry(.36,.08,.42),robeD);sh.position.y=.68;sh.rotation.x=.6;g.add(sh);
+    const h=new THREE.Mesh(new THREE.SphereGeometry(.15,12,10),M(pick(SKIN)));h.position.y=.88;g.add(h);for(const z of[-.06,.06]){const e=new THREE.Mesh(new THREE.BoxGeometry(.01,.008,.04),M(0x222222));e.position.set(.145,.9,z);g.add(e)}
+    const hands=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),M(pick(SKIN)));hands.scale.set(1.3,.5,1);hands.position.set(.12,.27,0);g.add(hands);g.scale.setScalar(s);return g}
   function salaThai(){const g=new THREE.Group(),white=M(0xfaf6ee,{flat:true});
     const base=new THREE.Mesh(new THREE.BoxGeometry(5.4,.55,3.8),white);base.position.y=.27;base.castShadow=true;g.add(base);for(let k=0;k<3;k++){const st=new THREE.Mesh(new THREE.BoxGeometry(1.4,.18,.3),white);st.position.set(0,.09+k*.18,2.2-k*.3);g.add(st)}
     for(const x of[-2.2,-.75,.75,2.2])for(const z of[-1.5,1.5]){const p=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,2.4,10),white);p.position.set(x,.55+1.2,z);p.castShadow=true;g.add(p);const cap=new THREE.Mesh(new THREE.CylinderGeometry(.18,.12,.2,10),goldM);cap.position.set(x,2.9,z);g.add(cap)}
+    for(let k=0;k<3;k++){const m=seatedMonk(k===1?1.05:.95);m.position.set(-1.4+k*1.4,.55,-.3+(k%2)*.4);m.rotation.y=-Math.PI/2;g.add(m)}
     const y0=2.95;const r1=gable(6.4,1.6,4.6,0x1b5e20);r1.position.y=y0;g.add(r1);const r2=gable(5.9,1.75,4.7,0xc62828);r2.position.y=y0+.12;g.add(r2);
     const r3=gable(4.4,2.3,3.4,0xd84315);r3.position.y=y0+.9;g.add(r3);const r4=gable(4.1,2.4,3.5,0xc62828);r4.position.y=y0+1;g.add(r4);
     const pn=new THREE.Shape();pn.moveTo(-1.9,0);pn.lineTo(0,2.2);pn.lineTo(1.9,0);pn.lineTo(-1.9,0);const pnl=new THREE.Mesh(new THREE.ShapeGeometry(pn),goldM);pnl.position.set(0,y0+1.02,1.78);g.add(pnl);
@@ -740,10 +745,17 @@ export function startGame(root,api){
   /* พุ่มดอกไม้: พุ่มใบเขียวมีดอกบานเต็มพุ่ม (ใช้ InstancedMesh ให้ลื่น) */
   const blossomGeo=new THREE.SphereGeometry(1,8,6),blossomCenter=new THREE.SphereGeometry(1,6,4);
   const BUSHC=[[0xff4f8b,0xff8fb3],[0xe53935,0xff7961],[0xffffff,0xfff3f8],[0xffd54f,0xffeb8a],[0xab47bc,0xd28be6],[0xff8a3d,0xffb27a],[0xf06292,0xffffff]];
+  const leafGeoB=new THREE.SphereGeometry(1,6,4),LEAFB=[0x2e7d32,0x388e3c,0x43a047,0x558b2f,0x66bb6a].map(c=>new THREE.Color(c));
   function flowerBush(){const g=new THREE.Group(),[c1,c2]=pick(BUSHC),s=rand(.9,1.4),blobs=[];
-    for(let k=0;k<4;k++){const r=rand(.45,.7)*s,b=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),M(pick([0x2e7d32,0x388e3c,0x43a047]),{flat:true}));const p=new THREE.Vector3(rand(-.5,.5)*s,r*.85+(k===3?.35*s:0),rand(-.35,.35)*s);b.position.copy(p);b.castShadow=true;g.add(b);blobs.push([p,r])}
-    const n=120,pet=new THREE.InstancedMesh(blossomGeo,new THREE.MeshStandardMaterial({roughness:.6}),n),cen=new THREE.InstancedMesh(blossomCenter,M(0xffeb3b),n),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),up=new THREE.Vector3(0,1,0),col=new THREE.Color();
-    for(let i=0;i<n;i++){const[bp,r]=pick(blobs),d=new THREE.Vector3(rand(-1,1),rand(-.15,1),rand(-1,1)).normalize(),p=bp.clone().addScaledVector(d,r*.98);q.setFromUnitVectors(up,d);const sz=rand(.09,.14)*s;
+    for(let k=0;k<4;k++){const r=rand(.42,.65)*s,b=new THREE.Mesh(new THREE.IcosahedronGeometry(r*.92,1),M(0x2b6e2a,{flat:true}));const p=new THREE.Vector3(rand(-.5,.5)*s,r*.85+(k===3?.35*s:0),rand(-.35,.35)*s);b.position.copy(p);b.castShadow=true;g.add(b);blobs.push([p,r])}
+    const up=new THREE.Vector3(0,1,0),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),col=new THREE.Color();
+    /* ใบไม้รอบพุ่ม: ใบรีแบนหลายร้อยใบ หันออกจากพุ่ม ขอบพุ่มเลยเป็นใบ ๆ ไม่เป็นก้อนเรียบ */
+    const nl=260,lv=new THREE.InstancedMesh(leafGeoB,new THREE.MeshStandardMaterial({roughness:.8,flatShading:true}),nl);
+    for(let i=0;i<nl;i++){const[bp,r]=pick(blobs),d=new THREE.Vector3(rand(-1,1),rand(-.25,1),rand(-1,1)).normalize(),p=bp.clone().addScaledVector(d,r*rand(.92,1.08));
+      q.setFromUnitVectors(up,d).multiply(new THREE.Quaternion().setFromAxisAngle(up,rand(0,6.28)));const L=rand(.09,.14)*s;m4.compose(p,q,new THREE.Vector3(L*.55,L*.12,L));lv.setMatrixAt(i,m4);lv.setColorAt(i,col.copy(pick(LEAFB)))}
+    lv.instanceColor.needsUpdate=true;lv.castShadow=true;g.add(lv);
+    const n=90,pet=new THREE.InstancedMesh(blossomGeo,new THREE.MeshStandardMaterial({roughness:.6}),n),cen=new THREE.InstancedMesh(blossomCenter,M(0xffeb3b),n);
+    for(let i=0;i<n;i++){const[bp,r]=pick(blobs),d=new THREE.Vector3(rand(-1,1),rand(-.1,1),rand(-1,1)).normalize(),p=bp.clone().addScaledVector(d,r*1.1);q.setFromUnitVectors(up,d);const sz=rand(.08,.13)*s;
       m4.compose(p,q,new THREE.Vector3(sz,sz*.38,sz));pet.setMatrixAt(i,m4);pet.setColorAt(i,col.set(Math.random()<.7?c1:c2));m4.compose(p.clone().addScaledVector(d,sz*.25),q,new THREE.Vector3(sz*.35,sz*.3,sz*.35));cen.setMatrixAt(i,m4)}
     pet.instanceColor.needsUpdate=true;g.add(pet);g.add(cen);return g}
   /* ===== ชาวบ้านทำงาน: ทำไร่ (จอบ) ปักดำนา รดน้ำแปลงผัก หาบน้ำใส่ตุ่ม กวาดบ้าน นั่งซักผ้าข้างโอ่ง ===== */
@@ -807,9 +819,9 @@ export function startGame(root,api){
       for(let k=0;k<7;k++){const z=rand(-25,8),sw=seaweed();sw.scale.set(.8,.16,.8);sw.position.set(cxz(z)+rand(-w/2+.3,w/2-.3),.03,z);g.add(sw);anim.push({seg:g,obj:sw,kind:"weed",ph:rand(0,6)})}
       for(let k=0;k<22;k++){const z=rand(-30,12),side=Math.random()<.5?-1:1,r=rock(rand(.25,.6),Math.random()<.45);r.position.set(cxz(z)+side*(w/2+rand(.05,.45)),.08,z);g.add(r)}
       for(let k=0;k<6;k++){const z=rand(-20,6),side=Math.random()<.5?-1:1,rd=new THREE.Group();for(let j=0;j<6;j++){const c=new THREE.Mesh(new THREE.ConeGeometry(.03,rand(.7,1.2),4),M(pick([0x5a8f2a,0x6b9e33,0x4c7f22])));c.position.set(rand(-.15,.15),.45,rand(-.15,.15));c.rotation.set(rand(-.2,.2),0,rand(-.2,.2));rd.add(c)}rd.position.set(cxz(z)+side*(w/2+.3),0,z);g.add(rd)}
-      for(let k=0;k<5;k++){const f=fish();f.scale.setScalar(rand(.9,1.3));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.2,1.2),ph:rand(0,40),sp:rand(.012,.022)})}
+      for(let k=0;k<5;k++){const f=fish();f.scale.setScalar(rand(.9,1.3));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.2,1.2),ph:rand(0,40),sp:rand(.004,.008)})}
       stoneBridge(g,5-w/2-1.5,w+3);bridges.push({seg:g,x0:segX+5-w/2-1.5,x1:segX+5+w/2+1.5});
-      for(let k=0;k<3;k++){const f=fish(),z=-rand(3,14);g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cxz(z),z,ph:rand(0,6),sp:rand(.35,.6)})}
+      for(let k=0;k<3;k++){const f=fish(),z=-rand(3,14);g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cxz(z),z,ph:rand(0,30),sp:rand(.06,.1)})}
       for(let k=0;k<6;k++){const z=-rand(2,26),r=new THREE.Mesh(new THREE.ConeGeometry(.05,.9,4),M(0x3f8f2a));r.position.set(cxz(z)+(Math.random()<.5?-1:1)*(w/2+.35),.45,z);g.add(r)}
       for(let k=0;k<2;k++){const z=-rand(4,20),lp=new THREE.Mesh(new THREE.CircleGeometry(.28,10),M(0x4caf32));lp.rotation.x=-Math.PI/2;lp.position.set(cxz(z)+rand(-.8,.8),.05,z);g.add(lp)}
     }else pathPiece(0,SEG);
@@ -872,7 +884,7 @@ export function startGame(root,api){
     }else{
       for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const tz=r>=.85?-2.2:r<.6?-rand(4.5,13):-rand(2.5,8);if(wet&&Math.abs(x-cxz(tz))<3.8)continue;const o=r<.6?(B==="canal"?bamboo():anyTree()):r<.85?bush():(B==="canal"?bamboo():fence());o.position.set(x,0,tz);o.rotation.y=rand(0,6);g.add(o)}
       const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower(),fz=Math.random()<.7?-rand(1.8,9):rand(1.8,4);f.position.set(okX(fz),0,fz);f.scale.setScalar(rand(1.3,1.9));g.add(f)}
-      if(B==="flowers"){addFlowerField(g,60);for(let k=0;k<4;k++){const fb=flowerBush();fb.position.set(rand(0,SEG),0,-rand(2.6,10));fb.rotation.y=rand(0,6);g.add(fb)}if(Math.random()<.5){const fb=flowerBush();fb.scale.setScalar(.75);fb.position.set(rand(0,SEG),0,rand(2.6,3.6));g.add(fb)}}
+      if(B==="flowers"){for(let k=0;k<3;k++){const r=rock(rand(.25,.7),Math.random()<.5);r.position.set(rand(0,SEG),.1,Math.random()<.8?-rand(2.5,9):rand(2.6,4));g.add(r)}addFlowerField(g,60);for(let k=0;k<4;k++){const fb=flowerBush();fb.position.set(rand(0,SEG),0,-rand(2.6,10));fb.rotation.y=rand(0,6);g.add(fb)}if(Math.random()<.5){const fb=flowerBush();fb.scale.setScalar(.75);fb.position.set(rand(0,SEG),0,rand(2.6,3.6));g.add(fb)}}
       for(let k=0;k<6;k++){const t=tuft(),tz=Math.random()<.5?rand(1.6,4):-rand(1.6,4);t.position.set(okX(tz),0,tz);g.add(t)}
       if(B==="canal"){if(segN%2===1){const o=Math.random()<.5?temple():pagoda();o.position.set(rand(3,7),0,-rand(13,18));o.rotation.y=rand(-.3,.3);g.add(o)}for(let k=0;k<4;k++){const bz=-rand(3.5,13),bm=bamboo(rand(.8,1.1));bm.position.set(okX(bz),0,bz);g.add(bm)}}
       if(B==="farm"){
@@ -1004,7 +1016,7 @@ export function startGame(root,api){
     else S.nextQ=S.x+8;
   }
   function clearAns(){for(const a of S.ans)a.userData.gone=true}
-  function hurt(){S.hearts--;ui.hearts(S.hearts);ui.shake();if(S.hearts<=0){S.mode="dead";ui.lose(S.st,()=>{S.hearts=3;ui.hearts(3);clearAns();S.mode="walk";stage(S.st)})}else if(S.mode==="jumping"){S.mode="walk";afterAnswer(false)}}
+  function hurt(){S.hearts--;ui.hearts(S.hearts);ui.shake();if(S.hearts<=0){S.mode="dead";const w=critters.some(c=>c.kind!=="veg")||S.scared>0?(critters.some(c=>c.kind==="auntie")?4800:2600):600;setTimeout(()=>ui.lose(S.st,()=>{clearCritters();S.hearts=3;ui.hearts(3);clearAns();S.mode="walk";stage(S.st)}),w)}else if(S.mode==="jumping"){S.mode="walk";afterAnswer(false)}}
   const bursts=[];
   function burst(pos){for(let i=0;i<16;i++){const s=new THREE.Mesh(new THREE.OctahedronGeometry(.12,0),M(pick([0xffd400,0xff6fa5,0x7dd3fc,0xa3e635]),{emissive:0x332200}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-2.5,2.5),rand(2,5),rand(-1.5,1.5));s.userData.life=1;world.add(s);bursts.push(s)}}
   /* ตอบผิดในบ้านผีสิง: ผีโผล่จากพื้นพุ่งเข้าหาจอ (ข้อละตัว) */
@@ -1019,12 +1031,12 @@ export function startGame(root,api){
     S.freeze=kind==="leech"?0:kind==="auntie"?4.4:kind==="chicks"?3:kind==="crab"?3.4:2.4;
     if(kind==="leech"){const l=leech(),a=-Math.PI/2+rand(-.5,.5);l.scale.setScalar(2);l.position.set(Math.sin(a)*.47,rand(.6,1.1),Math.cos(a)*.47);l.rotation.set(0,a,rand(-.4,.4));P.userData.body.add(l);leeches.push({o:l,t:0});SND.play("squish");ui.say&&ui.say("ทากเกาะ! ตอบข้อต่อไปให้ถูกเพื่อสลัดทากออก");return}
     if(kind==="chicks"){for(let k=0;k<5;k++){const c=chicken(),a=k/5*Math.PI*2+rand(-.3,.3);c.scale.setScalar(1.3);c.position.set(x0+Math.cos(a)*6,0,Math.sin(a)*4);world.add(c);critters.push({o:c,kind,t:0,a,x0})}ui.say&&ui.say("ไก่รุมจิก!");return}
-    if(kind==="auntie"){const o=auntie();o.position.set(x0+1.4,0,-7);o.rotation.y=Math.PI/2;world.add(o);critters.push({o,kind,t:0,x0});SND.play("tsk");ui.say&&ui.say("ป้าข้างบ้าน: "+o.userData.line);setTimeout(()=>SND.speak(o.userData.line),900);return}
+    if(kind==="auntie"){const o=auntie();o.position.set(x0+1.4,0,-7);o.rotation.y=Math.PI/2;world.add(o);critters.push({o,kind,t:0,x0});SND.play("tsk");setTimeout(()=>SND.speak(o.userData.line),900);return}
     const o=kind==="crab"?crab():Math.random()<.5?croc():lion();if(kind==="crab")o.scale.setScalar(2.2);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     ui.say&&ui.say(kind==="crab"?"ปูยักษ์มาแล้ว!":"โอ๊ย! โดนงับขา")}
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
   const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา",
-    "ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ","ลูกป้าซื้อรถให้ป้าแล้วนะ","ลูกป้าเป็นตำรวจแล้วนะ","ลูกป้าตอบข้อนี้ได้ตั้งแต่ ป.สี่","ลูกป้าอ่านหนังสือวันละสิบชั่วโมง"];let auntDeck=[];
+    "ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ","ลูกป้าซื้อรถให้ป้าแล้วนะ","ลูกป้าเป็นตำรวจแล้วนะ","ลูกป้าตอบข้อนี้ได้ตั้งแต่ปอสี่","ลูกป้าอ่านหนังสือวันละสิบชั่วโมง","ลูกป้าซื้อบ้านแล้วนะ"];let auntDeck=[];
   function auntie(){const a=person({skirt:pick([0x8e24aa,0xd81b60,0x6d4c41]),shirt:pick([0xf8bbd0,0xfff176,0x80deea]),hair:0x9e9e9e,long:false});
     const bun=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),M(0x9e9e9e));bun.position.set(-.16,.16,0);a.userData.head.add(bun);
     const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.22,.1),M(0xc62828));bag.position.set(0,.85,-.36);a.add(bag);
@@ -1113,7 +1125,7 @@ export function startGame(root,api){
     stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=themeNow();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
-    fallTex.offset.y+=dt*2.2;canalMat.map.offset.y-=dt*.35;clearWater.opacity=.5+Math.sin(S.t*1.3)*.04;if(!clearWater.map&&canalMat.map){clearWater.map=canalMat.map;clearWater.needsUpdate=true}ground.position.x=S.x;
+    fallTex.offset.y+=dt*2.2;canalMat.map.offset.y-=dt*.35;clearWater.opacity=.45+Math.sin(S.t*1.3)*.03;if(!clearWater.map&&canalMat.map){clearWater.map=canalMat.map;clearWater.needsUpdate=true}ground.position.x=S.x;
     {const on=biomeOf(S.st)==="beach"&&!TH.night;glit.visible=on;if(on){const a=glitGeo.attributes.position.array,sx=(fade?fade.cur.sp:TH.sunPos)[0];for(let k=0;k<GN;k++){if(Math.random()<.08||Math.abs(a[k*3]-S.x)>90){const z=-rand(14,150),sp=1.2+(-z)*.06;a[k*3]=S.x+3+sx*(-z/170)+rand(-sp,sp);a[k*3+1]=.3;a[k*3+2]=z}}glitGeo.attributes.position.needsUpdate=true;glitMat.opacity=.55+Math.sin(S.t*9)*.25;glitMat.color.set(TH.light)}}
     gearT+=dt;if(gearT>.5){gearT=0;applyGear()}if(GEAR.fan.visible)GEAR.fan.rotation.z=Math.sin(S.t*14)*.45;
     for(let i=chests.length-1;i>=0;i--){const c=chests[i];if(c.seg.parent!==world){chests.splice(i,1);continue}const u=c.o.userData;
@@ -1164,7 +1176,7 @@ export function startGame(root,api){
       else{const k=Math.min(1,(t-1.4)/.5);o.traverse(m=>{if(m.material){m.material.opacity=(1-k)*.92}})}
       if(t>1.9){world.remove(o);ghosts.splice(i,1)}}
     for(let i=anim.length-1;i>=0;i--){const a=anim[i];if(!live(a)){anim.splice(i,1);continue}const o=a.obj,t=S.t+a.ph;
-      if(a.kind==="fish"){const c=(t*a.sp)%1;if(c<.35){const k=c/.35;o.visible=true;o.position.set(a.x+Math.sin(a.ph)*.6,Math.sin(Math.PI*k)*1.1-.05,a.z+(k-.5)*1.4);o.rotation.set(0,Math.PI/2,(.5-k)*2.4)}else o.visible=false}
+      if(a.kind==="fish"){const c=(t*a.sp)%1;if(c<.08){const k=c/.08;o.visible=true;o.position.set(a.x+Math.sin(a.ph)*.6,Math.sin(Math.PI*k)*1.1-.05,a.z+(k-.5)*1.4);o.rotation.set(0,Math.PI/2,(.5-k)*2.4)}else o.visible=false}
       else if(a.kind==="graze"){const h=o.userData.head,c=(t*.25)%1;h.rotation.z=c<.6?-.75+Math.sin(t*6)*.06:-.1}
       else if(a.kind==="boat"){o.position.y=Math.sin(t*1.4)*.12;o.rotation.z=Math.sin(t*1.1)*.06}
       else if(a.kind==="crab"){o.position.x=a.x0+Math.sin(t*.9)*1.1;o.position.y=Math.abs(Math.sin(t*9))*.03}
@@ -1206,5 +1218,5 @@ export function startGame(root,api){
     for(const c of S.coins)world.remove(c);S.coins.length=0;for(const a of S.ans)world.remove(a);S.ans=[];if(S.arch){world.remove(S.arch);S.arch=null}if(S.shrine){world.remove(S.shrine);S.shrine=null}clearCritters();
     Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?2.3:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.0:3.2});cam.position.set(camPiv.x,nw?3.0:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
   raf=requestAnimationFrame(tick);
-  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),pz:+P.position.z.toFixed(2),py:+P.position.y.toFixed(2),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
+  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),pz:+P.position.z.toFixed(2),py:+P.position.y.toFixed(2),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},_hearts:n=>{S.hearts=n},refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
 }

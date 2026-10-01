@@ -2833,7 +2833,11 @@ body.adv-on{overflow:hidden}
 .adv-cf-btns{display:flex;gap:10px;margin-top:6px}.adv-cf-btns button{min-width:100px;padding:9px 14px;border:3px solid #5a3412;border-radius:10px;font:inherit;font-weight:800;cursor:pointer}
 .adv-cf-btns .no{background:#fff;color:#5a3412}.adv-cf-btns .yes{background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;text-shadow:0 2px 0 #5a3412}
 .adv-shop-x{padding:9px 22px;border:3px solid #5a3412;border-radius:10px;background:#7a4a1c;color:#fff4d6;font:inherit;font-weight:800;cursor:pointer}
-@media(max-width:600px){.adv-gear{top:12px;right:8px}.adv-gs{width:42px;height:42px}}
+@media(max-width:600px){.adv-gear{top:84px;right:8px}.adv-gs{width:42px;height:42px}}
+.adv-side{display:none}
+@media(max-width:600px){.adv-side{position:absolute;right:8px;top:10px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 6px;border-radius:14px;background:rgba(122,74,28,.88);border:2px solid #5a3412;box-shadow:0 3px 0 #3b2109}
+  .adv-side .adv-pts{font-size:13px;padding:2px 7px}.adv-side .adv-prog{display:grid!important;grid-template-columns:repeat(4,9px);gap:3px}
+  .adv-q.box{left:8px;right:auto;transform:none;width:calc(100% - 78px)}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
 .adv-ops{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
 .adv-ops button{display:flex;align-items:center;gap:8px;padding:7px 10px;border:3px solid #a8743a;border-radius:12px;background:#fffdf6;box-shadow:0 3px 0 #a8743a;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
@@ -7830,7 +7834,9 @@ function advQuestion(st){
   const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
 /* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
-let adv=null,advMod=null;
+let adv=null,advMod=null,advSayQ=[],advSayT=0;
+/* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
+function advSayNext(){const t=$("advToast");if(!t||!advSayQ.length){advSayT=0;return}const m=advSayQ.shift();t.innerHTML=`<b>${escHtml(m)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show");advSayT=setTimeout(advSayNext,2400)}
 /* ไอเทมในเกม: ซื้อด้วยเหรียญครั้งเดียวใช้ได้ตลอด ใส่อัตโนมัติตามสภาพอากาศ/ฉาก หรือแตะที่แถบไอเทมเพื่อใส่/ถอดเอง (ราคาตรงกับ firestore.rules) */
 const ADV_GEAR=[["umbrella","ร่ม","กางเองเวลาฝนตก",30],["cap","หมวกแก๊ป","ใส่เดินเล่นได้ทุกด่าน",20],["straw","หมวกชาวนา","ใส่เองในฟาร์มและหมู่บ้าน",20],["fan","พัด","โบกเองวันที่ร้อนจัด 35 องศาขึ้นไป",25],["coat","เสื้อกันหนาว","ใส่เองวันที่อากาศเย็น",40],["shades","แว่นกันแดด","ใส่เองตอนเดินริมทะเล",30]];
 const ADV_ICON={umbrella:'<svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 6.5 3 11h18c0-4.5-4-8-9-8z" fill="#ff7043"/><path d="M12 11v7a2 2 0 0 1-4 0" stroke="#5d4037" stroke-width="1.8" fill="none"/></svg>',
@@ -7908,6 +7914,9 @@ async function advStart(){
       
       <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
+  /* มือถือ: ย้ายดาวกับจุดความคืบหน้าไปไว้ข้างจอขวา แถบด้านบนจะได้ไม่ล้น */
+  {const side=document.createElement("div");side.className="adv-side";$("advView").appendChild(side);const top=ov.querySelector(".adv-top"),cn=ov.querySelector(".adv-cn");
+    const place=()=>{const nar=innerWidth<=600,pts=$("advPts"),pr=$("advProg");if(!pts||!pr)return;if(nar&&pts.parentNode!==side){side.append(pts,pr)}else if(!nar&&pts.parentNode===side){top.insertBefore(pr,cn);top.insertBefore(pts,cn)}};place();addEventListener("resize",place)}
   ov.addEventListener("pointerdown",()=>advMod?.SND.unlock(),{capture:true});ov.addEventListener("touchend",()=>advMod?.SND.unlock(),{capture:true});
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
@@ -7947,14 +7956,14 @@ async function advStart(){
     near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${id==="shades"?"ร้านแว่น":"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
       b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
     pray:cb=>{const b=$("advPray");if(!b)return;b.classList.remove("hidden");b.onclick=()=>{b.classList.add("hidden");advMod?.SND.unlock();cb()}},
-    say:msg=>{const t=$("advToast");t.innerHTML=`<b>${escHtml(msg)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
+    say:msg=>{advSayQ.push(msg);if(!advSayT)advSayNext()},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
     finish:st=>{advSel=1;advRe=true;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก! กด START เพื่อเริ่มด่าน 1 ใหม่ คะแนนดาวสะสมต่อ":`ผ่านด่าน ${st} แล้ว กด START เพื่อเริ่มด่าน 1 ใหม่ คะแนนดาวสะสมต่อ (ด่าน 6-10 สำหรับสมาชิก Premium)`)},
     hideQ:()=>{$("advQ").classList.add("hidden");$("advView").classList.remove("asking")},
     timer:f=>{$("advBar").style.width=f*100+"%"},
     shake:()=>{const v=$("advView");v.classList.remove("hurt");void v.offsetWidth;v.classList.add("hurt")},
     toast:(st,r)=>{const t=$("advToast");t.innerHTML=`<b>ผ่านด่าน ${st}!</b>${r.gain?`<span><i class="st-coin mini"></i> +${r.gain} เหรียญ</span>`:r.note?`<span>${escHtml(r.note)}</span>`:""}`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
-    lose:(st,again)=>{const m=$("advMsg");m.innerHTML=`<b class="adv-big">หัวใจหมดแล้ว</b><p>ไม่เป็นไร เล่นต่อจากด่าน ${st} ได้เลย</p><div class="adv-btns"><button type="button" class="pri" id="advRe">เล่นต่อ</button><button type="button" id="advHome">ออกจากเกม</button></div>`;m.classList.remove("hidden");
+    lose:(st,again)=>{advSayQ=[];clearTimeout(advSayT);advSayT=0;$("advToast")?.classList.remove("show");const m=$("advMsg");m.innerHTML=`<b class="adv-big">หัวใจหมดแล้ว</b><p>ไม่เป็นไร เล่นต่อจากด่าน ${st} ได้เลย</p><div class="adv-btns"><button type="button" class="pri" id="advRe">เล่นต่อ</button><button type="button" id="advHome">ออกจากเกม</button></div>`;m.classList.remove("hidden");
       $("advRe").onclick=()=>{m.classList.add("hidden");again()};$("advHome").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")}}
   };
   try{
