@@ -2760,17 +2760,17 @@ body.adv-on{overflow:hidden}
 .adv-view.hurt{animation:advHurt .45s}@keyframes advHurt{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 .adv-load{position:absolute;inset:0;display:grid;place-items:center;color:#16305f;font-weight:800}
 .adv-hint{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);color:#fff;font-size:12.5px;white-space:nowrap;pointer-events:none}
-.adv-q{position:absolute;left:50%;top:12px;width:min(520px,calc(100% - 24px));transform:translateX(-50%);padding:12px 16px;border-radius:20px;background:rgba(255,255,255,.96);border:3px solid #ffb84d;box-shadow:0 8px 0 rgba(0,0,0,.08);text-align:center;z-index:6;animation:advQin .3s both}
+.adv-q{position:absolute;left:50%;top:12px;width:min(520px,calc(100% - 24px));transform:translateX(-50%);padding:12px 16px;border-radius:18px;background:radial-gradient(circle at 10px 10px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 10px) 10px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at 10px calc(100% - 10px),#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),#5a3412 0 3px,transparent 3.5px),linear-gradient(180deg,#fff8e6,#f7e3b8);border:5px solid #7a4a1c;box-shadow:inset 0 0 0 3px #e9c98f,0 6px 0 #4a2a0d,0 10px 18px rgba(0,0,0,.3);text-align:center;z-index:6;animation:advQin .3s both}
 @keyframes advQin{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
-.adv-qt{font-size:24px;font-weight:900;color:#5b21b6}.adv-qh{margin-top:4px;font-size:12px;color:#94a3b8}
-.adv-tm{height:7px;margin-top:8px;border-radius:4px;background:#e2e8f0;overflow:hidden}.adv-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#22c55e,#ffd23f,#ef4444)}
+.adv-qt{font-size:24px;font-weight:900;color:#6b3410;text-shadow:0 1px 0 #fff}.adv-qh{margin-top:4px;font-size:12px;color:#94a3b8}
+.adv-tm{height:9px;margin-top:8px;border-radius:6px;background:#d9bf8c;box-shadow:inset 0 1px 2px rgba(0,0,0,.25);overflow:hidden}.adv-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#22c55e,#ffd23f,#ef4444)}
 .adv-toast{position:absolute;left:50%;top:22%;transform:translate(-50%,0);padding:14px 26px;border-radius:20px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:6;opacity:0}
 .adv-toast.show{animation:advToast 1.8s ease forwards}.adv-toast b{display:block;font-size:26px;color:#f57c00}.adv-toast span{display:inline-flex;align-items:center;gap:4px;margin-top:4px;color:#475569;font-weight:800}
 @keyframes advToast{0%{opacity:0;transform:translate(-50%,16px) scale(.9)}15%,75%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-14px)}}
 .adv-msg{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 32px));transform:translate(-50%,-50%);padding:22px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:7}
 .adv-big{display:block;font-size:24px;color:#f57c00;margin-bottom:6px}.adv-msg p{margin:0 0 14px;color:#475569}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
-@media(max-width:600px){.adv-q{top:auto;bottom:96px;padding:8px 12px;border-radius:16px}.adv-qt{font-size:19px}.adv-qh{display:none}.adv-pic{font-size:44px;margin:2px 0}.adv-ops{gap:5px;margin-top:6px}.adv-ops button{padding:6px 7px;font-size:13px}.adv-view.asking .adv-pad,.adv-view.asking .adv-jump{opacity:.35}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
+@media(max-width:600px){.adv-q{top:auto;bottom:96px;padding:8px 12px;border-radius:16px}.adv-q.box{top:8px;bottom:auto}.adv-view.asking .adv-clock{display:none}.adv-q.box .adv-qt{font-size:16px}.adv-q.box .adv-ops button{padding:5px 8px;font-size:13px}.adv-q.box .adv-ops button b{width:22px;height:22px;font-size:13px}.adv-qt{font-size:19px}.adv-qh{display:none}.adv-pic{font-size:44px;margin:2px 0}.adv-ops{gap:5px;margin-top:6px}.adv-ops button{padding:6px 7px;font-size:13px}.adv-view.asking .adv-pad,.adv-view.asking .adv-jump{opacity:.35}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
 /* ปุ่มเกมแบบป้ายไม้: แผ่นไม้ทรงลูกศรชี้ทาง ลายไม้แนวนอน ตอกตะปู ขอบน้ำตาลเข้ม (ใช้ทั้งบันไดยศและเกม) ปุ่ม JUMP กับ START เป็นป้ายไม้แผ่นตรง */
 .st-mv,.adv-k[data-h]{position:relative;padding:0;border:0!important;border-radius:0!important;color:transparent!important;font-size:0!important;background:#5a3412!important;box-shadow:none!important;
@@ -2835,9 +2835,9 @@ body.adv-on{overflow:hidden}
 .adv-shop-x{padding:9px 22px;border:3px solid #5a3412;border-radius:10px;background:#7a4a1c;color:#fff4d6;font:inherit;font-weight:800;cursor:pointer}
 @media(max-width:600px){.adv-gear{top:12px;right:8px}.adv-gs{width:42px;height:42px}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
-.adv-ops{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-.adv-ops button{display:flex;align-items:center;gap:6px;padding:7px 8px;border:2px solid var(--c);border-radius:12px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
-.adv-ops.two{grid-template-columns:1fr}.adv-ops.two button{padding:12px 14px;font-size:18px;justify-content:flex-start;min-height:56px}.adv-ops.two button b{width:30px;height:30px;font-size:16px}
+.adv-ops{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
+.adv-ops button{display:flex;align-items:center;gap:8px;padding:7px 10px;border:3px solid #a8743a;border-radius:12px;background:#fffdf6;box-shadow:0 3px 0 #a8743a;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
+@media(min-width:601px){.adv-q.box .adv-qt{font-size:20px}}.adv-ops.two{grid-template-columns:1fr}.adv-ops.two button{padding:12px 14px;font-size:18px;justify-content:flex-start;min-height:56px}.adv-ops.two button b{width:30px;height:30px;font-size:16px}
 .adv-ops button b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:14px}
 .adv-view.scare:after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 30%,rgba(90,0,30,.75));animation:advScare 1.6s forwards}
 @keyframes advScare{0%{opacity:0}12%{opacity:1}30%{opacity:.6}45%{opacity:1}100%{opacity:0}}
@@ -7790,10 +7790,10 @@ function advVocab(){
   return {q:"ภาพนี้คือคำว่าอะไร",pic,opts:o,ans:o.indexOf(ok)}}
 function advIdiom(){
   if(Math.random()<.3){const k=rnd(0,2);
-    if(k===0){const isN=Math.random()<.5,w=isN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),o=["คำนาม","คำกริยา","คำวิเศษณ์","คำสรรพนาม"];return {q:`คำว่า "${w}" เป็นคำชนิดใด`,opts:o,ans:isN?0:1,box:true}}
-    const wantN=k===1,ok=wantN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),pool=shuf((wantN?ADV_VERB:ADV_NOUN).slice()).slice(0,3),o=shuf([ok,...pool]);
+    if(k===0){const isN=Math.random()<.5,w=isN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),o=["คำนาม","คำกริยา","คำวิเศษณ์"];return {q:`คำว่า "${w}" เป็นคำชนิดใด`,opts:o,ans:isN?0:1,box:true}}
+    const wantN=k===1,ok=wantN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),pool=shuf((wantN?ADV_VERB:ADV_NOUN).slice()).slice(0,2),o=shuf([ok,...pool]);
     return {q:wantN?"ข้อใดเป็นคำนาม":"ข้อใดเป็นคำกริยา",opts:o,ans:o.indexOf(ok),box:true}}
-  const [id,mean]=advDraw("idiom",ADV_IDIOM),others=shuf(ADV_IDIOM.filter(x=>x[0]!==id)).slice(0,3);
+  const [id,mean]=advDraw("idiom",ADV_IDIOM),others=shuf(ADV_IDIOM.filter(x=>x[0]!==id)).slice(0,2);
   if(Math.random()<.6){const o=shuf([mean,...others.map(x=>x[1])]);return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
   const o=shuf([id,...others.map(x=>x[0])]);return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
 function advQuestion(st){
@@ -7939,7 +7939,7 @@ async function advStart(){
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
     pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
     ask:q=>{$("advView").classList.add("asking");$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
-      ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);ops.classList.toggle("two",q.box&&q.opts.length===2);
+      ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);$("advQ").classList.toggle("box",!!q.box);ops.classList.toggle("two",q.box&&q.opts.length===2);
       ops.querySelectorAll("button").forEach(b=>b.onclick=()=>adv?.choose(+b.dataset.i));
       $("advQh").textContent=q.box?"แตะที่คำตอบได้เลย":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
       $("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
