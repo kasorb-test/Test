@@ -1128,7 +1128,7 @@ export function startGame(root,api){
     if(i<0){mark(S.ans[S.q.ans],"#22c55e");SND.play("wrong");if(S.qBr){S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr};return}punish();hurt();setTimeout(clearAns,600);return}
     const a=S.ans[i],to=a.visible?new THREE.Vector3(a.position.x,Math.max(0,a.position.y-.9-groundY(a.position.x)),0):new THREE.Vector3(S.x,0,0);
     S.jump={from:new THREE.Vector3(S.x,S.y,0),to,t:0,dur:.55,done:()=>{
-      if(ok){SND.play("ok");for(const l of leeches)l.drop=1;for(const c of critters)if(c.kind==="crab")c.off=1;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);
+      if(ok){SND.play("ok");for(const l of leeches)l.drop=1;for(const c of critters)if(c.kind==="crab")c.off=1;S.crabHits=0;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);
         S.fall={vy:2};S.mode="falling";S.afterFall=()=>{clearAns();S.mode="walk";afterAnswer(true)}}
       else if(S.qBr){SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr}}
       else{SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.fall={vy:0};S.mode="falling";S.afterFall=()=>{punish();hurt();if(S.mode!=="dead"){clearAns();S.mode="walk";afterAnswer(false)}}}
@@ -1158,7 +1158,11 @@ export function startGame(root,api){
     if(kind==="leech"){const l=leech(),a=-Math.PI/2+rand(-.5,.5);l.scale.setScalar(1.6);l.position.set(Math.sin(a)*.47,rand(.6,1.1),Math.cos(a)*.47);l.rotation.set(0,a,rand(-.4,.4));P.userData.body.add(l);leeches.push({o:l,t:0});SND.play("squish");return}
     if(kind==="chicks"){SND.play("hen");setTimeout(()=>SND.play("hen"),900);setTimeout(()=>SND.play("hen"),1800);for(let k=0;k<5;k++){const c=chicken(),a=k/5*Math.PI*2+rand(-.3,.3);c.scale.setScalar(1.3);c.position.set(x0+Math.cos(a)*6,0,Math.sin(a)*4);world.add(c);critters.push({o:c,kind,t:0,a,x0})}return}
     if(kind==="auntie"){const o=auntie();o.position.set(x0+1.4,0,-7);o.rotation.y=Math.PI/2;world.add(o);critters.push({o,kind,t:0,x0});SND.play("tsk");setTimeout(()=>SND.speak(o.userData.line),900);return}
-    const o=kind==="crab"?crab():Math.random()<.5?croc():lion();if(kind==="crab")o.scale.setScalar(2.2);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
+    /* ปู: หนีบแขนทั้ง 2 ข้าง ถ้ายังผิดซ้ำก่อนตอบถูก มีปูมาหนีบขาทั้ง 2 ข้างด้วย */
+    if(kind==="crab"){const u=P.userData;S.crabHits=(S.crabHits||0)+1;const want=[[u.arms[0],"arm",-1],[u.arms[1],"arm",1]];if(S.crabHits>=2)want.push([u.legs[0],"leg",-1],[u.legs[1],"leg",1]);let n=0;
+      for(const[part,pk,side]of want){if(critters.some(c=>c.kind==="crab"&&c.part===part&&!c.off))continue;const o=crab();o.scale.setScalar(2.2);o.position.set(x0+7,0,.5+side*.35);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:-n*.35,x0,part,pk,side});n++}
+      SND.play("pinch");return}
+    const o=Math.random()<.5?croc():lion();o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     }
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
   const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา",
@@ -1272,13 +1276,17 @@ export function startGame(root,api){
         else if(t<5){o.position.x+=(S.x+1.4-o.position.x)*Math.min(1,dt*6);u.legs[0].rotation.z=u.legs[1].rotation.z=0;u.arms[0].rotation.x=-2.3+Math.sin(t*10)*.25;o.rotation.y=Math.PI+Math.sin(t*2)*.15;u.head.rotation.z=Math.sin(t*6)*.08}
         else{u.arms[0].rotation.x=0;o.rotation.y=Math.PI/2;o.position.z-=dt*5;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;if(t>7){world.remove(o);critters.splice(i,1)}}continue}
       if(c.kind==="vendor"){const u=o.userData;u.arms[1].rotation.x=-2.6+Math.abs(Math.sin(t*7))*2;u.say=null;if(t>2.6){o.position.z-=dt*4;o.rotation.y=Math.PI/2}if(t>3.9){world.remove(o);critters.splice(i,1)}continue}
-      if(c.kind==="veg"){if(t<0)continue;if(!c.said){c.said=1;SND.speakEn("What's?")}if(t<.6){const k=t/.6,tp=new THREE.Vector3();c.part.localToWorld(tp.copy(c.lp));world.worldToLocal(tp);o.position.lerpVectors(c.from,tp,k);o.position.y+=Math.sin(Math.PI*k)*1.5;o.rotation.x+=dt*12}
+      if(c.kind==="veg"){if(t<0)continue;if(!c.said){c.said=1;SND.speakEn("Wots!")}if(t<.6){const k=t/.6,tp=new THREE.Vector3();c.part.localToWorld(tp.copy(c.lp));world.worldToLocal(tp);o.position.lerpVectors(c.from,tp,k);o.position.y+=Math.sin(Math.PI*k)*1.5;o.rotation.x+=dt*12}
         else{critters.splice(i,1);world.remove(o);c.part.add(o);o.position.copy(c.lp);o.rotation.set(rand(-.5,.5),rand(0,6),rand(-.5,.5));leeches.push({o,t:0,veg:1});SND.play("splat");S.ouch=.15}continue}
-      if(c.kind==="crab"){const arm=P.userData.arms[1];
-        if(t<.9){o.position.x=c.x0+7-6.3*(t/.9);o.position.y=Math.abs(Math.sin(t*20))*.05}
-        else if(!c.off){if(!c.att){c.att=1;world.remove(o);arm.add(o);o.scale.setScalar(1.5);o.position.set(0,-.75,0);o.rotation.set(0,0,Math.PI);SND.play("pinch");}
-          const hard=t<3.2;arm.rotation.x=hard?-2.5+Math.sin(t*16)*.35:-.4+Math.sin(t*3)*.15;arm.rotation.z=hard?.3:.15;o.rotation.z=Math.PI+Math.sin(t*7)*.6;if(hard){P.userData.body.rotation.z=Math.sin(t*20)*.06;if(!c.snd||t-c.snd>.6){c.snd=t;SND.play("pinch")}S.ouch=.1}else if(!c.snd||t-c.snd>4){c.snd=t;SND.play("pinch")}}
-        else{if(c.att===1){c.att=2;c.t2=t;const wp=new THREE.Vector3();o.getWorldPosition(wp);arm.remove(o);world.add(o);world.worldToLocal(wp);o.position.set(wp.x,0,.6);o.scale.setScalar(1.6);o.rotation.set(0,0,0);arm.rotation.z=0}
+      if(c.kind==="crab"){const part=c.part,isArm=c.pk==="arm";
+        if(t<.9){o.position.x=c.x0+7-6.3*(Math.max(0,t)/.9);o.position.y=Math.abs(Math.sin(t*20))*.05}
+        else if(!c.off){if(!c.att){c.att=1;world.remove(o);part.add(o);if(isArm){o.scale.setScalar(1.5);o.position.set(0,-.75,0);o.rotation.set(0,0,Math.PI)}else{o.scale.setScalar(1.25);o.position.set(0,-.3,.17);o.rotation.set(0,Math.PI/2,0)}SND.play("pinch")}
+          const hard=t<3.2;
+          if(isArm){part.rotation.x=hard?-2.5+Math.sin(t*16+c.side)*.35:-.4+Math.sin(t*3+c.side)*.15;part.rotation.z=c.side*(hard?.3:.15);o.rotation.z=Math.PI+Math.sin(t*7)*.6}
+          else{part.rotation.x=hard?Math.sin(t*30+c.side*1.5)*.35:Math.sin(t*4+c.side)*.1;o.rotation.z=Math.sin(t*7)*.3}
+          if(hard){P.userData.body.rotation.z=Math.sin(t*20)*.06;if(c.side>0&&(!c.snd||t-c.snd>.6)){c.snd=t;SND.play("pinch")}S.ouch=.1}else if(c.side>0&&(!c.snd||t-c.snd>4)){c.snd=t;SND.play("pinch")}}
+        else{if(c.att===1){c.att=2;c.t2=t;const wp=new THREE.Vector3();o.getWorldPosition(wp);part.remove(o);world.add(o);world.worldToLocal(wp);o.position.set(wp.x,0,.6);o.scale.setScalar(1.6);o.rotation.set(0,0,0);if(isArm)part.rotation.z=c.side*.35;else part.rotation.x=0}
+          else if(!c.att){c.att=2;c.t2=t}
           o.position.x+=dt*6;o.position.y=Math.abs(Math.sin(t*20))*.05;if(t-c.t2>1.3){world.remove(o);critters.splice(i,1)}}
         continue}
       const stop=c.x0+(c.kind==="crab"?.75:o.userData.jaw?1.05:1.15);
