@@ -2685,6 +2685,27 @@ input{
 .st-kid.game .k-eye{transform-box:fill-box;transform-origin:center;animation:kBlink 4s infinite}
 @keyframes kBlink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
 .st-me.air .st-kid.game .k-arm.l{transform:rotate(140deg)}.st-me.air .st-kid.game .k-arm.r{transform:rotate(-140deg)}
+/* ตัวละครแต่งได้: หัวเป็นรูปทรงผม ตัวเป็น SVG */
+.st-kid.look .st-body{left:-3px;bottom:-2px;width:60px;height:100px}
+.st-kid.look .chr-hd{position:absolute;left:50%;bottom:52px;height:50px;width:auto;transform:translateX(-50%);border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
+.st-kid.look .chr-hat{position:absolute;left:50%;bottom:84px;width:46px;transform:translateX(-50%);pointer-events:none}
+.st-kid.look.flip .chr-hd{transform:translateX(-50%) scaleX(-1)}
+.st-me.walk .st-kid.look .chr-hd,.st-me.walk .st-kid.look .chr-hat{animation:kBob .36s ease-in-out infinite}
+.chr-mini{position:relative;display:block;width:44px;height:74px;margin:0 auto}
+.chr-mini .wd-svg{position:absolute;left:0;bottom:0;width:44px;height:74px}
+.chr-mini .chr-hd{position:absolute;left:50%;bottom:38px;height:37px;transform:translateX(-50%)}
+.chr-mini .chr-hat{position:absolute;left:50%;bottom:62px;width:34px;transform:translateX(-50%)}
+.wd-it.lock .chr-mini{filter:grayscale(1) brightness(.9)}
+.lk-tabs{display:flex;gap:6px;margin:0 0 8px;overflow-x:auto}
+.lk-tabs button{padding:6px 12px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;font:inherit;font-size:12.5px;font-weight:700;white-space:nowrap;cursor:pointer}
+.lk-tabs button.on{background:#16305f;border-color:#16305f;color:#fff}
+.lk-hair{flex:0 0 76px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:1.5px solid #eef2f7;border-radius:14px;background:#f8fafc;font:inherit;cursor:pointer}
+.lk-hair img{height:54px;width:auto;max-width:68px;object-fit:contain}.lk-hair span{font-size:11px;color:#334155}
+.lk-hair.on{border-color:#ff8a3d;background:#fff7ed}
+.lk-sws{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.lk-sw{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid #eef2f7;border-radius:12px;background:#fff;font:inherit;cursor:pointer}
+.lk-sw i{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}.lk-sw span{font-size:11px;color:#334155}
+.lk-sw.on{border-color:#ff8a3d;background:#fff7ed}
 /* ตู้เสื้อผ้า */
 .wd{margin:4px 0 6px}.wd-h{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}.wd-h b{font-size:14px;color:#16305f}.wd-h span{font-size:12px;color:#94a3b8}
 .wd-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
@@ -7385,60 +7406,81 @@ const OUTFITS=[
 const outfitOf=id=>OUTFITS.find(o=>o.id===id)||OUTFITS[0];
 function bestOutfit(lv){return OUTFITS.filter(o=>o.lv<=lv).pop()||OUTFITS[0]}
 function myOutfit(lv){const o=OUTFITS.find(x=>x.id===currentData?.outfit);return o&&o.lv<=lv?o:bestOutfit(lv)}
-/* ตัวละคร 60x100: ขา แขน ตัว หัว ผม หมวก แยกกลุ่มไว้ให้ CSS ขยับ */
-function charSvg(o,female,cls="st-body"){
-  const skin="#f6d2b0",skinD="#e8b58e",hair="#2b2320";
-  const collar=o.collar==="shirt"?`<path d="M24 45 L30 52 L36 45 L33 44 L30 48 L27 44Z" fill="${o.trim}"/>`
+const isFemale=()=>currentData?.gender==="female";
+/* ===== แต่งตัวละคร: ทรงผม (รูปหัวการ์ตูน chars/*.png) + สีเสื้อยืด กางเกงวอร์ม รองเท้าแตะ =====
+   ชุดลำลอง (Lv.0) ใช้สีที่เลือกเอง ชุดเลเวลอื่นเป็นเครื่องแบบตามเดิม เก็บไว้ที่ users/{uid}.look */
+const HAIRS={f:[["f01","มัดสูง"],["f02","ผมยาวตรง"],["f03","หางม้า"],["f04","มัดแกละ"],["f05","ประบ่า"],["f06","ผมสั้นตรง"],["f09","ผมสั้นทอม"],["f11","ผมหยิกฟ่อย"],["f12","ผมสองข้าง"],["f14","หางม้าต่ำ"]],
+  m:[["m01","แสกกลาง"],["m06","ซอยเกาหลี"],["m04","ผมตั้ง"],["m05","สกินเฮด"],["m10","รองทรง"],["m11","ผมยุ่ง"],["m12","แสกข้าง"],["m13","หยิกเกลียว"],["m14","ทูบล็อก"],["m15","ยาวประบ่า"]]};
+const SHIRTS=[["white","ขาว","#ffffff"],["black","ดำ","#1f2937"],["navy","กรม","#1e3a8a"],["grey","เทา","#9ca3af"],["sky","ฟ้า","#93c5fd"],["pink","ชมพู","#f9a8d4"],["mint","เขียวอ่อน","#a7f3d0"],["cream","ครีม","#f5e6c8"]];
+const PANTS=[["grey","เทา","#a1a1aa"],["black","ดำ","#18181b"],["navy","กรม","#1e3a8a"],["cream","ครีม","#e7d3b0"],["pink","ชมพู","#f9a8d4"],["sky","ฟ้า","#93c5fd"],["green","เขียว","#556b2f"],["brown","น้ำตาล","#7c4a2d"]];
+const SHOES=[["bw","ดำ-ขาว","#111827","#ffffff"],["wb","ขาว-ดำ","#ffffff","#111827"],["black","ดำล้วน","#111827","#111827"],["pink","ชมพู","#f9a8d4","#f9a8d4"],["cream","ครีม","#f5e6c8","#f5e6c8"],["navy","กรม","#1e3a8a","#1e3a8a"],["green","เขียว","#556b2f","#556b2f"],["brown","น้ำตาล","#7c4a2d","#7c4a2d"]];
+const pick=(list,id)=>list.find(x=>x[0]===id)||list[0];
+function myLook(){
+  const L=currentData?.look||{},g=isFemale()?"f":"m",all=[...HAIRS.f,...HAIRS.m];
+  return {hair:all.some(h=>h[0]===L.hair)?L.hair:HAIRS[g][0][0],shirt:pick(SHIRTS,L.shirt)[0],pants:pick(PANTS,L.pants)[0],shoe:pick(SHOES,L.shoe)[0]};
+}
+/* ตัวละคร: ตัว/แขน/ขา เป็น SVG (ขยับได้) หัวเป็นรูปทรงผมที่เลือก หมวกของเครื่องแบบวางทับหัว */
+function charBodySvg(o,look,cls){
+  const casual=o.id==="tee";
+  const shirt=casual?pick(SHIRTS,look.shirt)[2]:o.shirt,sleeve=casual?shirt:o.sleeve,pants=casual?pick(PANTS,look.pants)[2]:o.pants;
+  const sh=pick(SHOES,look.shoe),shoe=casual?sh[2]:o.shoe,strap=casual?sh[3]:o.sole,skin="#f6d2b0";
+  const collar=casual?`<path d="M25 44 Q30 49 35 44" fill="none" stroke="${shirt==="#ffffff"?"#e2e8f0":"rgba(0,0,0,.18)"}" stroke-width="2"/>`
+    :o.collar==="shirt"?`<path d="M24 45 L30 52 L36 45 L33 44 L30 48 L27 44Z" fill="${o.trim}"/>`
     :o.collar==="high"?`<rect x="24" y="43" width="12" height="5" rx="2" fill="${o.trim}"/>`
-    :o.collar==="zip"?`<path d="M30 45 V70" stroke="${o.trim}" stroke-width="1.6"/><path d="M26 44 L30 48 L34 44" fill="none" stroke="${o.trim}" stroke-width="2"/>`
-    :`<path d="M25 44 Q30 49 35 44" fill="none" stroke="${o.trim}" stroke-width="2"/>`;
-  const hatSvg=o.hat==="cap"?`<path d="M13 20 Q14 7 30 7 Q46 7 47 20 Z" fill="${o.hatc}"/><rect x="11" y="18" width="38" height="4" rx="2" fill="${o.hatc}" opacity=".85"/><circle cx="30" cy="13" r="2.6" fill="#f5b301"/>`
-    :o.hat==="peak"?`<path d="M12 18 Q14 4 30 4 Q46 4 48 18 Z" fill="${o.hatc}"/><rect x="12" y="15" width="36" height="5" fill="${o.gold?"#f5b301":"#3f2d14"}"/><path d="M13 20 Q30 26 47 20 L47 22 Q30 29 13 22Z" fill="#111827"/><circle cx="30" cy="11" r="3.2" fill="#f5b301"/>`
-    :o.hat==="crown"?`<path d="M15 16 L17 4 L23 11 L30 2 L37 11 L43 4 L45 16 Z" fill="${o.hatc}" stroke="#d99a00" stroke-width="1.2"/><circle cx="30" cy="11" r="2.2" fill="#e11d48"/>`:"";
-  const hairBack=female?`<path d="M12 26 Q10 6 30 6 Q50 6 48 26 L49 40 Q44 44 42 36 L18 36 Q16 44 11 40 Z" fill="${hair}"/>${o.hat?"":`<ellipse cx="48" cy="30" rx="5" ry="9" fill="${hair}"/>`}`:"";
-  const hairFront=female?`<path d="M13 24 Q14 8 30 8 Q46 8 47 24 Q40 14 30 16 Q22 14 13 24Z" fill="${hair}"/>`
-    :`<path d="M12 24 Q12 7 30 7 Q48 7 48 24 Q44 15 38 16 Q34 12 28 15 Q20 13 12 24Z" fill="${hair}"/>`;
-  const sleeves=(side,x,path)=>`<g class="k-arm ${side}"><path d="${path}" stroke="${o.sleeve}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="${x}" cy="67" r="3.6" fill="${skin}"/></g>`;
+    :o.collar==="zip"?`<path d="M30 45 V70" stroke="${o.trim}" stroke-width="1.6"/><path d="M26 44 L30 48 L34 44" fill="none" stroke="${o.trim}" stroke-width="2"/>`:"";
+  const foot=(x)=>casual?`<path d="M${x} 90 h12 a2.5 2.5 0 0 1 0 5 h-12 a2.5 2.5 0 0 1 0-5z" fill="${shoe}"/><rect x="${x+2}" y="88" width="8" height="3.2" rx="1.2" fill="${strap}"/>`
+    :`<path d="M${x} 88 h11 a3 3 0 0 1 3 3 v1 h-14z" fill="${shoe}"/><rect x="${x}" y="91" width="14" height="2" fill="${strap}"/>`;
+  const leg=(side,x,fx)=>`<g class="k-leg ${side}"><rect x="${x}" y="72" width="7.5" height="${casual?16:18}" rx="3" fill="${pants}"/>${casual?`<rect x="${x+1}" y="87" width="5.5" height="3" fill="${skin}"/>`:""}${foot(fx)}</g>`;
+  const arm=(side,x,path)=>`<g class="k-arm ${side}"><path d="${path}" stroke="${sleeve}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="${x}" cy="67" r="3.6" fill="${skin}"/></g>`;
   return `<svg class="${cls}" viewBox="0 0 60 100" aria-hidden="true">
     ${o.cape?`<path d="M18 46 L42 46 L48 84 L12 84Z" fill="${o.cape}"/>`:""}
-    <g class="k-leg l"><rect x="22" y="72" width="7.5" height="18" rx="3" fill="${o.pants}"/><path d="M19 88 h11 a3 3 0 0 1 3 3 v1 h-14z" fill="${o.shoe}"/><rect x="19" y="91" width="14" height="2" fill="${o.sole}"/></g>
-    <g class="k-leg r"><rect x="30.5" y="72" width="7.5" height="18" rx="3" fill="${o.pants}"/><path d="M30 88 h11 a3 3 0 0 1 3 3 v1 h-14z" fill="${o.shoe}"/><rect x="30" y="91" width="14" height="2" fill="${o.sole}"/></g>
-    ${sleeves("l",13,"M20 48 Q14 56 13 64")}${sleeves("r",47,"M40 48 Q46 56 47 64")}
-    <path d="M19 47 Q19 42 30 42 Q41 42 41 47 L42 75 H18 Z" fill="${o.shirt}"/>
-    ${o.stripe?`<path d="M19 50 V74 M41 50 V74" stroke="${o.stripe}" stroke-width="2"/>`:""}
-    ${o.pocket?`<rect x="22" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/><rect x="32" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/>`:""}
-    ${o.tie?`<path d="M29 48 L31 48 L32.5 62 L30 65 L27.5 62Z" fill="${o.tie}"/>`:""}
-    ${o.sash?`<path d="M20 46 L40 70 L37 72 L18 49Z" fill="${o.sash}" opacity=".9"/>`:""}
-    ${o.badge?`<path d="M34.5 51 l2.5 1.2 2.5-1.2 v3.5 l-2.5 1.8-2.5-1.8z" fill="${o.badge}"/>`:""}
-    ${o.gold?`<rect x="18" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/><rect x="36" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/>`:""}
-    ${o.belt?`<rect x="18" y="68" width="24" height="4" fill="${o.belt}"/><rect x="28" y="68" width="4" height="4" fill="#f5b301"/>`:""}
-    ${collar}
-    <g class="k-head">${hairBack}
-      <rect x="26" y="36" width="8" height="8" rx="3" fill="${skinD}"/>
-      <ellipse cx="12.5" cy="27" rx="3" ry="4" fill="${skin}"/><ellipse cx="47.5" cy="27" rx="3" ry="4" fill="${skin}"/>
-      <circle cx="30" cy="24" r="17" fill="${skin}"/>
-      ${hairFront}
-      <g class="k-eye"><ellipse cx="23.5" cy="27" rx="3.2" ry="4" fill="#1f2937"/><circle cx="24.6" cy="25.5" r="1.3" fill="#fff"/></g>
-      <g class="k-eye"><ellipse cx="36.5" cy="27" rx="3.2" ry="4" fill="#1f2937"/><circle cx="37.6" cy="25.5" r="1.3" fill="#fff"/></g>
-      ${female?`<path d="M19.5 22 l3-1.5 M40.5 22 l-3-1.5" stroke="#1f2937" stroke-width="1.2" stroke-linecap="round"/>`:`<path d="M20 21.5 h6 M34 21.5 h6" stroke="${hair}" stroke-width="1.8" stroke-linecap="round"/>`}
-      <ellipse cx="19" cy="33" rx="3" ry="1.8" fill="#ff8a7a" opacity=".5"/><ellipse cx="41" cy="33" rx="3" ry="1.8" fill="#ff8a7a" opacity=".5"/>
-      <path d="M26.5 33 Q30 37 33.5 33" stroke="#9a3412" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      ${hatSvg}</g></svg>`;
+    ${leg("l",22,19)}${leg("r",30.5,30)}
+    ${arm("l",13,"M20 48 Q14 56 13 64")}${arm("r",47,"M40 48 Q46 56 47 64")}
+    <path d="M19 47 Q19 42 30 42 Q41 42 41 47 L42 75 H18 Z" fill="${shirt}" ${shirt==="#ffffff"?'stroke="#e2e8f0" stroke-width=".8"':""}/>
+    ${casual?"":`${o.stripe?`<path d="M19 50 V74 M41 50 V74" stroke="${o.stripe}" stroke-width="2"/>`:""}${o.pocket?`<rect x="22" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/><rect x="32" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/>`:""}${o.tie?`<path d="M29 48 L31 48 L32.5 62 L30 65 L27.5 62Z" fill="${o.tie}"/>`:""}${o.sash?`<path d="M20 46 L40 70 L37 72 L18 49Z" fill="${o.sash}" opacity=".9"/>`:""}${o.badge?`<path d="M34.5 51 l2.5 1.2 2.5-1.2 v3.5 l-2.5 1.8-2.5-1.8z" fill="${o.badge}"/>`:""}${o.gold?`<rect x="18" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/><rect x="36" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/>`:""}${o.belt?`<rect x="18" y="68" width="24" height="4" fill="${o.belt}"/><rect x="28" y="68" width="4" height="4" fill="#f5b301"/>`:""}`}
+    ${collar}</svg>`;
 }
-const isFemale=()=>currentData?.gender==="female";
-function stCharHtml(lv){return `<div class="st-kid game">${charSvg(myOutfit(lv),isFemale())}</div>`}
+function hatSvg(o){
+  if(o.id==="tee"||!o.hat)return "";
+  const h=o.hat==="cap"?`<path d="M10 22 Q12 4 30 4 Q48 4 50 22 Z" fill="${o.hatc}"/><rect x="8" y="19" width="44" height="5" rx="2.5" fill="${o.hatc}" opacity=".85"/><circle cx="30" cy="12" r="3" fill="#f5b301"/>`
+    :o.hat==="peak"?`<path d="M8 20 Q11 0 30 0 Q49 0 52 20 Z" fill="${o.hatc}"/><rect x="8" y="16" width="44" height="6" fill="${o.gold?"#f5b301":"#3f2d14"}"/><path d="M9 22 Q30 30 51 22 L51 25 Q30 33 9 25Z" fill="#111827"/><circle cx="30" cy="9" r="3.6" fill="#f5b301"/>`
+    :`<path d="M13 22 L15 5 L22 13 L30 2 L38 13 L45 5 L47 22 Z" fill="${o.hatc}" stroke="#d99a00" stroke-width="1.2"/><circle cx="30" cy="14" r="2.4" fill="#e11d48"/>`;
+  return `<svg class="chr-hat" viewBox="0 0 60 34" aria-hidden="true">${h}</svg>`;
+}
+function charHtml(o,look,cls){
+  return `${charBodySvg(o,look,cls)}<img class="chr-hd" src="chars/${look.hair}.png" alt="" draggable="false">${hatSvg(o)}`;
+}
+function stCharHtml(lv){return `<div class="st-kid game look">${charHtml(myOutfit(lv),myLook(),"st-body")}</div>`}
 /* ตู้เสื้อผ้า: ชุดที่เลเวลถึงแล้วกดใส่ได้ ชุดที่ยังไม่ถึงแสดงเลเวลที่ต้องการ */
 function wardrobeHtml(lv){
-  const cur=myOutfit(lv).id,f=isFemale();
-  return `<div class="wd"><div class="wd-h"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;
-    return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}>${charSvg(o,f,"wd-svg")}<b>${escHtml(o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div></div>`;
+  const cur=myOutfit(lv).id,lk=myLook(),g=isFemale()?"f":"m",og=g==="f"?"m":"f";
+  const sw=(list,key)=>list.map(x=>`<button type="button" class="lk-sw${lk[key]===x[0]?" on":""}" data-k="${key}" data-v="${x[0]}" title="${escHtml(x[1])}"><i style="background:${x.length>3?`linear-gradient(135deg,${x[2]} 50%,${x[3]} 50%)`:x[2]}"></i><span>${escHtml(x[1])}</span></button>`).join("");
+  const hairs=[...HAIRS[g],...HAIRS[og]].map(h=>`<button type="button" class="lk-hair${lk.hair===h[0]?" on":""}" data-k="hair" data-v="${h[0]}"><img src="chars/${h[0]}.png" alt="" loading="lazy"><span>${escHtml(h[1])}</span></button>`).join("");
+  return `<div class="wd"><div class="wd-h"><b>แต่งตัวละคร</b><span>ทรงผม เสื้อ กางเกง รองเท้า ใช้กับชุดลำลอง</span></div>
+    <div class="lk-tabs">${[["hair","ทรงผม"],["shirt","เสื้อยืด"],["pants","กางเกงวอร์ม"],["shoe","รองเท้าแตะ"]].map(([k,t],i)=>`<button type="button" data-tab="${k}" class="${i?"":"on"}">${t}</button>`).join("")}</div>
+    <div class="lk-pane" data-pane="hair"><div class="wd-row">${hairs}</div></div>
+    <div class="lk-pane hidden" data-pane="shirt"><div class="lk-sws">${sw(SHIRTS,"shirt")}</div></div>
+    <div class="lk-pane hidden" data-pane="pants"><div class="lk-sws">${sw(PANTS,"pants")}</div></div>
+    <div class="lk-pane hidden" data-pane="shoe"><div class="lk-sws">${sw(SHOES,"shoe")}</div></div>
+    <div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;
+    return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div></div>`;
 }
+function redrawChar(lv){const kid=document.querySelector("#stTurn .st-kid");if(!kid)return;const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
 function bindWardrobe(lv){
+  document.querySelectorAll(".lk-tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".lk-tabs button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".lk-pane").forEach(p=>p.classList.toggle("hidden",p.dataset.pane!==b.dataset.tab))});
+  let saveT=0;
+  document.querySelectorAll(".lk-hair,.lk-sw").forEach(b=>b.onclick=()=>{
+    const look={...myLook(),[b.dataset.k]:b.dataset.v};if(currentData)currentData.look=look;
+    document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach(x=>x.classList.toggle("on",x===b));
+    if(b.dataset.k!=="hair"&&myOutfit(lv).id!=="tee"&&currentData){currentData.outfit="tee";document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o==="tee";x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"})}
+    redrawChar(lv);document.querySelectorAll(".wd-it").forEach(x=>{const m=x.querySelector(".chr-mini");if(m)m.innerHTML=charHtml(outfitOf(x.dataset.o),look,"wd-svg")});
+    clearTimeout(saveT);saveT=setTimeout(()=>{const upd={look};if(currentData?.outfit)upd.outfit=currentData.outfit;updateDoc(doc(db,"users",currentUser.uid),upd).catch(e=>console.error(e))},700);
+  });
   document.querySelectorAll(".wd-it:not(.lock)").forEach(b=>b.onclick=async()=>{
     const o=outfitOf(b.dataset.o);if(o.lv>lv)return;
     if(currentData)currentData.outfit=o.id;
     const kid=document.querySelector("#stTurn .st-kid");if(kid){const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
-    document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o===o.id;x.classList.toggle("on",on);const sp=x.querySelector("span");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"});
+    document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o===o.id;x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"});
     try{await updateDoc(doc(db,"users",currentUser.uid),{outfit:o.id})}catch(e){console.error(e)}
   });
 }
