@@ -2733,6 +2733,9 @@ body.adv-on{overflow:hidden}
 .adv-menu-btn{padding:6px 12px;border:0;border-radius:999px;background:#fff;color:#f57c00;font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.12)}
 .adv-top>b,.adv-menu-btn,.adv-cn,.adv-pts{white-space:nowrap;flex:0 0 auto}
 @media(max-width:440px){.adv-top{gap:6px;padding:8px 8px}.adv-prog{display:none}.adv-ht{width:17px;height:16px}}
+.adv-clock{position:absolute;right:12px;top:12px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 0 rgba(0,0,0,.1);pointer-events:none}
+.adv-clock b{font-size:22px;line-height:1.1;color:#16305f;font-variant-numeric:tabular-nums}.adv-clock span{font-size:11.5px;color:#475569;white-space:nowrap}
+@media(max-width:600px){.adv-clock{top:10px;left:10px;right:auto;align-items:flex-start}.adv-clock b{font-size:18px}}
 .adv-pad{position:absolute;left:14px;bottom:18px;display:flex;gap:12px;z-index:5}
 .adv-k{width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
 .adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
@@ -3770,14 +3773,6 @@ window.alert=m=>{uiAlert(m)};
     </button>
 </div>
 </div>
-<div class="sidebar-home sb-game">
-<button class="nav-btn" data-page="gamePage" data-title="เกม">
-<span class="menu-inline">
-<svg aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg>
-<span>เกม</span>
-</span>
-</button>
-</div>
 <div class="menu-group" data-group="results">
 <button class="group-toggle" data-toggle-group="results" type="button">
 <span class="group-left">
@@ -3801,6 +3796,14 @@ window.alert=m=>{uiAlert(m)};
       ประวัติการทำแบบทดสอบ
     </button>
 </div>
+</div>
+<div class="sidebar-home sb-game">
+<button class="nav-btn" data-page="gamePage" data-title="เกม">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg>
+<span>เกม</span>
+</span>
+</button>
 </div>
 <div class="menu-group" data-group="account">
 <button class="group-toggle" data-toggle-group="account" type="button">
@@ -3886,8 +3889,8 @@ LINE OA @kasorb
 <button type="button" class="tn-item tn-side" id="tnSide" aria-label="เปิดแถบเมนู"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 6h16M4 12h16M4 18h16"></path> </svg><span>เมนู</span></button>
 <button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M3 11.5 12 4l9 7.5"></path> <path d="M5.5 10.5V20h13v-9.5"></path> <path d="M9.5 20v-5h5v5"></path> </svg><span>หน้าหลัก</span></button>
 <button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">ทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
-<button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="results"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 19V9"></path> <path d="M10 19V5"></path> <path d="M16 19v-7"></path> <path d="M22 19H2"></path> </svg><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="account"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M20 21a8 8 0 0 0-16 0"></path> <circle cx="12" cy="7" r="4"></circle> </svg><span class="lg">บัญชีของฉัน</span><span class="sm">บัญชี</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="contact"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path> <path d="M8 12h.01M12 12h.01M16 12h.01"></path> </svg><span class="lg">ติดต่อเรา</span><span class="sm">ติดต่อ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 </nav>
@@ -7718,6 +7721,7 @@ async function advStart(){
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
   ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
+      <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
       <div class="adv-hint" id="advHint">กดค้าง ◀ ▶ เพื่อเดิน กด ⤒ เพื่อกระโดดเก็บเหรียญ</div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
@@ -7754,9 +7758,15 @@ async function advStart(){
     const mod=await import("./game3d.js");if(!$("advOv"))return;
     $("advLoad")?.remove();
     adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui});window.advGame=adv;
+    const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+    const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
+      t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
+      $("advPart").textContent=`${d.getUTCDate()} ${TM[d.getUTCMonth()]} · ${c.partTh} · ${c.seasonTh}${c.rain?" (ฝนตก)":c.mist?" (หมอก)":""}`};
+    tickClock();advClockT=setInterval(tickClock,1000);
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }
-function advClose(){if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+let advClockT=0;
+function advClose(){clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
 function renderGamePage(){const box=$("gmBox");if(box)box.innerHTML="";advStart()}
