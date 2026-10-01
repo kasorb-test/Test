@@ -6,6 +6,8 @@ self.addEventListener("install",()=>self.skipWaiting());
 self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()));
 /* หน้าเว็บโหลดจากเว็บจริงทุกครั้ง ไม่ใช้สำเนาเก่าในเครื่อง (แอปบน iPad/iPhone เคยค้างหน้าเก่า) */
 self.addEventListener("fetch",e=>{
+  /* ไฟล์เกมก็โหลดใหม่เสมอ ไม่ใช้สำเนาเก่าในเครื่อง */
+  if(/\/game3d\.js(\?|$)/.test(new URL(e.request.url).pathname+new URL(e.request.url).search)){e.respondWith(fetch(e.request,{cache:"no-store"}).catch(()=>fetch(e.request)));return}
   if(e.request.mode!=="navigate") return;
   e.respondWith(fetch(e.request,{cache:"no-store"}).catch(()=>fetch(e.request)));
 });
