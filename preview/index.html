@@ -2717,6 +2717,7 @@ input{
 .lk-sw i{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}.lk-sw span{font-size:11px;color:#334155}
 .lk-sw.on{border-color:#ff8a3d;background:#fff7ed}
 .lk-fits{display:flex;gap:8px;margin-bottom:10px}.lk-fit{padding:8px 16px;border:1.5px solid #eef2f7;border-radius:12px;background:#fff;font:inherit;font-size:13px;font-weight:700;color:#334155;cursor:pointer}.lk-fit.on{border-color:#ff8a3d;background:#fff7ed}.lk-fit:disabled{opacity:.4;cursor:not-allowed}
+.lk-dots{display:grid;grid-template-columns:repeat(auto-fill,34px);gap:10px;padding:2px}.lk-dot{width:34px;height:34px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);transition:transform .12s}.lk-dot:hover{transform:scale(1.08)}.lk-dot.on{box-shadow:inset 0 0 0 1px rgba(0,0,0,.14),0 0 0 3px #fff,0 0 0 5px #ff8a3d}
 .lk-sub{margin:4px 0 6px;font-size:12px;font-weight:800;color:#64748b}
 .lk-custom{position:relative;cursor:pointer}.lk-custom input{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:conic-gradient(#f87171,#fbbf24,#34d399,#60a5fa,#a78bfa,#f472b6,#f87171);cursor:pointer}
 .lk-custom input::-webkit-color-swatch-wrapper{padding:0}.lk-custom input::-webkit-color-swatch{border:0;border-radius:50%;opacity:0}
@@ -7446,10 +7447,11 @@ const isFemale=()=>currentData?.gender==="female";
    ชุดลำลอง (Lv.0) ใช้สีที่เลือกเอง ชุดเลเวลอื่นเป็นเครื่องแบบตามเดิม เก็บไว้ที่ users/{uid}.look */
 /* ตอนนี้ใช้เฉพาะตัวละครเต็มตัวตามแบบที่ออกแบบมา ตัวครึ่งตัวเดิมพักไว้ */
 const HAIRS={f:[["f21","A"],["f22","B"]],m:[["m21","A"]]};
-const SHIRTS=[["orig","ตามรูป",""],["white","ขาว","#ffffff"],["black","ดำ","#1f2937"],["navy","กรม","#1e3a8a"],["grey","เทา","#9ca3af"],["sky","ฟ้า","#93c5fd"],["pink","ชมพู","#f9a8d4"],["mint","เขียวอ่อน","#a7f3d0"],["cream","ครีม","#f5e6c8"]];
-const PANTS=[["orig","ตามรูป",""],["grey","เทา","#a1a1aa"],["black","ดำ","#18181b"],["navy","กรม","#1e3a8a"],["cream","ครีม","#e7d3b0"],["pink","ชมพู","#f9a8d4"],["sky","ฟ้า","#93c5fd"],["green","เขียว","#556b2f"],["brown","น้ำตาล","#7c4a2d"]];
-const SHOES=[["bw","ดำ-ขาว","#111827","#ffffff","slide"],["wb","ขาว-ดำ","#ffffff","#111827","slide"],["black","ดำล้วน","#111827","#111827","slide"],["pink","ชมพู","#f9a8d4","#f9a8d4","slide"],["cream","ครีม","#f5e6c8","#f5e6c8","slide"],["navy","กรม","#1e3a8a","#1e3a8a","slide"],["green","เขียว","#556b2f","#556b2f","slide"],["brown","น้ำตาล","#7c4a2d","#7c4a2d","slide"],
-  ["fblack","ดำ","#111827","#111827","flip"],["fwhite","ขาว","#ffffff","#cbd5e1","flip"],["fnavy","กรม","#1e3a8a","#1e3a8a","flip"],["fbrown","น้ำตาล","#7c4a2d","#7c4a2d","flip"],["fpink","ชมพู","#f9a8d4","#f9a8d4","flip"],["fcream","ครีม","#f5e6c8","#f5e6c8","flip"],["fgreen","เขียว","#556b2f","#556b2f","flip"],["fsky","ฟ้า","#93c5fd","#93c5fd","flip"],["fpurple","ม่วง","#c4b5fd","#c4b5fd","flip"]];
+/* สีโทนพาสเทล ใช้ร่วมกันทั้งเสื้อ กางเกง และรองเท้าแตะ ("ตามรูป" = สีเดิมของแบบ) */
+const PASTEL=[["white","ขาว","#ffffff"],["cream","ครีม","#fbf3df"],["lemon","เหลือง","#fde68a"],["peach","พีช","#fdd5b4"],["coral","ส้มอ่อน","#fbb4a5"],["pink","ชมพู","#f9c6d8"],["rose","ชมพูกุหลาบ","#f4a6c0"],["lilac","ม่วงอ่อน","#dccbf5"],["lav","ลาเวนเดอร์","#c4b5fd"],["baby","ฟ้าอ่อน","#c7e3fb"],["sky","ฟ้า","#a5d3f5"],["mint","มิ้นต์","#bdeedb"],["sage","เขียวเสจ","#c8dcb8"],["grey","เทาอ่อน","#d9dbe0"]];
+const SHIRTS=[["orig","ตามรูป",""],...PASTEL],PANTS=[["orig","ตามรูป",""],...PASTEL];
+const SHOE_T=[["s","แบบสวม","slide"],["f","แบบคีบ","flip"]];
+const SHOES=SHOE_T.flatMap(([p,,t])=>[[p+"-orig","ตามรูป","","",t],...PASTEL.map(c=>[p+"-"+c[0],c[1],c[2],c[2],t])]);
 const pick=(list,id)=>list.find(x=>x[0]===id)||(/^#[0-9a-f]{6}$/i.test(id||"")?[id,"สีที่เลือกเอง",id]:list[0]);
 function myLook(){
   const L={...(currentData?.look||{})},g=isFemale()?"f":"m",all=[...HAIRS.f,...HAIRS.m];
@@ -7522,8 +7524,8 @@ function dollPaint(img){
       for(let i=0;i<a.length;i+=4)if(m[i+ch]>128){sum+=lum(i);n++}
       if(!n)return;const Lb=sum/n,dark=Lb<90;
       /* ฐานสีเข้ม (ดำ/กรม): คูณสีใหม่ตามความสว่างเดิมแบบนุ่ม ๆ ฐานสีอ่อน (ขาว): บวกเงาเดิมลงบนสีใหม่ */
-      for(let i=0;i<a.length;i+=4){const wt=m[i+ch]/255;if(wt<.02)continue;const L=lum(i),f=.62+.38*Math.min(L/Lb,2.2),dl=L-Lb;
-        for(let j=0;j<3;j++)a[i+j]=Math.round(a[i+j]*(1-wt)+Math.max(0,Math.min(255,dark?T[j]*f:T[j]+dl))*wt)}});
+      for(let i=0;i<a.length;i+=4){const wt=m[i+ch]/255;if(wt<.02)continue;const L=lum(i),f=dark?.8+.28*Math.max(-1,Math.min(1.4,(L-Lb)/Lb)):Math.min(1.06,L/Lb);
+        for(let j=0;j<3;j++)a[i+j]=Math.round(a[i+j]*(1-wt)+Math.max(0,Math.min(255,T[j]*f))*wt)}});
     x.clearRect(0,0,W,H);x.putImageData(px,0,0);const url=c.toDataURL("image/png");dollCache[key]=url;
     document.querySelectorAll(`img[data-doll="${key}"]`).forEach(el=>{el.dataset.done=key;el.src=url});
   }catch(e){console.error(e)}};
@@ -7566,7 +7568,9 @@ function stCharHtml(lv){return `<div class="st-kid game look">${charHtml(myOutfi
 function wardrobeHtml(lv){
   const cur=myOutfit(lv).id,lk=myLook(),g=isFemale()?"f":"m",og=g==="f"?"m":"f";
   const dd=DOLL[lk.hair]||[0,0,0,"#f8f8fa","#262222"];
-  const sw=(list,key)=>list.map(x=>{const c=x[0]==="orig"?(key==="shirt"?dd[3]:dd[4]):x[2];return `<button type="button" class="lk-sw${lk[key]===x[0]?" on":""}" data-k="${key}" data-v="${x[0]}" title="${escHtml(x[1])}"><i style="background:${x.length>3&&x[2]!==x[3]?`linear-gradient(135deg,${x[2]} 50%,${x[3]} 50%)`:c}"></i><span>${escHtml(x[1])}</span></button>`}).join("");
+  const dot=(key,v,name,c,on)=>`<button type="button" class="lk-dot${on?" on":""}" data-k="${key}" data-v="${v}" title="${escHtml(name)}" aria-label="${escHtml(name)}" style="background:${c}"></button>`;
+  const sw=(list,key)=>list.map(x=>dot(key,x[0],x[1],x[0]==="orig"?(key==="shirt"?dd[3]:dd[4]):x[2],lk[key]===x[0])).join("");
+  const shT=lk.shoe.split("-")[0],shC=lk.shoe.slice(2);
   const hairs=[...HAIRS[g],...HAIRS[og]].map(h=>`<button type="button" class="lk-hair${lk.hair===h[0]?" on":""}" data-k="hair" data-v="${h[0]}"><img src="chars/b/${DOLL_FULL[h[0]]?fullOf(h[0],lk.fit).slide[0]:h[0]}.png" alt="" loading="lazy"><span>${escHtml(h[1])}</span></button>`).join("");
   const nm=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===lk.hair)||["",""])[1];
   return `<div class="wd"><div class="wd-h"><b>แต่งตัวละคร</b><span>เลือกตัวละคร สีเสื้อยืด กางเกงวอร์ม และรองเท้าแตะ</span></div>
@@ -7589,9 +7593,9 @@ function wardrobeHtml(lv){
       <div class="lk-kid"><div class="st-kid game look">${charHtml(myOutfit(lv),lk,"st-body")}</div></div><span class="lk-name" id="lkName">${escHtml(nm)}</span></div>
     <div class="lk-opts"><div class="lk-tabs">${[["hair","ตัวละคร"],["shirt","เสื้อยืด"],["pants","กางเกงวอร์ม"],["shoe","รองเท้าแตะ"]].map(([k,t],i)=>`<button type="button" data-tab="${k}" class="${i?"":"on"}">${t}</button>`).join("")}</div>
     <div class="lk-pane" data-pane="hair"><div class="wd-row">${hairs}</div></div>
-    <div class="lk-pane hidden" data-pane="shirt"><div class="lk-sws">${sw(SHIRTS,"shirt")}<label class="lk-sw lk-custom${/^#/.test(lk.shirt)?" on":""}"><input type="color" data-k="shirt" value="${/^#/.test(lk.shirt)?lk.shirt:"#ff8a3d"}"><span>สีอื่น ๆ</span></label></div></div>
-    <div class="lk-pane hidden" data-pane="pants"><p class="lk-sub">แบบกางเกง</p><div class="lk-fits">${FITS.map(([v,t])=>`<button type="button" class="lk-fit${lk.fit===v?" on":""}" data-k="fit" data-v="${v}"${DOLL_FULL[lk.hair]?.[v]?"":" disabled"}>${t}</button>`).join("")}</div><p class="lk-sub">สีกางเกง</p><div class="lk-sws">${sw(PANTS,"pants")}<label class="lk-sw lk-custom${/^#/.test(lk.pants)?" on":""}"><input type="color" data-k="pants" value="${/^#/.test(lk.pants)?lk.pants:"#ff8a3d"}"><span>สีอื่น ๆ</span></label></div></div>
-    <div class="lk-pane hidden" data-pane="shoe"><p class="lk-sub">แบบสวม</p><div class="lk-sws">${sw(SHOES.filter(x=>x[4]==="slide"),"shoe")}</div><p class="lk-sub">แบบหูหนีบ</p><div class="lk-sws">${sw(SHOES.filter(x=>x[4]==="flip"),"shoe")}</div></div></div></div>
+    <div class="lk-pane hidden" data-pane="shirt"><div class="lk-dots">${sw(SHIRTS,"shirt")}</div></div>
+    <div class="lk-pane hidden" data-pane="pants"><p class="lk-sub">แบบกางเกง</p><div class="lk-fits">${FITS.map(([v,t])=>`<button type="button" class="lk-fit${lk.fit===v?" on":""}" data-k="fit" data-v="${v}"${DOLL_FULL[lk.hair]?.[v]?"":" disabled"}>${t}</button>`).join("")}</div><p class="lk-sub">สีกางเกง</p><div class="lk-dots">${sw(PANTS,"pants")}</div></div>
+    <div class="lk-pane hidden" data-pane="shoe"><p class="lk-sub">แบบรองเท้าแตะ</p><div class="lk-fits">${SHOE_T.map(([p,t])=>`<button type="button" class="lk-fit lk-sht${shT===p?" on":""}" data-p="${p}">${t}</button>`).join("")}</div><p class="lk-sub">สีรองเท้าแตะ</p><div class="lk-dots">${[["orig","ตามรูป","#1f1d1d"],...PASTEL].map(c=>`<button type="button" class="lk-dot lk-shc${shC===c[0]?" on":""}" data-c="${c[0]}" title="${escHtml(c[1])}" aria-label="${escHtml(c[1])}" style="background:${c[2]}"></button>`).join("")}</div></div></div></div>
     ${UNIFORMS_ON?`<div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div>`:""}</div></div>`;
 }
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
@@ -7603,10 +7607,14 @@ function bindWardrobe(lv){
   document.querySelectorAll(".lk-custom input").forEach(inp=>inp.oninput=()=>{const k=inp.dataset.k;const look={...myLook(),[k]:inp.value};if(currentData)currentData.look=look;
     document.querySelectorAll(`.lk-sw[data-k="${k}"]`).forEach(x=>x.classList.remove("on"));inp.closest(".lk-custom").classList.add("on");redrawChar(lv);
     clearTimeout(saveT);saveT=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{look}).catch(e=>console.error(e)),700)});
-  document.querySelectorAll(".lk-hair,.lk-fit,.lk-sw:not(.lk-custom)").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".lk-sht,.lk-shc").forEach(b=>b.onclick=()=>{
+    const cur=myLook().shoe,p=b.dataset.p||cur.split("-")[0],c=b.dataset.c||cur.slice(2),look={...myLook(),shoe:`${p}-${c}`};if(currentData)currentData.look=look;
+    document.querySelectorAll(b.dataset.p?".lk-sht":".lk-shc").forEach(x=>x.classList.toggle("on",x===b));redrawChar(lv);
+    clearTimeout(saveT);saveT=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{look}).catch(e=>console.error(e)),700)});
+  document.querySelectorAll(".lk-hair,.lk-fit:not(.lk-sht),.lk-dot:not(.lk-shc)").forEach(b=>b.onclick=()=>{
     const look={...myLook(),[b.dataset.k]:b.dataset.v};if(currentData)currentData.look=look;
     if(b.dataset.k==="hair")document.querySelectorAll(".lk-fit").forEach(x=>x.disabled=!DOLL_FULL[look.hair]?.[x.dataset.v]);
-    if(b.dataset.k==="hair"){const dd=DOLL[look.hair];if(dd)document.querySelectorAll('.lk-sw[data-v="orig"] i').forEach(i=>i.style.background=i.closest("[data-k]").dataset.k==="shirt"?dd[3]:dd[4])}
+    if(b.dataset.k==="hair"){const dd=DOLL[look.hair];if(dd)document.querySelectorAll('.lk-dot[data-v="orig"]').forEach(i=>i.style.background=i.dataset.k==="shirt"?dd[3]:dd[4])}
     document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach(x=>x.classList.toggle("on",x===b));document.querySelector(`.lk-custom input[data-k="${b.dataset.k}"]`)?.closest(".lk-custom").classList.remove("on");
     if(b.dataset.k!=="hair"&&myOutfit(lv).id!=="tee"&&currentData){currentData.outfit="tee";document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o==="tee";x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"})}
     redrawChar(lv);document.querySelectorAll(".wd-it").forEach(x=>{const m=x.querySelector(".chr-mini");if(m)m.innerHTML=charHtml(outfitOf(x.dataset.o),look,"wd-svg")});
