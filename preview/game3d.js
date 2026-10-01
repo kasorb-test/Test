@@ -4,11 +4,11 @@
 import * as THREE from "./vendor/three.module.min.js";
 
 const THEMES={
-  day:{sky:["#3d9be9","#7cc4f5","#c8e9ff","#f2fbff"],fog:0xd9efff,ground:0x86cf4a,path:0xf0d29c,pathEdge:0xd9b47a,hill1:0x63b844,hill2:0x8fca73,mount:0x86a9c6,snow:true,water:0x4fb3ff,tuft:0x5aa832,
+  day:{sky:["#3d9be9","#7cc4f5","#c8e9ff","#f2fbff"],fog:0xd9efff,ground:0x86cf4a,path:0xf0d29c,pathEdge:0xd9b47a,hill1:0x63b844,hill2:0x8fca73,mount:0x86a9c6,mounts:[0x86a9c6,0x7fa3bf,0x93b6cf,0x8fb8a8],snow:true,water:0x4fb3ff,tuft:0x5aa832,
     hemi:[0xffffff,0x8aa86a],hemiI:1.1,light:0xfff2d6,sunI:1.9,sunCore:"#fffbe6",sunGlow:"#fff3a8",sunPos:[18,46],flowers:3,birds:true,birdColor:0x34495e},
-  sunset:{sky:["#5b4a9e","#c8669a","#ff8f6b","#ffd29a"],fog:0xffc79a,ground:0x86b84a,path:0xe9c28e,pathEdge:0xc99a66,hill1:0x5e9a46,hill2:0x8d8a72,mount:0x7b6a96,snow:true,water:0xff9e7a,tuft:0x5a9032,
+  sunset:{sky:["#5b4a9e","#c8669a","#ff8f6b","#ffd29a"],fog:0xffc79a,ground:0x86b84a,path:0xe9c28e,pathEdge:0xc99a66,hill1:0x5e9a46,hill2:0x8d8a72,mount:0x7b6a96,mounts:[0x7b6a96,0x8a6f98,0x6f6390,0x9a7a9e],snow:true,water:0xff9e7a,tuft:0x5a9032,
     hemi:[0xffc8a8,0x6a7a5a],hemiI:1,light:0xffa66b,sunI:1.6,sunCore:"#fff1c4",sunGlow:"#ff9d5c",sunPos:[10,14],flowers:3,birds:true,birdColor:0x3a2a3a},
-  spring:{sky:["#6ec3ff","#a8dcff","#e3f4ff","#fff6fb"],fog:0xeaf6ff,ground:0x9ddb5c,path:0xf6dcaa,pathEdge:0xe2be86,hill1:0x7bcf5e,hill2:0xaee08e,mount:0x9fbde0,snow:false,water:0x6fd3ff,tuft:0x6cc43a,
+  spring:{sky:["#6ec3ff","#a8dcff","#e3f4ff","#fff6fb"],fog:0xeaf6ff,ground:0x9ddb5c,path:0xf6dcaa,pathEdge:0xe2be86,hill1:0x7bcf5e,hill2:0xaee08e,mount:0x9fbde0,mounts:[0x9fbde0,0xa9c9e6,0x9ccbb8,0xb3cde8],snow:false,water:0x6fd3ff,tuft:0x6cc43a,
     hemi:[0xffffff,0x9cc47a],hemiI:1.2,light:0xfff6e6,sunI:1.7,sunCore:"#ffffff",sunGlow:"#fff6c2",sunPos:[-14,40],flowers:12,birds:true,birdColor:0x546e7a}};
 const rand=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -82,6 +82,15 @@ function oakTree(){
   const core=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),M(0x3a8a2a,{roughness:1}));core.scale.set(rx*.8,ry*.75,rx*.65);core.position.set(top.x,cy-.1*s,0);g.add(core);
   return g;
 }
+/* ต้นพุ่มกลม: ลำต้นตรง พุ่มกลมใหญ่ก้อนเดียวมีก้อนเล็กรอบ */
+function roundTree(){const g=new THREE.Group(),s=rand(.8,1.2);const tr=new THREE.Mesh(new THREE.CylinderGeometry(.13*s,.2*s,1.6*s,7),M(0x7a5230,{flat:true}));tr.position.y=.8*s;tr.castShadow=true;g.add(tr);
+  const c=pick([0x4caf32,0x5cb82f,0x6cc43a]);const b=new THREE.Mesh(new THREE.IcosahedronGeometry(1.1*s,1),M(c,{flat:true}));b.position.y=2.3*s;b.castShadow=true;g.add(b);
+  for(let k=0;k<4;k++){const a=k/4*Math.PI*2,m=new THREE.Mesh(new THREE.IcosahedronGeometry(.55*s,1),M(c,{flat:true}));m.position.set(Math.cos(a)*.8*s,2*s+rand(-.2,.3),Math.sin(a)*.6*s);m.castShadow=true;g.add(m)}return g}
+/* ต้นสนสูง: ชั้นกรวยซ้อน */
+function pineTree(){const g=new THREE.Group(),s=rand(.9,1.4);const tr=new THREE.Mesh(new THREE.CylinderGeometry(.1*s,.16*s,.9*s,6),M(0x6b4a2f,{flat:true}));tr.position.y=.45*s;tr.castShadow=true;g.add(tr);
+  const c=pick([0x2e7d32,0x388e3c,0x43a047]);for(let k=0;k<3;k++){const m=new THREE.Mesh(new THREE.ConeGeometry((1-k*.25)*s,1.4*s,7),M(c,{flat:true}));m.position.y=(1.3+k*.75)*s;m.castShadow=true;g.add(m)}return g}
+const TREES=[[appleTree,3],[oakTree,2],[roundTree,2],[pineTree,1]];
+function anyTree(){let t=Math.random()*TREES.reduce((a,b)=>a+b[1],0);for(const[f,w]of TREES){if((t-=w)<0)return f()}return appleTree()}
 function bush(){const g=new THREE.Group();for(let i=0;i<3;i++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.3,.45),1),M(pick([0x5cb82f,0x6cc43a,0x4caf32]),{flat:true}));b.position.set(i*.4-.4,.25,rand(-.1,.1));b.castShadow=true;g.add(b)}return g}
 function flower(){const g=new THREE.Group(),st=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.4,5),M(0x4caf32));st.position.y=.2;g.add(st);const h=new THREE.Mesh(new THREE.IcosahedronGeometry(.11,0),M(pick([0xff6fa5,0xa78bfa,0xffe066,0xff8a65]),{flat:true}));h.position.y=.45;g.add(h);return g}
 function fence(){const g=new THREE.Group(),w=M(0xe0954d,{flat:true});for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.BoxGeometry(.12,.7,.12),w);p.position.set(i*.5,.35,0);p.castShadow=true;g.add(p)}for(const y of[.25,.5]){const r=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,.06),w);r.position.set(1,y,0);g.add(r)}return g}
@@ -128,8 +137,13 @@ export function startGame(root,api){
   /* ชั้นฉากหลังวนซ้ำตามตำแหน่งตัวละคร (parallax): ภูเขา > เนินไกล > เนินใกล้ */
   const layers=[];
   function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span})}
-  layer(()=>{const g=new THREE.Group(),h=rand(28,46),r=h*rand(.75,1);const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,7),M(TH.mount,{flat:true,roughness:1}));m.position.y=h/2-4;g.add(m);
-    if(TH.snow){const sn=new THREE.Mesh(new THREE.ConeGeometry(r*.33,h*.33,7),M(0xffffff,{flat:true,roughness:1}));sn.position.y=h-4-h*.165+.2;g.add(sn)}g.rotation.y=rand(0,3);return g},9,320,-150);
+  /* ภูเขาโค้งแบบธรรมชาติ: โปรไฟล์ทรงระฆังหมุนรอบแกน สูงต่ำสลับกัน บางลูกยอดเอียง */
+  let mk=0;
+  layer(()=>{const big=mk++%2===0,h=big?rand(30,46):rand(14,24),r=h*rand(1.1,1.6),pts=[];
+    const ex=rand(1.2,2.4);for(let k=0;k<=20;k++){const t=k/20,y=h*Math.pow(Math.cos(t*Math.PI/2),ex);pts.push(new THREE.Vector2(Math.max(.01,r*t),y))}
+    const geo=new THREE.LatheGeometry(pts.reverse(),22);const m=new THREE.Mesh(geo,M(pick(TH.mounts||[TH.mount]),{roughness:1}));
+    m.scale.set(rand(.9,1.3),1,rand(.6,.9));m.rotation.z=rand(-.06,.06);m.position.y=-3;const g=new THREE.Group();g.add(m);
+    return g},14,340,-150);
   layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(16,26),2),M(TH.hill2,{flat:true,roughness:1}));m.scale.y=rand(.35,.5);m.position.y=-2;return m},10,260,-75);
   layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(9,15),2),M(TH.hill1,{flat:true,roughness:1}));m.scale.y=rand(.3,.45);m.position.y=-1.5;return m},12,200,-40);
   /* นกบินเป็นฝูงเล็ก ๆ */
@@ -151,7 +165,7 @@ export function startGame(root,api){
     const g=new THREE.Group();g.position.x=segX;segN++;
     const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.4),pathMat);p.position.set(SEG/2,.04,0);p.receiveShadow=true;g.add(p);
     for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(SEG,.05,.22),pathEdge);e.position.set(SEG/2,.03,zz);g.add(e)}
-    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?oakTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(5,14):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
+    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?anyTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(5,14):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
     const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(.8,1.3));g.add(f)}
     for(let k=0;k<6;k++){const t=tuft();t.position.set(rand(0,SEG),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
     if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
