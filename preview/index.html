@@ -2914,6 +2914,8 @@ body.adv-on{overflow:hidden}
 @keyframes stHop{0%{transform:translateY(0) scale(1)}12%{transform:translateY(2px) scale(1.12,.86)}45%{transform:translateY(-78px) scale(.95,1.06)}80%{transform:translateY(0) scale(1)}88%{transform:translateY(1px) scale(1.1,.9)}100%{transform:translateY(0) scale(1)}}
 .st-bank{position:absolute;left:10px;top:10px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:13px;color:#8a5a00}
 .st-coin.mini{position:static;width:16px;height:16px;animation:none}
+.hh-art{position:relative}.hh-music{position:absolute!important;right:10px;top:10px}
+.st-music{position:absolute;right:12px;top:12px;z-index:5;width:40px;height:40px;padding:0;border:3px solid #5a3412;border-radius:50%;background:#e8862a;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 0 #3b2109}.st-music svg{width:22px;height:22px}.st-music.off{background:#9ca3af;border-color:#6b7280}
 .st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
 .st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
 .st-plus{position:absolute;left:44px;top:34px;z-index:5;color:#e6a100;font-weight:900;font-size:15px;opacity:0;pointer-events:none}
@@ -4004,7 +4006,7 @@ LINE OA @kasorb
 <div class="home-hero">
 <div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
 <div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
-<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
+<div class="hh-art"><button type="button" class="st-music hh-music" id="hhMusic" aria-label="เปิดปิดดนตรี"></button><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
 </div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
@@ -5091,6 +5093,7 @@ function showAppPage(
 pageId,
 title
 ){
+if(pageId!=="homePage")ST_MUSIC.stop();
 /* ยังไม่เข้าสู่ระบบ: ดูได้เฉพาะหน้าหลัก หน้าอื่นให้เข้าสู่ระบบก่อน แล้วค่อยพาไปหน้านั้น */
 if(!currentUser && pageId!=="homePage"){ openLogin(pageId,title); return; }
 
@@ -8010,6 +8013,32 @@ function bindWardrobe(lv){
     try{await updateDoc(doc(db,"users",currentUser.uid),{outfit:o.id})}catch(e){console.error(e)}
   });
 }
+/* ดนตรีฮึกเหิมบนเส้นทางยศ: มาร์ชเครื่องเป่า กลองสแนร์ กลองเบส สร้างในเบราว์เซอร์ (ไม่ต้องโหลดไฟล์) เริ่มเมื่อแตะฉาก เปิดปิดได้ จำค่าไว้ในเครื่อง */
+const ST_MUSIC=(()=>{let ctx=null,out=null,timer=0,step=0,next=0,on=true,nb=null;try{on=localStorage.getItem("stMusic")!=="0"}catch(e){}
+  const N=n=>440*Math.pow(2,(n-69)/12);
+  const init=()=>{if(ctx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();out=ctx.createGain();out.gain.value=.35;const comp=ctx.createDynamicsCompressor();out.connect(comp);comp.connect(ctx.destination);
+    nb=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}};
+  const brass=(n,t,d,v=.12)=>{for(const det of[-6,6]){const o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type="sawtooth";o.frequency.value=N(n);o.detune.value=det;f.type="lowpass";f.frequency.setValueAtTime(600,t);f.frequency.linearRampToValueAtTime(2600,t+.06);f.frequency.linearRampToValueAtTime(1400,t+d);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.03);g.gain.setValueAtTime(v*.8,t+d*.7);g.gain.linearRampToValueAtTime(0,t+d);o.connect(f);f.connect(g);g.connect(out);o.start(t);o.stop(t+d+.05)}};
+  const bass=(n,t,d)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="triangle";o.frequency.value=N(n);g.gain.setValueAtTime(.22,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(out);o.start(t);o.stop(t+d)};
+  const kick=t=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.connect(g);g.connect(out);o.start(t);o.stop(t+.22)};
+  const snare=(t,v=.25)=>{const s=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=nb;f.type="highpass";f.frequency.value=1500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+.14);s.connect(f);f.connect(g);g.connect(out);s.start(t,Math.random()*.5);s.stop(t+.15)};
+  /* 16 ห้อง ห้องละ 8 จังหวะย่อย: C - G - Am - F แนวมาร์ชพร้อมแตรเปิด */
+  const CH=[[48,55,60,64],[43,55,59,62],[45,57,60,64],[41,53,57,60]];
+  const MEL=[[67,0,67,67,72,0,0,0],[71,0,71,72,74,0,72,0],[69,0,69,71,72,0,76,0],[77,0,76,0,74,0,72,0],[67,0,64,67,72,0,74,76],[74,0,71,0,67,0,71,74],[72,0,69,72,76,0,79,0],[77,76,74,72,74,0,0,0]];
+  const sched=()=>{const sp=60/112/2;while(next<ctx.currentTime+.2){const bar=Math.floor(step/8),b=step%8,ch=CH[bar%4],m=MEL[bar%8][b];
+      if(b%4===0)kick(next);if(b===4||(b===7&&bar%2))snare(next,b===7?.12:.25);if(b%2===1)snare(next,.05);
+      if(b===0||b===4)bass(ch[0]-12,next,sp*3.5);if(b===0)for(const n of ch.slice(1))brass(n,next,sp*7.6,.035);if(m)brass(m,next,sp*(MEL[bar%8][b+1]===0?1.8:.9),.09);
+      next+=sp;step++}};
+  return {start(){if(!on)return;init();if(!ctx)return;if(ctx.state!=="running")ctx.resume();if(timer)return;next=ctx.currentTime+.05;step=0;out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.35,ctx.currentTime+1);timer=setInterval(sched,60)},
+    stop(){clearInterval(timer);timer=0;if(ctx&&out){out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(out.gain.value,ctx.currentTime);out.gain.linearRampToValueAtTime(0,ctx.currentTime+.3)}},
+    toggle(){on=!on;try{localStorage.setItem("stMusic",on?"1":"0")}catch(e){}if(on)this.start();else this.stop();return on},isOn:()=>on,playing:()=>!!timer}})();
+window.__stMusic=ST_MUSIC;
+/* หน้าหลัก: ปุ่มดนตรีในห้องที่น้องดินสอเดินถือป้าย เริ่มเล่นเมื่อแตะหน้าหลักครั้งแรก (เบราว์เซอร์ไม่ให้เล่นเองก่อนแตะ) */
+function bindHomeMusic(){const mb=$("hhMusic");if(!mb)return;const ic=()=>{mb.innerHTML=`<svg viewBox="0 0 24 24"><path d="M9 17V5l11-2v12" stroke="#fff" stroke-width="2" fill="none"/><circle cx="6.5" cy="17.5" r="2.5" fill="#fff"/><circle cx="17.5" cy="15" r="2.5" fill="#fff"/>${ST_MUSIC.isOn()?"":'<path d="M3 3l18 18" stroke="#fff" stroke-width="2.4"/>'}</svg>`;mb.classList.toggle("off",!ST_MUSIC.isOn())};ic();
+  mb.onclick=e=>{e.stopPropagation();if(ST_MUSIC.isOn()&&!ST_MUSIC.playing()){ST_MUSIC.start();return}ST_MUSIC.toggle();ic()};
+  document.addEventListener("pointerdown",()=>{if($("homePage")?.classList.contains("active")&&!document.body.classList.contains("adv-on"))ST_MUSIC.start()},{capture:true})}
+bindHomeMusic();
 const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
 function stairsHtml(lv,xp){
   const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;

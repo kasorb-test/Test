@@ -108,7 +108,10 @@ export const SND=(()=>{let ctx=null,master=null,bgmG=null,on=true,bgmT=0,step=0,
       w(0,"RIFF");v.setUint32(4,36+n*2,true);w(8,"WAVEfmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,44100,true);v.setUint32(28,88200,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,n*2,true);
       silentEl=new Audio(URL.createObjectURL(new Blob([b],{type:"audio/wav"})));silentEl.loop=true;silentEl.setAttribute("playsinline","");silentEl.volume=.01}
       const p=silentEl.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}};
-  return {unlock(){iosUnlock();init();if(ctx&&ctx.state!=="running")ctx.resume();if(!bgmT)bgmT=setInterval(tick,230);if(ambName&&!amb){const n=ambName;ambName="";ambient(n)}},play(k){try{fx[k]&&fx[k]()}catch(e){}},ambient(n){try{ambient(n)}catch(e){}},
+  /* เสียงพูดป้าข้างบ้าน: ใช้เสียงอ่านภาษาไทยที่มีในเครื่อง (ฟรี ไม่ต้องใช้คีย์) เสียงสูงพูดเร็วนิดหน่อย ถ้าเครื่องไม่มีเสียงไทยจะข้ามไป */
+  let ttsOk=false;const thVoice=()=>{try{const vs=speechSynthesis.getVoices();return vs.find(v=>/^th/i.test(v.lang)&&/female|kanya|narisa|premwadee|pattara/i.test(v.name))||vs.find(v=>/^th/i.test(v.lang))}catch(e){return null}};
+  const speak=t=>{try{if(!on||!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";const v=thVoice();if(v)u.voice=v;u.pitch=1.6;u.rate=1.15;u.volume=1;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}};
+  return {speak,hasThai:()=>!!thVoice(),unlock(){if(!ttsOk&&window.speechSynthesis){try{const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u);ttsOk=true}catch(e){}}iosUnlock();init();if(ctx&&ctx.state!=="running")ctx.resume();if(!bgmT)bgmT=setInterval(tick,230);if(ambName&&!amb){const n=ambName;ambName="";ambient(n)}},play(k){try{fx[k]&&fx[k]()}catch(e){}},ambient(n){try{ambient(n)}catch(e){}},
     setOn(v){on=!!v;try{localStorage.setItem("advSound",on?"1":"0")}catch(e){}if(master)master.gain.value=on?.9:0;if(on&&ambName&&!amb){const n=ambName;ambName="";ambient(n)}},isOn:()=>on,state:()=>ctx?ctx.state:"none",
     mode(m){mode=m==="haunt"?"haunt":"day"},stop(){try{silentEl&&silentEl.pause()}catch(e){}clearInterval(bgmT);bgmT=0;clearInterval(ambT);ambT=0;if(amb){amb.stop();amb=null}ambName=""}}})();
 
@@ -1008,7 +1011,7 @@ export function startGame(root,api){
     S.freeze=kind==="leech"?0:kind==="auntie"?4.4:kind==="chicks"?3:kind==="crab"?3.4:2.4;
     if(kind==="leech"){const l=leech(),a=-Math.PI/2+rand(-.5,.5);l.scale.setScalar(2);l.position.set(Math.sin(a)*.47,rand(.6,1.1),Math.cos(a)*.47);l.rotation.set(0,a,rand(-.4,.4));P.userData.body.add(l);leeches.push({o:l,t:0});SND.play("squish");ui.say&&ui.say("ทากเกาะ! ตอบข้อต่อไปให้ถูกเพื่อสลัดทากออก");return}
     if(kind==="chicks"){for(let k=0;k<5;k++){const c=chicken(),a=k/5*Math.PI*2+rand(-.3,.3);c.scale.setScalar(1.3);c.position.set(x0+Math.cos(a)*6,0,Math.sin(a)*4);world.add(c);critters.push({o:c,kind,t:0,a,x0})}ui.say&&ui.say("ไก่รุมจิก!");return}
-    if(kind==="auntie"){const o=auntie();o.position.set(x0+1.4,0,-7);o.rotation.y=Math.PI/2;world.add(o);critters.push({o,kind,t:0,x0});SND.play("tsk");ui.say&&ui.say("ป้าข้างบ้าน: "+o.userData.line);return}
+    if(kind==="auntie"){const o=auntie();o.position.set(x0+1.4,0,-7);o.rotation.y=Math.PI/2;world.add(o);critters.push({o,kind,t:0,x0});SND.play("tsk");ui.say&&ui.say("ป้าข้างบ้าน: "+o.userData.line);setTimeout(()=>SND.speak(o.userData.line),900);return}
     const o=kind==="crab"?crab():Math.random()<.5?croc():lion();if(kind==="crab")o.scale.setScalar(2.2);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     ui.say&&ui.say(kind==="crab"?"ปูยักษ์มาแล้ว!":"โอ๊ย! โดนงับขา")}
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
