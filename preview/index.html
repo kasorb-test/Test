@@ -7906,6 +7906,7 @@ async function advStart(){
         <button type="button" data-go="shop">ร้านไอเทม</button>
         <button type="button" data-go="gamePage|เกม">เลือกเกม</button>
         <button type="button" data-go="aunt">ทดสอบเสียงป้าข้างบ้าน</button>
+        <button type="button" data-go="ansStyle" id="advAnsBtn">แบบตัวเลือก: ป้ายไม้</button>
         <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
         <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
         <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
@@ -7919,7 +7920,7 @@ async function advStart(){
     const place=()=>{const nar=innerWidth<=600,pts=$("advPts"),pr=$("advProg");if(!pts||!pr)return;if(nar&&pts.parentNode!==side){side.append(pts,pr)}else if(!nar&&pts.parentNode===side){top.insertBefore(pr,cn);top.insertBefore(pts,cn)}};place();addEventListener("resize",place)}
   ov.addEventListener("pointerdown",()=>advMod?.SND.unlock(),{capture:true});ov.addEventListener("touchend",()=>advMod?.SND.unlock(),{capture:true});
   const menu=$("advMenu");
-  $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
+  $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true);{let c;try{c=localStorage.getItem("advAnsStyle")||"wood"}catch(e){c="wood"}const a=$("advAnsBtn");if(a)a.textContent="แบบตัวเลือก: "+({wood:"ป้ายไม้",bubble:"ฟองสี",candy:"ปุ่มลูกอม"}[c]||"ป้ายไม้")}};
   const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
   /* หน้าเริ่ม: เลือกด่าน (เล่นได้ถึงด่านถัดจากที่ผ่าน) แล้วกด START */
   let advSel=Math.min(advBest()+1,advMax()),advRe=false;
@@ -7933,7 +7934,7 @@ async function advStart(){
       note.classList.add("hidden");advSel=n;advRe=false;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
     $("advGo").onclick=()=>{advMod?.SND.unlock();if(advRe){advRe=false;adv?.restart(advSel)}d.remove();adv?.pause(false)}};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
-    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="aunt"){const S=advMod?.SND;if(!S)return;S.unlock();if(!window.speechSynthesis){alert("เบราว์เซอร์นี้อ่านออกเสียงไม่ได้");return}S.speak("ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ",true);setTimeout(()=>{if(!S.hasThai())alert("เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย\niPad/iPhone: ตั้งค่า > การช่วยการเข้าถึง > เนื้อหาที่พูด > เสียง > ภาษาไทย แล้วดาวน์โหลดเสียง\nและเปิดสวิตช์เสียงด้านข้างเครื่อง (ปิดโหมดเงียบ)")},800);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="ansStyle"){const L=["wood","bubble","candy"],N={wood:"ป้ายไม้",bubble:"ฟองสี",candy:"ปุ่มลูกอม"};let cur;try{cur=localStorage.getItem("advAnsStyle")||"wood"}catch(e){cur="wood"}const nx=L[(L.indexOf(cur)+1)%L.length];try{localStorage.setItem("advAnsStyle",nx)}catch(e){}b.textContent="แบบตัวเลือก: "+N[nx];return}if(b.dataset.go==="aunt"){const S=advMod?.SND;if(!S)return;S.unlock();if(!window.speechSynthesis){alert("เบราว์เซอร์นี้อ่านออกเสียงไม่ได้");return}S.speak("ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ",true);setTimeout(()=>{if(!S.hasThai())alert("เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย\niPad/iPhone: ตั้งค่า > การช่วยการเข้าถึง > เนื้อหาที่พูด > เสียง > ภาษาไทย แล้วดาวน์โหลดเสียง\nและเปิดสวิตช์เสียงด้านข้างเครื่อง (ปิดโหมดเงียบ)")},800);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
