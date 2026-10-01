@@ -118,7 +118,16 @@ function pineTree(){const g=new THREE.Group(),s=rand(.9,1.4);const tr=new THREE.
 const TREES=[[appleTree,1]];
 function anyTree(){let t=Math.random()*TREES.reduce((a,b)=>a+b[1],0);for(const[f,w]of TREES){if((t-=w)<0)return f()}return appleTree()}
 function bush(){const g=new THREE.Group();for(let i=0;i<3;i++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.3,.45),1),M(pick([0x5cb82f,0x6cc43a,0x4caf32]),{flat:true}));b.position.set(i*.4-.4,.25,rand(-.1,.1));b.castShadow=true;g.add(b)}return g}
-function flower(){const g=new THREE.Group(),st=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.4,5),M(0x4caf32));st.position.y=.2;g.add(st);const h=new THREE.Mesh(new THREE.IcosahedronGeometry(.11,0),M(pick([0xff6fa5,0xa78bfa,0xffe066,0xff8a65]),{flat:true}));h.position.y=.45;g.add(h);return g}
+/* ดอกไม้: ก้าน ใบ กลีบ 5-6 กลีบรอบเกสรเหลือง หลายสี */
+const PETALS=[0xff6fa5,0xff8fb8,0xffffff,0xffd23f,0xa78bfa,0xff7a59,0x7dd3fc,0xf472b6];
+function flower(col){const g=new THREE.Group(),h=rand(.35,.6);
+  const st=new THREE.Mesh(new THREE.CylinderGeometry(.018,.022,h,5),M(0x3f9a2a));st.position.y=h/2;g.add(st);
+  const lf=new THREE.Mesh(new THREE.SphereGeometry(.07,6,4),M(0x4caf32,{flat:true}));lf.scale.set(1.6,.35,.7);lf.position.set(.06,h*.4,0);lf.rotation.z=-.5;g.add(lf);
+  const head=new THREE.Group();head.position.y=h;head.rotation.x=rand(-.5,.2);g.add(head);
+  const pm=M(col??pick(PETALS),{flat:true,roughness:.6}),n=Math.random()<.5?5:6;
+  for(let k=0;k<n;k++){const a=k/n*Math.PI*2,p=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),pm);p.scale.set(1,.35,.6);p.position.set(Math.cos(a)*.08,0,Math.sin(a)*.08);p.rotation.y=-a;head.add(p)}
+  const c=new THREE.Mesh(new THREE.SphereGeometry(.045,8,6),M(0xffc400,{roughness:.5}));c.scale.y=.6;c.position.y=.02;head.add(c);
+  g.rotation.y=rand(0,6);return g}
 function fence(){const g=new THREE.Group(),w=M(0xe0954d,{flat:true});for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.BoxGeometry(.12,.7,.12),w);p.position.set(i*.5,.35,0);p.castShadow=true;g.add(p)}for(const y of[.25,.5]){const r=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,.06),w);r.position.set(1,y,0);g.add(r)}return g}
 function cloud(){const g=new THREE.Group(),m=M(0xffffff,{roughness:1,emissive:0xffffff,emissiveIntensity:.55});for(let i=0;i<5;i++){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(1,1.8),12,10),m);b.position.set(i*1.4-2.8,rand(-.3,.4),rand(-.6,.6));g.add(b)}g.scale.setScalar(rand(.8,1.4));return g}
 function coinMesh(){const c=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.08,24),M(0xffcf1a,{metalness:.15,roughness:.35,emissive:0xffa000,emissiveIntensity:.35}));c.rotation.x=Math.PI/2;const s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.1,5),M(0xfff2a0,{metalness:.1,roughness:.3,emissive:0xffd54a,emissiveIntensity:.3}));s.rotation.x=Math.PI/2;const g=new THREE.Group();g.add(c);c.add(s);return g}
@@ -190,13 +199,17 @@ export function startGame(root,api){
     for(let k=0;k<5;k++){const r=new THREE.Mesh(new THREE.ConeGeometry(.05,.8,4),M(0x3f8f2a));const a=rand(0,6);r.position.set(Math.cos(a)*2.2,.4,Math.sin(a)*1.1);g.add(r)}return g}
   function tuft(){const g=new THREE.Group(),m=M(TH.tuft,{flat:true});for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.ConeGeometry(.06,.35,3),m);c.position.set(k*.08-.08,.17,0);c.rotation.z=(k-1)*.3;g.add(c)}return g}
   /* โลกเลื่อนไปทางขวา (+x): ชิ้นทางยาว 10 หน่วย */
+  let flowerBoost=0;
+  /* ทุ่งดอกไม้: ดอกไม้ขึ้นเป็นกอ ๆ สีเดียวกันในกอ ทั้งหน้าและหลังทาง */
+  function addFlowerField(g,n){let k=0;while(k<n){const front=Math.random()<.22,cx=rand(0,SEG),cz=front?rand(1.7,2.6):-rand(1.7,11),col=pick(PETALS),m=Math.min(n-k,6+Math.floor(Math.random()*6));
+    for(let j=0;j<m;j++){const f=flower(col);f.position.set(cx+rand(-.9,.9),0,cz+rand(-.4,.4));f.scale.setScalar(front?rand(.9,1.2):rand(1.5,2.4));g.add(f)}k+=m}}
   const SEG=10,world=new THREE.Group();scene.add(world);const segs=[];let segX=-20,segN=0;
   function addSeg(){
     const g=new THREE.Group();g.position.x=segX;segN++;
     const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.4),pathMat);p.position.set(SEG/2,.04,0);p.receiveShadow=true;g.add(p);
     for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(SEG,.05,.22),pathEdge);e.position.set(SEG/2,.03,zz);g.add(e)}
     for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?anyTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(4.5,13):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
-    const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(.8,1.3));g.add(f)}
+    const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(1.3,1.9));g.add(f)}if(flowerBoost)addFlowerField(g,flowerBoost);
     for(let k=0;k<6;k++){const t=tuft();t.position.set(rand(0,SEG),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
     if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
     if(Math.random()<.5){const c=cloud();c.position.set(rand(0,SEG),rand(13,19),-rand(30,55));g.add(c)}
@@ -237,7 +250,10 @@ export function startGame(root,api){
     im.src=api.avatar}
   const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.6,t:0,fall:null,hop:null,dir:0,face:1,paused:false};
   const ui=api.ui;
-  function stage(st){S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
+  function stage(st){
+    /* ด่าน 2: ทุ่งดอกไม้ ใส่ดอกไม้เพิ่มทั้งในฉากที่สร้างไว้แล้วข้างหน้าและฉากต่อ ๆ ไป */
+    const nb=st===2?60:0;if(nb>flowerBoost){for(const g of segs){if(g.position.x+SEG<S.x)continue;addFlowerField(g,nb-flowerBoost)}}flowerBoost=nb;
+    S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(){
