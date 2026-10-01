@@ -3,7 +3,13 @@
    หน้าเว็บส่ง api มาให้: question(st) best() clear(st) -> {gain,note} exit() coins() */
 import * as THREE from "./vendor/three.module.min.js";
 
-const SKY=[[0x8fd3ff,0xe8f7ff,0x7ccf3a],[0xffb36b,0xfff0d6,0x8ccf45],[0xa89cff,0xe6e0ff,0x6fc46a],[0x1f2a63,0x4b5bb0,0x3f9a62]];
+const THEMES={
+  day:{sky:["#3d9be9","#7cc4f5","#c8e9ff","#f2fbff"],fog:0xd9efff,ground:0x86cf4a,path:0xf0d29c,pathEdge:0xd9b47a,hill1:0x63b844,hill2:0x8fca73,mount:0x86a9c6,snow:true,water:0x4fb3ff,tuft:0x5aa832,
+    hemi:[0xffffff,0x8aa86a],hemiI:1.1,light:0xfff2d6,sunI:1.9,sunCore:"#fffbe6",sunGlow:"#fff3a8",sunPos:[18,46],flowers:3,birds:true,birdColor:0x34495e},
+  sunset:{sky:["#5b4a9e","#c8669a","#ff8f6b","#ffd29a"],fog:0xffc79a,ground:0x86b84a,path:0xe9c28e,pathEdge:0xc99a66,hill1:0x5e9a46,hill2:0x8d8a72,mount:0x7b6a96,snow:true,water:0xff9e7a,tuft:0x5a9032,
+    hemi:[0xffc8a8,0x6a7a5a],hemiI:1,light:0xffa66b,sunI:1.6,sunCore:"#fff1c4",sunGlow:"#ff9d5c",sunPos:[10,14],flowers:3,birds:true,birdColor:0x3a2a3a},
+  spring:{sky:["#6ec3ff","#a8dcff","#e3f4ff","#fff6fb"],fog:0xeaf6ff,ground:0x9ddb5c,path:0xf6dcaa,pathEdge:0xe2be86,hill1:0x7bcf5e,hill2:0xaee08e,mount:0x9fbde0,snow:false,water:0x6fd3ff,tuft:0x6cc43a,
+    hemi:[0xffffff,0x9cc47a],hemiI:1.2,light:0xfff6e6,sunI:1.7,sunCore:"#ffffff",sunGlow:"#fff6c2",sunPos:[-14,40],flowers:12,birds:true,birdColor:0x546e7a}};
 const rand=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
 
 function txt(text,{size=96,color="#6d28d9",bg="#ffffff",w=256,h=128,radius=40,border="#ffb84d"}={}){
@@ -56,7 +62,7 @@ function bush(){const g=new THREE.Group();for(let i=0;i<3;i++){const b=new THREE
 function flower(){const g=new THREE.Group(),st=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.4,5),M(0x4caf32));st.position.y=.2;g.add(st);const h=new THREE.Mesh(new THREE.IcosahedronGeometry(.11,0),M(pick([0xff6fa5,0xa78bfa,0xffe066,0xff8a65]),{flat:true}));h.position.y=.45;g.add(h);return g}
 function fence(){const g=new THREE.Group(),w=M(0xe0954d,{flat:true});for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.BoxGeometry(.12,.7,.12),w);p.position.set(i*.5,.35,0);p.castShadow=true;g.add(p)}for(const y of[.25,.5]){const r=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,.06),w);r.position.set(1,y,0);g.add(r)}return g}
 function cloud(){const g=new THREE.Group(),m=M(0xffffff,{roughness:1,emissive:0xffffff,emissiveIntensity:.55});for(let i=0;i<5;i++){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(1,1.8),12,10),m);b.position.set(i*1.4-2.8,rand(-.3,.4),rand(-.6,.6));g.add(b)}g.scale.setScalar(rand(.8,1.4));return g}
-function coinMesh(){const c=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.08,24),M(0xffc400,{metalness:.6,roughness:.25,emissive:0x664400,emissiveIntensity:.25}));c.rotation.x=Math.PI/2;const s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.1,5),M(0xffe066,{metalness:.5,roughness:.3}));s.rotation.x=Math.PI/2;const g=new THREE.Group();g.add(c);c.add(s);return g}
+function coinMesh(){const c=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.08,24),M(0xffcf1a,{metalness:.15,roughness:.35,emissive:0xffa000,emissiveIntensity:.35}));c.rotation.x=Math.PI/2;const s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.1,5),M(0xfff2a0,{metalness:.1,roughness:.3,emissive:0xffd54a,emissiveIntensity:.3}));s.rotation.x=Math.PI/2;const g=new THREE.Group();g.add(c);c.add(s);return g}
 /* ตัวเลขคำตอบลอย: ตัวหนังสือสีสดขอบขาว ไม่มีแท่น */
 function numTex(text,color){
   const c=document.createElement("canvas");c.width=320;c.height=160;const x=c.getContext("2d");let fs=120;
@@ -81,28 +87,55 @@ export function startGame(root,api){
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
   root.appendChild(renderer.domElement);
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,W()/H(),.1,240);
-  scene.add(new THREE.HemisphereLight(0xffffff,0x88aa66,1.1));
-  const sun=new THREE.DirectionalLight(0xfff2d6,1.9);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-16,right:16,top:12,bottom:-12,near:1,far:60});scene.add(sun);scene.add(sun.target);
-  const skyC=document.createElement("canvas");skyC.width=2;skyC.height=256;const skyT=new THREE.CanvasTexture(skyC);skyT.colorSpace=THREE.SRGBColorSpace;scene.background=skyT;
-  scene.fog=new THREE.Fog(0xe8f7ff,45,130);
-  const groundMat=M(0x7ccf3a),ground=new THREE.Mesh(new THREE.PlaneGeometry(400,240),groundMat);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
-  const pathMat=M(0xf2c98a,{roughness:.95});
-  function setSky(st){const k=SKY[Math.floor((st-1)/3)%SKY.length],x=skyC.getContext("2d"),gr=x.createLinearGradient(0,0,0,256);
-    gr.addColorStop(0,"#"+k[0].toString(16).padStart(6,"0"));gr.addColorStop(.7,"#"+k[1].toString(16).padStart(6,"0"));x.fillStyle=gr;x.fillRect(0,0,2,256);skyT.needsUpdate=true;
-    scene.fog.color.setHex(k[1]);groundMat.color.setHex(k[2]);sun.intensity=Math.floor((st-1)/3)%4===3?.9:1.9}
-  /* โลกเลื่อนไปทางขวา (+x): ชิ้นทางยาว 10 หน่วย ต้นแอปเปิ้ล พุ่มไม้ ดอกไม้ รั้ว อยู่ด้านหลังทาง */
-  const SEG=10,world=new THREE.Group();scene.add(world);const segs=[];let segX=-20;
+  /* ===== บรรยากาศ: เลือกธีมได้ (กลางวัน / เย็น / ทุ่งดอกไม้) ท้องฟ้าไล่สี พระอาทิตย์ ภูเขาไกล เนินสองชั้น กังหันลม บ้านไร่ บ่อน้ำ นก ===== */
+  const TH=THEMES[api.theme||window.__advTheme||"day"]||THEMES.day;
+  const hemi=new THREE.HemisphereLight(TH.hemi[0],TH.hemi[1],TH.hemiI);scene.add(hemi);
+  const sun=new THREE.DirectionalLight(TH.light,TH.sunI);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-16,right:16,top:12,bottom:-12,near:1,far:60});scene.add(sun);scene.add(sun.target);
+  const skyC=document.createElement("canvas");skyC.width=4;skyC.height=512;{const x=skyC.getContext("2d"),gr=x.createLinearGradient(0,0,0,512);TH.sky.forEach((c,k)=>gr.addColorStop(k/(TH.sky.length-1),c));x.fillStyle=gr;x.fillRect(0,0,4,512)}
+  const skyT=new THREE.CanvasTexture(skyC);skyT.colorSpace=THREE.SRGBColorSpace;scene.background=skyT;
+  scene.fog=new THREE.Fog(TH.fog,50,190);
+  const groundMat=M(TH.ground,{roughness:1}),ground=new THREE.Mesh(new THREE.PlaneGeometry(600,300),groundMat);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+  const pathMat=M(TH.path,{roughness:.95}),pathEdge=M(TH.pathEdge,{roughness:1});
+  function setSky(){}
+  /* พระอาทิตย์: แผ่นเรืองแสงไกล ๆ ตามกล้อง */
+  const sunSp=(()=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);
+    g.addColorStop(0,TH.sunCore);g.addColorStop(.28,TH.sunCore);g.addColorStop(.36,TH.sunGlow+"cc");g.addColorStop(1,TH.sunGlow+"00");x.fillStyle=g;x.fillRect(0,0,256,256);
+    const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,fog:false,depthWrite:false,transparent:true}));sp.scale.set(70,70,1);scene.add(sp);return sp})();
+  /* ชั้นฉากหลังวนซ้ำตามตำแหน่งตัวละคร (parallax): ภูเขา > เนินไกล > เนินใกล้ */
+  const layers=[];
+  function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span})}
+  layer(()=>{const g=new THREE.Group(),h=rand(28,46),r=h*rand(.75,1);const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,7),M(TH.mount,{flat:true,roughness:1}));m.position.y=h/2-4;g.add(m);
+    if(TH.snow){const sn=new THREE.Mesh(new THREE.ConeGeometry(r*.33,h*.33,7),M(0xffffff,{flat:true,roughness:1}));sn.position.y=h-4-h*.165+.2;g.add(sn)}g.rotation.y=rand(0,3);return g},9,320,-150);
+  layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(16,26),2),M(TH.hill2,{flat:true,roughness:1}));m.scale.y=rand(.35,.5);m.position.y=-2;return m},10,260,-75);
+  layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(9,15),2),M(TH.hill1,{flat:true,roughness:1}));m.scale.y=rand(.3,.45);m.position.y=-1.5;return m},12,200,-40);
+  /* นกบินเป็นฝูงเล็ก ๆ */
+  const birds=[];if(TH.birds){const bm=new THREE.MeshBasicMaterial({color:TH.birdColor,side:THREE.DoubleSide});for(let k=0;k<6;k++){const g=new THREE.Group();for(const sgn of[-1,1]){const w=new THREE.Mesh(new THREE.PlaneGeometry(.9,.18),bm);w.position.x=sgn*.42;w.userData.s=sgn;g.add(w)}g.position.set(rand(-20,20),rand(12,18),-rand(30,45));g.userData.ph=rand(0,6);scene.add(g);birds.push(g)}}
+  const spinners=[];
+  function windmill(){const g=new THREE.Group(),t=new THREE.Mesh(new THREE.CylinderGeometry(.6,1,5,8),M(0xfff4e0,{flat:true}));t.position.y=2.5;t.castShadow=true;g.add(t);
+    const roof=new THREE.Mesh(new THREE.ConeGeometry(1,1.2,8),M(0xd84315,{flat:true}));roof.position.y=5.6;g.add(roof);
+    const hub=new THREE.Group();hub.position.set(0,4.6,.9);for(let k=0;k<4;k++){const b=new THREE.Mesh(new THREE.BoxGeometry(.35,2.6,.05),M(0xffffff));b.position.y=1.3;const a=new THREE.Group();a.rotation.z=k*Math.PI/2;a.add(b);hub.add(a)}g.add(hub);spinners.push(hub);return g}
+  function house(){const g=new THREE.Group(),c=pick([0xfff1d6,0xffe0e6,0xe3f2ff]);const b=new THREE.Mesh(new THREE.BoxGeometry(2.6,1.8,2),M(c,{flat:true}));b.position.y=.9;b.castShadow=true;g.add(b);
+    const r=new THREE.Mesh(new THREE.CylinderGeometry(.01,1.7,1.3,4,1),M(pick([0xe53935,0x1e88e5,0x8e24aa]),{flat:true}));r.rotation.y=Math.PI/4;r.scale.set(1.15,1,.85);r.position.y=2.45;r.castShadow=true;g.add(r);
+    const d=new THREE.Mesh(new THREE.BoxGeometry(.5,.9,.05),M(0x8b5a2b));d.position.set(0,.45,1.01);g.add(d);
+    for(const sx of[-.8,.8]){const w=new THREE.Mesh(new THREE.BoxGeometry(.45,.45,.05),M(0x9ad7ff,{emissive:TH.night?0xffd27a:0,emissiveIntensity:.8}));w.position.set(sx,1.05,1.01);g.add(w)}return g}
+  function pond(){const g=new THREE.Group(),w=new THREE.Mesh(new THREE.CircleGeometry(rand(2,3),20),M(TH.water,{roughness:.15,metalness:.1}));w.rotation.x=-Math.PI/2;w.position.y=.04;w.scale.y=.55;g.add(w);
+    for(let k=0;k<5;k++){const r=new THREE.Mesh(new THREE.ConeGeometry(.05,.8,4),M(0x3f8f2a));const a=rand(0,6);r.position.set(Math.cos(a)*2.2,.4,Math.sin(a)*1.1);g.add(r)}return g}
+  function tuft(){const g=new THREE.Group(),m=M(TH.tuft,{flat:true});for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.ConeGeometry(.06,.35,3),m);c.position.set(k*.08-.08,.17,0);c.rotation.z=(k-1)*.3;g.add(c)}return g}
+  /* โลกเลื่อนไปทางขวา (+x): ชิ้นทางยาว 10 หน่วย */
+  const SEG=10,world=new THREE.Group();scene.add(world);const segs=[];let segX=-20,segN=0;
   function addSeg(){
-    const g=new THREE.Group();g.position.x=segX;
-    const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.6),pathMat);p.position.set(SEG/2,.03,0);p.receiveShadow=true;g.add(p);
-    for(let i=0;i<4;i++){const r=Math.random(),z=-rand(2.6,14),x=rand(0,SEG);const o=r<.55?appleTree():r<.75?bush():r<.9?flower():fence();o.position.set(x,0,r>=.9?-2.2:z);g.add(o)}
-    if(Math.random()<.5){const f=flower();f.position.set(rand(0,SEG),0,rand(1.8,3));g.add(f)}
-    if(Math.random()<.45){const c=cloud();c.position.set(rand(0,SEG),rand(11,16),-rand(25,45));g.add(c)}
+    const g=new THREE.Group();g.position.x=segX;segN++;
+    const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.4),pathMat);p.position.set(SEG/2,.04,0);p.receiveShadow=true;g.add(p);
+    for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(SEG,.05,.22),pathEdge);e.position.set(SEG/2,.03,zz);g.add(e)}
+    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);const o=r<.6?appleTree():r<.8?bush():fence();o.position.set(x,0,r>=.8?-2.2:-rand(3,12));g.add(o)}
+    const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(.8,1.3));g.add(f)}
+    for(let k=0;k<6;k++){const t=tuft();t.position.set(rand(0,SEG),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
+    if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
+    if(Math.random()<.5){const c=cloud();c.position.set(rand(0,SEG),rand(13,19),-rand(30,55));g.add(c)}
     world.add(g);segs.push(g);segX+=SEG;
   }
   for(let i=0;i<9;i++)addSeg();
-  const hills=[];for(let i=0;i<9;i++){const h=new THREE.Mesh(new THREE.SphereGeometry(rand(12,22),18,12),M(0x9ad0a0,{roughness:1}));h.position.set(-40+i*22+rand(-6,6),-rand(5,9),-rand(55,80));scene.add(h);hills.push(h)}
-
+  const hills=[];
   const P=makePencil();scene.add(P);
   const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.4,t:0,fall:null,hop:null};
   const ui=api.ui;
@@ -184,7 +217,10 @@ export function startGame(root,api){
     for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];b.userData.v.y-=9*dt;b.position.addScaledVector(b.userData.v,dt);b.rotation.x+=dt*6;b.userData.life-=dt;if(b.userData.life<=0){world.remove(b);bursts.splice(i,1)}}
     while(segX<S.x+60)addSeg();
     while(segs.length&&segs[0].position.x+SEG<S.x-25){world.remove(segs.shift())}
-    for(const h of hills)if(h.position.x<S.x-60)h.position.x+=200;
+    for(const L of layers)for(const m of L.items){if(m.position.x<S.x-L.span/2)m.position.x+=L.span}
+    sunSp.position.set(S.x+TH.sunPos[0],TH.sunPos[1],-170);
+    for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
+    for(const h of spinners)h.rotation.z+=dt*1.2;
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
     const narrow=W()<600,asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
     const lead=narrow?(asking?4.2:2.2):(asking?4:3),dist=narrow?(asking?14:11):(asking?12:10.5);
