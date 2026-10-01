@@ -7751,7 +7751,7 @@ function wardrobeHtml(lv){
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
-const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","English Market","Haunted House","Thai Temple"];
+const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","Vocabulary Market","Haunted House","Thai Temple"];
 const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
 const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
