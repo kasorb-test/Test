@@ -2763,7 +2763,7 @@ body.adv-on{overflow:hidden}
 .adv-hint{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);color:#fff;font-size:12.5px;white-space:nowrap;pointer-events:none}
 .adv-q{position:absolute;left:50%;top:12px;width:min(520px,calc(100% - 24px));transform:translateX(-50%);padding:12px 16px;border-radius:18px;background:radial-gradient(circle at 10px 10px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 10px) 10px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at 10px calc(100% - 10px),#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),#5a3412 0 3px,transparent 3.5px),linear-gradient(180deg,#fff8e6,#f7e3b8);border:5px solid #7a4a1c;box-shadow:inset 0 0 0 3px #e9c98f,0 6px 0 #4a2a0d,0 10px 18px rgba(0,0,0,.3);text-align:center;z-index:6;animation:advQin .3s both}
 @keyframes advQin{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
-.adv-qt{font-size:24px;font-weight:900;color:#6b3410;text-shadow:0 1px 0 #fff}.adv-qh{margin-top:4px;font-size:12px;color:#94a3b8}
+.adv-qh{display:none!important}.adv-qt{font-size:24px;font-weight:900;color:#6b3410;text-shadow:0 1px 0 #fff}.adv-qh{margin-top:4px;font-size:12px;color:#94a3b8}
 .adv-tm{height:9px;margin-top:8px;border-radius:6px;background:#d9bf8c;box-shadow:inset 0 1px 2px rgba(0,0,0,.25);overflow:hidden}.adv-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#22c55e,#ffd23f,#ef4444)}
 .adv-toast{position:absolute;left:50%;top:22%;transform:translate(-50%,0);padding:14px 26px;border-radius:20px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:6;opacity:0}
 .adv-toast.show{animation:advToast 1.8s ease forwards}.adv-toast b{display:block;font-size:26px;color:#f57c00}.adv-toast span{display:inline-flex;align-items:center;gap:4px;margin-top:4px;color:#475569;font-weight:800}
@@ -7751,7 +7751,7 @@ function wardrobeHtml(lv){
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
-const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","English Market","Haunted House","Thai Language"];
+const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","English Market","Haunted House","Thai Temple"];
 const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
 const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -7899,7 +7899,6 @@ async function advStart(){
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-pic hidden" id="advPic"></div><div class="adv-ops hidden" id="advOps"></div><div class="adv-qh" id="advQh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
-      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ ▶ เดินเร็ว · ลากจอเพื่อหมุนดูรอบตัว</div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
       <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">JUMP</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
@@ -7926,7 +7925,7 @@ async function advStart(){
   let advSel=Math.min(advBest()+1,advMax()),advRe=false;
   const startBox=msg=>{$("advStart")?.remove();adv?.pause(true);const d=document.createElement("div");d.className="adv-start";d.id="advStart";
     const chips=Array.from({length:10},(_,i)=>{const n=i+1,open=advOpen(n),prem=n>5&&advMax()<10;return `<button type="button" class="adv-chip${n===advSel?" on":""}${open?"":" lock"}${prem?" prem":""}" data-n="${n}" title="${escHtml(ADV_NAMES[i])}">${n}</button>`}).join("");
-    d.innerHTML=`<div class="adv-start-box"><img src="mascot-2b.svg" alt="">${msg?`<p class="adv-done">${msg}</p>`:""}<h3 id="advStartT"></h3><div class="adv-stages">${chips}</div><p class="adv-lock-note hidden" id="advLockNote"></p><p>น้องดินสอจะเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ<br>ตอบคำถามให้ถูก แล้วไปด่านต่อไป</p><button type="button" class="adv-go" id="advGo">START</button></div>`;
+    d.innerHTML=`<div class="adv-start-box"><img src="mascot-2b.svg" alt="">${msg?`<p class="adv-done">${msg}</p>`:""}<h3 id="advStartT"></h3><div class="adv-stages">${chips}</div><p class="adv-lock-note hidden" id="advLockNote"></p><button type="button" class="adv-go" id="advGo">START</button></div>`;
     $("advView").appendChild(d);
     const title=()=>{$("advStartT").textContent=`Stage ${advSel} · ${ADV_NAMES[advSel-1]}`};title();
     d.querySelectorAll(".adv-chip").forEach(b=>b.onclick=()=>{const n=+b.dataset.n,note=$("advLockNote");
