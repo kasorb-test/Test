@@ -2825,6 +2825,7 @@ body.adv-on{overflow:hidden}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
 .adv-ops{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
 .adv-ops button{display:flex;align-items:center;gap:6px;padding:7px 8px;border:2px solid var(--c);border-radius:12px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
+.adv-ops.two{grid-template-columns:1fr}.adv-ops.two button{padding:12px 14px;font-size:18px;justify-content:flex-start;min-height:56px}.adv-ops.two button b{width:30px;height:30px;font-size:16px}
 .adv-ops button b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:14px}
 .adv-view.scare:after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 30%,rgba(90,0,30,.75));animation:advScare 1.6s forwards}
 @keyframes advScare{0%{opacity:0}12%{opacity:1}30%{opacity:.6}45%{opacity:1}100%{opacity:0}}
@@ -7730,7 +7731,7 @@ function wardrobeHtml(lv){
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
-const ADV_NAMES=["ทุ่งหญ้า","ทุ่งดอกไม้","คลองและสะพานหิน","ฟาร์มสัตว์","ชายทะเล","น้ำตก","หมู่บ้าน","ตลาดคำศัพท์","บ้านผีสิง","สำนวนไทย"];
+const ADV_NAMES=["ทุ่งหญ้า","ทุ่งดอกไม้","คลองและสะพานหิน","ฟาร์มสัตว์","ชายทะเล","น้ำตก","หมู่บ้าน","ตลาดคำศัพท์","บ้านผีสิง","สำนวนและชนิดคำ"];
 const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
 const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -7749,11 +7750,25 @@ const ADV_IDIOM=[["น้ำขึ้นให้รีบตัก","มีโ�
   ["หนีเสือปะจระเข้","หนีภัยหนึ่งเจออีกภัย"],["สีซอให้ควายฟัง","สอนคนที่ไม่รับรู้"],["เข้าเมืองตาหลิ่วต้องหลิ่วตาตาม","ทำตามธรรมเนียมที่นั่น"],["ฝนทั่งให้เป็นเข็ม","เพียรพยายามจนสำเร็จ"],
   ["จับปลาสองมือ","หวังสองทางพร้อมกัน"],["ชักใบให้เรือเสีย","พูดออกนอกเรื่อง"],["เกลือเป็นหนอน","คนในคิดทรยศ"],["คางคกขึ้นวอ","ได้ดีแล้วลืมตัว"],
   ["ปากว่าตาขยิบ","พูดอย่างหนึ่งทำอีกอย่าง"],["วัวหายล้อมคอก","เสียหายแล้วค่อยป้องกัน"],["มือไม่พายเอาเท้าราน้ำ","ไม่ช่วยแล้วยังขัดขวาง"],["ผักชีโรยหน้า","ทำดีแค่ภายนอก"],
-  ["ดินพอกหางหมู","งานค้างจนพอกพูน"],["เส้นผมบังภูเขา","เรื่องง่ายแต่คิดไม่ออก"],["ทำคุณบูชาโทษ","ทำดีแต่ได้ผลร้าย"],["ขว้างงูไม่พ้นคอ","ผลร้ายย้อนกลับมาหาตัว"],["หวานอมขมกลืน","จำใจยอมทนไว้"],["ข้าวใหม่ปลามัน","คู่แต่งงานใหม่"]];
+  ["ดินพอกหางหมู","งานค้างจนพอกพูน"],["เส้นผมบังภูเขา","เรื่องง่ายแต่คิดไม่ออก"],["ทำคุณบูชาโทษ","ทำดีแต่ได้ผลร้าย"],["ขว้างงูไม่พ้นคอ","ผลร้ายย้อนกลับมาหาตัว"],["หวานอมขมกลืน","จำใจยอมทนไว้"],["ข้าวใหม่ปลามัน","คู่แต่งงานใหม่"],
+  ["กินบนเรือนขี้บนหลังคา","เนรคุณผู้มีพระคุณ"],["ขิงก็รา ข่าก็แรง","ต่างฝ่ายต่างไม่ยอมกัน"],["คนล้มอย่าข้าม","อย่าดูถูกคนที่พลาดพลั้ง"],["ตีวัวกระทบคราด","โกรธคนหนึ่งแต่ไปลงกับอีกคน"],
+  ["น้ำผึ้งหยดเดียว","เรื่องเล็กลุกลามเป็นเรื่องใหญ่"],["ปลาหมอตายเพราะปาก","พูดพล่อยจนเดือดร้อน"],["เป็นปี่เป็นขลุ่ย","เข้ากันได้ดี"],["สิบปากว่าไม่เท่าตาเห็น","เห็นเองดีกว่าฟังคนเล่า"],
+  ["หน้าชื่นอกตรม","ภายนอกสดชื่นแต่ในใจทุกข์"],["อาบน้ำร้อนมาก่อน","มีประสบการณ์มากกว่า"],["ตบมือข้างเดียวไม่ดัง","ทำฝ่ายเดียวไม่สำเร็จ"],["ตัดไฟแต่ต้นลม","แก้ปัญหาตั้งแต่ต้น"],
+  ["น้ำน้อยย่อมแพ้ไฟ","ฝ่ายน้อยย่อมแพ้ฝ่ายมาก"],["ยื่นหมูยื่นแมว","แลกเปลี่ยนกันพร้อมกัน"],["ลางเนื้อชอบลางยา","แต่ละคนชอบไม่เหมือนกัน"],["ไก่เห็นตีนงู งูเห็นนมไก่","รู้ความลับของกันและกัน"],
+  ["ชาติเสือต้องไว้ลาย","ต้องรักษาศักดิ์ศรี"],["ใจดีสู้เสือ","ทำใจดีเมื่อเจออันตราย"]];
+/* ชนิดของคำ: คำนาม (ชื่อคน สัตว์ สิ่งของ สถานที่) และคำกริยา (คำแสดงอาการ) */
+const ADV_NOUN=["โต๊ะ","หนังสือ","แมว","ดินสอ","โรงเรียน","ต้นไม้","รถ","บ้าน","นาฬิกา","ทะเล","ภูเขา","ครู","ปากกา","กระเป๋า","ดอกไม้","ข้าว","ถนน","ประตู","หน้าต่าง","ช้าง","ตำรวจ","หมวก","เก้าอี้","แม่น้ำ"];
+const ADV_VERB=["วิ่ง","กิน","นอน","เขียน","อ่าน","ร้องเพลง","ว่ายน้ำ","เดิน","พูด","ฟัง","ทำงาน","เล่น","ซื้อ","ขาย","หัวเราะ","กระโดด","คิด","ดู","ยืน","นั่ง","ร้องไห้","ขับรถ","ทำอาหาร","ล้างจาน"];
+/* สุ่มแบบไม่ซ้ำจนกว่าจะครบทุกข้อ */
+const advDeck={};const advDraw=(k,arr)=>{if(!advDeck[k]||!advDeck[k].length)advDeck[k]=shuf(arr.map((_,i)=>i));return arr[advDeck[k].pop()]};
 function advVocab(){const [pic,ok,...bad]=ADV_VOCAB[rnd(0,ADV_VOCAB.length-1)];const o=shuf([ok,...bad]);return {q:"ภาพนี้คือคำว่าอะไร",pic,opts:o,ans:o.indexOf(ok)}}
-function advIdiom(){const all=shuf(ADV_IDIOM.slice()),pick4=all.slice(0,4),[id,mean]=pick4[0];
-  if(Math.random()<.6){const o=shuf(pick4.map(x=>x[1]));return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
-  const o=shuf(pick4.map(x=>x[0]));return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
+function advIdiom(){
+  if(Math.random()<.35){const n=advDraw("noun",ADV_NOUN),v=advDraw("verb",ADV_VERB),k=rnd(0,2);
+    if(k===0){const isN=Math.random()<.5,w=isN?n:v,o=["คำนาม","คำกริยา"];return {q:`คำว่า "${w}" เป็นคำชนิดใด`,opts:o,ans:isN?0:1,box:true}}
+    const o=shuf([n,v]);return k===1?{q:"ข้อใดเป็นคำนาม",opts:o,ans:o.indexOf(n),box:true}:{q:"ข้อใดเป็นคำกริยา",opts:o,ans:o.indexOf(v),box:true}}
+  const [id,mean]=advDraw("idiom",ADV_IDIOM);let other;do{other=ADV_IDIOM[rnd(0,ADV_IDIOM.length-1)]}while(other[0]===id);
+  if(Math.random()<.6){const o=shuf([mean,other[1]]);return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
+  const o=shuf([id,other[0]]);return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
 function advQuestion(st){
   if(st===8)return advVocab();
   if(st===10)return advIdiom();
@@ -7884,13 +7899,14 @@ async function advStart(){
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
     pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
     ask:q=>{$("advView").classList.add("asking");$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
-      ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);
+      ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);ops.classList.toggle("two",q.box&&q.opts.length===2);
       ops.querySelectorAll("button").forEach(b=>b.onclick=()=>adv?.choose(+b.dataset.i));
-      $("advQh").textContent=q.box?"แตะคำตอบ หรือแตะตัวเลขในฉาก":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
+      $("advQh").textContent=q.box?"แตะที่คำตอบได้เลย":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
       $("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
     gear:on=>{advOn=on;advGearBar()},
     near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${id==="shades"?"ร้านแว่น":"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
       b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
+    say:msg=>{const t=$("advToast");t.innerHTML=`<b>${escHtml(msg)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
     finish:st=>{advSel=st;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก":`ผ่านด่าน ${st} แล้ว ด่าน 6-10 สำหรับสมาชิก Premium`)},
     hideQ:()=>{$("advQ").classList.add("hidden");$("advView").classList.remove("asking")},

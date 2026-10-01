@@ -204,7 +204,7 @@ export function startGame(root,api){
     const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,fog:false,depthWrite:false,transparent:true}));sp.scale.set(70,70,1);scene.add(sp);return sp})();
   /* ชั้นฉากหลังวนซ้ำตามตำแหน่งตัวละคร (parallax): ภูเขา > เนินไกล > เนินใกล้ */
   const layers=[];
-  function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span,kind:layers.length})}
+  function layer(make,n,span,z,kind){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span,kind:kind!=null?kind:layers.length})}
   /* ภูเขาโค้งแบบธรรมชาติ: โปรไฟล์ทรงระฆังหมุนรอบแกน สูงต่ำสลับกัน บางลูกยอดเอียง */
   let mk=0;
   layer(()=>{const big=mk++%2===0,h=big?rand(30,46):rand(14,24),r=h*rand(1.1,1.6),pts=[];
@@ -214,6 +214,12 @@ export function startGame(root,api){
     return g},14,340,-150);
   layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(16,26),2),M(TH.hill2,{flat:true,roughness:1}));m.scale.y=rand(.35,.5);m.position.y=-2;return m},10,260,-75);
   layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(9,15),2),M(TH.hill1,{flat:true,roughness:1}));m.scale.y=rand(.3,.45);m.position.y=-1.5;return m},12,200,-40);
+  /* ฝั่งตรงข้าม (หมุนกล้องดูรอบตัว 360 องศา): ภูเขาและเนินอีกชุดด้านหน้า */
+  {const L0=layers[0],L1=layers[1],L2=layers[2];let mk2=0;
+    layer(()=>{const big=mk2++%2===0,h=big?rand(26,40):rand(12,20),r=h*rand(1.1,1.6),pts=[],ex=rand(1.2,2.4);for(let k=0;k<=20;k++){const t=k/20,y=h*Math.pow(Math.cos(t*Math.PI/2),ex);pts.push(new THREE.Vector2(Math.max(.01,r*t),y))}
+      const m=new THREE.Mesh(new THREE.LatheGeometry(pts.reverse(),22),M(pick(TH.mounts||[TH.mount]),{roughness:1}));m.scale.set(rand(.9,1.3),1,rand(.6,.9));m.position.y=-3;const g=new THREE.Group();g.add(m);return g},14,340,150,0);
+    layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(16,26),2),M(TH.hill2,{flat:true,roughness:1}));m.scale.y=rand(.35,.5);m.position.y=-2;return m},10,260,80,1);
+    layer(()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(9,15),2),M(TH.hill1,{flat:true,roughness:1}));m.scale.y=rand(.3,.45);m.position.y=-1.5;return m},12,200,48,2)}
   /* นกบินเป็นฝูงเล็ก ๆ */
   const birds=[];if(TH.birds){const bm=new THREE.MeshBasicMaterial({color:TH.birdColor,side:THREE.DoubleSide});for(let k=0;k<6;k++){const g=new THREE.Group();for(const sgn of[-1,1]){const w=new THREE.Mesh(new THREE.PlaneGeometry(.9,.18),bm);w.position.x=sgn*.42;w.userData.s=sgn;g.add(w)}g.position.set(rand(-20,20),rand(12,18),-rand(30,45));g.userData.ph=rand(0,6);scene.add(g);birds.push(g)}}
   const spinners=[];
@@ -238,7 +244,10 @@ export function startGame(root,api){
   let curBiome=biomeOf(firstSt()),lastB=null;
   const anim=[],bridges=[],chests=[],shops=[];   // anim: {seg,obj,kind,...} ของที่ขยับได้, bridges: ช่วงสะพาน (พิกัดโลก)
   const live=a=>a.seg.parent===world;
-  const sandMat=M(0xf3dca2,{roughness:1}),wetSand=M(0xe0c48a,{roughness:1}),waterMat=M(0x3fb6e8,{roughness:.2,metalness:.1,transparent:true,opacity:.92}),canalMat=M(0x46a9d8,{roughness:.2,metalness:.1});
+  const sandMat=M(0xf3dca2,{roughness:1}),wetSand=M(0xe0c48a,{roughness:1}),waterMat=M(0x3fb6e8,{roughness:.2,metalness:.1,transparent:true,opacity:.92}),canalMat=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.2,metalness:.1});
+  /* ผิวน้ำไหล: ลายระลอกคลื่นเลื่อนตามทางน้ำ */
+  {const c=document.createElement("canvas");c.width=64;c.height=128;const x=c.getContext("2d");x.fillStyle="#3da5d6";x.fillRect(0,0,64,128);for(let i=0;i<70;i++){x.fillStyle=`rgba(${Math.random()<.5?'255,255,255':'120,210,245'},${(.15+Math.random()*.45).toFixed(2)})`;x.fillRect(Math.random()*64,Math.random()*128,4+Math.random()*14,1.5+Math.random()*2)}
+    const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;canalMat.map=t}
   function fish(){const g=new THREE.Group(),c=pick([0xff8a3d,0xffc400,0x7dd3fc,0xff6fa5]);const b=new THREE.Mesh(new THREE.SphereGeometry(.18,10,8),M(c,{roughness:.4}));b.scale.set(1.6,1,.6);g.add(b);
     const t=new THREE.Mesh(new THREE.ConeGeometry(.14,.22,4),M(c));t.rotation.z=Math.PI/2;t.position.x=-.36;g.add(t);const e=new THREE.Mesh(new THREE.SphereGeometry(.03,6,4),M(0x111111));e.position.set(.17,.05,.09);g.add(e);return g}
   function quad(body,head,legC,{wool=false,spots=false}={}){const g=new THREE.Group(),bm=M(body,{flat:true});
@@ -269,8 +278,8 @@ export function startGame(root,api){
       for(let k=0;k<8;k++){const t=(k+.5)/8,y=.32*Math.sin(Math.PI*t);const r=new THREE.Mesh(new THREE.BoxGeometry(L/8,.08,.08),rail);r.position.set(x0+t*L,y+.68,z);r.rotation.z=-Math.cos(Math.PI*t)*.12;g.add(r)}}}
   /* ===== ของตกแต่งรอบใหม่ ===== */
   /* แถบริบบอนตามเส้นโค้ง (ใช้ทำคลองคดเคี้ยว ตลิ่ง) fx(z)=จุดกึ่งกลาง */
-  function ribbon(fx,z0,z1,half,y,mat,steps=60){const pos=[],idx=[];for(let k=0;k<=steps;k++){const z=z0+(z1-z0)*k/steps,c=fx(z);pos.push(c-half,y,z,c+half,y,z);if(k){const a=(k-1)*2;idx.push(a,a+1,a+2,a+1,a+3,a+2)}}
-    const gm=new THREE.BufferGeometry();gm.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));gm.setIndex(idx);gm.computeVertexNormals();const m=new THREE.Mesh(gm,mat);m.receiveShadow=true;return m}
+  function ribbon(fx,z0,z1,half,y,mat,steps=60){const pos=[],idx=[],uv=[];for(let k=0;k<=steps;k++){const z=z0+(z1-z0)*k/steps,c=fx(z);pos.push(c-half,y,z,c+half,y,z);uv.push(0,z/4,half/2,z/4);if(k){const a=(k-1)*2;idx.push(a,a+1,a+2,a+1,a+3,a+2)}}
+    const gm=new THREE.BufferGeometry();gm.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));gm.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));gm.setIndex(idx);gm.computeVertexNormals();const m=new THREE.Mesh(gm,mat);m.receiveShadow=true;return m}
   /* สะพานหินโค้ง: พื้นสะพานโค้งปูหิน ราวหินเตี้ย ช่องโค้งใต้สะพาน เสาหัวสะพานมีโคมไฟจีน */
   const BR_H=.72,stoneM=M(0xcbbfa8,{flat:true,roughness:1}),stoneD=M(0xa99c84,{flat:true,roughness:1});
   const stoneTex=(()=>{const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d");x.fillStyle="#8f8372";x.fillRect(0,0,128,128);
@@ -451,8 +460,8 @@ export function startGame(root,api){
   function bananaTree(){const g=new THREE.Group(),h=rand(1.6,2.3);const tr=new THREE.Mesh(new THREE.CylinderGeometry(.11,.16,h,8),M(0x7d9a4a,{flat:true}));tr.position.y=h/2;tr.castShadow=true;g.add(tr);
     for(let k=0;k<7;k++){const l=archLeaf(rand(1.2,1.7),.45,leafMat,.9,1.1);l.position.y=h-.05;l.rotation.y=k/7*Math.PI*2+rand(-.2,.2);l.castShadow=true;g.add(l)}return g}
   /* น้ำตก: หน้าผาหิน ตะไคร่ ต้นไม้บนผา สายน้ำไหลลงแอ่ง ฟองน้ำและละอองหมอก */
-  const fallTex=canvasTex(64,256,(x,w,h)=>{x.fillStyle="#a6dcf5";x.fillRect(0,0,w,h);for(let i=0;i<90;i++){x.fillStyle=`rgba(255,255,255,${(.3+Math.random()*.6).toFixed(2)})`;x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*3,20+Math.random()*60)}},1,1.5);
-  const fallMat=new THREE.MeshStandardMaterial({map:fallTex,transparent:true,opacity:.93,roughness:.2,emissive:0x8fd0f0,emissiveIntensity:.3,side:THREE.DoubleSide});
+  const fallTex=canvasTex(64,256,(x,w,h)=>{const gr=x.createLinearGradient(0,0,w,0);gr.addColorStop(0,"#3f9fd8");gr.addColorStop(.5,"#6cc4ee");gr.addColorStop(1,"#3f9fd8");x.fillStyle=gr;x.fillRect(0,0,w,h);for(let i=0;i<110;i++){x.fillStyle=`rgba(255,255,255,${(.3+Math.random()*.6).toFixed(2)})`;x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*3,20+Math.random()*60)}},1,1.5);
+  const fallMat=new THREE.MeshStandardMaterial({map:fallTex,transparent:true,opacity:.95,roughness:.2,emissive:0x2a7fb8,emissiveIntensity:.35,side:THREE.DoubleSide});
   const mistTex=canvasTex(64,64,(x)=>{const gr=x.createRadialGradient(32,32,2,32,32,32);gr.addColorStop(0,"rgba(255,255,255,.9)");gr.addColorStop(1,"rgba(255,255,255,0)");x.fillStyle=gr;x.fillRect(0,0,64,64)});
   const rockM=[0x8d8478,0x7a7268,0x9a9184,0x6f675e].map(c=>M(c,{flat:true,roughness:1})),mossM=[0x4f9a3a,0x5aa843,0x3f8a30].map(c=>M(c,{flat:true,roughness:1}));
   function rock(r,moss){const m=new THREE.Mesh(new THREE.DodecahedronGeometry(r,0),moss?pick(mossM):pick(rockM));m.scale.set(rand(.8,1.3),rand(.65,1),rand(.8,1.2));m.rotation.set(rand(0,3),rand(0,3),rand(0,3));m.castShadow=true;m.receiveShadow=true;return m}
@@ -461,9 +470,12 @@ export function startGame(root,api){
     for(const cx of[-2.4,0,2.4])for(const cy of[2,5,8]){const a=rock(rand(1.6,2),false);a.position.set(cx,cy,-3.2);g.add(a)}
     for(let k=0;k<9;k++){const a=rock(rand(1,1.6),true);a.position.set(rand(-6,6),Hf+rand(.2,.8),rand(-2,-.5));g.add(a)}
     for(let k=0;k<3;k++){const t=roundTree();t.position.set(pick([-5,-3.5,3.5,5]),Hf+.6,rand(-2,-1));g.add(t)}
-    const wf=new THREE.Mesh(new THREE.PlaneGeometry(2.6,Hf+.6,1,8),fallMat);const p=wf.geometry.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i);p.setZ(i,Math.pow((y+(Hf+.6)/2)/(Hf+.6),3)*-.8)}
+    const wf=new THREE.Mesh(new THREE.PlaneGeometry(4.2,Hf+.6,1,8),fallMat);const p=wf.geometry.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i);p.setZ(i,Math.pow((y+(Hf+.6)/2)/(Hf+.6),3)*-.8)}
     wf.position.set(0,(Hf+.6)/2,.5);g.add(wf);
-    const pool=new THREE.Mesh(new THREE.CircleGeometry(3.4,28),canalMat);pool.rotation.x=-Math.PI/2;pool.position.set(0,.05,2.6);pool.scale.y=.7;g.add(pool);
+    const pool=new THREE.Mesh(new THREE.CircleGeometry(3.6,28),canalMat);pool.rotation.x=-Math.PI/2;pool.position.set(0,.05,2.8);pool.scale.y=.75;g.add(pool);
+    const fm=M(0xffffff,{emissive:0xffffff,emissiveIntensity:.4,transparent:true,opacity:.85});for(let k=0;k<9;k++){const f=new THREE.Mesh(new THREE.SphereGeometry(rand(.3,.6),10,8),fm);f.scale.y=.45;f.position.set(rand(-2,2),.12,1+rand(0,.9));g.add(f)}
+    const str=ribbon(z=>Math.sin(z*.25)*.8,45,4.5,1.1,.05,canalMat,40);g.add(str);const bank=ribbon(z=>Math.sin(z*.25)*.8,45,4.5,1.5,.03,M(0x8a7a5a,{flat:true}),40);g.add(bank);
+    for(let k=0;k<3;k++){const f=fish();g.add(f);anim.push({seg:null,obj:f,kind:"koi",fx:z=>Math.sin(z*.25)*.8,off:rand(-.5,.5),ph:rand(0,40),sp:rand(.5,.9),z0:5,len:40,local:1})}
     for(let k=0;k<10;k++){const a=k/10*Math.PI*2,rr=rock(rand(.35,.6));rr.position.set(Math.cos(a)*3.4,.1,2.6+Math.sin(a)*2.4);g.add(rr)}
     for(let k=0;k<6;k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.7,depthWrite:false}));sp.position.set(rand(-1.4,1.4),rand(.3,1.2),1.2+rand(0,.8));sp.scale.setScalar(rand(1.2,2.2));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}
     return g}
@@ -578,7 +590,8 @@ export function startGame(root,api){
     if(B==="canal"&&segN%2===0){
       /* คลองคดเคี้ยว ตลิ่งดินกับหญ้า สะพานหินโค้งข้ามคลอง ปลากระโดด */
       pathPiece(0,5-w/2-1.5);pathPiece(5+w/2+1.5,SEG);
-      g.add(ribbon(cxz,8,-45,w/2+.45,.025,M(0x8a6a3a,{flat:true,roughness:1})));g.add(ribbon(cxz,8,-45,w/2,.04,canalMat));
+      g.add(ribbon(cxz,40,-45,w/2+.45,.025,M(0x8a6a3a,{flat:true,roughness:1}),90));g.add(ribbon(cxz,40,-45,w/2,.04,canalMat,90));
+      for(let k=0;k<5;k++){const f=fish();f.scale.setScalar(rand(.9,1.3));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.2,1.2),ph:rand(0,40),sp:rand(.6,1.1)})}
       stoneBridge(g,5-w/2-1.5,w+3);bridges.push({seg:g,x0:segX+5-w/2-1.5,x1:segX+5+w/2+1.5});
       for(let k=0;k<3;k++){const f=fish(),z=-rand(3,14);g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cxz(z),z,ph:rand(0,6),sp:rand(.35,.6)})}
       for(let k=0;k<6;k++){const z=-rand(2,26),r=new THREE.Mesh(new THREE.ConeGeometry(.05,.9,4),M(0x3f8f2a));r.position.set(cxz(z)+(Math.random()<.5?-1:1)*(w/2+.35),.45,z);g.add(r)}
@@ -603,7 +616,7 @@ export function startGame(root,api){
       if(Math.random()<.35){const sb=boat();sb.scale.setScalar(rand(2,3));sb.position.set(rand(0,10),0,-rand(40,90));sb.rotation.y=rand(-.5,.5);g.add(sb);anim.push({seg:g,obj:sb,kind:"boat",ph:rand(0,6)})}
     }else if(B==="waterfall"){
       /* น้ำตก: ผาหินกับสายน้ำทุก 3 ชิ้น ที่เหลือเป็นหิน เฟิร์น ต้นไม้ กอไผ่ */
-      if(segN%3===0){const wf=waterfall();wf.position.set(5,0,-15);g.add(wf)}
+      if(segN%2===0){const wf=waterfall();wf.position.set(5,0,-15);g.add(wf)}
       else{for(let k=0;k<2;k++){const t=Math.random()<.5?roundTree():bamboo(.9);t.position.set(rand(0,SEG),0,-rand(5,12));g.add(t)}}
       for(let k=0;k<5;k++){const fr=Math.random()<.25,r=rock(fr?rand(.2,.4):rand(.3,.8),Math.random()<.4);r.position.set(rand(0,SEG),.1,fr?rand(2,4):-rand(2,8));g.add(r)}
       for(let k=0;k<4;k++){const f=fern();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,7):rand(1.8,3.5));g.add(f)}
@@ -653,6 +666,14 @@ export function startGame(root,api){
       if(segN%3===0&&B!=="canal"){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
     }
     if(Math.random()<.5){const c=cloud();c.position.set(rand(0,SEG),rand(13,19),-rand(30,55));g.add(c)}
+    {/* ของฝั่งหลังกล้อง เห็นเมื่อหมุนกล้อง */const put=(o,x,z)=>{o.position.set(x,0,z);o.rotation.y=rand(0,6);g.add(o)},F=()=>rand(17,40);
+      for(let k=0;k<3;k++){const x=rand(0,SEG),z=F();
+        if(B==="canal"&&segN%2===0&&Math.abs(x-cxz(z))<3.6)continue;
+        const o=B==="canal"?bamboo(rand(.8,1.1)):B==="beach"?(Math.random()<.6?palm2():bush()):B==="waterfall"?(Math.random()<.5?roundTree():rock(rand(.8,1.6),true)):B==="village"?(k===0&&segN%2?stiltHouse():Math.random()<.5?bananaTree():palm2()):
+          B==="market"?(k===0?stall():roundTree()):B==="haunted"?(Math.random()<.5?deadTree():grave()):B==="thai"?(k===0&&segN%3===2?stupa():frangipani()):B==="farm"&&k===0?pick([cow,sheep,goat])():anyTree();
+        put(o,x,z);if(B==="market"&&k===0)o.rotation.y=Math.PI}
+      if(B==="flowers")for(let k=0;k<3;k++){const col=pick(PETALS),cx=rand(0,SEG),cz=F();for(let j=0;j<8;j++){const f=flower(col);f.position.set(cx+rand(-.9,.9),0,cz+rand(-.5,.5));f.scale.setScalar(rand(1.4,2.2));g.add(f)}}
+      if(segN%4===1&&B!=="haunted"&&B!=="beach"){const h=house();put(h,rand(2,8),rand(24,36))}}
     if(Math.random()<.32&&!(B==="canal"&&segN%2===0)){const c=chest(),cx=rand(2,8);c.position.set(cx,0,-1.75);c.rotation.y=rand(-.25,.25);g.add(c);chests.push({seg:g,o:c,x:cx,open:0})}
     if(B==="beach"&&segN%4===2){const sh=stall({name:"ร้านแว่น",shades:true});sh.position.set(5,0,-3.6);g.add(sh);shops.push({seg:g,x:5,id:"shades",shown:false})}
     for(const a of anim)if(!a.seg)a.seg=g;
@@ -737,7 +758,7 @@ export function startGame(root,api){
   }
   function choose(i){
     if(S.mode!=="ask")return;S.mode="jumping";ui.hideQ();const ok=i===S.q.ans;
-    if(i<0){mark(S.ans[S.q.ans],"#22c55e");SND.play("wrong");scare();hurt();setTimeout(clearAns,600);return}
+    if(i<0){mark(S.ans[S.q.ans],"#22c55e");SND.play("wrong");if(S.qBr){S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr};return}scare();hurt();setTimeout(clearAns,600);return}
     const a=S.ans[i],to=new THREE.Vector3(a.position.x,a.position.y-.9-groundY(a.position.x),0);
     S.jump={from:new THREE.Vector3(S.x,S.y,0),to,t:0,dur:.55,done:()=>{
       if(ok){SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);
@@ -756,9 +777,9 @@ export function startGame(root,api){
   const bursts=[];
   function burst(pos){for(let i=0;i<16;i++){const s=new THREE.Mesh(new THREE.OctahedronGeometry(.12,0),M(pick([0xffd400,0xff6fa5,0x7dd3fc,0xa3e635]),{emissive:0x332200}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-2.5,2.5),rand(2,5),rand(-1.5,1.5));s.userData.life=1;world.add(s);bursts.push(s)}}
   /* ตอบผิดในบ้านผีสิง: ผีโผล่จากพื้นพุ่งเข้าหาจอ (ข้อละตัว) */
-  const ghosts=[];
+  const ghosts=[],ripples=[];
   function scare(){if(biomeOf(S.st)!=="haunted")return;const gh=ghost((S.qn-1)%5);gh.position.set(S.x+1.4,-1.6,-.4);gh.scale.setScalar(.3);world.add(gh);ghosts.push({o:gh,t:0});SND.play("ghost");ui.scare&&ui.scare()}
-  function splash(pos){for(let i=0;i<22;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
+  function splash(pos){const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,6,24),M(0xffffff,{transparent:true,opacity:.9}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0});for(let i=0;i<40;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
   async function passArch(){
     S.mode="cheer";const st=S.st;burst(new THREE.Vector3(S.archX,2.5,0));SND.play("clap");SND.play("sparkle");
     const r=await api.clear(st);ui.toast(st,r);if(S.hearts<3){S.hearts++;ui.hearts(S.hearts)}
@@ -807,9 +828,10 @@ export function startGame(root,api){
     if(S.mode==="jumping"&&S.jump){const j=S.jump;j.t+=dt/j.dur;const t=Math.min(1,j.t);S.x=j.from.x+(j.to.x-j.from.x)*t;S.y=j.from.y+(j.to.y-j.from.y)*t+Math.sin(Math.PI*t)*1.4;if(t>=1){S.jump=null;S.y=j.to.y;j.done()}}
     if(S.mode==="falling"){S.fall.vy-=18*dt;S.y=Math.max(0,S.y+S.fall.vy*dt);if(S.y<=0){S.mode="landed";S.afterFall&&S.afterFall()}}
     if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
-    if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,y=sp.y+2.4*t-10*t*t;S.z=Math.min(1,t/.7)*2.1;P.position.set(sp.x,Math.max(-1.7,y),S.z);P.rotation.z=Math.min(1,t)*.9;
-      if(y<.06&&!sp.hit){sp.hit=1;SND.play("splash");splash(new THREE.Vector3(sp.x,.15,S.z))}
-      if(t>1.6){S.z=0;P.rotation.z=0;S.x=sp.br.x0-1.4;S.y=0;S.spl=null;S.qBr=null;S.mode="walk";clearAns();S.nextQ=Math.max(S.nextQ,S.x+12);hurt()}}
+    if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,tx=Math.max(mid-1.3,Math.min(mid+1.3,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
+      if(fy<.05&&!sp.hit){sp.hit=1;SND.play("splash");splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบใหม่อีกครั้งนะ")}
+      if(sp.hit&&Math.random()<dt*6){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.04,.08),6,4),M(0xffffff,{transparent:true,opacity:.8}));b.position.set(fx+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}
+      if(t>2.4){S.z=0;P.rotation.z=0;S.x=sp.br.x0-1.4;S.y=0;S.spl=null;S.qBr=null;S.mode="walk";clearAns();S.nextQ=Math.max(S.nextQ,S.x+12);hurt()}}
     else P.position.set(S.x,S.y+groundY(S.x),S.z);
     const ud=P.userData,sw=walking&&!S.hop?Math.sin(S.t*11):0,air=S.mode==="jumping"||S.mode==="falling"||!!S.hop;
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
@@ -833,7 +855,7 @@ export function startGame(root,api){
     stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=themeNow();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
-    fallTex.offset.y+=dt*1.6;ground.position.x=S.x;
+    fallTex.offset.y+=dt*2.2;canalMat.map.offset.y-=dt*.35;ground.position.x=S.x;
     {const on=biomeOf(S.st)==="beach"&&!TH.night;glit.visible=on;if(on){const a=glitGeo.attributes.position.array,sx=(fade?fade.cur.sp:TH.sunPos)[0];for(let k=0;k<GN;k++){if(Math.random()<.08||Math.abs(a[k*3]-S.x)>90){const z=-rand(14,150),sp=1.2+(-z)*.06;a[k*3]=S.x+3+sx*(-z/170)+rand(-sp,sp);a[k*3+1]=.3;a[k*3+2]=z}}glitGeo.attributes.position.needsUpdate=true;glitMat.opacity=.55+Math.sin(S.t*9)*.25;glitMat.color.set(TH.light)}}
     gearT+=dt;if(gearT>.5){gearT=0;applyGear()}if(GEAR.fan.visible)GEAR.fan.rotation.z=Math.sin(S.t*14)*.45;
     for(let i=chests.length-1;i>=0;i--){const c=chests[i];if(c.seg.parent!==world){chests.splice(i,1);continue}const u=c.o.userData;
@@ -843,6 +865,7 @@ export function startGame(root,api){
       if(c.open&&c.open<2){u.lid.rotation.x=Math.max(-1.9,u.lid.rotation.x-dt*7);u.glow.material.opacity=Math.max(0,u.glow.material.opacity-dt*1.5);if(u.lid.rotation.x<=-1.9)c.open=2}
       else if(!c.open)u.glow.scale.setScalar(.8+Math.sin(S.t*4)*.12)}
     for(const sh of shops){if(sh.shown||sh.seg.parent!==world)continue;if(Math.abs(S.x-(sh.seg.position.x+sh.x))<3){sh.shown=true;if(!owns(sh.id))ui.near&&ui.near(sh.id)}}
+    for(let i=ripples.length-1;i>=0;i--){const R=ripples[i];R.t+=dt;R.o.scale.setScalar(1+R.t*3);R.o.material.opacity=Math.max(0,.9-R.t*.8);if(R.t>1.1){world.remove(R.o);ripples.splice(i,1)}}
     for(let i=ghosts.length-1;i>=0;i--){const G=ghosts[i];G.t+=dt;const t=G.t,o=G.o;
       if(t<.45){const k=t/.45;o.position.y=-1.6+k*3.1;o.scale.setScalar(.3+k*.9)}
       else if(t<1.4){const k=(t-.45)/.95;o.position.z=-.4+k*5;o.position.x=S.x+1.4-k*.8;o.position.y=1.5+Math.sin(t*14)*.12;o.scale.setScalar(1.2+k*.7);o.rotation.z=Math.sin(t*10)*.15}
@@ -856,6 +879,7 @@ export function startGame(root,api){
       else if(a.kind==="squid"){o.position.y=Math.abs(Math.sin(t*2))*.18;for(const [k,tt] of o.userData.ts.entries())tt.rotation.y=Math.sin(t*4+k)*.4}
       else if(a.kind==="sea"){const pa=o.geometry.attributes.position,ar=pa.array,bs=a.base;for(let v=0;v<ar.length;v+=3){const wx=a.gx+bs[v],z=bs[v+2],far=Math.min(1,Math.max(0,(shoreZ(wx)-z)/6));ar[v+1]=.12+far*(.06*Math.sin(wx*.7+S.t*1.6+z*.35)+.04*Math.sin(wx*.23-S.t*1.1+z*.6))}pa.needsUpdate=true;if((S.t*10|0)%3===0)o.geometry.computeVertexNormals()}
       else if(a.kind==="foam2"){const k=(Math.sin(S.t*1.4)+1)/2;o.position.z=.25-k*.5;o.material.opacity=.45+k*.45}
+      else if(a.kind==="koi"){const L=a.len||48,z0=a.z0!=null?a.z0:-36,z=z0+((t*a.sp)%1+1)%1*L,zz=a.local?z:z;o.position.set(a.fx(zz)+a.off+Math.sin(t*2)*.1,.09,zz);o.rotation.set(0,-Math.PI/2+Math.cos(t*2)*.15,0)}
       else if(a.kind==="weed"){for(const [k,c] of o.children.entries())c.rotation.z=Math.sin(t*1.6+k)*.25}
       else if(a.kind==="swim"){const q=t*a.sp;o.position.set(a.x0+Math.cos(q)*a.r,a.y0+Math.sin(q*2)*.05,a.z0+Math.sin(q)*a.r*.6);o.rotation.y=-q-Math.PI/2}
       else if(a.kind==="walker"){const ph=t*a.sp,v=Math.cos(ph);o.position.x=a.x0+Math.sin(ph)*a.rg;o.rotation.y=v>=0?0:Math.PI;const sw=Math.sin(S.t*7+a.ph)*.5,u=o.userData;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;u.arms[0].rotation.z=-sw*.8;u.arms[1].rotation.z=sw*.8}
