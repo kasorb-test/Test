@@ -2772,6 +2772,23 @@ body.adv-on{overflow:hidden}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
 @media(max-width:600px){.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
+/* ปุ่มเกม: เงาวาว ขอบหนา ลูกศรสามเหลี่ยม กดแล้วยุบ (ใช้ทั้งบันไดยศและเกม) */
+.st-mv,.adv-k[data-h]{--c1:#5fd0ff;--c2:#1d8fe6;--c3:#0f5fa8;position:relative;border:3px solid #fff!important;border-radius:50%;
+  background:radial-gradient(circle at 50% 28%,rgba(255,255,255,.75) 0 18%,rgba(255,255,255,0) 42%),linear-gradient(180deg,var(--c1),var(--c2))!important;
+  box-shadow:0 5px 0 var(--c3),0 9px 14px rgba(0,0,0,.28),inset 0 -6px 0 rgba(0,0,0,.12)!important;color:transparent!important;font-size:0!important;
+  cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;transition:transform .06s}
+.st-mv{width:54px;height:54px;padding:0}.st-pad{gap:12px!important}.adv-k[data-h]{width:68px;height:68px}
+.st-mv:before,.adv-k[data-h]:before{content:"";position:absolute;left:50%;top:50%;width:0;height:0;margin:0;border:0;transform:translate(-62%,-50%);
+  border-top:13px solid transparent;border-bottom:13px solid transparent;border-right:18px solid #fff;filter:drop-shadow(0 2px 0 var(--c3))}
+.st-mv.r:before,.adv-k[data-h="r"]:before{transform:translate(-38%,-50%);border-right:0;border-left:18px solid #fff}
+.adv-k[data-h]:before{border-top-width:16px;border-bottom-width:16px;border-right-width:22px}.adv-k[data-h="r"]:before{border-left-width:22px;border-right-width:0}
+.st-mv:active,.adv-k[data-h].on,.adv-k[data-h]:active{transform:translateY(4px);box-shadow:0 1px 0 var(--c3),0 3px 6px rgba(0,0,0,.25),inset 0 -3px 0 rgba(0,0,0,.12)!important}
+.st-jumpbtn,.adv-jump{position:absolute;border:3px solid #fff!important;border-radius:999px;color:#fff!important;font:inherit;font-weight:900;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.7) 0 20%,rgba(255,255,255,0) 50%),linear-gradient(180deg,#ffb23a,#ff6a00)!important;
+  box-shadow:0 5px 0 #b84a00,0 9px 14px rgba(0,0,0,.28),inset 0 -6px 0 rgba(0,0,0,.12)!important;text-shadow:0 2px 0 rgba(150,60,0,.6)}
+.st-jumpbtn{padding:10px 20px;font-size:15px;letter-spacing:.02em}
+.adv-jump{width:72px;height:72px;font-size:0!important}.adv-jump:before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-62%);border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:20px solid #fff;filter:drop-shadow(0 2px 0 #b84a00)}.adv-jump:after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,40%);background:#fff;border-radius:2px;filter:drop-shadow(0 2px 0 #b84a00)}
+.st-jumpbtn:active,.adv-jump:active{transform:translateY(4px);box-shadow:0 1px 0 #b84a00,0 3px 6px rgba(0,0,0,.25)!important}
 .sb-game{margin-top:10px}
 .lk-wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
 .lk-opts{min-width:0}
@@ -2809,8 +2826,6 @@ body.adv-on{overflow:hidden}
 .st-pad{position:absolute;left:10px;bottom:14px;z-index:5;display:flex;gap:8px}
 .st-mv{width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 4px 0 #cbd5e1,0 6px 12px rgba(0,0,0,.15);cursor:pointer;touch-action:none;position:relative}
 .st-mv:active{transform:translateY(3px);box-shadow:0 1px 0 #cbd5e1}
-.st-mv:before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;border-top:4px solid #16305f;border-left:4px solid #16305f;margin:-7px 0 0 -4px;transform:rotate(-45deg)}
-.st-mv.r:before{margin-left:-10px;transform:rotate(135deg)}
 .st-kid.flip .st-body{transform:scaleX(-1)}
 .st-me.walk .k-leg.l{animation:kWalkL .36s ease-in-out infinite}.st-me.walk .k-leg.r{animation:kWalkR .36s ease-in-out infinite}
 .st-me.walk .k-arm.l{animation:kWalkR .36s ease-in-out infinite}.st-me.walk .k-arm.r{animation:kWalkL .36s ease-in-out infinite}
