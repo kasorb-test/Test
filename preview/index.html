@@ -2770,7 +2770,7 @@ body.adv-on{overflow:hidden}
 .adv-msg{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 32px));transform:translate(-50%,-50%);padding:22px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:7}
 .adv-big{display:block;font-size:24px;color:#f57c00;margin-bottom:6px}.adv-msg p{margin:0 0 14px;color:#475569}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
-@media(max-width:600px){.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
+@media(max-width:600px){.adv-q{top:26%}.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
 /* ปุ่มเกมแบบป้ายไม้: แผ่นไม้ทรงลูกศรชี้ทาง ลายไม้แนวนอน ตอกตะปู ขอบน้ำตาลเข้ม (ใช้ทั้งบันไดยศและเกม) ปุ่ม JUMP กับ START เป็นป้ายไม้แผ่นตรง */
 .st-mv,.adv-k[data-h]{position:relative;padding:0;border:0!important;border-radius:0!important;color:transparent!important;font-size:0!important;background:#5a3412!important;box-shadow:none!important;
@@ -2800,6 +2800,11 @@ body.adv-on{overflow:hidden}
 .adv-go{position:relative!important;margin-top:10px;padding:12px 44px;font-size:24px;animation:advGo 1.2s ease-in-out infinite}
 .adv-go:active{transform:translateY(4px)}@keyframes advGo{50%{transform:scale(1.06)}}
 .sb-game{margin-top:10px}
+.gm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.gm-card{display:grid;justify-items:center;gap:6px;padding:18px 14px;border:4px solid #6b3f17;border-radius:20px;background:#fffaf0;box-shadow:0 6px 0 #4a2a0d;font:inherit;text-align:center;cursor:pointer}
+.gm-card img{height:96px}.gm-card b{font-size:20px;color:#6b3f17}.gm-card span{font-size:13.5px;color:#475569}
+.gm-card em{margin-top:4px;padding:7px 22px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font-style:normal;font-weight:900;text-shadow:0 2px 0 #5a3412}
+.gm-card.soon{opacity:.6;cursor:default}.gm-card.soon em{background:#9ca3af;border-color:#6b7280;text-shadow:none}
 .adv-stages{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0 6px}
 .adv-chip{position:relative;height:38px;border:3px solid #5a3412;border-radius:8px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-size:17px;font-weight:900;cursor:pointer;text-shadow:0 2px 0 #5a3412}
 .adv-chip.on{outline:3px solid #ffd23f;outline-offset:1px;transform:translateY(-2px)}
@@ -2822,6 +2827,11 @@ body.adv-on{overflow:hidden}
 .adv-it div{flex:1;min-width:0}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
 .adv-it button{flex:none;min-width:74px;padding:7px 10px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;text-shadow:0 2px 0 #5a3412;cursor:pointer}
 .adv-it button.low{filter:saturate(.5);opacity:.85}.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
+.adv-cf{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+.adv-cf-box{width:min(300px,calc(100% - 40px));padding:18px;border-radius:18px;background:#fffaf0;border:4px solid #6b3f17;box-shadow:0 6px 0 #4a2a0d;text-align:center;display:grid;justify-items:center;gap:6px}
+.adv-cf-box b{font-size:20px;color:#6b3f17}.adv-cf-box p{margin:0;color:#475569;line-height:1.6}
+.adv-cf-btns{display:flex;gap:10px;margin-top:6px}.adv-cf-btns button{min-width:100px;padding:9px 14px;border:3px solid #5a3412;border-radius:10px;font:inherit;font-weight:800;cursor:pointer}
+.adv-cf-btns .no{background:#fff;color:#5a3412}.adv-cf-btns .yes{background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;text-shadow:0 2px 0 #5a3412}
 .adv-shop-x{padding:9px 22px;border:3px solid #5a3412;border-radius:10px;background:#7a4a1c;color:#fff4d6;font:inherit;font-weight:800;cursor:pointer}
 @media(max-width:600px){.adv-gear{top:12px;right:8px}.adv-gs{width:42px;height:42px}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
@@ -2904,6 +2914,8 @@ body.adv-on{overflow:hidden}
 @keyframes stHop{0%{transform:translateY(0) scale(1)}12%{transform:translateY(2px) scale(1.12,.86)}45%{transform:translateY(-78px) scale(.95,1.06)}80%{transform:translateY(0) scale(1)}88%{transform:translateY(1px) scale(1.1,.9)}100%{transform:translateY(0) scale(1)}}
 .st-bank{position:absolute;left:10px;top:10px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:13px;color:#8a5a00}
 .st-coin.mini{position:static;width:16px;height:16px;animation:none}
+.hh-art{position:relative}.hh-music{position:absolute!important;right:10px;top:10px}
+.st-music{position:absolute;right:12px;top:12px;z-index:5;width:40px;height:40px;padding:0;border:3px solid #5a3412;border-radius:50%;background:#e8862a;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 0 #3b2109}.st-music svg{width:22px;height:22px}.st-music.off{background:#9ca3af;border-color:#6b7280}
 .st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
 .st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
 .st-plus{position:absolute;left:44px;top:34px;z-index:5;color:#e6a100;font-weight:900;font-size:15px;opacity:0;pointer-events:none}
@@ -3994,7 +4006,7 @@ LINE OA @kasorb
 <div class="home-hero">
 <div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
 <div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
-<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
+<div class="hh-art"><button type="button" class="st-music hh-music" id="hhMusic" aria-label="เปิดปิดดนตรี"></button><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
 </div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
@@ -4107,7 +4119,7 @@ LINE OA @kasorb
 <!-- GAME -->
 <section class="app-page" id="gamePage">
 <h2 class="page-heading">เกม</h2>
-<p class="page-desc">เลือกตัวละคร แล้วเล่นเกมฝึกสมองสั้น ๆ เก็บเหรียญไปเรื่อย ๆ แยกจากการทำแบบทดสอบ</p>
+<p class="page-desc">เลือกเกมที่อยากเล่น ตอบคำถามเก็บเหรียญไปซื้อไอเทม</p>
 <div id="gmBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- HISTORY -->
@@ -5081,6 +5093,7 @@ function showAppPage(
 pageId,
 title
 ){
+if(pageId!=="homePage")ST_MUSIC.stop();
 /* ยังไม่เข้าสู่ระบบ: ดูได้เฉพาะหน้าหลัก หน้าอื่นให้เข้าสู่ระบบก่อน แล้วค่อยพาไปหน้านั้น */
 if(!currentUser && pageId!=="homePage"){ openLogin(pageId,title); return; }
 
@@ -7836,14 +7849,24 @@ function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned()
   bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)}${advPref[id]==null?" (อัตโนมัติ)":""}">${ADV_ICON[id]}${advPref[id]==null?'<i>A</i>':""}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
   bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.g;if(id==="shop"){advShop();return}
     if(advPref[id]==null)advPref[id]=advOn[id]?0:1;else delete advPref[id];advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
-function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=coinsOf();
+const advCoins=()=>window.__advCoins??coinsOf();
+function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=advCoins();
   sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
     <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small></div>
       <button type="button" data-buy="${id}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
     <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
   sh.classList.remove("hidden");
   $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
-  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advBuy(b.dataset.buy))}
+  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advConfirm(b.dataset.buy))}
+/* ยืนยันก่อนซื้อ: บอกชื่อ ราคา และเหรียญที่จะเหลือ */
+function advConfirm(id){const it=ADV_GEAR.find(g=>g[0]===id),sh=$("advShop");if(!it||!sh)return;
+  if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}
+  if(advCoins()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${advCoins()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
+  const box=document.createElement("div");box.className="adv-cf";box.innerHTML=`<div class="adv-cf-box"><span class="adv-it-ic">${ADV_ICON[id]}</span><b>ซื้อ${escHtml(it[1])}?</b>
+    <p>ราคา <i class="st-coin mini"></i> ${it[3]} เหรียญ<br>ซื้อแล้วเหลือ ${(advCoins()-it[3]).toLocaleString()} เหรียญ</p>
+    <div class="adv-cf-btns"><button type="button" class="no">ยกเลิก</button><button type="button" class="yes">ยืนยันซื้อ</button></div></div>`;
+  sh.appendChild(box);box.querySelector(".no").onclick=()=>box.remove();box.onclick=e=>{if(e.target===box)box.remove()};
+  box.querySelector(".yes").onclick=e=>{e.target.disabled=true;e.target.textContent="กำลังซื้อ…";advBuy(id)}}
 async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===id);if(!it)return;if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}const own=advOwned();if(own.includes(id))return;
   if(coinsOf()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${coinsOf()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
   const gear=[...own,id],coins=coinsOf()-it[3];
@@ -7875,6 +7898,7 @@ async function advStart(){
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
         <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
         <button type="button" data-go="shop">ร้านไอเทม</button>
+        <button type="button" data-go="gamePage|เกม">เลือกเกม</button>
         <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
         <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
         <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
@@ -7883,6 +7907,7 @@ async function advStart(){
       
       <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
+  ov.addEventListener("pointerdown",()=>advMod?.SND.unlock(),{capture:true});ov.addEventListener("touchend",()=>advMod?.SND.unlock(),{capture:true});
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
   const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
@@ -7947,7 +7972,12 @@ let advClockT=0;
 function advClose(){clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
-function renderGamePage(){const box=$("gmBox");if(box)box.innerHTML="";advStart()}
+/* หน้าเลือกเกม: การ์ดเกมที่มี เพิ่มเกมใหม่ได้ภายหลัง */
+const GAMES=[{id:"adv",name:"Pencil Adventure",desc:"น้องดินสอผจญภัย 10 ด่าน ตอบคำถามเก็บเหรียญ",img:"mascot-2b.svg",play:()=>advStart()},
+  {id:"village",name:"Village Quest",desc:"เลือกทางไปหมู่บ้านอังกฤษ ภาษาไทย หรือคณิต",img:"mascot-2b-walk.svg",soon:true}];
+function renderGamePage(){const box=$("gmBox");if(!box)return;
+  box.innerHTML=`<div class="gm-list">${GAMES.map(g=>`<button type="button" class="gm-card${g.soon?" soon":""}" data-g="${g.id}"${g.soon?" disabled":""}><img src="${g.img}" alt=""><b>${escHtml(g.name)}</b><span>${escHtml(g.desc)}</span><em>${g.soon?"เร็ว ๆ นี้":"เล่นเลย"}</em></button>`).join("")}</div>`;
+  box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play())}
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
 function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
 /* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */
@@ -7983,6 +8013,32 @@ function bindWardrobe(lv){
     try{await updateDoc(doc(db,"users",currentUser.uid),{outfit:o.id})}catch(e){console.error(e)}
   });
 }
+/* ดนตรีฮึกเหิมบนเส้นทางยศ: มาร์ชเครื่องเป่า กลองสแนร์ กลองเบส สร้างในเบราว์เซอร์ (ไม่ต้องโหลดไฟล์) เริ่มเมื่อแตะฉาก เปิดปิดได้ จำค่าไว้ในเครื่อง */
+const ST_MUSIC=(()=>{let ctx=null,out=null,timer=0,step=0,next=0,on=true,nb=null;try{on=localStorage.getItem("stMusic")!=="0"}catch(e){}
+  const N=n=>440*Math.pow(2,(n-69)/12);
+  const init=()=>{if(ctx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();out=ctx.createGain();out.gain.value=.35;const comp=ctx.createDynamicsCompressor();out.connect(comp);comp.connect(ctx.destination);
+    nb=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}};
+  const brass=(n,t,d,v=.12)=>{for(const det of[-6,6]){const o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type="sawtooth";o.frequency.value=N(n);o.detune.value=det;f.type="lowpass";f.frequency.setValueAtTime(600,t);f.frequency.linearRampToValueAtTime(2600,t+.06);f.frequency.linearRampToValueAtTime(1400,t+d);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.03);g.gain.setValueAtTime(v*.8,t+d*.7);g.gain.linearRampToValueAtTime(0,t+d);o.connect(f);f.connect(g);g.connect(out);o.start(t);o.stop(t+d+.05)}};
+  const bass=(n,t,d)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="triangle";o.frequency.value=N(n);g.gain.setValueAtTime(.22,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(out);o.start(t);o.stop(t+d)};
+  const kick=t=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.connect(g);g.connect(out);o.start(t);o.stop(t+.22)};
+  const snare=(t,v=.25)=>{const s=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=nb;f.type="highpass";f.frequency.value=1500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+.14);s.connect(f);f.connect(g);g.connect(out);s.start(t,Math.random()*.5);s.stop(t+.15)};
+  /* 16 ห้อง ห้องละ 8 จังหวะย่อย: C - G - Am - F แนวมาร์ชพร้อมแตรเปิด */
+  const CH=[[48,55,60,64],[43,55,59,62],[45,57,60,64],[41,53,57,60]];
+  const MEL=[[67,0,67,67,72,0,0,0],[71,0,71,72,74,0,72,0],[69,0,69,71,72,0,76,0],[77,0,76,0,74,0,72,0],[67,0,64,67,72,0,74,76],[74,0,71,0,67,0,71,74],[72,0,69,72,76,0,79,0],[77,76,74,72,74,0,0,0]];
+  const sched=()=>{const sp=60/112/2;while(next<ctx.currentTime+.2){const bar=Math.floor(step/8),b=step%8,ch=CH[bar%4],m=MEL[bar%8][b];
+      if(b%4===0)kick(next);if(b===4||(b===7&&bar%2))snare(next,b===7?.12:.25);if(b%2===1)snare(next,.05);
+      if(b===0||b===4)bass(ch[0]-12,next,sp*3.5);if(b===0)for(const n of ch.slice(1))brass(n,next,sp*7.6,.035);if(m)brass(m,next,sp*(MEL[bar%8][b+1]===0?1.8:.9),.09);
+      next+=sp;step++}};
+  return {start(){if(!on)return;init();if(!ctx)return;if(ctx.state!=="running")ctx.resume();if(timer)return;next=ctx.currentTime+.05;step=0;out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.35,ctx.currentTime+1);timer=setInterval(sched,60)},
+    stop(){clearInterval(timer);timer=0;if(ctx&&out){out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(out.gain.value,ctx.currentTime);out.gain.linearRampToValueAtTime(0,ctx.currentTime+.3)}},
+    toggle(){on=!on;try{localStorage.setItem("stMusic",on?"1":"0")}catch(e){}if(on)this.start();else this.stop();return on},isOn:()=>on,playing:()=>!!timer}})();
+window.__stMusic=ST_MUSIC;
+/* หน้าหลัก: ปุ่มดนตรีในห้องที่น้องดินสอเดินถือป้าย เริ่มเล่นเมื่อแตะหน้าหลักครั้งแรก (เบราว์เซอร์ไม่ให้เล่นเองก่อนแตะ) */
+function bindHomeMusic(){const mb=$("hhMusic");if(!mb)return;const ic=()=>{mb.innerHTML=`<svg viewBox="0 0 24 24"><path d="M9 17V5l11-2v12" stroke="#fff" stroke-width="2" fill="none"/><circle cx="6.5" cy="17.5" r="2.5" fill="#fff"/><circle cx="17.5" cy="15" r="2.5" fill="#fff"/>${ST_MUSIC.isOn()?"":'<path d="M3 3l18 18" stroke="#fff" stroke-width="2.4"/>'}</svg>`;mb.classList.toggle("off",!ST_MUSIC.isOn())};ic();
+  mb.onclick=e=>{e.stopPropagation();if(ST_MUSIC.isOn()&&!ST_MUSIC.playing()){ST_MUSIC.start();return}ST_MUSIC.toggle();ic()};
+  document.addEventListener("pointerdown",()=>{if($("homePage")?.classList.contains("active")&&!document.body.classList.contains("adv-on"))ST_MUSIC.start()},{capture:true})}
+bindHomeMusic();
 const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
 function stairsHtml(lv,xp){
   const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;
