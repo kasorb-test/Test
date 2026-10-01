@@ -195,7 +195,7 @@ export function startGame(root,api){
     layers.forEach((L,li)=>L.items.forEach((g,ii)=>{const m=g.isMesh?g:g.children[0];m.material.color.copy(f.lay[li][ii]).lerp(t.lay[li][ii],k)}));
     if(fade.t>=1){drawSun(TH.sunCore,TH.sunGlow);sunSp.material.map.needsUpdate=true;fade=null}}
   const P=makePencil();scene.add(P);
-  const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.4,t:0,fall:null,hop:null};
+  const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.6,t:0,fall:null,hop:null,dir:0,face:1,paused:false};
   const ui=api.ui;
   function stage(st){if(themeOf(st)!==TH)fadeTo(themeOf(st));S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
@@ -231,7 +231,7 @@ export function startGame(root,api){
   }
   /* ควบคุม: ตอนมีคำถามแตะตัวเลข (หรือกด 1-4) ตอนเดินแตะจอ/เว้นวรรค/ลูกศรขึ้น เพื่อกระโดดเก็บเหรียญที่ลอยสูง */
   const ray=new THREE.Raycaster(),v2=new THREE.Vector2();
-  function hop(){if(S.mode==="walk"&&S.y<=0.01){S.hop={vy:7.5}}}
+  function hop(){if(S.mode==="walk"&&S.y<=0.01&&!S.paused){S.hop={vy:7.5}}}
   function tap(e){
     const r=renderer.domElement.getBoundingClientRect();v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
     if(S.mode==="ask"){ray.setFromCamera(v2,cam);const hit=ray.intersectObjects(S.ans.filter(a=>!a.userData.gone),true)[0];
@@ -241,7 +241,11 @@ export function startGame(root,api){
     hop();
   }
   renderer.domElement.addEventListener("pointerup",tap);
-  function key(e){if(S.mode==="ask"&&/^[1-4]$/.test(e.key))choose(+e.key-1);if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();hop()}}
+  const held={l:0,r:0};const setDir=()=>{S.dir=(held.r?1:0)-(held.l?1:0)};
+  function key(e){if(S.paused)return;if(S.mode==="ask"&&/^[1-4]$/.test(e.key))choose(+e.key-1);if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();hop()}
+    if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();held[e.key==="ArrowLeft"?"l":"r"]=1;setDir()}}
+  function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
+  document.addEventListener("keyup",keyUp);
   document.addEventListener("keydown",key);
   function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=W()<600?62:45;cam.updateProjectionMatrix()}
   addEventListener("resize",resize);resize();
@@ -249,9 +253,10 @@ export function startGame(root,api){
   stage(S.st);ui.hearts(3);ui.pts(0);
   let last=performance.now(),raf=0;
   function tick(now){
-    const dt=Math.min(.05,(now-last)/1000);last=now;S.t+=dt;
-    const walking=S.mode==="walk"||S.mode==="cheer";
-    if(walking){S.x+=S.speed*dt;
+    const dt0=Math.min(.05,(now-last)/1000);last=now;if(S.paused){raf=requestAnimationFrame(tick);return}const dt=dt0;S.t+=dt;
+    /* เดินเอง: กดค้าง ◀ ▶ หรือลูกศรซ้ายขวา ถอยกลับไปเก็บเหรียญได้ แต่ไม่เกินจุดเริ่มด่านของฉากที่ยังโหลดอยู่ */
+    const mv=S.mode==="cheer"?1:S.mode==="walk"?S.dir:0,walking=mv!==0;if(mv)S.face=mv;
+    if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);
       if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop)ask();
       if(S.arch&&S.mode==="walk"&&S.x>=S.archX-.3)passArch()}
     if(S.hop){S.hop.vy-=20*dt;S.y=Math.max(0,S.y+S.hop.vy*dt);if(S.y<=0)S.hop=null}
@@ -262,19 +267,19 @@ export function startGame(root,api){
     const ud=P.userData,sw=walking&&!S.hop?Math.sin(S.t*11):0,air=S.mode==="jumping"||S.mode==="falling"||!!S.hop;
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
     ud.body.position.y=.12+(walking?Math.abs(Math.sin(S.t*11))*.08:Math.sin(S.t*3)*.03);ud.body.rotation.z=walking?sw*.05:0;
-    const face=S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:Math.PI/2;P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
+    const face=S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:walking?S.face*Math.PI/2:(S.face>0?Math.PI/2.6:-Math.PI/2.6);P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
     ud.shadow.position.y=.02-S.y;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
       if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){world.remove(c);S.coins.splice(i,1)}continue}
       if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.pts+=1;ui.pts(S.pts)}
-      else if(c.position.x<S.x-10){world.remove(c);S.coins.splice(i,1)}}
+      else if(c.position.x<S.x-40){world.remove(c);S.coins.splice(i,1)}}
     for(const a of S.ans){const u=a.userData;
       if(u.gone){a.scale.multiplyScalar(1-dt*5)}else if(u.drop){a.position.y-=dt*7;a.rotation.z+=dt*4}
       else{a.scale.setScalar(Math.min(1,a.scale.x+dt*5));a.position.y=u.base+Math.sin(S.t*2.4+u.i)*.12}}
     S.ans=S.ans.filter(a=>{if(a.scale.x<.04||a.position.y<-4){world.remove(a);return false}return true});
     for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];b.userData.v.y-=9*dt;b.position.addScaledVector(b.userData.v,dt);b.rotation.x+=dt*6;b.userData.life-=dt;if(b.userData.life<=0){world.remove(b);bursts.splice(i,1)}}
     while(segX<S.x+60)addSeg();
-    while(segs.length&&segs[0].position.x+SEG<S.x-25){world.remove(segs.shift())}
+    while(segs.length&&segs[0].position.x+SEG<S.x-45){world.remove(segs.shift())}
     for(const L of layers)for(const m of L.items){if(m.position.x<S.x-L.span/2)m.position.x+=L.span}
     stepFade(dt);const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
@@ -287,5 +292,5 @@ export function startGame(root,api){
     renderer.render(scene,cam);raf=requestAnimationFrame(tick);
   }
   raf=requestAnimationFrame(tick);
-  return {stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length}),goStage:n=>stage(n)};
+  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length}),goStage:n=>stage(n)};
 }
