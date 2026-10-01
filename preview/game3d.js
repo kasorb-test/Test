@@ -844,6 +844,19 @@ export function startGame(root,api){
   const VEGTHROW=[()=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.13,10,8),M(0xe53935,{roughness:.4}));return m},()=>{const m=new THREE.Mesh(new THREE.IcosahedronGeometry(.16,1),M(0x7cb342,{flat:true}));return m},
     ()=>{const m=new THREE.Mesh(new THREE.ConeGeometry(.07,.4,8),M(0xff7043));m.rotation.z=Math.PI/2;return m},()=>{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.05,.3,4,8),M(0xffeb3b));m.rotation.z=1;return m},
     ()=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.11,10,8),M(0x6a1b9a,{roughness:.3}));m.scale.set(1,1,1.8);return m},()=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.13,10,8),M(0xff9800));return m}];
+  /* ผักใบ: กะหล่ำปลี ผักกาดกวางตุ้ง ผักบุ้งมัดกำ ต้นหอม (ใบแบนสองหน้า เห็นเป็นใบ ๆ ตอนลอยมา) */
+  const leafM=c=>M(c,{roughness:.7,side:THREE.DoubleSide}),leafG=new THREE.SphereGeometry(1,10,8);
+  const leaf=(c,w,l,t=.12)=>{const m=new THREE.Mesh(leafG,leafM(c));m.scale.set(w,t*w,l);return m};
+  const VEGLEAF=[
+    ()=>{const g=new THREE.Group(),core=new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),M(0xc5e1a5,{roughness:.6}));g.add(core);
+      for(let k=0;k<7;k++){const a=k/7*Math.PI*2,lf=leaf(k%2?0x8bc34a:0x9ccc65,.12,.15,.25);lf.position.set(Math.cos(a)*.1,rand(-.04,.04),Math.sin(a)*.1);lf.lookAt(Math.cos(a)*.4,.05,Math.sin(a)*.4);lf.rotateX(-.5);g.add(lf)}return g},
+    ()=>{const g=new THREE.Group();for(let k=0;k<5;k++){const a=k/5*Math.PI*2+rand(-.2,.2),b=new THREE.Group();b.rotation.set(Math.sin(a)*.3,0,-Math.cos(a)*.3);
+      const st=new THREE.Mesh(new THREE.CylinderGeometry(.018,.03,.2,6),M(0xf1f8e9));st.position.y=.1;b.add(st);const lf=leaf(0x2e7d32,.09,.16,.1);lf.rotation.x=Math.PI/2;lf.position.y=.32;b.add(lf);g.add(b)}return g},
+    ()=>{const g=new THREE.Group(),sm=M(0x7cb342);for(let k=0;k<9;k++){const st=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.55,5),sm);st.position.set(rand(-.04,.04),0,rand(-.04,.04));st.rotation.set(rand(-.15,.15),0,rand(-.15,.15));g.add(st);
+      for(let j=0;j<2;j++){const lf=leaf(0x43a047,.035,.08,.15);lf.position.set(st.position.x+rand(-.05,.05),rand(.05,.28),st.position.z+rand(-.05,.05));lf.rotation.set(rand(-1,1),rand(0,6),rand(-1,1));g.add(lf)}}
+      const tie=new THREE.Mesh(new THREE.TorusGeometry(.055,.012,6,14),M(0xd32f2f));tie.rotation.x=Math.PI/2;tie.position.y=-.1;g.add(tie);g.rotation.z=1.1;return g},
+    ()=>{const g=new THREE.Group();for(let k=0;k<5;k++){const x=rand(-.04,.04),z=rand(-.04,.04),bl=new THREE.Mesh(new THREE.SphereGeometry(.03,8,6),M(0xfafafa));bl.position.set(x,-.2,z);g.add(bl);
+      const tb=new THREE.Mesh(new THREE.CylinderGeometry(.012,.02,.45,6),M(0x66bb6a));tb.position.set(x,.03,z);tb.rotation.z=rand(-.15,.15);g.add(tb)}g.rotation.z=1;return g}];
   /* ของในร้านตลาดให้ตรงกับชื่อร้าน */
   function goods(nm,cx,y,z){const g=new THREE.Group();g.position.set(cx,y,z);const add=(m,x,yy,zz)=>{m.position.set(x,yy,zz);m.castShadow=true;g.add(m)};
     if(nm==="ผลไม้"){for(let k=0;k<5;k++)add(new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),M(pick([0xe53935,0xff9800,0x7cb342]),{roughness:.4})),rand(-.22,.22),.1,rand(-.18,.18));
@@ -1134,7 +1147,7 @@ export function startGame(root,api){
   const critters=[],leeches=[];
   function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="thai")return critter("auntie");if(b==="farm")critter("bite");else if(b==="waterfall")critter("leech");else if(b==="village")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
   function critter(kind){const x0=S.x;
-    if(kind==="pelt"){S.freeze=1.8;const parts=[P.userData.body,P.userData.arms[0],P.userData.arms[1],P.userData.legs[0],P.userData.legs[1]];for(let k=0;k<4;k++){const v=pick(VEGTHROW)();v.scale.setScalar(2.2);v.position.set(x0+2.6,1.4,-1.6);world.add(v);
+    if(kind==="pelt"){S.freeze=1.8;const parts=[P.userData.body,P.userData.arms[0],P.userData.arms[1],P.userData.legs[0],P.userData.legs[1]];for(let k=0;k<4;k++){const v=(k%2===0?pick(VEGLEAF):pick(VEGTHROW))();v.scale.setScalar(2.2);v.position.set(x0+2.6,1.4,-1.6);world.add(v);
         const part=parts[k===0?0:1+Math.floor(Math.random()*4)],lp=part===P.userData.body?new THREE.Vector3(rand(-.3,.3),k===0?2.35:rand(.9,1.6),.42):new THREE.Vector3(0,-rand(.2,.5),.12);critters.push({o:v,kind:"veg",t:-k*.25,from:v.position.clone(),part,lp})}
       {const vd=person({long:true,skirt:0x8e24aa,shirt:0xffcc80,basket:true});vd.position.set(x0+2.8,0,-1.8);vd.rotation.y=Math.PI+.6;world.add(vd);critters.push({o:vd,kind:"vendor",t:0,x0})}SND.play("whoosh");return}
     S.freeze=kind==="leech"?0:kind==="auntie"?4.4:kind==="chicks"?3:kind==="crab"?3.2:2.4;
