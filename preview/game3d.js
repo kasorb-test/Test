@@ -587,21 +587,38 @@ export function startGame(root,api){
   const mistTex=canvasTex(64,64,(x)=>{const gr=x.createRadialGradient(32,32,2,32,32,32);gr.addColorStop(0,"rgba(255,255,255,.9)");gr.addColorStop(1,"rgba(255,255,255,0)");x.fillStyle=gr;x.fillRect(0,0,64,64)});
   const rockM=[0x8d8478,0x7a7268,0x9a9184,0x6f675e].map(c=>M(c,{flat:true,roughness:1})),mossM=[0x4f9a3a,0x5aa843,0x3f8a30].map(c=>M(c,{flat:true,roughness:1}));
   function rock(r,moss){const m=new THREE.Mesh(new THREE.DodecahedronGeometry(r,0),moss?pick(mossM):pick(rockM));m.scale.set(rand(.8,1.3),rand(.65,1),rand(.8,1.2));m.rotation.set(rand(0,3),rand(0,3),rand(0,3));m.castShadow=true;m.receiveShadow=true;return m}
-  function waterfall(){const g=new THREE.Group(),Hf=9;
-    for(const cx of[-7,-5,-3,-1.6,1.6,3,5,7])for(const cy of[1,3.4,5.8,8.2]){if(Math.abs(cx)>5.5&&cy>6)continue;const a=rock(rand(1.7,2.3));a.position.set(cx+rand(-.3,.3),cy,rand(-1.2,-.2)-(Math.abs(cx)<2?1.2:0));g.add(a)}
-    for(const cx of[-2.4,0,2.4])for(const cy of[2,5,8]){const a=rock(rand(1.6,2),false);a.position.set(cx,cy,-3.2);g.add(a)}
-    for(let k=0;k<9;k++){const a=rock(rand(1,1.6),true);a.position.set(rand(-6,6),Hf+rand(.2,.8),rand(-2,-.5));g.add(a)}
-    for(let k=0;k<3;k++){const t=roundTree();t.position.set(pick([-5,-3.5,3.5,5]),Hf+.6,rand(-2,-1));g.add(t)}
-    for(const[w,h,y,z]of[[2.2,2.4,Hf+.4,-.8],[3.4,4.2,Hf*.55,.1],[1.6,3.2,Hf*.75,-.3]]){const c=new THREE.Mesh(new THREE.PlaneGeometry(w,h,1,6),fallMat);c.position.set(rand(-.4,.4),y,z+.9);c.rotation.x=-.08;g.add(c)}
-    for(let k=0;k<4;k++){const ld=rock(rand(.8,1.2),true);ld.position.set(rand(-1.8,1.8),Hf*rand(.3,.75),.9);ld.scale.z=.5;g.add(ld)}
-    for(let k=0;k<14;k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.8,depthWrite:false}));sp.position.set(rand(-2.2,2.2),rand(.2,1.6),1.6+rand(0,1.6));sp.scale.setScalar(rand(1.2,2.6));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}
-    const rb=new THREE.Mesh(new THREE.TorusGeometry(2.6,.18,6,24,Math.PI),new THREE.MeshBasicMaterial({color:0xffe082,transparent:true,opacity:.22,depthWrite:false}));rb.position.set(0,1.2,2.8);g.add(rb);
-    const wf=new THREE.Mesh(new THREE.PlaneGeometry(4.2,Hf+.6,1,8),fallMat);const p=wf.geometry.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i);p.setZ(i,Math.pow((y+(Hf+.6)/2)/(Hf+.6),3)*-.8)}
-    wf.position.set(0,(Hf+.6)/2,.5);g.add(wf);
-    const pool=new THREE.Mesh(new THREE.CircleGeometry(3.6,28),canalMat);pool.rotation.x=-Math.PI/2;pool.position.set(0,.05,2.8);pool.scale.y=.75;g.add(pool);
-    const fm=M(0xffffff,{emissive:0xffffff,emissiveIntensity:.4,transparent:true,opacity:.85});for(let k=0;k<9;k++){const f=new THREE.Mesh(new THREE.SphereGeometry(rand(.3,.6),10,8),fm);f.scale.y=.45;f.position.set(rand(-2,2),.12,1+rand(0,.9));g.add(f)}
-    for(let k=0;k<10;k++){const a=k/10*Math.PI*2,rr=rock(rand(.35,.6));rr.position.set(Math.cos(a)*3.4,.1,2.6+Math.sin(a)*2.4);g.add(rr)}
-    for(let k=0;k<6;k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.7,depthWrite:false}));sp.position.set(rand(-1.4,1.4),rand(.3,1.2),1.2+rand(0,.8));sp.scale.setScalar(rand(1.2,2.2));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}
+  /* น้ำตกสมจริง: หน้าผาหินสีเข้มเป็นชั้น ๆ มีตะไคร่ สายน้ำขาวหลายสายไหลจากขอบผา ละอองหมอกที่ฐาน แอ่งน้ำสีเขียวมรกต */
+  const fallTexA=canvasTex(128,512,(x,w,h)=>{x.clearRect(0,0,w,h);const gr=x.createLinearGradient(0,0,w,0);gr.addColorStop(0,"rgba(200,235,250,0)");gr.addColorStop(.18,"rgba(205,238,252,.55)");gr.addColorStop(.5,"rgba(225,246,255,.75)");gr.addColorStop(.82,"rgba(205,238,252,.55)");gr.addColorStop(1,"rgba(200,235,250,0)");x.fillStyle=gr;x.fillRect(0,0,w,h);
+      for(let i=0;i<260;i++){const X=Math.random()*w,edge=Math.min(X,w-X)/(w/2);x.fillStyle=`rgba(255,255,255,${((.25+Math.random()*.6)*Math.min(1,edge*1.6)).toFixed(2)})`;x.fillRect(X,Math.random()*h,1+Math.random()*2.5,30+Math.random()*120)}},1,1);
+  const fallMatA=new THREE.MeshBasicMaterial({map:fallTexA,transparent:true,depthWrite:false,side:THREE.DoubleSide}),fallTexB=fallTexA.clone();fallTexB.needsUpdate=true;fallTexB.repeat.set(1,1.6);
+  const fallMatB=new THREE.MeshBasicMaterial({map:fallTexB,transparent:true,opacity:.7,depthWrite:false,side:THREE.DoubleSide});
+  const cliffM=new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:1});
+  function fallSheet(w,h,lip){const gm=new THREE.PlaneGeometry(w,h,4,24),p=gm.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i),t=(h/2-y)/h;p.setZ(i,lip*Math.sin(Math.min(1,t*4)*Math.PI/2)*(1-t*.3)+Math.sin(p.getX(i)*3+y)*.04);p.setX(i,p.getX(i)*(1+t*.25))}gm.computeVertexNormals();
+    const g=new THREE.Group(),a=new THREE.Mesh(gm,fallMatA),b=new THREE.Mesh(gm,fallMatB);b.position.z=.06;b.scale.x=.85;g.add(a);g.add(b);return g}
+  function waterfall(){const g=new THREE.Group(),Hf=rand(8.5,10),W=13,falls=[];
+    /* จุดน้ำตก 2-3 สาย กว้างไม่เท่ากัน */
+    const nF=Math.random()<.5?2:3;for(let k=0;k<nF;k++)falls.push({x:-W/2+1.8+(W-3.6)*(nF===1?.5:k/(nF-1))+rand(-.6,.6),w:k===Math.floor(nF/2)?rand(2.4,3.4):rand(1,1.8)});
+    /* หน้าผา: แผ่นเรียบที่ดันนูนเป็นหิน มีร่องตรงสายน้ำ สีหินเข้ม-ตะไคร่เขียว */
+    const gm=new THREE.PlaneGeometry(W,Hf+1.4,36,26),p=gm.attributes.position,col=[],cA=new THREE.Color(0x5b554d),cB=new THREE.Color(0x3d3a35),cM=new THREE.Color(0x3f6b2c),cT=new THREE.Color(0x4f8a35),tc=new THREE.Color();
+    for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i)+(Hf+1.4)/2,ledge=Math.sin(y*1.7)*.35+Math.sin(y*4.3+x)*.12,bump=Math.sin(x*1.3+y*.7)*.45+Math.sin(x*3.1-y*1.9)*.22+rand(-.12,.12);
+      let groove=0;for(const f of falls){const d=Math.abs(x-f.x)/(f.w*.75);if(d<1)groove=Math.max(groove,(1-d*d)*.9)}
+      p.setXYZ(i,x,y,bump+ledge-groove);const top=y>Hf-.3,mossy=(Math.sin(x*2.1+y*3.3)*Math.sin(y*.9+x*.4)>.45)||top;tc.copy(Math.random()<.5?cA:cB);if(mossy)tc.lerp(top?cT:cM,top?.85:.45);if(groove>.2)tc.lerp(cB,.5);col.push(tc.r,tc.g,tc.b)}
+    gm.setAttribute("color",new THREE.Float32BufferAttribute(col,3));gm.computeVertexNormals();const cl=new THREE.Mesh(gm,cliffM);cl.receiveShadow=true;g.add(cl);
+    /* ขอบบนผา: พุ่มไม้ ต้นไม้ เฟิร์นห้อย */
+    for(let k=0;k<6;k++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.6,1.1),1),M(pick([0x2f6b24,0x3a7d2b,0x2b5e22]),{flat:true}));b.position.set(rand(-W/2,W/2),Hf+.5,rand(-.6,.4));if(falls.some(f=>Math.abs(b.position.x-f.x)<f.w*.6))continue;g.add(b)}
+    for(let k=0;k<3;k++){const t=roundTree(),x=pick([-W/2+1,W/2-1,rand(-W/2,W/2)]);if(falls.some(f=>Math.abs(x-f.x)<f.w))continue;t.position.set(x,Hf+.3,-.8);g.add(t)}
+    for(let k=0;k<7;k++){const f=fern();f.scale.setScalar(rand(.6,1));f.rotation.x=rand(.4,.9);f.position.set(rand(-W/2,W/2),rand(1.5,Hf),.5);if(falls.some(q=>Math.abs(f.position.x-q.x)<q.w*.7))continue;g.add(f)}
+    /* สายน้ำ: ไหลจากขอบผา โค้งออกนิดหน่อย กว้างขึ้นตอนล่าง */
+    for(const f of falls){const h=Hf+.3,sh=fallSheet(f.w,h,.55);sh.position.set(f.x,h/2,.35);g.add(sh);
+      const lip=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,f.w*.95,8,1,false,0,Math.PI),new THREE.MeshBasicMaterial({color:0xeaf8ff,transparent:true,opacity:.8,depthWrite:false}));lip.rotation.z=Math.PI/2;lip.position.set(f.x,Hf+.15,.25);g.add(lip);
+      /* ฟองขาวตรงที่น้ำตกกระทบ + หมอกลอย */
+      const fm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.85,depthWrite:false});for(let k=0;k<7;k++){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.25,.5)*f.w/2,10,8),fm);b.scale.y=.4;b.position.set(f.x+rand(-f.w/2,f.w/2),.15,.9+rand(0,.8));g.add(b)}
+      for(let k=0;k<Math.round(4+f.w*2);k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.75,depthWrite:false}));sp.position.set(f.x+rand(-f.w*.7,f.w*.7),rand(.3,2.2),1+rand(0,1.6));sp.scale.setScalar(rand(1.2,2.6)*(.6+f.w*.25));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}}
+    /* แอ่งน้ำสีเขียวมรกต มีระลอก ขอบหินมีตะไคร่ */
+    const pool=new THREE.Mesh(new THREE.PlaneGeometry(W+1,7),new THREE.MeshStandardMaterial({color:0x3fb7b0,map:canalRip,roughness:.1,metalness:.1,emissive:0x0d4f55,emissiveIntensity:.25,transparent:true,opacity:.92}));pool.rotation.x=-Math.PI/2;pool.position.set(0,.06,3.6);g.add(pool);
+    for(let k=0;k<16;k++){const rr=rock(rand(.35,.75),Math.random()<.5);rr.position.set(rand(-W/2,W/2),.1,7+rand(-.2,.4));g.add(rr)}
+    for(let k=0;k<5;k++){const rr=rock(rand(.4,.8),true);rr.position.set(rand(-W/2,W/2),.15,rand(1.2,6));if(falls.some(f=>Math.abs(rr.position.x-f.x)<f.w*.7))continue;g.add(rr)}
+    const rb=new THREE.Mesh(new THREE.TorusGeometry(2.4,.14,6,24,Math.PI),new THREE.MeshBasicMaterial({color:0xffe9a8,transparent:true,opacity:.18,depthWrite:false}));rb.position.set(falls[0].x+1,1.4,2.6);g.add(rb);
     return g}
   function fern(){const g=new THREE.Group();for(let k=0;k<9;k++){const f=archLeaf(rand(.7,1.1),.24,fernMat,.9,1);f.rotation.y=k/9*Math.PI*2+rand(-.2,.2);g.add(f)}return g}
   /* ตลาด: แผงร้านหลังคาผ้าใบลายทาง ผลไม้ผักกองบนโต๊ะ แม่ค้า ป้ายชื่อร้าน ธงราว */
@@ -1010,7 +1027,7 @@ export function startGame(root,api){
       if(Math.random()<.35){const sb=boat();sb.scale.setScalar(rand(2,3));sb.position.set(rand(0,10),0,-rand(40,90));sb.rotation.y=rand(-.5,.5);g.add(sb);anim.push({seg:g,obj:sb,kind:"boat",ph:rand(0,6)})}
     }else if(B==="waterfall"){
       /* น้ำตก: ผาหินกับสายน้ำทุก 3 ชิ้น ที่เหลือเป็นหิน เฟิร์น ต้นไม้ กอไผ่ */
-      {const wf=waterfall(),odd=segN%2;wf.position.set(5,0,odd?-17:-15);if(odd)wf.scale.setScalar(.8);g.add(wf)}
+      {const wf=waterfall();wf.position.set(5,0,-15);g.add(wf)}
       for(let k=0;k<5;k++){const fr=Math.random()<.25,r=rock(fr?rand(.2,.4):rand(.3,.8),Math.random()<.4);r.position.set(rand(0,SEG),.1,fr?rand(2,4):-rand(2,8));g.add(r)}
       for(let k=0;k<4;k++){const f=fern();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,7):rand(1.8,3.5));g.add(f)}
       for(let k=0;k<5;k++){const t=tuft();t.position.set(rand(0,SEG),0,rand(-4,4)*(Math.random()<.5?1:-1));g.add(t)}
@@ -1301,7 +1318,7 @@ export function startGame(root,api){
     stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=themeNow();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
-    fallTex.offset.y+=dt*2.2;canalMat.map.offset.y-=dt*.35;canalRip.offset.y-=dt*.22;clearWater.opacity=.45+Math.sin(S.t*1.3)*.03;if(!clearWater.map&&canalMat.map){clearWater.map=canalMat.map;clearWater.needsUpdate=true}ground.position.x=S.x;
+    fallTex.offset.y+=dt*2.2;fallTexA.offset.y+=dt*1.6;fallTexB.offset.y+=dt*2.4;canalMat.map.offset.y-=dt*.35;canalRip.offset.y-=dt*.22;clearWater.opacity=.45+Math.sin(S.t*1.3)*.03;if(!clearWater.map&&canalMat.map){clearWater.map=canalMat.map;clearWater.needsUpdate=true}ground.position.x=S.x;
     {const on=biomeOf(S.st)==="beach"&&!TH.night;glit.visible=on;if(on){const a=glitGeo.attributes.position.array,sx=(fade?fade.cur.sp:TH.sunPos)[0];for(let k=0;k<GN;k++){if(Math.random()<.08||Math.abs(a[k*3]-S.x)>90){const z=-rand(14,150),sp=1.2+(-z)*.06;a[k*3]=S.x+3+sx*(-z/170)+rand(-sp,sp);a[k*3+1]=.3;a[k*3+2]=z}}glitGeo.attributes.position.needsUpdate=true;glitMat.opacity=.55+Math.sin(S.t*9)*.25;glitMat.color.set(TH.light)}}
     gearT+=dt;if(gearT>.5){gearT=0;applyGear()}if(GEAR.fan.visible)GEAR.fan.rotation.z=Math.sin(S.t*14)*.45;
     for(let i=chests.length-1;i>=0;i--){const c=chests[i];if(c.seg.parent!==world){chests.splice(i,1);continue}const u=c.o.userData;
