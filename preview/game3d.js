@@ -121,22 +121,27 @@ export function startGame(root,api){
   root.appendChild(renderer.domElement);
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,W()/H(),.1,240);
   /* ===== บรรยากาศ: เลือกธีมได้ (กลางวัน / เย็น / ทุ่งดอกไม้) ท้องฟ้าไล่สี พระอาทิตย์ ภูเขาไกล เนินสองชั้น กังหันลม บ้านไร่ บ่อน้ำ นก ===== */
-  const TH=THEMES[api.theme||window.__advTheme||"day"]||THEMES.day;
+  /* ธีมสลับตามด่าน ทุก 3 ด่าน: กลางวัน > ยามเย็น > ทุ่งดอกไม้ (ล็อกธีมได้ผ่าน api.theme สำหรับทดสอบ) */
+  const ORDER=["day","sunset","spring"],fixedTheme=api.theme||window.__advTheme;
+  const themeOf=st=>THEMES[fixedTheme]||THEMES[ORDER[Math.floor((Math.max(1,st)-1)/3)%ORDER.length]];
+  let TH=themeOf(api.best()+1);
   const hemi=new THREE.HemisphereLight(TH.hemi[0],TH.hemi[1],TH.hemiI);scene.add(hemi);
   const sun=new THREE.DirectionalLight(TH.light,TH.sunI);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-16,right:16,top:12,bottom:-12,near:1,far:60});scene.add(sun);scene.add(sun.target);
-  const skyC=document.createElement("canvas");skyC.width=4;skyC.height=512;{const x=skyC.getContext("2d"),gr=x.createLinearGradient(0,0,0,512);TH.sky.forEach((c,k)=>gr.addColorStop(k/(TH.sky.length-1),c));x.fillStyle=gr;x.fillRect(0,0,4,512)}
+  const skyC=document.createElement("canvas");skyC.width=4;skyC.height=512;const drawSky=cols=>{const x=skyC.getContext("2d"),gr=x.createLinearGradient(0,0,0,512);cols.forEach((c,k)=>gr.addColorStop(k/(cols.length-1),"#"+c.getHexString()));x.fillStyle=gr;x.fillRect(0,0,4,512)};drawSky(TH.sky.map(c=>new THREE.Color(c)));
   const skyT=new THREE.CanvasTexture(skyC);skyT.colorSpace=THREE.SRGBColorSpace;scene.background=skyT;
   scene.fog=new THREE.Fog(TH.fog,50,190);
   const groundMat=M(TH.ground,{roughness:1}),ground=new THREE.Mesh(new THREE.PlaneGeometry(600,300),groundMat);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
   const pathMat=M(TH.path,{roughness:.95}),pathEdge=M(TH.pathEdge,{roughness:1});
   function setSky(){}
   /* พระอาทิตย์: แผ่นเรืองแสงไกล ๆ ตามกล้อง */
-  const sunSp=(()=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);
+  const sunC=document.createElement("canvas");sunC.width=sunC.height=256;
+  const drawSun=(core,glow)=>{const x=sunC.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);x.clearRect(0,0,256,256);g.addColorStop(0,core);g.addColorStop(.28,core);g.addColorStop(.36,glow+"cc");g.addColorStop(1,glow+"00");x.fillStyle=g;x.fillRect(0,0,256,256)};
+  const sunSp=(()=>{const c=sunC;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);
     g.addColorStop(0,TH.sunCore);g.addColorStop(.28,TH.sunCore);g.addColorStop(.36,TH.sunGlow+"cc");g.addColorStop(1,TH.sunGlow+"00");x.fillStyle=g;x.fillRect(0,0,256,256);
     const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,fog:false,depthWrite:false,transparent:true}));sp.scale.set(70,70,1);scene.add(sp);return sp})();
   /* ชั้นฉากหลังวนซ้ำตามตำแหน่งตัวละคร (parallax): ภูเขา > เนินไกล > เนินใกล้ */
   const layers=[];
-  function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span})}
+  function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span,kind:layers.length})}
   /* ภูเขาโค้งแบบธรรมชาติ: โปรไฟล์ทรงระฆังหมุนรอบแกน สูงต่ำสลับกัน บางลูกยอดเอียง */
   let mk=0;
   layer(()=>{const big=mk++%2===0,h=big?rand(30,46):rand(14,24),r=h*rand(1.1,1.6),pts=[];
@@ -174,10 +179,25 @@ export function startGame(root,api){
   }
   for(let i=0;i<9;i++)addSeg();
   const hills=[];
+  /* เปลี่ยนธีมแบบค่อย ๆ ไล่สี 2 วินาที: ท้องฟ้า หมอก พื้น ทาง แสง พระอาทิตย์ ภูเขา เนิน */
+  let fade=null;const C=v=>new THREE.Color(v);
+  function snapshot(){return{sky:(fade?fade.cur.sky:TH.sky.map(C)),fog:scene.fog.color.clone(),ground:groundMat.color.clone(),path:pathMat.color.clone(),edge:pathEdge.color.clone(),
+    hs:hemi.color.clone(),hg:hemi.groundColor.clone(),hi:hemi.intensity,lc:sun.color.clone(),li:sun.intensity,sp:fade?fade.cur.sp:TH.sunPos.slice(),
+    lay:layers.map(L=>L.items.map(g=>{const m=g.isMesh?g:g.children[0];return m.material.color.clone()}))}}
+  function target(T){return{sky:T.sky.map(C),fog:C(T.fog),ground:C(T.ground),path:C(T.path),edge:C(T.pathEdge),hs:C(T.hemi[0]),hg:C(T.hemi[1]),hi:T.hemiI,lc:C(T.light),li:T.sunI,sp:T.sunPos.slice(),
+    lay:layers.map(L=>L.items.map(()=>C(L.kind===0?pick(T.mounts||[T.mount]):L.kind===1?T.hill2:T.hill1)))}}
+  function fadeTo(T){const from=snapshot();TH=T;fade={t:0,from,to:target(T),cur:{sky:from.sky.map(c=>c.clone()),sp:from.sp.slice()}}}
+  function stepFade(dt){if(!fade)return;fade.t=Math.min(1,fade.t+dt/2);const k=fade.t*fade.t*(3-2*fade.t),f=fade.from,t=fade.to,cur=fade.cur;
+    cur.sky=f.sky.map((c,i)=>c.clone().lerp(t.sky[i],k));drawSky(cur.sky);skyT.needsUpdate=true;
+    scene.fog.color.copy(f.fog).lerp(t.fog,k);groundMat.color.copy(f.ground).lerp(t.ground,k);pathMat.color.copy(f.path).lerp(t.path,k);pathEdge.color.copy(f.edge).lerp(t.edge,k);
+    hemi.color.copy(f.hs).lerp(t.hs,k);hemi.groundColor.copy(f.hg).lerp(t.hg,k);hemi.intensity=f.hi+(t.hi-f.hi)*k;sun.color.copy(f.lc).lerp(t.lc,k);sun.intensity=f.li+(t.li-f.li)*k;
+    cur.sp=[f.sp[0]+(t.sp[0]-f.sp[0])*k,f.sp[1]+(t.sp[1]-f.sp[1])*k];
+    layers.forEach((L,li)=>L.items.forEach((g,ii)=>{const m=g.isMesh?g:g.children[0];m.material.color.copy(f.lay[li][ii]).lerp(t.lay[li][ii],k)}));
+    if(fade.t>=1){drawSun(TH.sunCore,TH.sunGlow);sunSp.material.map.needsUpdate=true;fade=null}}
   const P=makePencil();scene.add(P);
   const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.4,t:0,fall:null,hop:null};
   const ui=api.ui;
-  function stage(st){S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
+  function stage(st){if(themeOf(st)!==TH)fadeTo(themeOf(st));S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(){
@@ -256,7 +276,7 @@ export function startGame(root,api){
     while(segX<S.x+60)addSeg();
     while(segs.length&&segs[0].position.x+SEG<S.x-25){world.remove(segs.shift())}
     for(const L of layers)for(const m of L.items){if(m.position.x<S.x-L.span/2)m.position.x+=L.span}
-    sunSp.position.set(S.x+TH.sunPos[0],TH.sunPos[1],-170);
+    stepFade(dt);const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
@@ -267,5 +287,5 @@ export function startGame(root,api){
     renderer.render(scene,cam);raf=requestAnimationFrame(tick);
   }
   raf=requestAnimationFrame(tick);
-  return {stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length})};
+  return {stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length}),goStage:n=>stage(n)};
 }
