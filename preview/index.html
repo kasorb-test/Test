@@ -2825,7 +2825,7 @@ body.adv-on{overflow:hidden}
 .adv-shop-box h3{margin:0;font-size:22px;color:#6b3f17}.adv-shop-c{margin:4px 0 8px;color:#475569}.adv-shop-msg{margin:0 0 8px;color:#b45309;font-weight:700}
 .adv-shop-list{display:grid;gap:8px;text-align:left}.adv-it{display:flex;align-items:center;gap:10px;padding:8px;border:2px solid #ead7b8;border-radius:14px;background:#fff}.adv-it.focus{border-color:#f59e0b;background:#fff8e1}
 .adv-it-ic{flex:none;width:44px;height:44px;border-radius:12px;background:#f3e3c7;display:grid;place-items:center}.adv-it-ic svg{width:32px;height:32px}
-.adv-it div{flex:1;min-width:0}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
+.adv-it div{flex:1;min-width:0}.adv-hc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.adv-it .adv-hc button{width:24px;height:24px;min-width:0;padding:0;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #cbd5e1;background:var(--c);text-shadow:none;cursor:pointer}.adv-it .adv-hc button.on{box-shadow:0 0 0 3px #f59e0b}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
 .adv-it button{flex:none;min-width:74px;padding:7px 10px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;text-shadow:0 2px 0 #5a3412;cursor:pointer}
 .adv-it button.low{filter:saturate(.5);opacity:.85}.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
 .adv-cf{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(15,23,42,.45)}
@@ -7851,6 +7851,8 @@ const ADV_ICON={umbrella:'<svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 6.5 3 11
   sndOff:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2"/></svg>'};
 let advPref={},advOn={};try{advPref=JSON.parse(localStorage.getItem("advGearPref")||"{}")||{}}catch(e){}
 const advOwned=()=>window.__advGear||(Array.isArray(currentData?.gear)?currentData.gear:[]);
+const ADV_HATC={cap:["#1c1c1f","#1e3a8a","#c62828","#ec407a","#2e7d32","#f5f5f5"],straw:["#e53935","#1e88e5","#ec407a","#212121","#43a047","#fdd835"]};
+let advHatCol={};try{advHatCol=JSON.parse(localStorage.getItem("advHatCol")||"{}")||{}}catch(e){}
 const advSavePref=()=>{try{localStorage.setItem("advGearPref",JSON.stringify(advPref))}catch(e){}};
 function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned();
   bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)}${advPref[id]==null?" (อัตโนมัติ)":""}">${ADV_ICON[id]}${advPref[id]==null?'<i>A</i>':""}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
@@ -7859,12 +7861,13 @@ function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned()
 const advCoins=()=>window.__advCoins??coinsOf();
 function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=advCoins();
   sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
-    <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small></div>
+    <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small>${has&&ADV_HATC[id]?`<span class="adv-hc">${ADV_HATC[id].map((c,i)=>`<button type="button" data-hc="${id}" data-c="${c}" style="--c:${c}" class="${(advHatCol[id]||ADV_HATC[id][0])===c?"on":""}" aria-label="สีหมวก ${i+1}"></button>`).join("")}</span>`:""}</div>
       <button type="button" data-buy="${id}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
     <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
   sh.classList.remove("hidden");
   $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
-  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advConfirm(b.dataset.buy))}
+  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advConfirm(b.dataset.buy));
+  sh.querySelectorAll("[data-hc]").forEach(b=>b.onclick=()=>{advHatCol[b.dataset.hc]=b.dataset.c;try{localStorage.setItem("advHatCol",JSON.stringify(advHatCol))}catch(e){}advMod?.SND.play("tap");adv?.refreshGear();advShop(b.dataset.hc)})}
 /* ยืนยันก่อนซื้อ: บอกชื่อ ราคา และเหรียญที่จะเหลือ */
 function advConfirm(id){const it=ADV_GEAR.find(g=>g[0]===id),sh=$("advShop");if(!it||!sh)return;
   if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}
@@ -7970,7 +7973,7 @@ async function advStart(){
     const mod=await import("./game3d.js");if(!$("advOv"))return;advMod=mod;
     const snd=$("advSnd"),sndIc=()=>{snd.innerHTML=mod.SND.isOn()?ADV_ICON.sndOn:ADV_ICON.sndOff};sndIc();snd.onclick=()=>{mod.SND.unlock();mod.SND.setOn(!mod.SND.isOn());sndIc()};
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref});advGearBar();window.advGame=adv;startBox();
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref,hatCol:()=>advHatCol});advGearBar();window.advGame=adv;startBox();
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
