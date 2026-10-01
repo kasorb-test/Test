@@ -7733,7 +7733,7 @@ function wardrobeHtml(lv){
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
-const ADV_NAMES=["ทุ่งหญ้า","ทุ่งดอกไม้","คลองและสะพานหิน","สวนสัตว์","ชายทะเล","น้ำตก","หมู่บ้าน","ตลาดภาษาอังกฤษ","บ้านผีสิง","ภาษาไทย"];
+const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","English Market","Haunted House","Thai Language"];
 const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
 const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -7865,7 +7865,7 @@ async function advClear(st){
 async function advStart(){
   advClose();
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
-  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
+  ov.innerHTML=`<div class="adv-top"><b id="advSt">Stage 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-pic hidden" id="advPic"></div><div class="adv-ops hidden" id="advOps"></div><div class="adv-qh" id="advQh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
@@ -7892,7 +7892,7 @@ async function advStart(){
     const chips=Array.from({length:10},(_,i)=>{const n=i+1,open=advOpen(n),prem=n>5&&advMax()<10;return `<button type="button" class="adv-chip${n===advSel?" on":""}${open?"":" lock"}${prem?" prem":""}" data-n="${n}" title="${escHtml(ADV_NAMES[i])}">${n}</button>`}).join("");
     d.innerHTML=`<div class="adv-start-box"><img src="mascot-2b.svg" alt="">${msg?`<p class="adv-done">${msg}</p>`:""}<h3 id="advStartT"></h3><div class="adv-stages">${chips}</div><p class="adv-lock-note hidden" id="advLockNote"></p><p>น้องดินสอจะเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ<br>ตอบคำถามให้ถูก แล้วไปด่านต่อไป</p><button type="button" class="adv-go" id="advGo">START</button></div>`;
     $("advView").appendChild(d);
-    const title=()=>{$("advStartT").textContent=`ด่าน ${advSel} ${ADV_NAMES[advSel-1]}`};title();
+    const title=()=>{$("advStartT").textContent=`Stage ${advSel} · ${ADV_NAMES[advSel-1]}`};title();
     d.querySelectorAll(".adv-chip").forEach(b=>b.onclick=()=>{const n=+b.dataset.n,note=$("advLockNote");
       if(!advOpen(n)){note.textContent=n>5&&advMax()<10?"ด่าน 6-10 สำหรับสมาชิก Premium":`ผ่านด่าน ${n-1} ก่อน แล้วจะเล่นด่านนี้ได้`;note.classList.remove("hidden");return}
       note.classList.add("hidden");advSel=n;advRe=false;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
@@ -7909,7 +7909,7 @@ async function advStart(){
     ["pointerup","pointercancel","touchend","touchcancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
   $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});
   const ui={
-    stage:(st,need,done)=>{$("advSt").textContent=`ด่าน ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
+    stage:(st,need,done)=>{$("advSt").textContent=`Stage ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
     pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
     ask:q=>{$("advView").classList.add("asking");$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
