@@ -2772,23 +2772,31 @@ body.adv-on{overflow:hidden}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
 @media(max-width:600px){.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
-/* ปุ่มเกม: เงาวาว ขอบหนา ลูกศรสามเหลี่ยม กดแล้วยุบ (ใช้ทั้งบันไดยศและเกม) */
-.st-mv,.adv-k[data-h]{--c1:#5fd0ff;--c2:#1d8fe6;--c3:#0f5fa8;position:relative;border:3px solid #fff!important;border-radius:50%;
-  background:radial-gradient(circle at 50% 28%,rgba(255,255,255,.75) 0 18%,rgba(255,255,255,0) 42%),linear-gradient(180deg,var(--c1),var(--c2))!important;
-  box-shadow:0 5px 0 var(--c3),0 9px 14px rgba(0,0,0,.28),inset 0 -6px 0 rgba(0,0,0,.12)!important;color:transparent!important;font-size:0!important;
+/* ปุ่มเกมแบบป้ายไม้: ลายไม้ ขอบน้ำตาลเข้ม ลูกศรสีครีม ปุ่ม JUMP ไม้สีเขียว กดแล้วยุบ (ใช้ทั้งบันไดยศและเกม) */
+.st-mv,.adv-k[data-h]{position:relative;padding:0;border:4px solid #6b3f17!important;border-radius:16px;color:transparent!important;font-size:0!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 30%),repeating-linear-gradient(0deg,#c98a4a 0 10px,#b8783a 10px 12px)!important;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.25),0 6px 0 #4a2a0d,0 10px 14px rgba(0,0,0,.28)!important;
   cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;transition:transform .06s}
-.st-mv{width:54px;height:54px;padding:0}.st-pad{gap:12px!important}.adv-k[data-h]{width:68px;height:68px}
+.st-mv{width:58px;height:50px}.adv-k[data-h]{width:72px;height:62px}
 .st-mv:before,.adv-k[data-h]:before{content:"";position:absolute;left:50%;top:50%;width:0;height:0;margin:0;border:0;transform:translate(-62%,-50%);
-  border-top:13px solid transparent;border-bottom:13px solid transparent;border-right:18px solid #fff;filter:drop-shadow(0 2px 0 var(--c3))}
-.st-mv.r:before,.adv-k[data-h="r"]:before{transform:translate(-38%,-50%);border-right:0;border-left:18px solid #fff}
-.adv-k[data-h]:before{border-top-width:16px;border-bottom-width:16px;border-right-width:22px}.adv-k[data-h="r"]:before{border-left-width:22px;border-right-width:0}
-.st-mv:active,.adv-k[data-h].on,.adv-k[data-h]:active{transform:translateY(4px);box-shadow:0 1px 0 var(--c3),0 3px 6px rgba(0,0,0,.25),inset 0 -3px 0 rgba(0,0,0,.12)!important}
-.st-jumpbtn,.adv-jump{position:absolute;border:3px solid #fff!important;border-radius:999px;color:#fff!important;font:inherit;font-weight:900;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent;
-  background:radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.7) 0 20%,rgba(255,255,255,0) 50%),linear-gradient(180deg,#ffb23a,#ff6a00)!important;
-  box-shadow:0 5px 0 #b84a00,0 9px 14px rgba(0,0,0,.28),inset 0 -6px 0 rgba(0,0,0,.12)!important;text-shadow:0 2px 0 rgba(150,60,0,.6)}
-.st-jumpbtn{padding:10px 20px;font-size:15px;letter-spacing:.02em}
-.adv-jump{width:72px;height:72px;font-size:0!important}.adv-jump:before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-62%);border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:20px solid #fff;filter:drop-shadow(0 2px 0 #b84a00)}.adv-jump:after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,40%);background:#fff;border-radius:2px;filter:drop-shadow(0 2px 0 #b84a00)}
-.st-jumpbtn:active,.adv-jump:active{transform:translateY(4px);box-shadow:0 1px 0 #b84a00,0 3px 6px rgba(0,0,0,.25)!important}
+  border-top:13px solid transparent;border-bottom:13px solid transparent;border-right:17px solid #fff4d6;filter:drop-shadow(0 2px 0 rgba(74,42,13,.6))}
+.st-mv.r:before,.adv-k[data-h="r"]:before{transform:translate(-38%,-50%);border-right:0;border-left:17px solid #fff4d6}
+.adv-k[data-h]:before{border-top-width:15px;border-bottom-width:15px;border-right-width:20px}.adv-k[data-h="r"]:before{border-left-width:20px;border-right-width:0}
+.st-mv:active,.adv-k[data-h].on,.adv-k[data-h]:active{transform:translateY(5px);box-shadow:inset 0 3px 0 rgba(255,255,255,.25),0 1px 0 #4a2a0d,0 3px 6px rgba(0,0,0,.25)!important}
+.st-jumpbtn,.adv-jump{position:absolute;border:4px solid #2f6b14!important;border-radius:16px;color:#fff!important;font:inherit;font-weight:900;letter-spacing:.08em;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 30%),repeating-linear-gradient(0deg,#7ccf3a 0 10px,#6abd2c 10px 12px)!important;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 6px 0 #1f4a0c,0 10px 14px rgba(0,0,0,.28)!important;text-shadow:0 2px 0 #2f6b14}
+.st-jumpbtn{padding:9px 20px;font-size:17px}
+.adv-jump{width:auto!important;height:62px!important;padding:0 22px;font-size:20px!important;border-radius:16px!important}
+.st-jumpbtn:active,.adv-jump:active{transform:translateY(5px);box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 1px 0 #1f4a0c,0 3px 6px rgba(0,0,0,.25)!important}
+/* หน้าจอเริ่มเกม */
+.adv-start{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(15,23,42,.35)}
+.adv-start-box{width:min(340px,calc(100% - 40px));padding:22px 20px;border-radius:24px;background:#fffaf0;border:4px solid #6b3f17;box-shadow:0 8px 0 #4a2a0d,0 16px 30px rgba(0,0,0,.3);text-align:center}
+.adv-start-box img{width:84px;height:auto;margin-top:-62px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}
+.adv-start-box h3{margin:6px 0 4px;font-size:26px;color:#6b3f17}.adv-start-box p{margin:0 0 6px;font-size:13.5px;color:#475569;line-height:1.6}
+.adv-go{margin-top:10px;padding:12px 44px;border:4px solid #2f6b14;border-radius:18px;color:#fff;font:inherit;font-size:24px;font-weight:900;letter-spacing:.1em;cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 30%),repeating-linear-gradient(0deg,#7ccf3a 0 10px,#6abd2c 10px 12px);box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 6px 0 #1f4a0c;text-shadow:0 2px 0 #2f6b14;animation:advGo 1.2s ease-in-out infinite}
+.adv-go:active{transform:translateY(5px);box-shadow:0 1px 0 #1f4a0c}@keyframes advGo{50%{transform:scale(1.06)}}
 .sb-game{margin-top:10px}
 .lk-wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
 .lk-opts{min-width:0}
@@ -7750,7 +7758,7 @@ async function advStart(){
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
       <div class="adv-hint" id="advHint">น้องดินสอเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
-      <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">⤒</button>
+      <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">JUMP</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
         <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
         <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
@@ -7758,12 +7766,14 @@ async function advStart(){
         <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
         <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
         <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
+      <div class="adv-start" id="advStart"><div class="adv-start-box"><img src="mascot-2b.svg" alt=""><h3 id="advStartT">ด่าน 1</h3><p>น้องดินสอจะเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ<br>ตอบคำถามให้ถูก แล้วไปด่านต่อไป</p><button type="button" class="adv-go" id="advGo">START</button></div></div>
       <div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
-  menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu){menu.classList.add("hidden");adv?.pause(false)}return}
-    if(b.dataset.go==="resume"){menu.classList.add("hidden");adv?.pause(false);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+  const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
+  menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
+    if(b.dataset.go==="resume"){resume();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
@@ -7788,7 +7798,8 @@ async function advStart(){
   try{
     const mod=await import("./game3d.js");if(!$("advOv"))return;
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc()});window.advGame=adv;
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc()});window.advGame=adv;adv.pause(true);
+    $("advStartT").textContent=`ด่าน ${advBest()+1}`;$("advGo").onclick=()=>{$("advStart")?.remove();adv?.pause(false)};
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
@@ -7849,7 +7860,7 @@ function stairsHtml(lv,xp){
     ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+128}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+154}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
     <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn">${stCharHtml(lv)}</div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
-    <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
+    <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">JUMP</button><span class="st-plus" id="stPlus"></span></div>
     <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
 }
 /* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
