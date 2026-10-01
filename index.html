@@ -2589,6 +2589,284 @@ input{
 .countdown-days{font-size:56px;font-weight:900;line-height:1}
 .countdown-unit{font-size:18px;font-weight:800}
 .countdown-date{font-size:13px;font-weight:600;opacity:.92}
+.ptr-tip{position:fixed;left:50%;top:6px;z-index:9999;padding:6px 14px;border-radius:999px;background:#16305f;color:#fff;font-size:12.5px;font-weight:700;opacity:0;transform:translate(-50%,0);pointer-events:none;transition:opacity .1s}
+/* บันไดยศแบบรูป */
+.stairs{position:relative;height:250px;margin:4px 0 6px;container-type:inline-size;overflow:hidden;border-radius:14px;background:linear-gradient(#fff7ef,#fff 70%)}
+.st-floor{position:absolute;left:0;right:0;bottom:0;height:6px;background:#efe6da}
+.st-col{position:absolute;bottom:6px;box-sizing:border-box;padding:9px 4px 0;border-radius:10px 10px 0 0;text-align:center;border:1px solid rgba(0,0,0,.04);border-bottom:0}
+.st-col b{display:block;font-size:12.5px;line-height:1.2}.st-col span{display:block;font-size:10px;line-height:1.25;opacity:.85;overflow-wrap:anywhere}
+.st-col.done{background:#e3e9f5;color:#16305f}.st-col.now{background:linear-gradient(160deg,#ff9a45,#ff6a00);color:#fff}
+.st-col.next{background:#ffe8d4;color:#c2410c}.st-col.top{background:linear-gradient(160deg,#ffe07a,#f5b301);color:#5a3b00}
+/* บันไดยศแบบมีมิติ มินิมอล: ด้านหน้า + ผิวบน + ด้านข้าง ไล่เฉดสีเดียวกัน */
+.stairs{--d:12px;height:270px!important;background:linear-gradient(180deg,#fbf8f4,#f3eee7);box-shadow:inset 0 0 0 1px #efe8de}
+.st-floor{height:6px;background:#e9e1d6}
+.st-col{--f:#e6ebf3;--t:#f4f7fb;--s:#cfd8e6;background:var(--f)!important;border:0;border-radius:0;overflow:visible;padding-top:12px;box-shadow:0 10px 18px -12px rgba(22,48,95,.35)}
+.st-col::before{content:"";position:absolute;left:0;right:0;top:calc(-1*var(--d));height:var(--d);background:var(--t);transform:skewX(-45deg);transform-origin:bottom left}
+.st-col::after{content:"";position:absolute;top:calc(-1*var(--d));right:calc(-1*var(--d));bottom:var(--d);width:var(--d);background:var(--s);transform:skewY(-45deg);transform-origin:bottom left;top:0;bottom:0}
+.st-col.done{--f:#e6ebf3;--t:#f4f7fb;--s:#cfd8e6;color:#16305f}
+.st-col.now{--f:#ff7a1a;--t:#ffa35c;--s:#e2600a;color:#fff}
+.st-col.next{--f:#fde9d7;--t:#fff4ea;--s:#f6d3b4;color:#c2410c}
+.st-col.top{--f:#f7cf55;--t:#fde38f;--s:#e0b232;color:#5a3b00}
+.st-col b{font-size:13px;letter-spacing:.2px}.st-col span{font-size:10px;opacity:.8}
+@media(max-width:480px){.st-col span{display:none!important}.st-col b{font-size:12px}}
+.st-me img{border-width:2px;box-shadow:0 6px 14px rgba(22,48,95,.22)}
+.st-cap{font-weight:600;color:#475569}
+/* ฉากธรรมชาติหลังบันไดยศ: ฟ้า ภูเขา เนินหญ้า ต้นไม้ เมฆลอย นก */
+.stairs{background:linear-gradient(180deg,#dcefff 0%,#eef7ff 45%,#f6fbf2 100%)!important;box-shadow:inset 0 0 0 1px #e3ecf3!important}
+.st-scene{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.st-land{position:absolute;left:0;right:0;bottom:0;width:100%;height:92%}
+.st-trees{position:absolute;left:0;width:100%;bottom:calc(56px + 48px);height:40px}
+.st-sun{position:absolute;right:14%;top:16px;width:34px;height:34px;border-radius:50%;background:#fff1b8;box-shadow:0 0 0 8px rgba(255,241,184,.35),0 0 30px rgba(255,220,120,.5)}
+.st-cloud{position:absolute;height:14px;border-radius:14px;background:#fff;opacity:.9;animation:stCloud 34s linear infinite}
+.st-cloud:before,.st-cloud:after{content:"";position:absolute;bottom:4px;border-radius:50%;background:#fff}
+.st-cloud:before{left:8px;width:18px;height:18px}.st-cloud:after{left:22px;width:14px;height:14px}
+.st-cloud.c1{top:26px;width:54px;left:8%}.st-cloud.c2{top:52px;width:44px;left:48%;animation-duration:46s;animation-delay:-18s}
+@keyframes stCloud{0%{transform:translateX(0)}50%{transform:translateX(40px)}100%{transform:translateX(0)}}
+.st-bird{position:absolute;width:12px;height:5px;border-top:2px solid #64748b;border-radius:50% 50% 0 0;opacity:.6;animation:stBird 7s ease-in-out infinite}
+.st-bird:after{content:"";position:absolute;left:10px;top:-2px;width:12px;height:5px;border-top:2px solid #64748b;border-radius:50% 50% 0 0}
+.st-bird.b1{left:30%;top:30px}.st-bird.b2{left:36%;top:42px;transform:scale(.8);animation-delay:-3s}
+@keyframes stBird{0%,100%{translate:0 0}50%{translate:14px -6px}}
+.st-floor{background:#7fb877!important;height:8px!important}
+.st-col{box-shadow:0 12px 16px -12px rgba(30,60,30,.45)!important}
+@media(prefers-reduced-motion:reduce){.st-cloud,.st-bird{animation:none}}
+/* ===== บันไดยศแนวเกมกระโดดข้ามแท่น: แท่นดินหญ้าลายบล็อก รูปประจำตัวกระโดดโค้งไปแท่นถัดไป ===== */
+.stairs{background:linear-gradient(180deg,#6ec6ff 0%,#a9dcff 55%,#d6f0ff 100%)!important;box-shadow:none!important;border-radius:16px!important}
+.st-sun{background:#fff6c2!important}
+.st-cloud{height:16px;background:#fff;opacity:1}.st-cloud:before{width:22px;height:22px}.st-cloud:after{width:16px;height:16px;left:26px}
+.st-floor{height:10px!important;background:#6b4424!important}
+.st-col{--dirt:#d08a4c;--line:rgba(90,50,20,.28);--g:#5ccf3f;--gd:#37a52b;
+  background:linear-gradient(var(--g),var(--g)) top/100% 13px no-repeat,linear-gradient(var(--gd),var(--gd)) 0 13px/100% 4px no-repeat,
+  border:3px solid #5b3718!important;border-bottom:0!important;border-radius:9px 9px 0 0!important;padding-top:20px!important;box-shadow:inset -5px 0 0 rgba(0,0,0,.12),inset 4px 0 0 rgba(255,255,255,.16)!important;color:#fff!important}
+.st-col::before{content:"";position:absolute;left:-3px;right:-3px;top:-7px;height:10px;transform:none;background:radial-gradient(circle at 6px 10px,var(--g) 6px,transparent 6.5px) 0 0/12px 10px repeat-x}
+.st-col::after{content:none}
+.st-col b,.st-col span{text-shadow:none}.st-col b{display:inline-block;padding:1px 7px;border-radius:6px;background:rgba(60,30,10,.5)}.st-col span{display:block;margin:3px 3px 0;padding:1px 3px;border-radius:5px;background:rgba(60,30,10,.35);opacity:1}
+.st-col.top b{background:rgba(120,80,0,.55)}.st-col.top span{background:rgba(120,80,0,.4)}
+.st-col.done{filter:saturate(.55) brightness(1.08)}
+.st-col.now{--g:#6be04c;--gd:#3fb830;box-shadow:0 0 0 3px #fff,0 0 18px 4px rgba(255,210,80,.8),inset -5px 0 0 rgba(0,0,0,.12)!important}
+.st-col.next{--dirt:#c98247}
+.st-col.top{--dirt:#e9b93a;--line:rgba(140,90,0,.3);--g:#ffe066;--gd:#e2b100;border-color:#8a6200!important;color:#fff!important}
+.st-goal{position:absolute;left:50%;top:-58px;width:4px;height:52px;margin-left:-2px;background:#e5e7eb;border-radius:2px}
+.st-goal:after{content:"";position:absolute;left:4px;top:2px;width:22px;height:14px;background:#ff5a36;clip-path:polygon(0 0,100% 50%,0 100%);animation:stFlagW 1.4s ease-in-out infinite;transform-origin:left center}
+@keyframes stFlagW{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.8)}}
+.st-col.top .st-star{position:absolute;left:50%;top:-78px;margin-left:-8px}
+.st-coin{position:absolute;z-index:1;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6b0 0 3px,#ffd23a 4px 6px,#f2b400 7px);box-shadow:inset 0 0 0 2px #d99a00;animation:stCoin 1.2s linear infinite}
+@keyframes stCoin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
+.st-me{transform-origin:50% 100%}
+/* เช็คอินรายวัน + ร้านแลกของสะสม */
+.st-cklabel{position:absolute;z-index:3;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#b45309;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.st-plus{left:auto!important;right:0;width:100%;top:44%!important;text-align:center;font-size:22px!important;text-shadow:0 2px 0 #fff}
+.shop .ovh{display:flex;align-items:center;gap:10px;margin-bottom:10px}.shop .ovh h3{margin:0;flex:1}
+.shop-bal{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:#fff7e0;color:#8a5a00;font-size:13px}.shop-bal b{font-size:15px}
+.ck-note{margin:0 0 14px;font-size:12.5px;color:#64748b}.ck-note.on{padding:8px 12px;border-radius:10px;background:#fff7e0;color:#8a5a00;font-weight:700}
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.cp-it{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:14px;border:1.5px dashed #fdba74;background:#fff7ed}
+.cp-it b{font-size:15px;color:#c2410c}.cp-it span{font-size:12px;color:#64748b;min-height:16px}
+.cp-it button{align-self:flex-start;display:flex;align-items:center;gap:4px;margin-top:4px;padding:5px 12px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}.cp-it button:disabled{background:#e5e7eb;color:#9ca3af}
+.cp-mine{display:grid;gap:8px;margin-bottom:14px}
+.cp-code{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;padding:10px 12px;border-radius:12px;background:#f0fdf4;border:1px solid #bbf7d0}
+.cp-code b{font-family:monospace;font-size:15px;letter-spacing:1px;color:#15803d}.cp-code span{flex:1;font-size:12.5px;color:#374151}.cp-code em{font-style:normal;font-size:12px;font-weight:800;color:#15803d}
+.cp-code.used{background:#f8fafc;border-color:#e5e7eb;opacity:.7}.cp-code.used b,.cp-code.used em{color:#94a3b8}
+.shop-h{margin:0 0 10px;font-size:14px;color:#16305f}.shop-h small{color:#94a3b8;font-weight:600}
+/* เมฆลอยผ่านตลอดจากขวาไปซ้าย (อยู่นอกแผนที่ ไม่เลื่อนตามการปัด) */
+.st-sky{position:absolute;left:0;right:0;top:0;height:45%;z-index:1;pointer-events:none;overflow:hidden}
+.st-sky .st-cloud{left:auto!important;right:-90px;animation:stDrift 28s linear infinite!important}
+.st-sky .c1{top:22px;width:60px}.st-sky .c2{top:56px;width:46px;animation-duration:38s!important;animation-delay:-14s!important}
+.st-sky .c3{top:34px;width:72px;animation-duration:44s!important;animation-delay:-30s!important}.st-sky .c4{top:74px;width:40px;animation-duration:32s!important;animation-delay:-6s!important}
+@keyframes stDrift{from{transform:translateX(0)}to{transform:translateX(calc(-100cqw - 180px))}}
+.stairs{container-type:inline-size}
+.st-track{z-index:2}
+/* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
+@media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
+/* ตัวละครเกม (SVG ทั้งตัว) */
+.st-kid.game .st-body{left:-3px;bottom:-2px;width:60px;height:100px}
+.st-kid.game .k-head{transform-box:fill-box;transform-origin:50% 90%;animation:kHead 2.4s ease-in-out infinite}
+@keyframes kHead{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.st-kid.game .k-eye{transform-box:fill-box;transform-origin:center;animation:kBlink 4s infinite}
+@keyframes kBlink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.st-me.air .st-kid.game .k-arm.l{transform:rotate(140deg)}.st-me.air .st-kid.game .k-arm.r{transform:rotate(-140deg)}
+/* ตัวละครแต่งได้: หัวเป็นรูปทรงผม ตัวเป็น SVG */
+.st-kid.look .st-body{left:-3px;bottom:-2px;width:60px;height:100px}
+.st-kid.look .chr-hd{position:absolute;left:50%;bottom:52px;height:50px;width:auto;transform:translateX(-50%);border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
+.st-kid.look .chr-hat{position:absolute;left:50%;bottom:84px;width:46px;transform:translateX(-50%);pointer-events:none}
+.st-kid.look.flip .chr-hd{transform:translateX(-50%) scaleX(-1)}
+.st-me.walk .st-kid.look .chr-hd,.st-me.walk .st-kid.look .chr-hat{animation:kBob .36s ease-in-out infinite}
+.st-kid.look .dl{position:absolute;left:50%;bottom:-2px;width:calc(var(--dw)*84px/190);height:113px;transform:translateX(-50%)}
+.st-kid.look.flip .dl{transform:translateX(-50%) scaleX(-1)}
+.st-me.walk .st-kid.look .dl-leg.l{animation:kStepL .5s linear infinite}.st-me.walk .st-kid.look .dl-leg.r{animation:kStepR .5s linear infinite}
+.st-me.air .st-kid.look .dl-leg.l{transform:rotate(9deg);animation:none}.st-me.air .st-kid.look .dl-leg.r{transform:rotate(-9deg);animation:none}
+@keyframes kStepL{0%,50%,100%{transform:none}25%{transform:translateY(-5px) rotate(5deg)}}@keyframes kStepR{0%,50%,100%{transform:none}75%{transform:translateY(-5px) rotate(-5deg)}}
+/* ไม่ใส่ filter เงากับตัวละครเต็มตัว เพราะในฉาก 3D จะเกิดกรอบสี่เหลี่ยมสว่างรอบตัว */
+.st-kid.look .dl.dlf .dl-up{filter:none}.st-kid.look .dl.dlf{width:calc(var(--dw)*122px/300);height:122px}.st-kid.look .dl.dlf .dl-up{bottom:0;height:122px!important}
+.st-kid.look .dl-up{position:absolute;left:0;bottom:29.2px;width:100%!important;height:84px!important;object-fit:contain;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
+.dl-legs{position:absolute;left:0;bottom:0;width:100%;height:31.8px;overflow:visible}
+.st-me.walk .st-kid.look .dl-up{animation:kBob .36s ease-in-out infinite}
+.st-me.air .st-kid.look .k-leg.l{transform:rotate(12deg)}.st-me.air .st-kid.look .k-leg.r{transform:rotate(-12deg)}
+.chr-mini{position:relative;display:block;width:44px;height:74px;margin:0 auto}
+.chr-mini .wd-svg{position:absolute;left:0;bottom:0;width:44px;height:74px}
+.chr-mini .chr-hd{position:absolute;left:50%;bottom:38px;height:37px;transform:translateX(-50%)}
+.chr-mini .chr-hat{position:absolute;left:50%;bottom:62px;width:34px;transform:translateX(-50%)}
+.wd-it.lock .chr-mini{filter:grayscale(1) brightness(.9)}
+.lk-tabs{display:flex;gap:6px;margin:0 0 8px;overflow-x:auto}
+.lk-tabs button{padding:6px 12px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;font:inherit;font-size:12.5px;font-weight:700;white-space:nowrap;cursor:pointer}
+.lk-tabs button.on{background:#16305f;border-color:#16305f;color:#fff}
+.lk-hair{flex:0 0 76px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:1.5px solid #eef2f7;border-radius:14px;background:#f8fafc;font:inherit;cursor:pointer}
+.lk-hair img{height:54px;width:auto;max-width:68px;object-fit:contain}.lk-hair span{font-size:11px;color:#334155}
+.lk-hair.on{border-color:#ff8a3d;background:#fff7ed}
+.lk-sws{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.lk-sw{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid #eef2f7;border-radius:12px;background:#fff;font:inherit;cursor:pointer}
+.lk-sw i{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}.lk-sw span{font-size:11px;color:#334155}
+.lk-sw.on{border-color:#ff8a3d;background:#fff7ed}
+.lk-fits{display:flex;gap:8px;margin-bottom:10px}.lk-fit{padding:8px 16px;border:1.5px solid #eef2f7;border-radius:12px;background:#fff;font:inherit;font-size:13px;font-weight:700;color:#334155;cursor:pointer}.lk-fit.on{border-color:#ff8a3d;background:#fff7ed}.lk-fit:disabled{opacity:.4;cursor:not-allowed}
+.lk-dots{display:grid;grid-template-columns:repeat(auto-fill,34px);gap:10px;padding:2px}.lk-dot{width:34px;height:34px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);transition:transform .12s}.lk-dot:hover{transform:scale(1.08)}.lk-dot.on{box-shadow:inset 0 0 0 1px rgba(0,0,0,.14),0 0 0 3px #fff,0 0 0 5px #ff8a3d}
+.lk-sub{margin:4px 0 6px;font-size:12px;font-weight:800;color:#64748b}
+.lk-custom{position:relative;cursor:pointer}.lk-custom input{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:conic-gradient(#f87171,#fbbf24,#34d399,#60a5fa,#a78bfa,#f472b6,#f87171);cursor:pointer}
+.lk-custom input::-webkit-color-swatch-wrapper{padding:0}.lk-custom input::-webkit-color-swatch{border:0;border-radius:50%;opacity:0}
+.lk-custom.on input::-webkit-color-swatch{opacity:1}
+/* ตู้เสื้อผ้า */
+body.adv-on{overflow:hidden}
+.adv-ov{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;background:#0f172a;font-family:inherit}
+.adv-top{display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(180deg,#ff9a3d,#f57c00);color:#fff;font-size:15px;box-shadow:0 3px 0 #c45f00;z-index:3}
+.adv-top>b{padding:4px 12px;border-radius:999px;background:rgba(0,0,0,.18)}
+.adv-hearts{display:flex;gap:3px}.adv-ht{width:20px;height:18px;background:#ff3b5c;clip-path:path("M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z")}.adv-ht.off{background:rgba(255,255,255,.35)}
+.adv-prog{display:flex;gap:3px}.adv-prog i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.4)}.adv-prog i.on{background:#fff36b;box-shadow:0 0 6px #fff36b}
+.adv-cn{display:flex;align-items:center;gap:4px;margin-left:auto;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.18)}
+.adv-menu-btn{padding:6px 12px;border:0;border-radius:999px;background:#fff;color:#f57c00;font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.adv-top>b,.adv-menu-btn,.adv-cn,.adv-pts{white-space:nowrap;flex:0 0 auto}
+@media(max-width:440px){.adv-top{gap:6px;padding:8px 8px}.adv-prog{display:none}.adv-ht{width:17px;height:16px}}
+.adv-clock{position:absolute;right:12px;top:12px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 0 rgba(0,0,0,.1);pointer-events:none}
+.adv-clock b{font-size:22px;line-height:1.1;color:#16305f;font-variant-numeric:tabular-nums}.adv-clock span{font-size:11.5px;color:#475569;white-space:nowrap}
+@media(max-width:600px){.adv-clock{top:10px;left:10px;right:auto;align-items:flex-start}.adv-clock b{font-size:18px}}
+.adv-pad{position:absolute;left:14px;bottom:18px;display:flex;gap:12px;z-index:5}
+.adv-k{width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
+.adv-jump{position:absolute;right:16px;bottom:18px;z-index:5;background:#ffd23f;color:#7a4b00}
+.adv-menu{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+.adv-menu-box{display:flex;flex-direction:column;gap:8px;width:min(300px,calc(100% - 40px));padding:20px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center}
+.adv-menu-box b{font-size:22px;color:#f57c00;margin-bottom:4px}
+.adv-menu-box button{padding:11px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}
+.adv-menu-box .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}.adv-menu-box .out{background:#fee2e2;color:#b91c1c}
+.adv-x{width:32px;height:32px;border:0;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
+.adv-pts{display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#fff;color:#f57c00;font-weight:900}.adv-pts:before{content:"★";color:#ffc400}.adv-pts.bump{animation:advBump .25s}@keyframes advBump{50%{transform:scale(1.2)}}
+.adv-view{position:relative;flex:1;overflow:hidden;background:linear-gradient(180deg,#8fd3ff,#e8f7ff);touch-action:none}.adv-view canvas{display:block;width:100%;height:100%}
+.adv-view.hurt{animation:advHurt .45s}@keyframes advHurt{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.adv-load{position:absolute;inset:0;display:grid;place-items:center;color:#16305f;font-weight:800}
+.adv-hint{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);color:#fff;font-size:12.5px;white-space:nowrap;pointer-events:none}
+.adv-q{position:absolute;left:50%;top:12px;width:min(520px,calc(100% - 24px));transform:translateX(-50%);padding:12px 16px;border-radius:20px;background:rgba(255,255,255,.96);border:3px solid #ffb84d;box-shadow:0 8px 0 rgba(0,0,0,.08);text-align:center;z-index:6;animation:advQin .3s both}
+@keyframes advQin{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
+.adv-qt{font-size:24px;font-weight:900;color:#5b21b6}.adv-qh{margin-top:4px;font-size:12px;color:#94a3b8}
+.adv-tm{height:7px;margin-top:8px;border-radius:4px;background:#e2e8f0;overflow:hidden}.adv-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#22c55e,#ffd23f,#ef4444)}
+.adv-toast{position:absolute;left:50%;top:22%;transform:translate(-50%,0);padding:14px 26px;border-radius:20px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:6;opacity:0}
+.adv-toast.show{animation:advToast 1.8s ease forwards}.adv-toast b{display:block;font-size:26px;color:#f57c00}.adv-toast span{display:inline-flex;align-items:center;gap:4px;margin-top:4px;color:#475569;font-weight:800}
+@keyframes advToast{0%{opacity:0;transform:translate(-50%,16px) scale(.9)}15%,75%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-14px)}}
+.adv-msg{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 32px));transform:translate(-50%,-50%);padding:22px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:7}
+.adv-big{display:block;font-size:24px;color:#f57c00;margin-bottom:6px}.adv-msg p{margin:0 0 14px;color:#475569}
+.adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
+@media(max-width:600px){.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
+@media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
+.sb-game{margin-top:10px}
+.lk-wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
+.lk-opts{min-width:0}
+.lk-stage{position:relative;height:250px;border-radius:18px;overflow:hidden;cursor:pointer;background:#f6cf9a;box-shadow:0 8px 20px rgba(120,72,30,.25)}
+.lk-room{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.lk-bulbs circle{animation:lkTw 2.2s ease-in-out infinite}.lk-bulbs circle:nth-child(2n){animation-delay:-1.1s}
+.lk-spot{position:absolute;left:50%;top:-10px;width:170px;height:240px;transform:translateX(-50%);background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 85%);clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);pointer-events:none}
+.lk-stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1.5px 1.5px at 18% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 80% 16%,#fff,transparent),radial-gradient(1px 1px at 66% 40%,#fff,transparent),radial-gradient(1px 1px at 28% 52%,#cfe0ff,transparent),radial-gradient(1.5px 1.5px at 88% 58%,#fff,transparent),radial-gradient(1px 1px at 10% 70%,#fff,transparent);animation:lkTw 3s ease-in-out infinite}
+@keyframes lkTw{50%{opacity:.45}}
+.lk-podium{position:absolute;left:50%;bottom:26px;width:150px;height:44px;transform:translateX(-50%);border-radius:50%;background:linear-gradient(180deg,#fcd34d,#d97706 60%,#92400e);box-shadow:0 10px 16px rgba(80,40,10,.4)}
+.lk-podium:before{content:"";position:absolute;left:0;right:0;top:-14px;height:40px;border-radius:50%;background:radial-gradient(60% 60% at 50% 40%,#ffffff,#fef3c7 55%,#fbbf24);box-shadow:inset 0 -3px 0 rgba(146,64,14,.35)}
+.lk-podium i{position:absolute;left:50%;top:-22px;width:176px;height:56px;transform:translateX(-50%);border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 0 14px rgba(253,224,71,.9);animation:lkRing 2.4s ease-in-out infinite}
+@keyframes lkRing{50%{transform:translateX(-50%) scale(1.06);opacity:.55}}
+.lk-kid{position:absolute;left:50%;bottom:52px;width:54px;height:98px;transform:translateX(-50%) scale(1.42);transform-origin:50% 100%;perspective:520px;pointer-events:none}
+.lk-stage.spin .lk-kid .st-kid{animation:lkSpin .7s cubic-bezier(.3,.7,.4,1)}
+@keyframes lkSpin{0%{transform:rotateY(0) translateY(0)}40%{transform:rotateY(180deg) translateY(-8px)}100%{transform:rotateY(360deg) translateY(0)}}
+.lk-name{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);padding:2px 12px;border-radius:999px;background:#16305f;color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+@media(max-width:760px){.lk-wrap{grid-template-columns:1fr}.lk-stage{height:240px}}
+@media(prefers-reduced-motion:reduce){.lk-bulbs circle,.lk-podium i,.lk-stage.spin .lk-kid .st-kid{animation:none}}
+.wd{margin:4px 0 6px}.wd-h{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}.wd-h b{font-size:14px;color:#16305f}.wd-h span{font-size:12px;color:#94a3b8}
+.wd-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.wd-it{flex:0 0 86px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border:1.5px solid #eef2f7;border-radius:14px;background:#f8fafc;font:inherit;cursor:pointer}
+.wd-it .wd-svg{width:44px;height:74px}.wd-it b{font-size:11px;color:#334155;line-height:1.25;text-align:center}.wd-it span{font-size:10.5px;font-weight:800;color:#e86208}
+.wd-it.on{border-color:#ff8a3d;background:#fff7ed;box-shadow:0 4px 12px rgba(255,106,0,.15)}.wd-it.on span{color:#15803d}
+.wd-it.lock{cursor:default;opacity:.6}.wd-it.lock .wd-svg{filter:grayscale(1) brightness(.9)}.wd-it.lock span{color:#64748b}
+@media(prefers-reduced-motion:reduce){.st-kid.game .k-head,.st-kid.game .k-eye{animation:none}}
+/* หันตัว / หมุนตัวแบบ 3 มิติ */
+#stMe{perspective:520px}
+.st-turn{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 60%}
+.st-turn.turning{animation:kTurn .3s ease-in-out}
+@keyframes kTurn{0%{transform:rotateY(0)}50%{transform:rotateY(90deg)}51%{transform:rotateY(-90deg)}100%{transform:rotateY(0)}}
+.st-turn.held .st-kid{animation:none}
+@media(prefers-reduced-motion:reduce){.st-turn.turning{animation:none}}
+/* ปุ่มเดินซ้ายขวา + ท่าเดิน */
+.st-pad{position:absolute;left:10px;bottom:14px;z-index:5;display:flex;gap:8px}
+.st-mv{width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 4px 0 #cbd5e1,0 6px 12px rgba(0,0,0,.15);cursor:pointer;touch-action:none;position:relative}
+.st-mv:active{transform:translateY(3px);box-shadow:0 1px 0 #cbd5e1}
+.st-mv:before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;border-top:4px solid #16305f;border-left:4px solid #16305f;margin:-7px 0 0 -4px;transform:rotate(-45deg)}
+.st-mv.r:before{margin-left:-10px;transform:rotate(135deg)}
+.st-kid.flip .st-body{transform:scaleX(-1)}
+.st-me.walk .k-leg.l{animation:kWalkL .36s ease-in-out infinite}.st-me.walk .k-leg.r{animation:kWalkR .36s ease-in-out infinite}
+.st-me.walk .k-arm.l{animation:kWalkR .36s ease-in-out infinite}.st-me.walk .k-arm.r{animation:kWalkL .36s ease-in-out infinite}
+.st-me.walk .st-kid{animation:kBob .36s ease-in-out infinite}
+@keyframes kWalkL{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-20deg)}}@keyframes kWalkR{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
+@keyframes kBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.st-me.air .k-arm.l{transform:rotate(150deg);animation:none}.st-me.air .k-arm.r{transform:rotate(-150deg);animation:none}
+.st-me.hop{animation:none!important}
+/* ตัวละครคนการ์ตูน: หัวเป็นรูปประจำตัว ตัวใส่เครื่องแบบ ยืนรอแกว่งแขน กระโดดยกแขนงอเข่าและหมุนรอบตัว */
+#stMe.st-me{width:54px;height:98px;margin-left:0}
+.st-kid{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 60%}
+.st-body{position:absolute;left:1px;bottom:0;width:52px;height:56px;overflow:visible}
+.st-head{position:absolute;left:5px;top:0;width:44px!important;height:44px!important;border-radius:50%;object-fit:cover;background:#ffd9c2;border:2.5px solid #fff!important;box-shadow:0 3px 8px rgba(22,48,95,.25)!important;z-index:2}
+.k-arm{transform-box:fill-box;transform-origin:50% 0}.k-arm.l{animation:kArmL 2.4s ease-in-out infinite}.k-arm.r{animation:kArmR 2.4s ease-in-out infinite}
+@keyframes kArmL{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-8deg)}}@keyframes kArmR{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(8deg)}}
+.st-kid{animation:kIdle 2.4s ease-in-out infinite}@keyframes kIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+.st-me.hop .st-kid{animation:kSpin .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes kSpin{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+.st-me.hop .k-arm.l{animation:kUpL .6s ease-out}.st-me.hop .k-arm.r{animation:kUpR .6s ease-out}
+@keyframes kUpL{0%{transform:rotate(0)}30%,70%{transform:rotate(150deg)}100%{transform:rotate(0)}}@keyframes kUpR{0%{transform:rotate(0)}30%,70%{transform:rotate(-150deg)}100%{transform:rotate(0)}}
+.k-leg{transform-box:fill-box;transform-origin:50% 0}.st-me.hop .k-leg.l{animation:kKneeL .6s ease-out}.st-me.hop .k-leg.r{animation:kKneeR .6s ease-out}
+@keyframes kKneeL{30%,60%{transform:rotate(22deg) scaleY(.8)}}@keyframes kKneeR{30%,60%{transform:rotate(-22deg) scaleY(.8)}}
+@media(prefers-reduced-motion:reduce){.st-kid,.k-arm,.k-leg,.st-me.hop .st-kid{animation:none!important}}
+.st-me i.st-shadow{position:absolute;left:50%;bottom:-5px;width:26px;height:6px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.14)}
+/* บันไดยศครบทุกขั้น เลื่อนซ้ายขวาได้ + กระโดดเก็บเหรียญ */
+.stairs{height:290px!important}
+.st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
+.st-track:active{cursor:grabbing}
+.st-world{position:relative;height:100%}
+.st-world .st-scene{background:inherit}
+.st-next{position:absolute;left:50%;top:-30px;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#c2410c;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15);animation:gBobS 2s ease-in-out infinite}
+@keyframes gBobS{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
+.st-coin.big{width:22px;height:22px;transition:opacity .2s,transform .2s}
+.st-coin.got{opacity:0;transform:translateY(-24px) scale(1.5)!important;animation:none}
+.st-me{z-index:3}
+.st-me.hop{animation:stHop .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes stHop{0%{transform:translateY(0) scale(1)}12%{transform:translateY(2px) scale(1.12,.86)}45%{transform:translateY(-78px) scale(.95,1.06)}80%{transform:translateY(0) scale(1)}88%{transform:translateY(1px) scale(1.1,.9)}100%{transform:translateY(0) scale(1)}}
+.st-bank{position:absolute;left:10px;top:10px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:13px;color:#8a5a00}
+.st-coin.mini{position:static;width:16px;height:16px;animation:none}
+.st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
+.st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
+.st-plus{position:absolute;left:44px;top:34px;z-index:5;color:#e6a100;font-weight:900;font-size:15px;opacity:0;pointer-events:none}
+.st-plus.on{animation:stPlus .8s ease-out}
+@keyframes stPlus{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+.st-cap small{font-weight:500;color:#94a3b8;font-size:11.5px}
+.st-col span{display:block!important}
+@media(max-width:480px){.st-col span{display:block!important;font-size:9.5px}}
+@media(prefers-reduced-motion:reduce){.st-me.hop,.st-coin,.st-goal:after,.st-next{animation:none}}
+.st-star{display:block;width:16px;height:16px;margin:-2px auto 2px;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:stStar 2.4s ease-in-out infinite}
+@keyframes stStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(12deg)}}
+.st-me{position:absolute;z-index:2;width:42px;height:42px;margin-bottom:6px}
+.st-me img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:3px solid #fff;box-shadow:0 4px 12px rgba(226,82,10,.35);display:block}
+.st-me i{position:absolute;left:50%;bottom:-5px;width:26px;height:6px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.12)}
+.st-cap{margin:0 0 12px;font-size:12.5px;font-weight:700;color:#16305f;text-align:center}
+@media(prefers-reduced-motion:reduce){.st-star{animation:none}}
+/* นับถอยหลัง: ย่อเล็ก อยู่เหนือสถิติด้านล่างของหน้าแรก */
+#countdownRow{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin:14px 0 10px}
+#countdownRow .countdown-card{padding:12px 14px;min-height:0;border-radius:16px}
+#countdownRow .countdown-label{font-size:11.5px;font-weight:700;line-height:1.35}
+#countdownRow .countdown-track{font-size:12.5px;margin-top:1px}
+#countdownRow .countdown-main{margin:4px 0 0;gap:5px}
+#countdownRow .countdown-days{font-size:26px!important}
+#countdownRow .countdown-unit{font-size:13px}
+#countdownRow .countdown-date{font-size:11px}
+.countdown-track{display:block;margin-top:2px;font-weight:800;color:#111;text-wrap:balance}
 .countdown-cheer{
   margin-top:14px;
   display:inline-block;
@@ -3519,6 +3797,14 @@ window.alert=m=>{uiAlert(m)};
     </button>
 </div>
 </div>
+<div class="sidebar-home sb-game">
+<button class="nav-btn" data-page="gamePage" data-title="เกม">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg>
+<span>เกม</span>
+</span>
+</button>
+</div>
 <div class="menu-group" data-group="account">
 <button class="group-toggle" data-toggle-group="account" type="button">
 <span class="group-left">
@@ -3602,8 +3888,9 @@ LINE OA @kasorb
 <nav class="topnav" id="topNav" aria-label="เมนูหลัก">
 <button type="button" class="tn-item tn-side" id="tnSide" aria-label="เปิดแถบเมนู"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 6h16M4 12h16M4 18h16"></path> </svg><span>เมนู</span></button>
 <button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M3 11.5 12 4l9 7.5"></path> <path d="M5.5 10.5V20h13v-9.5"></path> <path d="M9.5 20v-5h5v5"></path> </svg><span>หน้าหลัก</span></button>
-<button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">แบบทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">ทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="results"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 19V9"></path> <path d="M10 19V5"></path> <path d="M16 19v-7"></path> <path d="M22 19H2"></path> </svg><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="account"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M20 21a8 8 0 0 0-16 0"></path> <circle cx="12" cy="7" r="4"></circle> </svg><span class="lg">บัญชีของฉัน</span><span class="sm">บัญชี</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="contact"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path> <path d="M8 12h.01M12 12h.01M16 12h.01"></path> </svg><span class="lg">ติดต่อเรา</span><span class="sm">ติดต่อ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 </nav>
@@ -3635,18 +3922,17 @@ LINE OA @kasorb
 <main class="content">
 <!-- HOME -->
 <section class="app-page active" id="homePage">
-<div class="home-hero">
-<div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
-<div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
-<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
-</div>
 <div class="news-slider hidden" id="newsSlider" aria-label="ข่าวสารและประกาศ">
 <div class="ns-track" id="newsTrack"></div>
 <button type="button" class="ns-arrow ns-prev" id="newsPrev" aria-label="ข่าวก่อนหน้า"></button>
 <button type="button" class="ns-arrow ns-next" id="newsNext" aria-label="ข่าวถัดไป"></button>
 <div class="ns-dots" id="newsDots"></div>
 </div>
-<div class="countdown-row" id="countdownRow"></div>
+<div class="home-hero">
+<div class="hh-text"><span class="hh-tag">กะสอบ TEST</span><h2>ฝึกวันละนิด<br>ติดยศได้แน่นอน</h2><p>ทำข้อสอบเสมือนจริงและแบบทดสอบรายวิชา พร้อมเฉลยละเอียดทุกข้อ</p>
+<div class="hh-btns"><button type="button" class="hh-go" id="hhMock">ข้อสอบเสมือนจริง</button><button type="button" class="hh-alt" id="hhSubj">แบบทดสอบรายวิชา</button></div></div>
+<div class="hh-art"><img src="room-study.svg" alt="" draggable="false"><span class="hh-walk"><span class="hh-walker"><span class="hh-sign"><span class="hh-flag" id="hhSign" aria-live="polite">มาฝึกกัน!</span></span><img class="hh-mascot" src="mascot-2b-walk.svg" alt="มาสคอตดินสอ 2B" draggable="false"></span></span></div>
+</div>
 <div class="daily-card" id="dailyCard">
 <div class="daily-head">
 <h3 class="daily-title">ข้อสอบประจำวัน</h3>
@@ -3678,6 +3964,7 @@ LINE OA @kasorb
 </div>
 </div>
 </div>
+<div class="countdown-row" id="countdownRow"></div>
 <div class="system-stats">
 <div class="stat-card">
 <div class="stat-value" id="statQuestions">—</div>
@@ -3753,6 +4040,12 @@ LINE OA @kasorb
 <p class="page-desc" id="rvDesc"></p>
 <div class="xpaper exam-text rv" id="rvPaper"></div>
 <div class="rvbar" id="rvBar"></div>
+</section>
+<!-- GAME -->
+<section class="app-page" id="gamePage">
+<h2 class="page-heading">เกม</h2>
+<p class="page-desc">เลือกตัวละคร แล้วเล่นเกมฝึกสมองสั้น ๆ เก็บเหรียญไปเรื่อย ๆ แยกจากการทำแบบทดสอบ</p>
+<div id="gmBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- HISTORY -->
 <section class="app-page" id="historyPage">
@@ -4180,6 +4473,7 @@ function openTopMenu(btn){
 }
 document.querySelectorAll(".tn-group").forEach(b=>b.onclick=e=>{e.stopPropagation();openTopMenu(b)});
 document.querySelector('.tn-item[data-page="homePage"]').onclick=()=>{closeTopMenu();showAppPage("homePage","หน้าหลัก")};
+document.querySelector('.tn-item[data-page="gamePage"]').onclick=()=>{closeTopMenu();showAppPage("gamePage","เกม")};
 document.addEventListener("click",e=>{if(!e.target.closest("#tnPanel"))closeTopMenu()});
 window.addEventListener("scroll",()=>{if(Math.abs(window.scrollY-tnY)>40)closeTopMenu()},{passive:true});
 window.addEventListener("resize",closeTopMenu);
@@ -4743,6 +5037,7 @@ document.body.classList.toggle("on-home",pageId==="homePage");
 document.querySelectorAll(".tn-item").forEach(b=>b.classList.toggle("active",b.dataset.page===pageId||(!!grp&&b.dataset.menu===grp)));}
 if(pageId==="historyPage") renderHistory();
 if(pageId==="scorePage") renderOverview();
+if(pageId==="gamePage") renderGamePage();
 document
 .querySelectorAll(".nav-btn")
 .forEach(
@@ -4795,6 +5090,18 @@ renderMembershipStatus();
 }
 
 
+/* แอปที่ติดตั้งบน iPhone/iPad ไม่มีการลากลงเพื่อรีเฟรช: ลากลงจากบนสุดเกิน 80px แล้วปล่อย = โหลดหน้าใหม่ (ยกเว้นตอนทำข้อสอบ) */
+(()=>{
+  const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  if(!standalone) return;
+  const tip=document.createElement("div");tip.className="ptr-tip";tip.textContent="ลากลงเพื่อรีเฟรช";document.body.appendChild(tip);
+  let y0=null,d=0;
+  const busy=()=>!!document.querySelector(".xpaper")&&document.querySelector(".xpaper").offsetParent!==null;
+  addEventListener("touchstart",e=>{y0=(scrollY<=0&&e.touches.length===1&&!busy()&&!e.target.closest(".gview,.ghouse-ov"))?e.touches[0].clientY:null;d=0},{passive:true});
+  addEventListener("touchmove",e=>{if(y0==null)return;d=e.touches[0].clientY-y0;if(d<=0){tip.style.opacity=0;return}
+    tip.style.opacity=Math.min(1,d/80);tip.style.transform=`translate(-50%,${Math.min(d,110)*.6}px)`;tip.textContent=d>80?"ปล่อยเพื่อรีเฟรช":"ลากลงเพื่อรีเฟรช"},{passive:true});
+  addEventListener("touchend",()=>{if(y0!=null&&d>80){tip.textContent="กำลังโหลด…";location.reload()}else{tip.style.opacity=0;tip.style.transform=""}y0=null},{passive:true});
+})();
 /* ติดตั้งลงหน้าจอ (PWA): ซ่อนปุ่มเมื่อเปิดจากไอคอนบนหน้าจออยู่แล้ว */
 (()=>{
   if("serviceWorker" in navigator){
@@ -5928,7 +6235,9 @@ function renderCountdown(home){
 
     const label=document.createElement("div");
     label.className="countdown-label";
-    label.textContent=`นับถอยหลังสอบ${homeText(item.title)}`;
+    label.textContent="นับถอยหลังสอบ";
+    const track=document.createElement("span");track.className="countdown-track";track.textContent=homeText(item.title);
+    label.appendChild(track);
 
     const main=document.createElement("div");
     main.className="countdown-main";
@@ -5952,11 +6261,7 @@ function renderCountdown(home){
       date.textContent=left>=0 ? `วันสอบ ${thaiDate(exam)}` : `สอบไปแล้วเมื่อ ${thaiDate(exam)}`;
     }
 
-    const cheer=document.createElement("div");
-    cheer.className="countdown-cheer";
-    cheer.textContent="ฝึกวันละนิด ติดยศได้แน่นอน";
-
-    card.append(label,main,date,cheer);
+    card.append(label,main,date);
     row.appendChild(card);
   });
 }
@@ -7121,21 +7426,476 @@ async function openAttempt(a,btn){
 const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
 function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
+/* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
+/* ===== เหรียญอัตโนมัติ + แลกส่วนลด =====
+   เช็คอิน: เข้าแอปวันละครั้ง ได้ตามลำดับ 7 วัน (ขาดวันเริ่มนับใหม่) · ขยัน: ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 2 เหรียญ (วันละไม่เกิน 20)
+   เก็บโดยกระโดดบนบันไดยศ · เหรียญแลกโค้ดส่วนลดตามที่แอดมินตั้งไว้ (site/coins.coupons)
+   วันนับตามเวลาไทย กฎของ Firebase ตรวจซ้ำทุกครั้ง */
+const CHECKIN_REWARD=[5,5,10,10,15,15,30],DIL_PER=20,DIL_COIN=2,DIL_MAX=10;
+const thaiDay=()=>Math.floor((Date.now()+7*3600000)/86400000);
+let coinSite={coupons:{}};
+async function loadCoinSite(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};coinSite={coupons:d.coupons||{}}}catch(e){console.error(e)}}
+const checkedToday=()=>Number(currentData?.checkin?.day)===thaiDay();
+function nextStreak(){const c=currentData?.checkin,d=thaiDay();return c&&Number(c.day)===d-1?(Number(c.streak)||0)%7+1:1}
+const todayDone=()=>currentData?.today?.date===todayKey()?Number(currentData.today.count)||0:0;
+const dilHave=()=>Number(currentData?.diligence?.day)===thaiDay()?Number(currentData.diligence.n)||0:0;
+const dilTarget=()=>Math.min(DIL_MAX,Math.floor(todayDone()/DIL_PER));
+/* เหรียญที่รอเก็บอยู่ตอนนี้: เช็คอินก่อน แล้วค่อยเหรียญขยัน */
+function activeDrop(){
+  if(!currentData)return null;
+  if(!checkedToday())return {kind:"ck",amount:CHECKIN_REWARD[nextStreak()-1],label:"เช็คอินวันนี้"};
+  const more=dilTarget()-dilHave();
+  return more>0?{kind:"dil",amount:more*DIL_COIN,label:"เหรียญขยัน"}:null;
+}
+async function claimDrop(){
+  const d=activeDrop();if(!d||!currentUser)return 0;const day=thaiDay(),coins=coinsOf()+d.amount;
+  const upd=d.kind==="ck"?{coins,checkin:{day,streak:nextStreak()}}:{coins,diligence:{day,n:dilTarget()}};
+  try{await updateDoc(doc(db,"users",currentUser.uid),upd)}catch(e){console.error(e);return 0}
+  currentData.coins=coins;Object.assign(currentData,d.kind==="ck"?{checkin:upd.checkin}:{diligence:upd.diligence});
+  return d.amount;
+}
+const coinsOf=()=>Number(currentData?.coins)||0;
+function coinNote(d){
+  const st=checkedToday()?Number(currentData.checkin.streak)||1:0,done=todayDone(),left=DIL_PER-(done%DIL_PER);
+  const ck=st?`เช็คอินต่อเนื่อง ${st} วัน พรุ่งนี้ได้ ${CHECKIN_REWARD[st%7]} เหรียญ`:`วันนี้ยังไม่เช็คอิน รับ ${CHECKIN_REWARD[nextStreak()-1]} เหรียญ`;
+  const dil=dilHave()>=DIL_MAX?"วันนี้ได้เหรียญขยันครบแล้ว":`วันนี้ทำข้อสอบ ${done} ข้อ ทำอีก ${left} ข้อ ได้เหรียญขยันเพิ่ม ${DIL_COIN} เหรียญ`;
+  return (d?`มีเหรียญ${d.kind==="ck"?"เช็คอิน":"ขยัน"} ${d.amount} เหรียญรอเก็บบนบันไดยศ · `:"")+ck+" · "+dil;
+}
+function shopHtml(){
+  const d=activeDrop();
+  const cps=Object.entries(coinSite.coupons).map(([id,c])=>({id,...c})).filter(c=>Number(c.coins)>0&&Number(c.baht)>0).sort((x,y)=>x.coins-y.coins);
+  const mine=Object.entries(currentData?.coupons||{}).map(([code,c])=>({code,...c})).sort((x,y)=>(y.at||0)-(x.at||0));
+  return `<div class="ovc shop" id="shopBox"><div class="ovh"><h3>เหรียญของฉัน</h3><span class="shop-bal"><i class="st-coin mini"></i><b id="shopBal">${coinsOf().toLocaleString()}</b> เหรียญ</span></div>
+    <p class="ck-note${d?" on":""}">${coinNote(d)}</p>
+    ${cps.length?`<h4 class="shop-h">แลกส่วนลด</h4><div class="cp-grid">${cps.map(c=>`<div class="cp-it"><b>ลด ${Number(c.baht).toLocaleString()} บาท</b><span>${escHtml(c.name||"")}</span><button type="button" data-cp="${escHtml(c.id)}"${coinsOf()<c.coins?" disabled":""}><i class="st-coin mini"></i>${Number(c.coins).toLocaleString()}</button></div>`).join("")}</div>`:""}
+    ${mine.length?`<h4 class="shop-h">โค้ดส่วนลดของฉัน <small>แจ้งโค้ดนี้ตอนชำระเงิน</small></h4><div class="cp-mine">${mine.map(c=>`<div class="cp-code${c.used?" used":""}"><b>${escHtml(c.code)}</b><span>ลด ${Number(c.baht).toLocaleString()} บาท · ${escHtml(c.name||"")}</span><em>${c.used?"ใช้แล้ว":"ยังไม่ใช้"}</em></div>`).join("")}</div>`:""}
+</div>`;
+}
+function refreshShop(){const b=$("shopBox");if(!b)return;b.outerHTML=shopHtml();bindShop();const bank=$("stBank")?.querySelector("b");if(bank)bank.textContent=coinsOf().toLocaleString()}
+function bindShop(){
+  $("shopBox")?.querySelectorAll(".cp-it button").forEach(btn=>btn.onclick=async()=>{
+    const id=btn.dataset.cp,c=coinSite.coupons[id];if(!c||coinsOf()<c.coins)return;
+    if(!confirm(`แลกส่วนลด ${c.baht} บาท ใช้ ${c.coins} เหรียญ?\nจะได้โค้ดไว้แจ้งตอนชำระเงิน`))return;
+    btn.disabled=true;
+    const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let code="KS";for(let i=0;i<6;i++)code+=A[Math.floor(Math.random()*A.length)];
+    const coupons={...(currentData.coupons||{}),[code]:{cid:id,baht:Number(c.baht),name:String(c.name||"").slice(0,40),used:false,at:Date.now()}},coins=coinsOf()-Number(c.coins);
+    try{await updateDoc(doc(db,"users",currentUser.uid),{coins,coupons,lastCoupon:code});currentData.coins=coins;currentData.coupons=coupons;refreshShop();alert(`ได้โค้ดส่วนลด ${code}\nแจ้งโค้ดนี้ตอนชำระเงิน`)}
+    catch(e){console.error(e);btn.disabled=false;alert("แลกไม่สำเร็จ ลองใหม่อีกครั้ง")}
+  });
+}
+/* ===== ตัวละครเกมบนบันไดยศ + ตู้เสื้อผ้าตามเลเวล =====
+   วาดด้วย SVG ทั้งตัว แขนขาขยับได้ ทรงผมตามเพศในโปรไฟล์ ชุดปลดล็อกตามเลเวล เลือกแล้วจำไว้ที่ users/{uid}.outfit */
+const OUTFITS=[
+  {id:"tee",name:"เสื้อยืดกีฬา",lv:0,shirt:"#ff8a3d",sleeve:"#ff8a3d",pants:"#334155",shoe:"#f8fafc",sole:"#94a3b8",collar:"round",trim:"#fff"},
+  {id:"student",name:"ชุดนักเรียน",lv:1,shirt:"#ffffff",sleeve:"#ffffff",pants:"#1e3a8a",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#cbd5e1",tie:"#1e3a8a"},
+  {id:"track",name:"ชุดวอร์มฝึก",lv:2,shirt:"#1f3b73",sleeve:"#1f3b73",pants:"#1f3b73",shoe:"#f8fafc",sole:"#94a3b8",collar:"zip",trim:"#ffb21e",stripe:"#ffb21e"},
+  {id:"cadet",name:"ชุดนักเรียนนายสิบ",lv:4,shirt:"#b08d57",sleeve:"#b08d57",pants:"#8c6d3f",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#8c6d3f",badge:"#f5b301",belt:"#3f2d14",hat:"cap",hatc:"#8c6d3f"},
+  {id:"khaki",name:"เครื่องแบบกากี",lv:6,shirt:"#a3825a",sleeve:"#a3825a",pants:"#7a5f3b",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#7a5f3b",badge:"#f5b301",belt:"#111827",hat:"peak",hatc:"#6b5130",pocket:1},
+  {id:"white",name:"ชุดปกติขาว",lv:9,shirt:"#ffffff",sleeve:"#ffffff",pants:"#ffffff",shoe:"#111827",sole:"#111827",collar:"high",trim:"#e2e8f0",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#ffffff",gold:1},
+  {id:"navy",name:"ชุดพิธีการ",lv:12,shirt:"#16305f",sleeve:"#16305f",pants:"#0f2449",shoe:"#111827",sole:"#111827",collar:"high",trim:"#f5b301",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#16305f",gold:1,sash:"#e11d48"},
+  {id:"gold",name:"ชุดทองผู้พิชิต",lv:18,shirt:"#f5c542",sleeve:"#f5c542",pants:"#d9a400",shoe:"#7c5a00",sole:"#5a4100",collar:"high",trim:"#fff6c2",badge:"#fff",belt:"#7c5a00",hat:"crown",hatc:"#ffd84a",gold:1,cape:"#e11d48"}
+];
+const outfitOf=id=>OUTFITS.find(o=>o.id===id)||OUTFITS[0];
+function bestOutfit(lv){return OUTFITS.filter(o=>o.lv<=lv).pop()||OUTFITS[0]}
+/* เครื่องแบบตามเลเวลพักไว้ก่อน ตอนนี้ใส่ชุดลำลองเสมอ */
+const UNIFORMS_ON=false;
+function myOutfit(lv){if(!UNIFORMS_ON)return OUTFITS[0];const o=OUTFITS.find(x=>x.id===currentData?.outfit);return o&&o.lv<=lv?o:bestOutfit(lv)}
+const isFemale=()=>currentData?.gender==="female";
+/* ===== แต่งตัวละคร: ทรงผม (รูปหัวการ์ตูน chars/*.png) + สีเสื้อยืด กางเกงวอร์ม รองเท้าแตะ =====
+   ชุดลำลอง (Lv.0) ใช้สีที่เลือกเอง ชุดเลเวลอื่นเป็นเครื่องแบบตามเดิม เก็บไว้ที่ users/{uid}.look */
+/* ตอนนี้ใช้เฉพาะตัวละครเต็มตัวตามแบบที่ออกแบบมา ตัวครึ่งตัวเดิมพักไว้ */
+const HAIRS={f:[["f21","A"],["f22","B"]],m:[["m21","A"]]};
+/* สีโทนพาสเทล ใช้ร่วมกันทั้งเสื้อ กางเกง และรองเท้าแตะ ("ตามรูป" = สีเดิมของแบบ) */
+const PASTEL=[["white","ขาว","#ffffff"],["cream","ครีม","#fbf3df"],["lemon","เหลือง","#fde68a"],["peach","พีช","#fdd5b4"],["coral","ส้มอ่อน","#fbb4a5"],["pink","ชมพู","#f9c6d8"],["rose","ชมพูกุหลาบ","#f4a6c0"],["lilac","ม่วงอ่อน","#dccbf5"],["lav","ลาเวนเดอร์","#c4b5fd"],["baby","ฟ้าอ่อน","#c7e3fb"],["sky","ฟ้า","#a5d3f5"],["mint","มิ้นต์","#bdeedb"],["sage","เขียวเสจ","#c8dcb8"],["grey","เทาอ่อน","#d9dbe0"]];
+const SHIRTS=[["orig","ตามรูป",""],...PASTEL],PANTS=[["orig","ตามรูป",""],...PASTEL];
+const SHOE_T=[["s","แบบสวม","slide"],["f","แบบคีบ","flip"]];
+const SHOES=SHOE_T.flatMap(([p,,t])=>[[p+"-orig","ตามรูป","","",t],...PASTEL.map(c=>[p+"-"+c[0],c[1],c[2],c[2],t])]);
+const pick=(list,id)=>list.find(x=>x[0]===id)||(/^#[0-9a-f]{6}$/i.test(id||"")?[id,"สีที่เลือกเอง",id]:list[0]);
+function myLook(){
+  const L={...(currentData?.look||{})},g=isFemale()?"f":"m",all=[...HAIRS.f,...HAIRS.m];
+  return {hair:all.some(h=>h[0]===L.hair)?L.hair:HAIRS[g][0][0],shirt:pick(SHIRTS,L.shirt)[0],pants:pick(PANTS,L.pants)[0],shoe:pick(SHOES,L.shoe)[0],fit:L.fit==="short"?"short":"long"};
+}
+/* ตัวละคร: ตัว/แขน/ขา เป็น SVG (ขยับได้) หัวเป็นรูปทรงผมที่เลือก หมวกของเครื่องแบบวางทับหัว */
+/* ชุดลำลอง: เสื้อยืดโอเวอร์ไซซ์แขนสั้น กางเกงวอร์มขาจั๊มมีเชือก รองเท้าแตะแบบสวม/หูหนีบ */
+function casualSvg(look,cls){
+  const shirt=pick(SHIRTS,look.shirt)[2],pants=pick(PANTS,look.pants)[2],sh=pick(SHOES,look.shoe),skin="#f6d2b0",line="rgba(0,0,0,.14)";
+  const light=c=>/^#f|^#e|^#a7|^#93|^#c4/i.test(c);
+  const foot=x=>sh[4]==="flip"?`<path d="M${x} 91 h12 a2.4 2.4 0 0 1 0 4.8 h-12 a2.4 2.4 0 0 1 0-4.8z" fill="${sh[2]}" stroke="${line}" stroke-width=".6"/><path d="M${x+3} 91.5 L${x+6} 88.5 L${x+9} 91.5" fill="none" stroke="${sh[3]==="#ffffff"?"#94a3b8":sh[3]}" stroke-width="1.4" stroke-linecap="round"/>`
+    :`<path d="M${x} 91 h12 a2.4 2.4 0 0 1 0 4.8 h-12 a2.4 2.4 0 0 1 0-4.8z" fill="${sh[2]}" stroke="${line}" stroke-width=".6"/><rect x="${x+1.5}" y="87.5" width="9" height="4.4" rx="1.6" fill="${sh[3]}" stroke="${line}" stroke-width=".6"/>${sh[0]==="bw"||sh[0]==="wb"?`<path d="M${x+3.5} 87.8 v4 M${x+6} 87.8 v4 M${x+8.5} 87.8 v4" stroke="${sh[2]}" stroke-width=".9"/>`:""}`;
+  const leg=(side,x,fx)=>`<g class="k-leg ${side}"><path d="M${x} 70 h9 l-1 15 h-7z" fill="${pants}" stroke="${line}" stroke-width=".6"/><rect x="${x+.6}" y="84" width="7.6" height="3.4" rx="1.2" fill="${pants}" stroke="${line}" stroke-width=".7"/><rect x="${x+2}" y="87.2" width="5" height="2.6" fill="${skin}"/>${foot(fx)}</g>`;
+  const arm=(side,sx,sy,ex,ey,hx,hy)=>`<g class="k-arm ${side}"><path d="M${sx} ${sy} L${ex} ${ey}" stroke="${skin}" stroke-width="5" stroke-linecap="round"/><circle cx="${hx}" cy="${hy}" r="3.4" fill="${skin}"/><path d="M${sx} ${sy-1} L${sx+(ex-sx)*.42} ${sy+(ey-sy)*.42}" stroke="${shirt}" stroke-width="9.5" stroke-linecap="round"/><path d="M${sx+(ex-sx)*.42} ${sy+(ey-sy)*.42-3.6} l${(ex-sx)>0?1:-1}.2 7" stroke="${line}" stroke-width=".6"/></g>`;
+  return `<svg class="${cls}" viewBox="0 0 60 100" aria-hidden="true">
+    ${leg("l",20.5,18.5)}${leg("r",30.5,29.5)}
+    <path d="M20 68 h20 v4 h-20z" fill="${pants}"/><path d="M28.6 69.5 q-1 4 -2.6 5 M31.4 69.5 q1 4 2.6 5" stroke="${light(pants)?"#94a3b8":"#e5e7eb"}" stroke-width=".9" fill="none" stroke-linecap="round"/>
+    <path d="M17 48 Q17 42 30 42 Q43 42 43 48 L44 70 Q30 73 16 70 Z" fill="${shirt}" stroke="${shirt==="#ffffff"?"#e2e8f0":line}" stroke-width=".8"/>
+    <path d="M25 43.5 Q30 48 35 43.5" fill="none" stroke="${light(shirt)?"#cbd5e1":"rgba(255,255,255,.25)"}" stroke-width="1.6"/>
+    <path d="M22 60 q8 2 16 0" stroke="${line}" stroke-width=".8" fill="none"/>
+    ${arm("l",18,47,11,63,10.6,65)}${arm("r",42,47,49,63,49.4,65)}</svg>`;
+}
+const DOLL={f01:[118,32,95,"#fbfafc","#b5b2bf"],f02:[139,33,106,"#272727","#f4d6c3"],f03:[135,21,91,"#1e3153","#fdc3cb"],f04:[142,37,110,"#f7f8fd","#080909"],f05:[117,28,89,"#1c3054","#9ac9f8"],f06:[125,21,99,"#242323","#e9b69b"],f09:[129,34,106,"#fafafb","#a6a1ad"],f11:[155,41,105,"#1e2f53","#85b7f0"],f12:[139,37,109,"#f7f5fa","#181918"],f14:[138,19,86,"#1f3255","#5e5c40"],m01:[105,24,92,"#212120","#9692a3"],m04:[123,21,89,"#212222","#3c3926"],m05:[101,30,89,"#faf9fc","#0a0b0c"],m06:[130,35,102,"#1c2e50","#b2aeb7"],m10:[107,27,97,"#a79ea6","#0b0c0b"],m11:[114,29,101,"#20201f","#eed8c7"],m12:[118,35,108,"#f3f2f7","#040a1b"],m13:[136,25,99,"#182d51","#9d9ba3"],m14:[138,48,104,"#222120","#212011"],m15:[126,36,105,"#f3f2f8","#102a50"],m21:[115,23,96,"#f9f6fc","#2c2829"],m22:[110,17,94,"#fbf7fb","#b0a8ab"],m23:[106,15,88,"#faf8f9","#a19698"]};
+/* ชุดลำลอง: ใช้ตัวละครทั้งตัวจากรูปต้นแบบ (หัว เสื้อยืด สะโพก เป็นรูปเดียวกัน) ต่อขากางเกงวอร์มและรองเท้าแตะด้านล่าง
+   เปลี่ยนสีเสื้อ/กางเกงด้วยมาสก์ chars/b/<id>_m.png (แดง = เสื้อ เขียว = กางเกง) บน canvas แล้วเก็บผลไว้ใช้ซ้ำ */
+const dollCache={};
+const hexRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function dollColor(list,v,orig){const x=pick(list,v);return x[0]==="orig"?orig:x[2]}
+function dollLegsSvg(d,look){
+  const [w,hl,hr,,po]=d,pants=dollColor(PANTS,look.pants,po),sh=pick(SHOES,look.shoe),skin="#f6d2b0",toe="#e2a988",line="rgba(0,0,0,.2)";
+  const lw=(hr-hl)/2,gap=Math.max(2,lw*.08),lw2=lw-gap/2,fw=lw2*.98;
+  const c=sh[2],st=sh[3]==="#ffffff"&&sh[4]==="flip"?"#94a3b8":sh[3];
+  /* เท้าเปล่าบนรองเท้าแตะ มุมหน้าตรง: พื้นรองเท้า เท้า นิ้วเท้า แล้วสายคาด (แบบสวม) หรือสายคีบ (แบบคีบ) */
+  const foot=cx=>{const l=cx-fw/2,r=cx+fw/2;
+    const toes=[.17,.39,.6,.8].map((f,i)=>`<ellipse cx="${l+fw*f}" cy="${59.4-(i===0?.3:0)}" rx="${fw*(i===0?.12:.095)}" ry="${fw*(i===0?.1:.08)}" fill="${skin}" stroke="${toe}" stroke-width=".7"/>`).join("");
+    const strap=sh[4]==="flip"
+      ?`<path d="M${l+fw*.02} 57.6 L${l+fw*.28} 55.4 L${r-fw*.02} 57.4" fill="none" stroke="${st}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+      :`<path d="M${l-1.4} 58.2 Q${l-1.4} 52.6 ${cx} 52.6 Q${r+1.4} 52.6 ${r+1.4} 58.2 Z" fill="${st}" stroke="${line}" stroke-width=".8"/>${sh[0]==="bw"||sh[0]==="wb"?[.28,.5,.72].map(f=>`<path d="M${l+fw*f} 53 v5" stroke="${c}" stroke-width="1.3"/>`).join(""):""}`;
+    return `<g transform="translate(${cx} 65) scale(1.15 1.65) translate(${-cx} -65)"><rect x="${l-1.8}" y="59.6" width="${fw+3.6}" height="5" rx="2.5" fill="${c}" stroke="${line}" stroke-width=".8"/><path d="M${l} 60.4 Q${l-.6} 51 ${cx} 50.6 Q${r+.6} 51 ${r} 60.4 Z" fill="${skin}" stroke="${toe}" stroke-width=".7"/>${toes}${strap}</g>`};
+  /* ขากางเกงวอร์มยาวตรง บานเล็กน้อย ปลายขาคลุมข้อเท้า มีรอยพับที่ปลายขา */
+  const leg=(side,x)=>{const cx=x+lw2/2;return `<g class="k-leg ${side}">${foot(cx)}<path d="M${x} -6 h${lw2} L${x+lw2+1.6} 46.6 Q${cx} 48.8 ${x-1.6} 46.6 Z" fill="${pants}" stroke="${line}" stroke-width="1"/><path d="M${x+lw2*.62} -2 L${x+lw2+1.2} 45" stroke="rgba(0,0,0,.1)" stroke-width="${lw2*.22}"/><path d="M${x+lw2*.2} 42 q${lw2*.3} 1.8 ${lw2*.6} -.2" stroke="${line}" stroke-width=".8" fill="none" stroke-linecap="round"/></g>`};
+  return `<svg class="dl-legs" viewBox="0 -6 ${w} 72" aria-hidden="true">${leg("l",hl+1)}${leg("r",hl+lw+gap/2)}</svg>`;
+}
+/* ตัวละครที่มีรูปเต็มตัว ใช้ขาและรองเท้าแตะจากรูปจริง สลับรูปตามแบบรองเท้า (สวม/คีบ) มาสก์สีน้ำเงิน = รองเท้า */
+/* [ไฟล์, ความกว้าง, แนวเป้า (สัดส่วนความสูง), แนวแบ่งขาซ้าย/ขวา] แยกตามแบบกางเกง (ขายาว/ขาสั้น) และแบบรองเท้า */
+const DOLL_FULL={m21:{long:{slide:["m21s",87,.70,.471],flip:["m21f",88,.71,.455]},short:{slide:["m31s",90,.725,.489]}},
+  f21:{long:{slide:["f21s",88,.70,.477]}},f22:{short:{slide:["f22s",84,.67,.5]}}};
+const FITS=[["long","ขายาว"],["short","ขาสั้น"]];
+const fullOf=(id,fit)=>{const D=DOLL_FULL[id];if(!D)return null;return D[fit]||D.long||D.short};
+function dollHtml(look){
+  const id=DOLL[look.hair]||DOLL_FULL[look.hair]?look.hair:(isFemale()?"f21":"m21"),d=DOLL[id],key=`${id}|${look.shirt}|${look.pants}`;
+  const fl=DOLL_FULL[id];if(!fl&&!d)return "";
+  if(fl){const fv=fullOf(id,look.fit),v=fv[pick(SHOES,look.shoe)[4]]||fv.slide,fk=`${v[0]}|${look.shirt}|${look.pants}|${look.shoe}`;
+    const src=dollCache[fk]||`chars/b/${v[0]}.png`,hy=v[2]*100,sx=v[3]*100,im=c=>`<img class="dl-up${c}" src="${src}" data-doll="${fk}" onload="dollPaint(this)" alt="" draggable="false"`;
+    /* แบ่งรูปเป็นลำตัว + ขาซ้าย + ขาขวา (ตัดใต้เป้า) ให้ขาแกว่งจากสะโพกตอนเดิน */
+    return `<span class="dl dlf" style="--dw:${v[1]}">${im(" dl-leg l")} style="clip-path:inset(${hy-1}% ${100-sx}% 0 0);transform-origin:${sx*.55}% ${hy}%">${im(" dl-leg r")} style="clip-path:inset(${hy-1}% 0 0 ${sx}%);transform-origin:${sx+(100-sx)*.45}% ${hy}%">${im("")} style="clip-path:inset(0 0 ${100-hy-.8}% 0)"></span>`}
+  return `<span class="dl" style="--dw:${d[0]}">${dollLegsSvg(d,look)}<img class="dl-up" src="${dollCache[key]||`chars/b/${id}.png`}" data-doll="${key}" onload="dollPaint(this)" alt="" draggable="false"></span>`;
+}
+/* สร้างรูปที่เติมสีแล้วเก็บไว้ในแคช (โหลดรูปต้นแบบกับมาสก์เอง) ใช้ทั้งตอนแสดงและตอนเตรียมล่วงหน้าก่อนเปลี่ยนสี จะได้ไม่กะพริบ */
+const dollJobs={};
+const loadImg=src=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=src});
+function dollUrl(key){
+  if(dollCache[key])return Promise.resolve(dollCache[key]);
+  if(dollJobs[key])return dollJobs[key];
+  const [id,sv,pv,bv]=key.split("|");
+  const tS=dollColor(SHIRTS,sv,""),tP=dollColor(PANTS,pv,""),tB=bv?pick(SHOES,bv)[2]:"";
+  if(!tS&&!tP&&!tB)return Promise.resolve(null);
+  return dollJobs[key]=Promise.all([loadImg(`chars/b/${id}.png`),loadImg(`chars/b/${id}_m.png`)]).then(([img,mk])=>{
+    const W=img.naturalWidth,H=img.naturalHeight,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+    x.drawImage(img,0,0);const px=x.getImageData(0,0,W,H);x.clearRect(0,0,W,H);x.drawImage(mk,0,0,W,H);const m=x.getImageData(0,0,W,H).data,a=px.data;
+    const lum=(i)=>a[i]*.3+a[i+1]*.59+a[i+2]*.11;
+    [[0,tS],[1,tP],[2,tB]].forEach(([ch,t])=>{if(!t)return;const T=hexRgb(t);let sum=0,n=0;
+      for(let i=0;i<a.length;i+=4)if(m[i+ch]>128){sum+=lum(i);n++}
+      if(!n)return;const Lb=sum/n,dark=Lb<90;
+      /* ฐานสีเข้ม (ดำ): ยกความสว่างขึ้นแบบนุ่ม ๆ ฐานสีอ่อน (ขาว): คูณสีใหม่ตามเงาเดิม */
+      for(let i=0;i<a.length;i+=4){const wt=m[i+ch]/255;if(wt<.02)continue;const L=lum(i),f=dark?.8+.28*Math.max(-1,Math.min(1.4,(L-Lb)/Lb)):Math.min(1.06,L/Lb);
+        for(let j=0;j<3;j++)a[i+j]=Math.round(a[i+j]*(1-wt)+Math.max(0,Math.min(255,T[j]*f))*wt)}});
+    x.clearRect(0,0,W,H);x.putImageData(px,0,0);return dollCache[key]=c.toDataURL("image/png");
+  }).catch(e=>{console.error(e);return null}).finally(()=>delete dollJobs[key]);
+}
+function dollPaint(img){
+  const key=img.dataset.doll;if(!key||img.dataset.done===key)return;img.dataset.done=key;
+  dollUrl(key).then(url=>{if(url)document.querySelectorAll(`img[data-doll="${key}"]`).forEach(el=>{el.dataset.done=key;if(el.src!==url)el.src=url})});
+}
+/* คีย์รูปของชุดที่ใส่อยู่ (เฉพาะตัวละครเต็มตัว) */
+function dollKeyOf(look){const fv=fullOf(look.hair,look.fit);if(!fv)return "";const v=fv[pick(SHOES,look.shoe)[4]]||fv.slide;return `${v[0]}|${look.shirt}|${look.pants}|${look.shoe}`}
+window.dollPaint=dollPaint;
+function charBodySvg(o,look,cls){
+  const casual=o.id==="tee";
+  const shirt=casual?pick(SHIRTS,look.shirt)[2]:o.shirt,sleeve=casual?shirt:o.sleeve,pants=casual?pick(PANTS,look.pants)[2]:o.pants;
+  const sh=pick(SHOES,look.shoe),shoe=casual?sh[2]:o.shoe,strap=casual?sh[3]:o.sole,skin="#f6d2b0";
+  const collar=casual?`<path d="M25 44 Q30 49 35 44" fill="none" stroke="${shirt==="#ffffff"?"#e2e8f0":"rgba(0,0,0,.18)"}" stroke-width="2"/>`
+    :o.collar==="shirt"?`<path d="M24 45 L30 52 L36 45 L33 44 L30 48 L27 44Z" fill="${o.trim}"/>`
+    :o.collar==="high"?`<rect x="24" y="43" width="12" height="5" rx="2" fill="${o.trim}"/>`
+    :o.collar==="zip"?`<path d="M30 45 V70" stroke="${o.trim}" stroke-width="1.6"/><path d="M26 44 L30 48 L34 44" fill="none" stroke="${o.trim}" stroke-width="2"/>`:"";
+  const foot=(x)=>casual?`<path d="M${x} 90 h12 a2.5 2.5 0 0 1 0 5 h-12 a2.5 2.5 0 0 1 0-5z" fill="${shoe}"/><rect x="${x+2}" y="88" width="8" height="3.2" rx="1.2" fill="${strap}"/>`
+    :`<path d="M${x} 88 h11 a3 3 0 0 1 3 3 v1 h-14z" fill="${shoe}"/><rect x="${x}" y="91" width="14" height="2" fill="${strap}"/>`;
+  const leg=(side,x,fx)=>`<g class="k-leg ${side}"><rect x="${x}" y="72" width="7.5" height="${casual?16:18}" rx="3" fill="${pants}"/>${casual?`<rect x="${x+1}" y="87" width="5.5" height="3" fill="${skin}"/>`:""}${foot(fx)}</g>`;
+  const arm=(side,x,path)=>`<g class="k-arm ${side}"><path d="${path}" stroke="${sleeve}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="${x}" cy="67" r="3.6" fill="${skin}"/></g>`;
+  return `<svg class="${cls}" viewBox="0 0 60 100" aria-hidden="true">
+    ${o.cape?`<path d="M18 46 L42 46 L48 84 L12 84Z" fill="${o.cape}"/>`:""}
+    ${leg("l",22,19)}${leg("r",30.5,30)}
+    ${arm("l",13,"M20 48 Q14 56 13 64")}${arm("r",47,"M40 48 Q46 56 47 64")}
+    <path d="M19 47 Q19 42 30 42 Q41 42 41 47 L42 75 H18 Z" fill="${shirt}" ${shirt==="#ffffff"?'stroke="#e2e8f0" stroke-width=".8"':""}/>
+    ${casual?"":`${o.stripe?`<path d="M19 50 V74 M41 50 V74" stroke="${o.stripe}" stroke-width="2"/>`:""}${o.pocket?`<rect x="22" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/><rect x="32" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/>`:""}${o.tie?`<path d="M29 48 L31 48 L32.5 62 L30 65 L27.5 62Z" fill="${o.tie}"/>`:""}${o.sash?`<path d="M20 46 L40 70 L37 72 L18 49Z" fill="${o.sash}" opacity=".9"/>`:""}${o.badge?`<path d="M34.5 51 l2.5 1.2 2.5-1.2 v3.5 l-2.5 1.8-2.5-1.8z" fill="${o.badge}"/>`:""}${o.gold?`<rect x="18" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/><rect x="36" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/>`:""}${o.belt?`<rect x="18" y="68" width="24" height="4" fill="${o.belt}"/><rect x="28" y="68" width="4" height="4" fill="#f5b301"/>`:""}`}
+    ${collar}</svg>`;
+}
+function hatSvg(o){
+  if(o.id==="tee"||!o.hat)return "";
+  const h=o.hat==="cap"?`<path d="M10 22 Q12 4 30 4 Q48 4 50 22 Z" fill="${o.hatc}"/><rect x="8" y="19" width="44" height="5" rx="2.5" fill="${o.hatc}" opacity=".85"/><circle cx="30" cy="12" r="3" fill="#f5b301"/>`
+    :o.hat==="peak"?`<path d="M8 20 Q11 0 30 0 Q49 0 52 20 Z" fill="${o.hatc}"/><rect x="8" y="16" width="44" height="6" fill="${o.gold?"#f5b301":"#3f2d14"}"/><path d="M9 22 Q30 30 51 22 L51 25 Q30 33 9 25Z" fill="#111827"/><circle cx="30" cy="9" r="3.6" fill="#f5b301"/>`
+    :`<path d="M13 22 L15 5 L22 13 L30 2 L38 13 L45 5 L47 22 Z" fill="${o.hatc}" stroke="#d99a00" stroke-width="1.2"/><circle cx="30" cy="14" r="2.4" fill="#e11d48"/>`;
+  return `<svg class="chr-hat" viewBox="0 0 60 34" aria-hidden="true">${h}</svg>`;
+}
+function charHtml(o,look,cls){
+  if(o.id==="tee")return dollHtml(look);
+  return `${charBodySvg(o,look,cls)}<img class="chr-hd" src="chars/${look.hair}.png" alt="" draggable="false">${hatSvg(o)}`;
+}
+function stCharHtml(lv){return `<div class="st-kid game look">${charHtml(myOutfit(lv),myLook(),"st-body")}</div>`}
+/* ตู้เสื้อผ้า: ชุดที่เลเวลถึงแล้วกดใส่ได้ ชุดที่ยังไม่ถึงแสดงเลเวลที่ต้องการ */
+function wardrobeHtml(lv){
+  const cur=myOutfit(lv).id,lk=myLook(),g=isFemale()?"f":"m",og=g==="f"?"m":"f";
+  const dd=DOLL[lk.hair]||[0,0,0,"#f8f8fa","#262222"];
+  const dot=(key,v,name,c,on)=>`<button type="button" class="lk-dot${on?" on":""}" data-k="${key}" data-v="${v}" title="${escHtml(name)}" aria-label="${escHtml(name)}" style="background:${c}"></button>`;
+  const sw=(list,key)=>list.map(x=>dot(key,x[0],x[1],x[0]==="orig"?(key==="shirt"?dd[3]:dd[4]):x[2],lk[key]===x[0])).join("");
+  const shT=lk.shoe.split("-")[0],shC=lk.shoe.slice(2);
+  const hairs=[...HAIRS[g],...HAIRS[og]].map(h=>`<button type="button" class="lk-hair${lk.hair===h[0]?" on":""}" data-k="hair" data-v="${h[0]}"><img src="chars/b/${DOLL_FULL[h[0]]?fullOf(h[0],lk.fit).slide[0]:h[0]}.png" alt="" loading="lazy"><span>${escHtml(h[1])}</span></button>`).join("");
+  const nm=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===lk.hair)||["",""])[1];
+  return `<div class="wd"><div class="wd-h"><b>แต่งตัวละคร</b><span>เลือกตัวละคร สีเสื้อยืด กางเกงวอร์ม และรองเท้าแตะ</span></div>
+    <div class="lk-wrap"><div class="lk-stage" id="lkStage" title="แตะเพื่อหมุนตัว"><svg class="lk-room" viewBox="0 0 400 250" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="lkW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9c7"/><stop offset="1" stop-color="#f6cf9a"/></linearGradient><linearGradient id="lkF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset="1" stop-color="#8f5a2f"/></linearGradient><linearGradient id="lkS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient><radialGradient id="lkG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff6d6" stop-opacity=".9"/><stop offset="1" stop-color="#fff6d6" stop-opacity="0"/></radialGradient><pattern id="lkP" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="#f2c48a"/></pattern></defs>
+<rect width="400" height="172" fill="url(#lkW)"/><rect width="400" height="172" fill="url(#lkP)" opacity=".7"/>
+<rect y="166" width="400" height="8" fill="#a8693a"/><rect y="172" width="400" height="78" fill="url(#lkF)"/>
+<path d="M0 190 H400 M0 212 H400 M0 236 H400 M60 172 V190 M170 172 V190 M290 172 V190 M110 190 V212 M240 190 V212 M350 190 V212 M30 212 V236 M190 212 V236 M320 212 V236" stroke="#7a4a25" stroke-width="1.2" opacity=".5"/>
+<g><rect x="26" y="38" width="88" height="80" rx="6" fill="#fff"/><rect x="32" y="44" width="76" height="68" rx="3" fill="url(#lkS)"/><ellipse cx="58" cy="70" rx="14" ry="6" fill="#fff" opacity=".9"/><ellipse cx="88" cy="58" rx="10" ry="4.5" fill="#fff" opacity=".8"/><circle cx="92" cy="96" r="7" fill="#fde047" opacity=".9"/><path d="M70 44 V112 M32 78 H108" stroke="#fff" stroke-width="3"/>
+<path d="M20 32 H120 V40 H20Z" fill="#a8693a"/><path d="M22 40 Q30 78 26 124 L44 124 Q40 80 46 40Z" fill="#fb7185"/><path d="M118 40 Q110 78 114 124 L96 124 Q100 80 94 40Z" fill="#fb7185"/></g>
+<g><rect x="286" y="44" width="92" height="126" rx="5" fill="#b9773f"/><rect x="292" y="50" width="38" height="112" rx="2" fill="#5b3a1f"/><path d="M294 62 H328" stroke="#d6d3d1" stroke-width="2"/>
+<path d="M298 62 l-5 8 v26 h16 v-26 l-5 -8z" fill="#f9a8d4"/><path d="M312 62 l-5 8 v26 h16 v-26 l-5 -8z" fill="#93c5fd"/><path d="M302 104 h12 v40 h-12z M316 104 h10 v40 h-10z" fill="#a1a1aa"/>
+<rect x="334" y="50" width="38" height="112" rx="2" fill="#c98a52" stroke="#a8693a"/><circle cx="338" cy="106" r="2.4" fill="#fde68a"/><rect x="340" y="62" width="26" height="36" rx="13" fill="#e0f2fe" stroke="#fff" stroke-width="2"/><rect x="282" y="38" width="100" height="8" rx="3" fill="#a8693a"/></g>
+<g><circle cx="148" cy="62" r="15" fill="#fff" stroke="#a8693a" stroke-width="3"/><path d="M148 52 V62 L155 66" stroke="#16305f" stroke-width="2" stroke-linecap="round" fill="none"/></g>
+<path d="M0 14 Q50 30 100 14 T200 14 T300 14 T400 14" fill="none" stroke="#7c5a3a" stroke-width="1.2"/>
+<g class="lk-bulbs">${[[16,19],[50,24],[84,18],[120,19],[154,24],[188,18],[220,18],[254,24],[288,18],[320,19],[354,24],[388,18]].map(([x,y],i)=>`<circle cx="${x}" cy="${y+3}" r="3.6" fill="${["#fde047","#fb7185","#7dd3fc","#86efac"][i%4]}"/>`).join("")}</g>
+<g><path d="M20 172 h30 l-4 -24 h-22z" fill="#e2725b"/><path d="M35 148 q-18 -10 -12 -34 q10 12 12 34 q2 -30 14 -40 q4 22 -14 40 q14 -16 26 -12 q-8 14 -26 12z" fill="#22c55e"/></g>
+<g><rect x="250" y="120" width="6" height="52" fill="#a8693a"/><path d="M238 120 h30 l-6 -20 h-18z" fill="#fef3c7"/><circle cx="253" cy="112" r="34" fill="url(#lkG)"/></g>
+<ellipse cx="200" cy="218" rx="120" ry="22" fill="#fb7185" opacity=".85"/><ellipse cx="200" cy="218" rx="104" ry="16" fill="none" stroke="#fde68a" stroke-width="2" stroke-dasharray="4 4"/>
+<ellipse cx="200" cy="150" rx="110" ry="120" fill="url(#lkG)" opacity=".5"/></svg><i class="lk-podium"><i></i></i>
+      <div class="lk-kid"><div class="st-kid game look">${charHtml(myOutfit(lv),lk,"st-body")}</div></div><span class="lk-name" id="lkName">${escHtml(nm)}</span></div>
+    <div class="lk-opts"><div class="lk-tabs">${[["hair","ตัวละคร"],["shirt","เสื้อยืด"],["pants","กางเกงวอร์ม"],["shoe","รองเท้าแตะ"]].map(([k,t],i)=>`<button type="button" data-tab="${k}" class="${i?"":"on"}">${t}</button>`).join("")}</div>
+    <div class="lk-pane" data-pane="hair"><div class="wd-row">${hairs}</div></div>
+    <div class="lk-pane hidden" data-pane="shirt"><div class="lk-dots">${sw(SHIRTS,"shirt")}</div></div>
+    <div class="lk-pane hidden" data-pane="pants"><p class="lk-sub">แบบกางเกง</p><div class="lk-fits">${FITS.map(([v,t])=>`<button type="button" class="lk-fit${lk.fit===v?" on":""}" data-k="fit" data-v="${v}"${DOLL_FULL[lk.hair]?.[v]?"":" disabled"}>${t}</button>`).join("")}</div><p class="lk-sub">สีกางเกง</p><div class="lk-dots">${sw(PANTS,"pants")}</div></div>
+    <div class="lk-pane hidden" data-pane="shoe"><p class="lk-sub">แบบรองเท้าแตะ</p><div class="lk-fits">${SHOE_T.map(([p,t])=>`<button type="button" class="lk-fit lk-sht${shT===p?" on":""}" data-p="${p}">${t}</button>`).join("")}</div><p class="lk-sub">สีรองเท้าแตะ</p><div class="lk-dots">${[["orig","ตามรูป","#1f1d1d"],...PASTEL].map(c=>`<button type="button" class="lk-dot lk-shc${shC===c[0]?" on":""}" data-c="${c[0]}" title="${escHtml(c[1])}" aria-label="${escHtml(c[1])}" style="background:${c[2]}"></button>`).join("")}</div></div></div></div>
+    ${UNIFORMS_ON?`<div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div>`:""}</div></div>`;
+}
+/* ===== เกมผจญภัยตอบคำถาม (แนวมาริโอ้): เดินไปเจอกล่อง ? ตอบถูกกระโดดชนกล่องได้เหรียญ ผ่านครบถึงธงคือผ่านด่าน =====
+   โจทย์สร้างใหม่ทุกครั้งตามความยากของด่าน (คิดเลข อนุกรม เปรียบเทียบ เงื่อนไข) ไม่ใช้ข้อสอบจริง
+   บันทึก users/{uid}.game {stage: ด่านสูงสุดที่ผ่าน, day, got: ด่านใหม่ที่ผ่านวันนี้} ผ่านด่านใหม่ได้ 3 เหรียญ วันละไม่เกิน 10 ด่าน */
+const ADV_COIN=3,ADV_CAP=10;
+const advBest=()=>Number(currentData?.game?.stage)||0;
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function advOpts(ans,near){const set=new Set([ans]);let g=0;while(set.size<4&&g++<60){const d=rnd(1,Math.max(3,near))*(Math.random()<.5?-1:1);const v=ans+d;if(v>=0||ans<0)set.add(v)}let k=1;while(set.size<4)set.add(ans+near+k++);const o=shuf([...set]);return {opts:o.map(String),ans:o.indexOf(ans)}}
+function advQuestion(st){
+  const kinds=["math"];if(st>=2)kinds.push("seq");if(st>=3)kinds.push("cmp");if(st>=5)kinds.push("logic");
+  const k=kinds[rnd(0,kinds.length-1)];
+  if(k==="math"){
+    const top=st<3?20:st<6?50:100;let a,b,q,ans;const ops=["+","-"];if(st>=4)ops.push("×");if(st>=6)ops.push("÷");
+    const op=ops[rnd(0,ops.length-1)];
+    if(op==="+"){a=rnd(2,top);b=rnd(2,top);ans=a+b}
+    else if(op==="-"){a=rnd(5,top);b=rnd(1,a);ans=a-b}
+    else if(op==="×"){a=rnd(2,st<8?9:12);b=rnd(2,st<8?9:12);ans=a*b}
+    else{b=rnd(2,9);ans=rnd(2,12);a=b*ans}
+    q=`${a} ${op} ${b} = ?`;
+    if(st>=8&&Math.random()<.4){const c=rnd(2,9);q=`${a} ${op} ${b} + ${c} = ?`;ans+=c}
+    return {q,...advOpts(ans,Math.max(3,Math.round(Math.abs(ans)*.15)))};
+  }
+  if(k==="seq"){
+    let s=[],ans;const t=st<4?0:rnd(0,st<7?1:2);
+    if(t===0){const a=rnd(1,20),d=rnd(2,st<4?5:12);for(let i=0;i<5;i++)s.push(a+d*i)}
+    else if(t===1){const a=rnd(1,4),r=rnd(2,3);for(let i=0;i<5;i++)s.push(a*r**i)}
+    else{const a=rnd(1,10),d1=rnd(2,6),d2=rnd(1,4);let v=a;for(let i=0;i<5;i++){s.push(v);v+=i%2?d2:d1}}
+    ans=s.pop();return {q:`${s.join(", ")}, ?`,...advOpts(ans,Math.max(2,Math.round(ans*.12)))};
+  }
+  if(k==="cmp"){
+    const mk=()=>{const a=rnd(2,st<6?12:25),b=rnd(2,9),o=rnd(0,2);return o===0?[`${a} + ${b}`,a+b]:o===1?[`${a} × ${b}`,a*b]:[`${a*b} ÷ ${b}`,a]};
+    let xs=[],vals=new Set();while(xs.length<4){const e=mk();if(!vals.has(e[1])){vals.add(e[1]);xs.push(e)}}
+    const big=Math.random()<.5,want=big?Math.max(...xs.map(x=>x[1])):Math.min(...xs.map(x=>x[1]));
+    return {q:`ข้อใด${big?"มากที่สุด":"น้อยที่สุด"}`,opts:xs.map(x=>x[0]),ans:xs.findIndex(x=>x[1]===want)};
+  }
+  const L=shuf(["ก","ข","ค","ง"]).slice(0,3);/* L[0] > L[1] > L[2] */
+  const right=`${L[0]} > ${L[2]}`,wrong=shuf([`${L[2]} > ${L[0]}`,`${L[1]} > ${L[0]}`,`${L[2]} > ${L[1]}`,`${L[0]} = ${L[2]}`]).slice(0,3);
+  const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
+}
+/* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
+let adv=null;
+async function advClear(st){
+  let gain=0,note="";
+  if(st===advBest()+1&&currentUser&&currentData){
+    const day=thaiDay(),g=currentData.game||{stage:0,day:0,got:0},had=Number(g.day)===day?Number(g.got)||0:0,give=had<ADV_CAP;
+    const game={stage:st,day,got:give?had+1:had},upd={game};if(give)upd.coins=coinsOf()+ADV_COIN;
+    try{await updateDoc(doc(db,"users",currentUser.uid),upd);currentData.game=game;if(give){currentData.coins=upd.coins;gain=ADV_COIN}}
+    catch(e){console.error(e);note="บันทึกไม่สำเร็จ"}
+    if(!give&&!note)note=`วันนี้รับเหรียญครบ ${ADV_CAP} ด่านแล้ว`;
+  }
+  const c=$("advCoins");if(c)c.textContent=coinsOf().toLocaleString();
+  return {gain,note};
+}
+async function advStart(){
+  advClose();
+  const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
+  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
+    <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
+      <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
+      <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
+      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง กดค้าง ◀ ถอยกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
+      <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
+      <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">⤒</button>
+      <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
+        <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
+        <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
+        <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
+        <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
+        <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
+        <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
+      <div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
+  document.body.appendChild(ov);document.body.classList.add("adv-on");
+  const menu=$("advMenu");
+  $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
+  menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu){menu.classList.add("hidden");adv?.pause(false)}return}
+    if(b.dataset.go==="resume"){menu.classList.add("hidden");adv?.pause(false);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+  ov.querySelectorAll(".adv-k[data-h]").forEach(b=>{const on=e=>{e.preventDefault();b.classList.add("on");adv?.hold(b.dataset.h,true);$("advHint")?.classList.add("hidden")},off=()=>{b.classList.remove("on");adv?.hold(b.dataset.h,false)};
+    b.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
+  $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});
+  const ui={
+    stage:(st,need,done)=>{$("advSt").textContent=`ด่าน ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
+    hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
+    pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
+    ask:q=>{$("advQt").textContent=q;$("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
+    hideQ:()=>$("advQ").classList.add("hidden"),
+    timer:f=>{$("advBar").style.width=f*100+"%"},
+    shake:()=>{const v=$("advView");v.classList.remove("hurt");void v.offsetWidth;v.classList.add("hurt")},
+    toast:(st,r)=>{const t=$("advToast");t.innerHTML=`<b>ผ่านด่าน ${st}!</b>${r.gain?`<span><i class="st-coin mini"></i> +${r.gain} เหรียญ</span>`:r.note?`<span>${escHtml(r.note)}</span>`:""}`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
+    lose:(st,again)=>{const m=$("advMsg");m.innerHTML=`<b class="adv-big">หัวใจหมดแล้ว</b><p>ไม่เป็นไร เล่นต่อจากด่าน ${st} ได้เลย</p><div class="adv-btns"><button type="button" class="pri" id="advRe">เล่นต่อ</button><button type="button" id="advHome">ออกจากเกม</button></div>`;m.classList.remove("hidden");
+      $("advRe").onclick=()=>{m.classList.add("hidden");again()};$("advHome").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")}}
+  };
+  try{
+    const mod=await import("./game3d.js");if(!$("advOv"))return;
+    $("advLoad")?.remove();
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui});window.advGame=adv;
+    const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+    const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
+      t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
+      $("advPart").textContent=`${d.getUTCDate()} ${TM[d.getUTCMonth()]} · ${c.partTh} · ${c.seasonTh}${c.rain?" · ฝนตก":c.cloudy?" · เมฆมาก":c.mist?" · หมอก":""}${c.temp!=null?` · ${c.temp}°C`:""}`};
+    tickClock();advClockT=setInterval(tickClock,1000);
+  }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
+}
+let advClockT=0;
+function advClose(){clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
+/* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
+function renderGamePage(){const box=$("gmBox");if(box)box.innerHTML="";advStart()}
+function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
+function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
+/* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */
+function swapInPlace(k){const els=[...document.querySelectorAll("#lkStage img[data-doll],#stTurn img[data-doll]")],id=k.split("|")[0];
+  if(!els.length||!els.every(e=>e.dataset.doll.split("|")[0]===id))return false;
+  const src=dollCache[k]||`chars/b/${id}.png`;els.forEach(e=>{e.dataset.doll=k;e.dataset.done=k;if(e.getAttribute("src")!==src)e.src=src});return true}
+function redrawChar2(lv){const k=dollKeyOf(myLook());if(k&&swapInPlace(k))return;redrawStage(lv);const kid=document.querySelector("#stTurn .st-kid");if(!kid)return;const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
+function bindWardrobe(lv){
+  const stg=$("lkStage");if(stg)stg.onclick=()=>{stg.classList.remove("spin");void stg.offsetWidth;stg.classList.add("spin")};
+  document.querySelectorAll(".lk-tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".lk-tabs button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".lk-pane").forEach(p=>p.classList.toggle("hidden",p.dataset.pane!==b.dataset.tab))});
+  let saveT=0;
+  document.querySelectorAll(".lk-custom input").forEach(inp=>inp.oninput=()=>{const k=inp.dataset.k;const look={...myLook(),[k]:inp.value};if(currentData)currentData.look=look;
+    document.querySelectorAll(`.lk-sw[data-k="${k}"]`).forEach(x=>x.classList.remove("on"));inp.closest(".lk-custom").classList.add("on");redrawChar(lv);
+    clearTimeout(saveT);saveT=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{look}).catch(e=>console.error(e)),700)});
+  document.querySelectorAll(".lk-sht,.lk-shc").forEach(b=>b.onclick=()=>{
+    const cur=myLook().shoe,p=b.dataset.p||cur.split("-")[0],c=b.dataset.c||cur.slice(2),look={...myLook(),shoe:`${p}-${c}`};if(currentData)currentData.look=look;
+    document.querySelectorAll(b.dataset.p?".lk-sht":".lk-shc").forEach(x=>x.classList.toggle("on",x===b));redrawChar(lv);
+    clearTimeout(saveT);saveT=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{look}).catch(e=>console.error(e)),700)});
+  document.querySelectorAll(".lk-hair,.lk-fit:not(.lk-sht),.lk-dot:not(.lk-shc)").forEach(b=>b.onclick=()=>{
+    const look={...myLook(),[b.dataset.k]:b.dataset.v};if(currentData)currentData.look=look;
+    if(b.dataset.k==="hair")document.querySelectorAll(".lk-fit").forEach(x=>x.disabled=!DOLL_FULL[look.hair]?.[x.dataset.v]);
+    if(b.dataset.k==="hair"){const dd=DOLL[look.hair];if(dd)document.querySelectorAll('.lk-dot[data-v="orig"]').forEach(i=>i.style.background=i.dataset.k==="shirt"?dd[3]:dd[4])}
+    document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach(x=>x.classList.toggle("on",x===b));document.querySelector(`.lk-custom input[data-k="${b.dataset.k}"]`)?.closest(".lk-custom").classList.remove("on");
+    if(b.dataset.k!=="hair"&&myOutfit(lv).id!=="tee"&&currentData){currentData.outfit="tee";document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o==="tee";x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"})}
+    redrawChar(lv);document.querySelectorAll(".wd-it").forEach(x=>{const m=x.querySelector(".chr-mini");if(m)m.innerHTML=charHtml(outfitOf(x.dataset.o),look,"wd-svg")});
+    clearTimeout(saveT);saveT=setTimeout(()=>{const upd={look};if(currentData?.outfit)upd.outfit=currentData.outfit;updateDoc(doc(db,"users",currentUser.uid),upd).catch(e=>console.error(e))},700);
+  });
+  document.querySelectorAll(".wd-it:not(.lock)").forEach(b=>b.onclick=async()=>{
+    const o=outfitOf(b.dataset.o);if(o.lv>lv)return;
+    if(currentData)currentData.outfit=o.id;
+    const kid=document.querySelector("#stTurn .st-kid");if(kid){const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
+    document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o===o.id;x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"});
+    try{await updateDoc(doc(db,"users",currentUser.uid),{outfit:o.id})}catch(e){console.error(e)}
+  });
+}
+const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
+function stairsHtml(lv,xp){
+  const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;
+  const cols=[];for(let l=0;l<=MAX_LEVEL;l++){const k=l===lv?"now":l<lv?"done":l===MAX_LEVEL?"top":"next";
+    cols.push(`<div class="st-col ${k}" style="left:${stX(l)}px;width:${ST_CW}px;height:${stH(l)}px">${l===MAX_LEVEL?'<i class="st-goal"></i><i class="st-star"></i>':""}${l===lv+1?'<em class="st-next">ขั้นถัดไป</em>':""}<b>Lv.${l}</b><span>${escHtml(rankLabel(l))}</span></div>`)}
+  const coins=coinsOf(),drop=activeDrop(),ck=!!drop;
+  const cx=stX(lv)+ST_CW/2;
+  return `<div class="stairs"><div class="st-sky" aria-hidden="true"><i class="st-cloud c1"></i><i class="st-cloud c2"></i><i class="st-cloud c3"></i><i class="st-cloud c4"></i></div><div class="st-track" id="stTrack"><div class="st-world" style="width:${W}px"><div class="st-scene" aria-hidden="true"><i class="st-sun"></i><i class="st-bird b1"></i><i class="st-bird b2"></i>
+    <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
+    <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
+    ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+128}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+154}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
+    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn">${stCharHtml(lv)}</div><i class="st-shadow"></i></div></div></div>
+    <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
+    <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>${wardrobeHtml(lv)}`;
+}
+/* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
+/* เดินแบบเกม: ปุ่มซ้าย/ขวา (หรือลูกศร) เดิน ปุ่มกระโดด (หรือเว้นวรรค/ลูกศรขึ้น) กระโดด เดินขึ้นแท่นที่สูงกว่าได้เอง เดินลงแล้วตก
+   เดินได้ถึงแท่นยศของตัวเองเท่านั้น กระโดดชนเหรียญเหนือแท่นยศของตัวเองเพื่อเก็บเหรียญ */
+function bindStairs(lv){
+  const tr=$("stTrack"),me=$("stMe"),kid=me?.querySelector(".st-kid");if(!tr||!me)return;
+  const P=ST_CW+ST_GAP,top=lv>=MAX_LEVEL,minX=stX(0)+14,maxX=stX(lv)+ST_CW-14;
+  const ground=x=>stH(Math.max(0,Math.min(MAX_LEVEL,Math.floor((x-ST_GAP/2)/P))));
+  const g={x:stX(lv)+ST_CW/2,y:stH(lv),vy:0,air:false,dir:1,keys:{},raf:0,last:0,warned:0};
+  requestAnimationFrame(()=>{tr.scrollLeft=g.x-tr.clientWidth/2});
+  let drag=null,moved=false;
+  tr.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;drag={x:e.clientX,l:tr.scrollLeft};moved=false});
+  addEventListener("pointermove",e=>{if(!drag)return;const d=e.clientX-drag.x;if(Math.abs(d)>4)moved=true;tr.scrollLeft=drag.l-d});
+  addEventListener("pointerup",()=>{drag=null});
+  const say=t=>{const pl=$("stPlus");if(!pl)return;pl.textContent=t;pl.classList.remove("on");void pl.offsetWidth;pl.classList.add("on")};
+  let claiming=false;
+  const tryCoin=async()=>{const coin=$("stCoin");if(!coin||claiming||coin.classList.contains("got"))return;
+    const cx=parseFloat(coin.style.left)+11,cb=parseFloat(coin.style.bottom);
+    if(Math.abs(g.x-cx)>26||g.y+98<cb)return;
+    claiming=true;coin.classList.add("got");document.querySelector(".st-cklabel")?.remove();
+    const gain=await claimDrop();say(gain?`+${gain}`:"เก็บไม่สำเร็จ");claiming=false;
+    if(!gain){coin.classList.remove("got");return}refreshShop();
+    const nd=activeDrop();if(nd)setTimeout(()=>{coin.classList.remove("got");coin.insertAdjacentHTML("afterend",`<em class="st-cklabel" style="left:${cx}px;bottom:${cb+26}px">${escHtml(nd.label)} +${nd.amount}</em>`)},900)};
+  const draw=()=>{me.style.left=(g.x-27)+"px";me.style.bottom=g.y+"px";
+    const vw=tr.clientWidth,l=tr.scrollLeft;if(g.x<l+70||g.x>l+vw-70)tr.scrollLeft=g.x-vw/2};
+  /* หันตัวแบบ 3 มิติ: หมุนไปครึ่งทาง (หันข้าง) แล้วสลับทิศ แล้วหมุนกลับมาหันหน้า */
+  const turn=$("stTurn");let face=1,spin=null;
+  const setFace=d=>{if(d===face||!turn)return;face=d;turn.classList.remove("turning");void turn.offsetWidth;turn.classList.add("turning");
+    setTimeout(()=>kid?.classList.toggle("flip",face<0),150)};
+  /* แตะตัวละคร = หมุน 1 รอบ · ลากตัวละครซ้ายขวา = หมุนตามนิ้ว ปล่อยแล้วหมุนต่อจนหันหน้า */
+  const rot=deg=>{if(turn)turn.style.transform=`rotateY(${deg}deg)`};
+  const settle=(deg,vel)=>{cancelAnimationFrame(spin?.raf||0);const st={deg,vel};spin=st;
+    const tick=()=>{st.vel*=.94;st.deg+=st.vel;if(Math.abs(st.vel)<2){const target=Math.round(st.deg/360)*360;st.deg+=(target-st.deg)*.18;if(Math.abs(target-st.deg)<.5){rot(0);turn.style.transform="";spin=null;return}}
+      rot(st.deg);st.raf=requestAnimationFrame(tick)};st.raf=requestAnimationFrame(tick)};
+  let dragMe=null;
+  me.style.pointerEvents="auto";me.style.cursor="grab";me.style.touchAction="none";
+  me.addEventListener("pointerdown",e=>{e.stopPropagation();e.preventDefault();cancelAnimationFrame(spin?.raf||0);spin=null;
+    dragMe={x:e.clientX,last:e.clientX,t:performance.now(),deg:0,vel:0,moved:false};me.setPointerCapture?.(e.pointerId);turn?.classList.add("held")});
+  me.addEventListener("pointermove",e=>{if(!dragMe)return;const dx=e.clientX-dragMe.x;if(Math.abs(dx)>4)dragMe.moved=true;
+    const now=performance.now();dragMe.vel=(e.clientX-dragMe.last)*1.6;dragMe.last=e.clientX;dragMe.t=now;dragMe.deg=dx*1.6;rot(dragMe.deg)});
+  const endDrag=e=>{if(!dragMe)return;const d=dragMe;dragMe=null;turn?.classList.remove("held");
+    if(!d.moved)settle(0,24);else settle(d.deg,Math.max(-40,Math.min(40,d.vel)))};
+  me.addEventListener("pointerup",endDrag);me.addEventListener("pointercancel",endDrag);me.addEventListener("click",e=>e.stopPropagation());
+  const step=now=>{
+    const dt=Math.min(.04,(now-g.last)/1000);g.last=now;
+    const v=(g.keys.r?1:0)-(g.keys.l?1:0);
+    if(v){g.dir=v;setFace(v);let nx=g.x+v*150*dt;
+      if(nx>maxX){nx=maxX;if(!top&&now-g.warned>1500){g.warned=now;say(`Lv.${lv+1} ต้องเลื่อนยศก่อน`)}}
+      g.x=Math.max(minX,nx)}
+    const gr=ground(g.x);
+    if(g.air||g.y>gr+.5){g.vy-=1500*dt;g.y+=g.vy*dt;if(g.y<=gr){g.y=gr;g.vy=0;g.air=false}}
+    else g.y=gr;                                  // เดินขึ้นแท่นที่สูงกว่า (สูงกว่าทีละไม่กี่พิกเซล) ได้เอง
+    me.classList.toggle("walk",!!v&&!g.air);me.classList.toggle("air",g.air);
+    if(g.air)tryCoin();
+    draw();
+    if(v||g.air||g.y>ground(g.x)+.5)g.raf=requestAnimationFrame(step);else g.raf=0;
+  };
+  const go=()=>{if(!g.raf){g.last=performance.now();g.raf=requestAnimationFrame(step)}};
+  const jump=()=>{if(g.air)return;g.air=true;g.vy=430;me.classList.remove("hop");void me.offsetWidth;me.classList.add("hop");go()};
+  const hold=(el,k)=>{if(!el)return;const on=e=>{e.preventDefault();e.stopPropagation();g.keys[k]=1;go()},off=()=>{g.keys[k]=0};
+    el.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>el.addEventListener(ev,off));el.addEventListener("click",e=>e.stopPropagation())};
+  hold($("stLeft"),"l");hold($("stRight"),"r");
+  $("stJump").onclick=e=>{e.stopPropagation();jump()};
+  tr.addEventListener("click",()=>{if(!moved)jump()});
+  tr.tabIndex=0;const K={ArrowLeft:"l",ArrowRight:"r"};
+  tr.addEventListener("keydown",e=>{if(K[e.key]){e.preventDefault();g.keys[K[e.key]]=1;go()}else if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();jump()}});
+  tr.addEventListener("keyup",e=>{if(K[e.key])g.keys[K[e.key]]=0});
+  draw();
+}
 async function renderOverview(){
   const box=$("ovBox");if(!currentUser) return;
   let list=[];
   try{[list]=await Promise.all([loadAttempts(),loadCatalog().catch(()=>[])])}catch(e){console.error(e)}
   const xp=Number(currentData?.xp)||0,done=answeredCount()||0,total=siteTotalQuestions||0,pct=progressPercent();
+  await loadCoinSite();
   const premium=currentData?.plan==="premium",lv=currentLevel();
-  /* บันไดยศ: เรียงจากสูงลงต่ำ แสดง 2 ขั้นถัดไป ขั้นปัจจุบัน ขั้นก่อนหน้า และยศสูงสุด */
-  const steps=[];
-  const hi=Math.min(MAX_LEVEL,lv+2),lo=Math.max(0,lv-1);
-  if(hi<MAX_LEVEL){steps.push(`<div class="lstep"><b>Lv.${MAX_LEVEL} ${escHtml(rankLabel(MAX_LEVEL))}</b><small>ยศสูงสุด</small></div>`);if(hi<MAX_LEVEL-1)steps.push('<div class="lgap">&middot; &middot; &middot;</div>')}
-  for(let l=hi;l>=lo;l--){
-    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":`อีก ${l-lv} ขั้น`}</small></div>`);
-    else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
-    else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
-  }
   /* เงื่อนไขเลื่อนยศ */
   let next;
   if(!premium) next=`<p class="note">สมาชิก Freeอยู่ที่ Lv.0 เสมอ ทำข้อสอบชุด Freeได้ XP ตามปกติ อัปเกรดเป็น Premium แล้วยศจะขึ้นตาม XP และความคืบหน้าที่สะสมไว้</p>`;
@@ -7153,10 +7913,12 @@ async function renderOverview(){
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
   const badges=Object.entries(src).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ${mode==="sum"?` · ${v.n} ครั้ง`:v.at?` · ${v.at.toLocaleDateString("th-TH",{day:"numeric",month:"short"})}`:""}</em></div>`}).join("");
-  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}</div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
+  box.insertAdjacentHTML("beforeend",shopHtml());bindShop();
+  bindStairs(lv);bindWardrobe(lv);
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
