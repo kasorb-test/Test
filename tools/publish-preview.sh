@@ -12,5 +12,6 @@ PY
 done
 cp preview/sw.js .
 for f in preview/*.png preview/*.svg; do cp "$f" .; done
-if [ -d preview/chars ]; then rm -rf chars && cp -r preview/chars .; fi
+for d in chars vendor; do if [ -d "preview/$d" ]; then rm -rf "$d" && cp -r "preview/$d" .; fi; done
+for f in preview/*.js; do [ "$f" = preview/sw.js ] || cp "$f" .; done
 echo "เผยแพร่ไฟล์จาก preview/ ขึ้นเว็บจริงแล้ว"
