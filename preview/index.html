@@ -2724,6 +2724,26 @@ input{
 .lk-custom input::-webkit-color-swatch-wrapper{padding:0}.lk-custom input::-webkit-color-swatch{border:0;border-radius:50%;opacity:0}
 .lk-custom.on input::-webkit-color-swatch{opacity:1}
 /* ตู้เสื้อผ้า */
+.gm-hero{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:stretch;margin-bottom:18px}
+.gm-stage{position:relative;height:260px;border-radius:20px;overflow:hidden;cursor:pointer;background:radial-gradient(120% 90% at 50% 10%,#7c5cff 0%,#4c2fb8 45%,#1e1350 100%);box-shadow:0 10px 24px rgba(30,19,80,.3)}
+.gm-rays{position:absolute;left:50%;top:40%;width:520px;height:520px;margin:-260px 0 0 -260px;background:repeating-conic-gradient(rgba(255,255,255,.09) 0 10deg,transparent 10deg 20deg);animation:gmRot 24s linear infinite;pointer-events:none}
+@keyframes gmRot{to{transform:rotate(360deg)}}
+.gm-stage .lk-kid{bottom:56px}.gm-stage.spin .lk-kid .st-kid{animation:lkSpin .7s cubic-bezier(.3,.7,.4,1)}
+.gm-side{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px;border-radius:20px;background:#fff;border:1px solid #eef2f7}
+.gm-coin{display:flex;align-items:center;gap:8px}.gm-coin b{font-size:26px;color:#16305f}.gm-coin span{font-size:12px;color:#94a3b8}
+.gm-tip{margin:0;font-size:13px;line-height:1.6;color:#475569}
+.gm-dress{align-self:flex-start;padding:9px 16px;border:0;border-radius:999px;background:#16305f;color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+.gm-h{margin:0 0 10px;font-size:16px;color:#16305f}
+.gm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.gm-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px 14px 14px;border:0;border-radius:18px;background:linear-gradient(160deg,var(--c1),var(--c2));color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 8px 18px rgba(15,23,42,.14);transition:transform .15s}
+.gm-card:hover{transform:translateY(-3px)}
+.gm-card b{font-size:16px;text-shadow:0 1px 2px rgba(0,0,0,.18)}.gm-d{font-size:12px;line-height:1.5;opacity:.95}
+.gm-ic{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.28)}.gm-ic svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gm-soon{position:absolute;top:12px;right:12px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.9);color:#334155;font-size:10.5px;font-weight:800}
+.gm-card.shake{animation:gmShake .35s}@keyframes gmShake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media(max-width:700px){.gm-hero{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.gm-rays{animation:none}}
+.sb-game{margin-top:10px}
 .lk-wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
 .lk-opts{min-width:0}
 .lk-stage{position:relative;height:250px;border-radius:18px;overflow:hidden;cursor:pointer;background:#f6cf9a;box-shadow:0 8px 20px rgba(120,72,30,.25)}
@@ -3733,6 +3753,14 @@ window.alert=m=>{uiAlert(m)};
     </button>
 </div>
 </div>
+<div class="sidebar-home sb-game">
+<button class="nav-btn" data-page="gamePage" data-title="เกม">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg>
+<span>เกม</span>
+</span>
+</button>
+</div>
 <div class="menu-group" data-group="results">
 <button class="group-toggle" data-toggle-group="results" type="button">
 <span class="group-left">
@@ -3840,7 +3868,8 @@ LINE OA @kasorb
 <nav class="topnav" id="topNav" aria-label="เมนูหลัก">
 <button type="button" class="tn-item tn-side" id="tnSide" aria-label="เปิดแถบเมนู"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 6h16M4 12h16M4 18h16"></path> </svg><span>เมนู</span></button>
 <button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M3 11.5 12 4l9 7.5"></path> <path d="M5.5 10.5V20h13v-9.5"></path> <path d="M9.5 20v-5h5v5"></path> </svg><span>หน้าหลัก</span></button>
-<button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">แบบทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">ทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="results"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 19V9"></path> <path d="M10 19V5"></path> <path d="M16 19v-7"></path> <path d="M22 19H2"></path> </svg><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="account"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M20 21a8 8 0 0 0-16 0"></path> <circle cx="12" cy="7" r="4"></circle> </svg><span class="lg">บัญชีของฉัน</span><span class="sm">บัญชี</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="contact"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path> <path d="M8 12h.01M12 12h.01M16 12h.01"></path> </svg><span class="lg">ติดต่อเรา</span><span class="sm">ติดต่อ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -3991,6 +4020,12 @@ LINE OA @kasorb
 <p class="page-desc" id="rvDesc"></p>
 <div class="xpaper exam-text rv" id="rvPaper"></div>
 <div class="rvbar" id="rvBar"></div>
+</section>
+<!-- GAME -->
+<section class="app-page" id="gamePage">
+<h2 class="page-heading">เกม</h2>
+<p class="page-desc">เลือกตัวละคร แล้วเล่นเกมฝึกสมองสั้น ๆ เก็บเหรียญไปเรื่อย ๆ แยกจากการทำแบบทดสอบ</p>
+<div id="gmBox"><div class="card placeholder">กำลังโหลด…</div></div>
 </section>
 <!-- HISTORY -->
 <section class="app-page" id="historyPage">
@@ -4418,6 +4453,7 @@ function openTopMenu(btn){
 }
 document.querySelectorAll(".tn-group").forEach(b=>b.onclick=e=>{e.stopPropagation();openTopMenu(b)});
 document.querySelector('.tn-item[data-page="homePage"]').onclick=()=>{closeTopMenu();showAppPage("homePage","หน้าหลัก")};
+document.querySelector('.tn-item[data-page="gamePage"]').onclick=()=>{closeTopMenu();showAppPage("gamePage","เกม")};
 document.addEventListener("click",e=>{if(!e.target.closest("#tnPanel"))closeTopMenu()});
 window.addEventListener("scroll",()=>{if(Math.abs(window.scrollY-tnY)>40)closeTopMenu()},{passive:true});
 window.addEventListener("resize",closeTopMenu);
@@ -4981,6 +5017,7 @@ document.body.classList.toggle("on-home",pageId==="homePage");
 document.querySelectorAll(".tn-item").forEach(b=>b.classList.toggle("active",b.dataset.page===pageId||(!!grp&&b.dataset.menu===grp)));}
 if(pageId==="historyPage") renderHistory();
 if(pageId==="scorePage") renderOverview();
+if(pageId==="gamePage") renderGamePage();
 document
 .querySelectorAll(".nav-btn")
 .forEach(
@@ -7605,6 +7642,27 @@ function wardrobeHtml(lv){
     <div class="lk-pane hidden" data-pane="pants"><p class="lk-sub">แบบกางเกง</p><div class="lk-fits">${FITS.map(([v,t])=>`<button type="button" class="lk-fit${lk.fit===v?" on":""}" data-k="fit" data-v="${v}"${DOLL_FULL[lk.hair]?.[v]?"":" disabled"}>${t}</button>`).join("")}</div><p class="lk-sub">สีกางเกง</p><div class="lk-dots">${sw(PANTS,"pants")}</div></div>
     <div class="lk-pane hidden" data-pane="shoe"><p class="lk-sub">แบบรองเท้าแตะ</p><div class="lk-fits">${SHOE_T.map(([p,t])=>`<button type="button" class="lk-fit lk-sht${shT===p?" on":""}" data-p="${p}">${t}</button>`).join("")}</div><p class="lk-sub">สีรองเท้าแตะ</p><div class="lk-dots">${[["orig","ตามรูป","#1f1d1d"],...PASTEL].map(c=>`<button type="button" class="lk-dot lk-shc${shC===c[0]?" on":""}" data-c="${c[0]}" title="${escHtml(c[1])}" aria-label="${escHtml(c[1])}" style="background:${c[2]}"></button>`).join("")}</div></div></div></div>
     ${UNIFORMS_ON?`<div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div>`:""}</div></div>`;
+}
+/* ===== หน้าเกม: ตัวละครที่เลือกยืนบนแท่น + รายการเกมฝึกสมอง (โจทย์สร้างใหม่ทุกครั้ง ไม่ใช้ข้อสอบจริง) ===== */
+const GAMES=[
+  {id:"math",name:"คิดเลขเร็ว",desc:"บวก ลบ คูณ หาร ตอบให้ทันเวลา ตอบถูกติดกันได้คอมโบ",c1:"#ffb38a",c2:"#ff7a45",ic:'<path d="M12 5v14M5 12h14"/><path d="M5 4l3 3M8 4 5 7"/><path d="M16 17h4"/>'},
+  {id:"seq",name:"อนุกรมตัวเลข",desc:"ดูชุดตัวเลข แล้วเลือกตัวถัดไปให้ถูก",c1:"#a5d3f5",c2:"#4f8fe8",ic:'<path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/>'},
+  {id:"pair",name:"จับคู่การ์ด",desc:"เปิดการ์ดหาคู่โจทย์กับคำตอบ ฝึกความจำ",c1:"#c4b5fd",c2:"#8b5cf6",ic:'<rect x="3" y="5" width="8" height="12" rx="2"/><rect x="13" y="7" width="8" height="12" rx="2"/>'},
+  {id:"logic",name:"เงื่อนไขสัญลักษณ์",desc:"A > B, B > C ข้อสรุปไหนถูก ฝึกตรรกะ",c1:"#bdeedb",c2:"#22a06b",ic:'<path d="M5 8l5 4-5 4"/><path d="M13 16h6"/>'},
+  {id:"fast",name:"เลือกให้ไว",desc:"ข้อไหนมากที่สุด น้อยที่สุด กดให้เร็วที่สุด",c1:"#fde68a",c2:"#e8a400",ic:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'}];
+function renderGamePage(){
+  const box=$("gmBox");if(!box)return;const lk=myLook(),lv=typeof getLevel==="function"&&currentData?getLevel(Number(currentData.xp)||0):0;
+  const nm=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===lk.hair)||["",""])[1];
+  box.innerHTML=`<div class="gm-hero"><div class="gm-stage" id="gmStage" title="แตะเพื่อหมุนตัว"><i class="gm-rays"></i><i class="lk-podium"><i></i></i>
+      <div class="lk-kid"><div class="st-kid game look">${charHtml(myOutfit(lv),lk,"st-body")}</div></div><span class="lk-name">${escHtml(nm)}</span></div>
+    <div class="gm-side"><div class="gm-coin"><i class="st-coin mini"></i><b>${coinsOf().toLocaleString()}</b><span>เหรียญของฉัน</span></div>
+      <p class="gm-tip">เลือกเกมด้านล่างแล้วเริ่มเล่นได้เลย ตอบถูกได้เหรียญ ยิ่งตอบถูกติดกันยิ่งได้เยอะ</p>
+      <button type="button" class="gm-dress" id="gmDress">แต่งตัวละคร</button></div></div>
+    <h3 class="gm-h">เลือกเกม</h3>
+    <div class="gm-grid">${GAMES.map(g=>`<button type="button" class="gm-card" data-g="${g.id}" style="--c1:${g.c1};--c2:${g.c2}"><span class="gm-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${g.ic}</svg></span><b>${g.name}</b><span class="gm-d">${g.desc}</span><span class="gm-soon">เร็ว ๆ นี้</span></button>`).join("")}</div>`;
+  const stg=$("gmStage");stg.onclick=()=>{stg.classList.remove("spin");void stg.offsetWidth;stg.classList.add("spin")};
+  $("gmDress").onclick=()=>{showAppPage("scorePage","ภาพรวมผลการทดสอบ");setTimeout(()=>document.querySelector(".wd")?.scrollIntoView({block:"start",behavior:"smooth"}),900)};
+  box.querySelectorAll(".gm-card").forEach(b=>b.onclick=()=>{b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake")});
 }
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
 function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
