@@ -58,6 +58,30 @@ function appleTree(){
     ap.position.set((x+Math.cos(th)*Math.sin(ph)*r*.95)*s,(y+Math.cos(ph)*r*.8)*s,(z+Math.sin(th)*Math.sin(ph)*r*.95)*s);g.add(ap)}
   return g;
 }
+/* ต้นไม้ใหญ่ทรงโอ๊ก: ลำต้นหนาโคนบาน รากแผ่ กิ่งแตกหลายทาง พุ่มใบกลมกว้างเป็นก้อน ๆ ด้านบนสว่าง ด้านล่างเข้ม */
+const _up=new THREE.Vector3(0,1,0);
+function limbBetween(a,b,r0,r1,mat){const d=new THREE.Vector3().subVectors(b,a),len=d.length();const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r0,len,7),mat);
+  m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(_up,d.normalize());m.castShadow=true;return m}
+function oakTree(){
+  const g=new THREE.Group(),s=rand(.9,1.25),bark=M(0x6b4a2f,{flat:true,roughness:1}),barkD=M(0x55391f,{flat:true,roughness:1});
+  const top=new THREE.Vector3(rand(-.1,.1),2.3*s,0);
+  g.add(limbBetween(new THREE.Vector3(0,0,0),top,.42*s,.3*s,bark));
+  const flare=new THREE.Mesh(new THREE.CylinderGeometry(.34*s,.62*s,.5*s,8),bark);flare.position.y=.25*s;g.add(flare);
+  for(let k=0;k<6;k++){const an=k/6*Math.PI*2+rand(-.3,.3),L=rand(.6,1)*s;g.add(limbBetween(new THREE.Vector3(Math.cos(an)*.25*s,.18*s,Math.sin(an)*.25*s),new THREE.Vector3(Math.cos(an)*L,-.02,Math.sin(an)*L),.13*s,.04*s,barkD))}
+  const tips=[];const nb=5;
+  for(let k=0;k<nb;k++){const an=k/nb*Math.PI*2+rand(-.4,.4),out=rand(1,1.6)*s,up=rand(1.3,2.1)*s;
+    const mid=new THREE.Vector3(top.x+Math.cos(an)*out*.55,top.y+up*.5,Math.sin(an)*out*.55),tip=new THREE.Vector3(top.x+Math.cos(an)*out,top.y+up,Math.sin(an)*out);
+    g.add(limbBetween(top,mid,.22*s,.14*s,bark));g.add(limbBetween(mid,tip,.14*s,.06*s,bark));tips.push(tip)}
+  g.add(limbBetween(top,new THREE.Vector3(top.x,top.y+2*s,0),.2*s,.08*s,bark));
+  const cy=top.y+2*s,rx=2.5*s,ry=1.85*s,greens=[0x3a8a2a,0x4c9e34,0x5fb33f,0x76c452,0x92d468];
+  const n=28;for(let k=0;k<n;k++){const u=Math.random()*Math.PI*2,v=Math.acos(rand(-.35,1)),r=rand(.55,.95);
+    const x=Math.cos(u)*Math.sin(v)*rx*.85,y=Math.cos(v)*ry*.8,z=Math.sin(u)*Math.sin(v)*rx*.75;
+    const h=(y/ry+1)/2,c=greens[Math.min(4,Math.max(0,Math.floor(h*4.2+rand(-.6,.6))))];
+    const b=new THREE.Mesh(new THREE.IcosahedronGeometry(r*s,1),M(c,{flat:true,roughness:.9}));b.position.set(top.x+x,cy+y,z);b.scale.y=.85;b.castShadow=true;g.add(b)}
+  for(const t of tips){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.6,.85)*s,1),M(pick([0x3b8f2c,0x4ea336]),{flat:true}));b.position.copy(t).add(new THREE.Vector3(0,.3*s,0));b.castShadow=true;g.add(b)}
+  const core=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),M(0x3a8a2a,{roughness:1}));core.scale.set(rx*.8,ry*.75,rx*.65);core.position.set(top.x,cy-.1*s,0);g.add(core);
+  return g;
+}
 function bush(){const g=new THREE.Group();for(let i=0;i<3;i++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.3,.45),1),M(pick([0x5cb82f,0x6cc43a,0x4caf32]),{flat:true}));b.position.set(i*.4-.4,.25,rand(-.1,.1));b.castShadow=true;g.add(b)}return g}
 function flower(){const g=new THREE.Group(),st=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.4,5),M(0x4caf32));st.position.y=.2;g.add(st);const h=new THREE.Mesh(new THREE.IcosahedronGeometry(.11,0),M(pick([0xff6fa5,0xa78bfa,0xffe066,0xff8a65]),{flat:true}));h.position.y=.45;g.add(h);return g}
 function fence(){const g=new THREE.Group(),w=M(0xe0954d,{flat:true});for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.BoxGeometry(.12,.7,.12),w);p.position.set(i*.5,.35,0);p.castShadow=true;g.add(p)}for(const y of[.25,.5]){const r=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,.06),w);r.position.set(1,y,0);g.add(r)}return g}
@@ -127,7 +151,7 @@ export function startGame(root,api){
     const g=new THREE.Group();g.position.x=segX;segN++;
     const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.4),pathMat);p.position.set(SEG/2,.04,0);p.receiveShadow=true;g.add(p);
     for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(SEG,.05,.22),pathEdge);e.position.set(SEG/2,.03,zz);g.add(e)}
-    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);const o=r<.6?appleTree():r<.8?bush():fence();o.position.set(x,0,r>=.8?-2.2:-rand(3,12));g.add(o)}
+    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?oakTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(5,14):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
     const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(.8,1.3));g.add(f)}
     for(let k=0;k<6;k++){const t=tuft();t.position.set(rand(0,SEG),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
     if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
