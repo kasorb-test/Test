@@ -229,6 +229,12 @@ export function startGame(root,api){
   let themeCheck=0;loadWeather().then(()=>{const T=curTheme();if(T!==TH)fadeTo(T)});
   const lamp=new THREE.PointLight(0xfff0c8,0,14,1.6);scene.add(lamp);
   const P=makePencil();scene.add(P);
+  /* รูปประจำตัวของนักเรียน ลอยอยู่บนหัวน้องดินสอ */
+  if(api.avatar){const im=new Image();im.crossOrigin="anonymous";im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");
+      x.fillStyle="#fff";x.beginPath();x.arc(128,118,112,0,Math.PI*2);x.fill();x.beginPath();x.moveTo(104,222);x.lineTo(152,222);x.lineTo(128,252);x.fill();
+      x.save();x.beginPath();x.arc(128,118,100,0,Math.PI*2);x.clip();const sd=Math.min(im.naturalWidth,im.naturalHeight);x.drawImage(im,(im.naturalWidth-sd)/2,(im.naturalHeight-sd)/2,sd,sd,28,18,200,200);x.restore();
+      const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthWrite:false}));sp.scale.set(.95,.95,1);sp.position.y=3.15;P.add(sp);P.userData.av=sp};
+    im.src=api.avatar}
   const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.6,t:0,fall:null,hop:null,dir:0,face:1,paused:false};
   const ui=api.ui;
   function stage(st){S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
@@ -302,7 +308,7 @@ export function startGame(root,api){
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
     ud.body.position.y=.12+(walking?Math.abs(Math.sin(S.t*11))*.08:Math.sin(S.t*3)*.03);ud.body.rotation.z=walking?sw*.05:0;
     const face=S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:walking?S.face*Math.PI/2:(S.face>0?Math.PI/2.6:-Math.PI/2.6);P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
-    ud.shadow.position.y=.02-S.y;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
+    ud.shadow.position.y=.02-S.y;if(ud.av)ud.av.position.y=3.15+Math.sin(S.t*3)*.05;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
       if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){world.remove(c);S.coins.splice(i,1)}continue}
       if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.pts+=1;ui.pts(S.pts)}

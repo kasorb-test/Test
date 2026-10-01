@@ -2636,6 +2636,7 @@ input{
 .st-floor{height:10px!important;background:#6b4424!important}
 .st-col{--dirt:#d08a4c;--line:rgba(90,50,20,.28);--g:#5ccf3f;--gd:#37a52b;
   background:linear-gradient(var(--g),var(--g)) top/100% 13px no-repeat,linear-gradient(var(--gd),var(--gd)) 0 13px/100% 4px no-repeat,
+  repeating-linear-gradient(90deg,transparent 0 19px,var(--line) 19px 21px),repeating-linear-gradient(0deg,transparent 0 17px,var(--line) 17px 19px),var(--dirt)!important;
   border:3px solid #5b3718!important;border-bottom:0!important;border-radius:9px 9px 0 0!important;padding-top:20px!important;box-shadow:inset -5px 0 0 rgba(0,0,0,.12),inset 4px 0 0 rgba(255,255,255,.16)!important;color:#fff!important}
 .st-col::before{content:"";position:absolute;left:-3px;right:-3px;top:-7px;height:10px;transform:none;background:radial-gradient(circle at 6px 10px,var(--g) 6px,transparent 6.5px) 0 0/12px 10px repeat-x}
 .st-col::after{content:none}
@@ -2686,6 +2687,14 @@ input{
 .st-me.air .st-kid.game .k-arm.l{transform:rotate(140deg)}.st-me.air .st-kid.game .k-arm.r{transform:rotate(-140deg)}
 /* ตัวละครแต่งได้: หัวเป็นรูปทรงผม ตัวเป็น SVG */
 .st-kid.look .st-body{left:-3px;bottom:-2px;width:60px;height:100px}
+.st-kid.pencil img{position:absolute;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;pointer-events:none}
+.st-kid.pencil .pc-idle,.st-kid.pencil .pc-walk{left:50%;bottom:-6px;width:68px!important;height:102px!important;transform:translateX(-50%)}
+.st-kid.pencil .pc-walk{display:none}.st-me.walk .st-kid.pencil .pc-walk{display:block}.st-me.walk .st-kid.pencil .pc-idle{display:none}
+.st-kid.pencil.flip .pc-idle,.st-kid.pencil.flip .pc-walk{transform:translateX(-50%) scaleX(-1)}
+.st-kid.pencil .pc-av{position:absolute;left:50%;bottom:96px;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(22,48,95,.3);animation:pcBob 2.4s ease-in-out infinite}
+.st-kid.pencil .pc-av:after{content:"";position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-top-color:#fff;border-bottom:0}
+.st-kid.pencil .pc-av img{left:3px;top:3px;width:34px!important;height:34px!important;border-radius:50%!important;object-fit:cover}
+@keyframes pcBob{50%{transform:translateY(-3px)}}
 .st-kid.look .chr-hd{position:absolute;left:50%;bottom:52px;height:50px;width:auto;transform:translateX(-50%);border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
 .st-kid.look .chr-hat{position:absolute;left:50%;bottom:84px;width:46px;transform:translateX(-50%);pointer-events:none}
 .st-kid.look.flip .chr-hd{transform:translateX(-50%) scaleX(-1)}
@@ -7628,7 +7637,8 @@ function charHtml(o,look,cls){
   if(o.id==="tee")return dollHtml(look);
   return `${charBodySvg(o,look,cls)}<img class="chr-hd" src="chars/${look.hair}.png" alt="" draggable="false">${hatSvg(o)}`;
 }
-function stCharHtml(lv){return `<div class="st-kid game look">${charHtml(myOutfit(lv),myLook(),"st-body")}</div>`}
+/* ตัวละครบนบันไดยศ: น้องดินสอ 2B ถือรูปประจำตัวของนักเรียนลอยอยู่บนหัว (เลิกระบบแต่งตัว) */
+function stCharHtml(lv){return `<div class="st-kid pencil"><span class="pc-av"><img src="${escHtml(avatarSrc())}" alt="" draggable="false"></span><img class="pc-idle" src="mascot-2b.svg" alt="" draggable="false"><img class="pc-walk" src="mascot-2b-walk.svg" alt="" draggable="false"></div>`}
 /* ตู้เสื้อผ้า: ชุดที่เลเวลถึงแล้วกดใส่ได้ ชุดที่ยังไม่ถึงแสดงเลเวลที่ต้องการ */
 function wardrobeHtml(lv){
   const cur=myOutfit(lv).id,lk=myLook(),g=isFemale()?"f":"m",og=g==="f"?"m":"f";
@@ -7763,7 +7773,7 @@ async function advStart(){
   try{
     const mod=await import("./game3d.js");if(!$("advOv"))return;
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui});window.advGame=adv;
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc()});window.advGame=adv;
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
@@ -7825,7 +7835,7 @@ function stairsHtml(lv,xp){
     <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn">${stCharHtml(lv)}</div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
     <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
-    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>${wardrobeHtml(lv)}`;
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
 }
 /* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
 /* เดินแบบเกม: ปุ่มซ้าย/ขวา (หรือลูกศร) เดิน ปุ่มกระโดด (หรือเว้นวรรค/ลูกศรขึ้น) กระโดด เดินขึ้นแท่นที่สูงกว่าได้เอง เดินลงแล้วตก
