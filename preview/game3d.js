@@ -62,6 +62,7 @@ export const SND=(()=>{let ctx=null,master=null,bgmG=null,on=true,bgmT=0,step=0,
     peck:()=>{for(let i=0;i<6;i++)noise(.03,{v:.18,f:2500,q:3,at:i*.09})},
     pinch:()=>{tone(900,.08,{type:"square",v:.05});tone(700,.12,{type:"square",v:.05,at:.1})},
     squish:()=>{noise(.25,{v:.15,f:500,q:4});tone(200,.25,{type:"sine",v:.06,to:120})},
+    tsk:()=>{for(let i=0;i<2;i++)noise(.05,{v:.2,f:4000,q:2,at:i*.16});tone(330,.5,{type:"triangle",v:.05,to:260,at:.35})},
     bell:()=>[79,86,91].forEach((n,i)=>tone(N(n),1.2,{type:"sine",v:.08,at:i*.35}))};
   /* เพลงประกอบเบา ๆ วนไป (บ้านผีสิงเปลี่ยนเป็นทำนองไมเนอร์ช้า ๆ) */
   const MEL={day:[72,0,76,79,76,0,74,72,69,0,72,74,76,0,74,0,72,0,76,79,81,79,76,74,72,0,69,72,74,0,72,0],haunt:[69,0,0,72,0,71,0,0,68,0,0,71,0,69,0,0,64,0,0,65,0,64,0,0,63,0,0,64,0,0,0,0]};
@@ -935,12 +936,23 @@ export function startGame(root,api){
   const ghosts=[],ripples=[];
   function scare(){if(biomeOf(S.st)!=="haunted")return;const gh=ghost((S.qn-1)%5);gh.position.set(S.x+1.4,-1.6,-.4);gh.scale.setScalar(.3);world.add(gh);ghosts.push({o:gh,t:0});SND.play("ghost");ui.scare&&ui.scare()}
   const critters=[],leeches=[];
-  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="farm")critter("bite");else if(b==="waterfall")critter("leech");else if(b==="village")critter("chicks");else if(b==="beach")critter("crab")}
+  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="thai")return critter("auntie");if(b==="farm")critter("bite");else if(b==="waterfall")critter("leech");else if(b==="village")critter("chicks");else if(b==="beach")critter("crab")}
   function critter(kind){const x0=S.x;
     if(kind==="leech"){const l=leech(),a=-Math.PI/2+rand(-.5,.5);l.scale.setScalar(2);l.position.set(Math.sin(a)*.47,rand(.6,1.1),Math.cos(a)*.47);l.rotation.set(0,a,rand(-.4,.4));P.userData.body.add(l);leeches.push({o:l,t:0});SND.play("squish");ui.say&&ui.say("ทากเกาะ! ตอบข้อต่อไปให้ถูกเพื่อสลัดทากออก");return}
     if(kind==="chicks"){for(let k=0;k<5;k++){const c=chicken(),a=k/5*Math.PI*2+rand(-.3,.3);c.scale.setScalar(1.3);c.position.set(x0+Math.cos(a)*6,0,Math.sin(a)*4);world.add(c);critters.push({o:c,kind,t:0,a,x0})}ui.say&&ui.say("ไก่รุมจิก!");return}
+    if(kind==="auntie"){const o=auntie();o.position.set(x0+7,0,.4);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});SND.play("tsk");ui.say&&ui.say("ป้าข้างบ้าน: "+o.userData.line);return}
     const o=kind==="crab"?crab():Math.random()<.5?croc():lion();if(kind==="crab")o.scale.setScalar(2.2);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     ui.say&&ui.say(kind==="crab"?"โอ๊ย! ปูหนีบ":"โอ๊ย! โดนงับ")}
+  /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
+  const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือน 2 หมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรด 4 ทุกวิชา",
+    "ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ","ลูกป้าซื้อรถให้ป้าแล้วนะ","ลูกป้าเป็นตำรวจแล้วนะ","ลูกป้าตอบข้อนี้ได้ตั้งแต่ ป.4","ลูกป้าอ่านหนังสือวันละ 10 ชั่วโมง"];let auntDeck=[];
+  function auntie(){const a=person({skirt:pick([0x8e24aa,0xd81b60,0x6d4c41]),shirt:pick([0xf8bbd0,0xfff176,0x80deea]),hair:0x9e9e9e,long:false});
+    const bun=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),M(0x9e9e9e));bun.position.set(-.16,.16,0);a.userData.head.add(bun);
+    const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.22,.1),M(0xc62828));bag.position.set(0,.85,-.36);a.add(bag);
+    const tag=new THREE.Sprite(new THREE.SpriteMaterial({map:txt("ป้าข้างบ้าน",{size:60,color:"#ffffff",bg:"#d81b60",border:"#ffd23f",w:320,h:110,radius:30}),depthTest:false}));tag.scale.set(1.5,.52,1);tag.position.y=2.35;tag.renderOrder=21;a.add(tag);
+    if(!auntDeck.length)auntDeck=AUNT.slice().sort(()=>Math.random()-.5);const line=auntDeck.pop();
+    const say=new THREE.Sprite(new THREE.SpriteMaterial({map:txt(line,{size:52,color:"#4a148c",bg:"#ffffff",border:"#d81b60",w:760,h:120,radius:44}),depthTest:false}));say.scale.set(3.6,.57,1);say.position.set(0,2.95,0);say.renderOrder=21;say.visible=false;a.add(say);
+    a.userData.say=say;a.userData.line=line;return a}
   function clearCritters(){for(const c of critters)world.remove(c.o);critters.length=0;for(const l of leeches)l.o.parent&&l.o.parent.remove(l.o);leeches.length=0}
   function splash(pos){const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,6,24),M(0xffffff,{transparent:true,opacity:.9}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0});for(let i=0;i<40;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
   async function passArch(){
@@ -1037,6 +1049,11 @@ export function startGame(root,api){
         else if(t<3){o.rotation.y=-Math.atan2(-tz,c.x0-tx);o.userData.head.rotation.z=-Math.abs(Math.sin(t*14))*.9;if(Math.random()<dt*3)SND.play("peck");S.ouch=.2}
         else{o.position.x+=Math.cos(c.a)*dt*7;o.position.z+=Math.sin(c.a)*dt*5;o.rotation.y=-c.a}
         if(t>4.2){world.remove(o);critters.splice(i,1)}continue}
+      if(c.kind==="auntie"){const u=o.userData,sw=Math.sin(t*8)*.5;
+        u.say.visible=t<5;const tx=S.x+1.5;
+        if(t<1){o.position.x+=(tx-o.position.x)*Math.min(1,dt*4);u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw}
+        else if(t<5){o.position.x+=(tx-o.position.x)*Math.min(1,dt*6);u.legs[0].rotation.z=u.legs[1].rotation.z=0;u.arms[0].rotation.x=-2.3+Math.sin(t*10)*.25;o.rotation.y=Math.PI+Math.sin(t*2)*.15;u.head.rotation.z=Math.sin(t*6)*.08}
+        else{u.arms[0].rotation.x=0;o.rotation.y=0;o.position.x+=dt*5;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;if(t>7){world.remove(o);critters.splice(i,1)}}continue}
       const stop=c.x0+(c.kind==="crab"?.9:1.6);
       if(t<.9){o.position.x=c.x0+7-(7-(stop-c.x0))*(t/.9);o.position.y=c.kind==="crab"?Math.abs(Math.sin(t*20))*.05:0}
       else if(t<2.1){const k=Math.sin((t-.9)*12);if(o.userData.jaw)o.userData.jaw.rotation.z=Math.max(0,k)*.7;else if(o.userData.head)o.userData.head.rotation.z=k*.3;else o.rotation.z=k*.08;
