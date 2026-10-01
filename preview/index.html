@@ -2822,6 +2822,11 @@ body.adv-on{overflow:hidden}
 .adv-it div{flex:1;min-width:0}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
 .adv-it button{flex:none;min-width:74px;padding:7px 10px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;text-shadow:0 2px 0 #5a3412;cursor:pointer}
 .adv-it button.low{filter:saturate(.5);opacity:.85}.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
+.adv-cf{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+.adv-cf-box{width:min(300px,calc(100% - 40px));padding:18px;border-radius:18px;background:#fffaf0;border:4px solid #6b3f17;box-shadow:0 6px 0 #4a2a0d;text-align:center;display:grid;justify-items:center;gap:6px}
+.adv-cf-box b{font-size:20px;color:#6b3f17}.adv-cf-box p{margin:0;color:#475569;line-height:1.6}
+.adv-cf-btns{display:flex;gap:10px;margin-top:6px}.adv-cf-btns button{min-width:100px;padding:9px 14px;border:3px solid #5a3412;border-radius:10px;font:inherit;font-weight:800;cursor:pointer}
+.adv-cf-btns .no{background:#fff;color:#5a3412}.adv-cf-btns .yes{background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;text-shadow:0 2px 0 #5a3412}
 .adv-shop-x{padding:9px 22px;border:3px solid #5a3412;border-radius:10px;background:#7a4a1c;color:#fff4d6;font:inherit;font-weight:800;cursor:pointer}
 @media(max-width:600px){.adv-gear{top:12px;right:8px}.adv-gs{width:42px;height:42px}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
@@ -7836,14 +7841,24 @@ function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned()
   bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)}${advPref[id]==null?" (อัตโนมัติ)":""}">${ADV_ICON[id]}${advPref[id]==null?'<i>A</i>':""}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
   bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.g;if(id==="shop"){advShop();return}
     if(advPref[id]==null)advPref[id]=advOn[id]?0:1;else delete advPref[id];advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
-function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=coinsOf();
+const advCoins=()=>window.__advCoins??coinsOf();
+function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=advCoins();
   sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
     <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small></div>
       <button type="button" data-buy="${id}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
     <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
   sh.classList.remove("hidden");
   $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
-  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advBuy(b.dataset.buy))}
+  sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advConfirm(b.dataset.buy))}
+/* ยืนยันก่อนซื้อ: บอกชื่อ ราคา และเหรียญที่จะเหลือ */
+function advConfirm(id){const it=ADV_GEAR.find(g=>g[0]===id),sh=$("advShop");if(!it||!sh)return;
+  if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}
+  if(advCoins()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${advCoins()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
+  const box=document.createElement("div");box.className="adv-cf";box.innerHTML=`<div class="adv-cf-box"><span class="adv-it-ic">${ADV_ICON[id]}</span><b>ซื้อ${escHtml(it[1])}?</b>
+    <p>ราคา <i class="st-coin mini"></i> ${it[3]} เหรียญ<br>ซื้อแล้วเหลือ ${(advCoins()-it[3]).toLocaleString()} เหรียญ</p>
+    <div class="adv-cf-btns"><button type="button" class="no">ยกเลิก</button><button type="button" class="yes">ยืนยันซื้อ</button></div></div>`;
+  sh.appendChild(box);box.querySelector(".no").onclick=()=>box.remove();box.onclick=e=>{if(e.target===box)box.remove()};
+  box.querySelector(".yes").onclick=e=>{e.target.disabled=true;e.target.textContent="กำลังซื้อ…";advBuy(id)}}
 async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===id);if(!it)return;if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}const own=advOwned();if(own.includes(id))return;
   if(coinsOf()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${coinsOf()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
   const gear=[...own,id],coins=coinsOf()-it[3];
