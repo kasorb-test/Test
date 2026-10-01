@@ -60,6 +60,16 @@ service cloud.firestore {
         && !n.diff(o).affectedKeys().hasAny(["checkin", "diligence", "coupons", "lastCoupon"]);
     }
     // แลกโค้ดส่วนลด: เพิ่มโค้ดใหม่ครั้งละ 1 โค้ด ราคาและจำนวนบาทตรงกับที่แอดมินตั้งไว้ โค้ดเดิมแก้ไม่ได้
+    // ไอเทมในเกม: ซื้อครั้งละ 1 ชิ้นด้วยเหรียญตามราคาที่กำหนด ซื้อแล้วใช้ได้ตลอด
+    function validGear(n, o) {
+      let price = {"umbrella": 30, "cap": 20, "straw": 20, "fan": 25, "coat": 40, "shades": 30};
+      let before = o.get("gear", []);
+      let add = n.gear.removeAll(before);
+      return n.gear is list && n.gear.size() == before.size() + 1 && n.gear.hasAll(before)
+        && add.size() == 1 && add[0] in price
+        && n.get("coins", 0) == o.get("coins", 0) - price[add[0]] && n.get("coins", 0) >= 0
+        && !n.diff(o).affectedKeys().hasAny(["checkin", "diligence", "coupons", "lastCoupon", "game"]);
+    }
     function validCoupon(n, o) {
       let cps = coinSite().coupons;
       let before = o.get("coupons", {});
@@ -270,7 +280,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon", "outfit", "look", "game"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon", "outfit", "look", "game", "gear"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -301,7 +311,7 @@ service cloud.firestore {
                 && request.resource.data.look.get("pants", "") is string && request.resource.data.look.get("pants", "").size() <= 10
                 && request.resource.data.look.get("shoe", "") is string && request.resource.data.look.get("shoe", "").size() <= 10
                 && request.resource.data.look.get("fit", "long") in ["long", "short"]))
-        // เหรียญ: เปลี่ยนได้ 3 ทางเท่านั้น คือเช็คอินรายวัน เหรียญขยัน และแลกโค้ดส่วนลด
+        // เหรียญ: เปลี่ยนได้เฉพาะเช็คอินรายวัน เหรียญขยัน แลกโค้ดส่วนลด ผ่านด่านเกม และซื้อไอเทมในเกม
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin"])
             || validCheckin(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["diligence"])
@@ -310,8 +320,10 @@ service cloud.firestore {
             || validCoupon(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["game"])
             || validGame(request.resource.data, resource.data))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["gear"])
+            || validGear(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["coins"])
-            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin", "diligence", "lastCoupon", "game"]))
+            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin", "diligence", "lastCoupon", "game", "gear"]))
         // หมู่บ้าน: รหัสหมู่บ้าน เลขบ้าน 0-19 ต้องเป็นหลังที่ตัวเองจองไว้ในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["village", "plot"])
             || (request.resource.data.village is string && request.resource.data.village.matches("v[0-9a-z]{4,20}")
