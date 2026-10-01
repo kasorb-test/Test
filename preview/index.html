@@ -2811,7 +2811,9 @@ body.adv-on{overflow:hidden}
 .adv-gs{position:relative;width:46px;height:46px;padding:0;border:3px solid #5a3412;border-radius:12px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);box-shadow:0 3px 0 #3b2109;display:grid;place-items:center;cursor:pointer}
 .adv-gs svg{width:30px;height:30px}.adv-gs.on{outline:3px solid #22c55e;outline-offset:1px}.adv-gs.shop{background:#7a4a1c}
 .adv-gs i{position:absolute;right:-6px;top:-6px;width:16px;height:16px;border-radius:50%;background:#0ea5e9;color:#fff;font:700 10px/16px sans-serif;font-style:normal}
-.adv-near{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:6;padding:10px 18px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;font-size:15px;text-shadow:0 2px 0 #5a3412;box-shadow:0 4px 0 #3b2109;cursor:pointer;white-space:nowrap;animation:advGo 1.2s ease-in-out infinite}
+.adv-near{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:6;padding:10px 18px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;font-size:15px;text-shadow:0 2px 0 #5a3412;box-shadow:0 4px 0 #3b2109;cursor:pointer;white-space:nowrap;animation:advPulseX 1.2s ease-in-out infinite}
+.adv-pray{position:absolute;left:50%;top:auto;bottom:150px;transform:translateX(-50%);z-index:7;padding:16px 26px;border:4px solid #8d5a00;border-radius:14px;background:linear-gradient(180deg,#ffe082,#ffb300);color:#5a3412;font:inherit;font-weight:900;font-size:20px;box-shadow:0 5px 0 #8d5a00,0 10px 22px rgba(0,0,0,.3);cursor:pointer;animation:advPulseX 1.2s ease-in-out infinite;white-space:nowrap}
+@keyframes advPulseC{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}@keyframes advPulseX{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
 .adv-shop{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(15,23,42,.45)}
 .adv-shop-box{width:min(420px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto;padding:18px 16px;border-radius:22px;background:#fffaf0;border:4px solid #6b3f17;box-shadow:0 8px 0 #4a2a0d;text-align:center}
 .adv-shop-box h3{margin:0;font-size:22px;color:#6b3f17}.adv-shop-c{margin:4px 0 8px;color:#475569}.adv-shop-msg{margin:0 0 8px;color:#b45309;font-weight:700}
@@ -7731,20 +7733,27 @@ function wardrobeHtml(lv){
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
-const ADV_NAMES=["ทุ่งหญ้า","ทุ่งดอกไม้","คลองและสะพานหิน","ฟาร์มสัตว์","ชายทะเล","น้ำตก","หมู่บ้าน","ตลาดคำศัพท์","บ้านผีสิง","สำนวนและชนิดคำ"];
+const ADV_NAMES=["ทุ่งหญ้า","ทุ่งดอกไม้","คลองและสะพานหิน","สวนสัตว์","ชายทะเล","น้ำตก","หมู่บ้าน","ตลาดภาษาอังกฤษ","บ้านผีสิง","ภาษาไทย"];
 const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
 const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function advOpts(ans,near){const set=new Set([ans]);let g=0;while(set.size<4&&g++<60){const d=rnd(1,Math.max(3,near))*(Math.random()<.5?-1:1);const v=ans+d;if(v>=0||ans<0)set.add(v)}let k=1;while(set.size<4)set.add(ans+near+k++);const o=shuf([...set]);return {opts:o.map(String),ans:o.indexOf(ans)}}
 /* ด่าน 8 คำศัพท์: ดูภาพแล้วเลือกคำที่สะกดถูก, ด่าน 10 สำนวนไทย: เลือกความหมายให้ตรงกับสำนวน (หรือกลับกัน) */
-const ADV_VOCAB=[["⌚","watch","whatch","wacth","watsh"],["🍎","apple","aple","appel","aplle"],["🍌","banana","bananna","banena","banan"],["🍊","orange","orenge","oragne","orang"],["🍇","grapes","graps","grepes","grapse"],
-  ["🍉","watermelon","watermellon","watermelone","wotermelon"],["🍓","strawberry","strawbery","strawberri","strowberry"],["🍅","tomato","tomatoe","tamato","tomoto"],["🥕","carrot","carot","carrat","karrot"],["🌽","corn","corne","korn","conr"],
-  ["🥚","egg","eeg","egge","eg"],["🍞","bread","braed","bred","breed"],["🥛","milk","mikl","milc","mielk"],["🐟","fish","fich","fisch","fsh"],["🐔","chicken","chiken","chickan","chikken"],["🍚","rice","rise","rics","ricce"],
-  ["🍰","cake","caek","kake","cak"],["☂️","umbrella","umbrela","umbralla","ambrella"],["👟","shoes","shose","sheos","shoos"],["👕","shirt","shrit","sirt","shirtt"],["👓","glasses","glases","glassess","glasess"],
-  ["📖","book","bok","boook","buk"],["✏️","pencil","pensil","pencel","pencill"],["⏰","clock","clok","colck","klock"],["🔑","key","kee","kye","kei"],["📱","phone","fone","phon","phoen"],["🏠","house","hause","houes","hous"],
-  ["🚗","car","kar","carr","cra"],["🚲","bicycle","bicycel","bycicle","bicicle"],["🌸","flower","flowr","flouer","flawer"],["🌳","tree","tre","trea","tri"],["🌙","moon","mon","mooon","moun"],["⭐","star","stra","starr","sdar"],
-  ["🐱","cat","kat","catt","cta"],["🐶","dog","dgo","dogg","doog"],["🐘","elephant","elefant","elephent","elepant"],["🐦","bird","brid","burd","berd"],["💵","money","mony","monney","monee"],["🧺","basket","baskit","baskett","bascket"]];
+/* คำศัพท์อังกฤษตามหมวด: ตัวเลือกเป็นคำที่สะกดถูกทั้งหมด แต่เป็นคำอื่นในหมวดเดียวกัน */
+const ADV_VOCAB={
+  fruit:[["🍎","apple"],["🍌","banana"],["🍊","orange"],["🍇","grapes"],["🍉","watermelon"],["🍓","strawberry"],["🥭","mango"],["🍍","pineapple"],["🍋","lemon"],["🍒","cherry"],["🥥","coconut"],["🍑","peach"]],
+  food:[["🍞","bread"],["🥚","egg"],["🍚","rice"],["🥛","milk"],["🍰","cake"],["🧀","cheese"],["🍜","noodles"],["🍕","pizza"],["🍦","ice cream"],["🍪","cookie"],["🍬","candy"],["🍔","hamburger"]],
+  veg:[["🥕","carrot"],["🌽","corn"],["🍅","tomato"],["🥔","potato"],["🍄","mushroom"],["🥦","broccoli"],["🥒","cucumber"],["🌶️","chili"],["🧄","garlic"],["🧅","onion"]],
+  animal:[["🐱","cat"],["🐶","dog"],["🐘","elephant"],["🐦","bird"],["🐟","fish"],["🐔","chicken"],["🐰","rabbit"],["🐯","tiger"],["🦁","lion"],["🐵","monkey"],["🐴","horse"],["🐮","cow"],["🐷","pig"],["🐸","frog"],["🐻","bear"],["🦆","duck"],["🐢","turtle"],["🐍","snake"]],
+  clothes:[["👕","shirt"],["👟","shoes"],["🧢","cap"],["👗","dress"],["🧦","socks"],["👓","glasses"],["👖","jeans"],["🧣","scarf"],["🧤","gloves"],["🧥","coat"]],
+  school:[["📖","book"],["✏️","pencil"],["📏","ruler"],["✂️","scissors"],["🎒","bag"],["⏰","clock"],["💻","computer"],["🖊️","pen"],["🖍️","crayon"],["⌚","watch"]],
+  transport:[["🚗","car"],["🚌","bus"],["🚲","bicycle"],["🚆","train"],["✈️","airplane"],["⛵","boat"],["🚚","truck"],["🏍️","motorcycle"],["🚕","taxi"],["🚁","helicopter"]],
+  nature:[["☀️","sun"],["🌙","moon"],["⭐","star"],["🌳","tree"],["🌸","flower"],["🌧️","rain"],["☁️","cloud"],["⛰️","mountain"],["🌈","rainbow"],["❄️","snow"],["🔥","fire"],["🍃","leaf"]],
+  home:[["🏠","house"],["🔑","key"],["📱","phone"],["☂️","umbrella"],["🛏️","bed"],["🚪","door"],["🪑","chair"],["🛁","bathtub"],["🧸","teddy bear"],["🖼️","picture"]]};
+const ADV_VOCAB_ALL=Object.entries(ADV_VOCAB).flatMap(([c,l])=>l.map(([p,w])=>[c,p,w]));
+/* คำที่มีความหมายเหมือนกัน (synonym) */
+const ADV_SYN=[["big","large"],["small","little"],["happy","glad"],["fast","quick"],["begin","start"],["end","finish"],["smart","clever"],["angry","mad"],["easy","simple"],["hard","difficult"],["close","shut"],["rich","wealthy"],["sick","ill"],["scared","afraid"],["shout","yell"],["gift","present"],["quiet","silent"],["correct","right"],["hurry","rush"],["funny","humorous"],["choose","pick"],["help","assist"],["look","stare"],["cold","chilly"],["pretty","beautiful"]];
 const ADV_IDIOM=[["น้ำขึ้นให้รีบตัก","มีโอกาสแล้วรีบทำ"],["ช้า ๆ ได้พร้าเล่มงาม","ทำช้าแต่ได้ผลดี"],["ไก่ได้พลอย","ได้ของดีแต่ไม่รู้ค่า"],["กระต่ายตื่นตูม","ตกใจง่ายไม่ไตร่ตรอง"],
   ["ขี่ช้างจับตั๊กแตน","ลงทุนมากได้ผลน้อย"],["ตำน้ำพริกละลายแม่น้ำ","ลงทุนไปอย่างสูญเปล่า"],["น้ำซึมบ่อทราย","ได้มาเรื่อย ๆ ไม่ขาด"],["ปิดทองหลังพระ","ทำดีแต่ไม่มีใครเห็น"],
   ["หนีเสือปะจระเข้","หนีภัยหนึ่งเจออีกภัย"],["สีซอให้ควายฟัง","สอนคนที่ไม่รับรู้"],["เข้าเมืองตาหลิ่วต้องหลิ่วตาตาม","ทำตามธรรมเนียมที่นั่น"],["ฝนทั่งให้เป็นเข็ม","เพียรพยายามจนสำเร็จ"],
@@ -7761,7 +7770,11 @@ const ADV_NOUN=["โต๊ะ","หนังสือ","แมว","ดินส
 const ADV_VERB=["วิ่ง","กิน","นอน","เขียน","อ่าน","ร้องเพลง","ว่ายน้ำ","เดิน","พูด","ฟัง","ทำงาน","เล่น","ซื้อ","ขาย","หัวเราะ","กระโดด","คิด","ดู","ยืน","นั่ง","ร้องไห้","ขับรถ","ทำอาหาร","ล้างจาน"];
 /* สุ่มแบบไม่ซ้ำจนกว่าจะครบทุกข้อ */
 const advDeck={};const advDraw=(k,arr)=>{if(!advDeck[k]||!advDeck[k].length)advDeck[k]=shuf(arr.map((_,i)=>i));return arr[advDeck[k].pop()]};
-function advVocab(){const [pic,ok,...bad]=ADV_VOCAB[rnd(0,ADV_VOCAB.length-1)];const o=shuf([ok,...bad]);return {q:"ภาพนี้คือคำว่าอะไร",pic,opts:o,ans:o.indexOf(ok)}}
+function advVocab(){
+  if(Math.random()<.35){const [a,b]=advDraw("syn",ADV_SYN),[w,ok]=Math.random()<.5?[a,b]:[b,a],others=shuf(ADV_SYN.filter(x=>x[0]!==a)).slice(0,3).map(x=>x[Math.random()<.5?0:1]),o=shuf([ok,...others]);
+    return {q:`คำใดมีความหมายเหมือนคำว่า "${w}"`,opts:o,ans:o.indexOf(ok)}}
+  const [cat,pic,ok]=advDraw("vocab",ADV_VOCAB_ALL),others=shuf(ADV_VOCAB[cat].filter(x=>x[1]!==ok)).slice(0,3).map(x=>x[1]),o=shuf([ok,...others]);
+  return {q:"ภาพนี้คือคำว่าอะไร",pic,opts:o,ans:o.indexOf(ok)}}
 function advIdiom(){
   if(Math.random()<.3){const k=rnd(0,2);
     if(k===0){const isN=Math.random()<.5,w=isN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),o=["คำนาม","คำกริยา","คำวิเศษณ์","คำสรรพนาม"];return {q:`คำว่า "${w}" เป็นคำชนิดใด`,opts:o,ans:isN?0:1,box:true}}
@@ -7868,7 +7881,7 @@ async function advStart(){
         <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
         <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
       
-      <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
+      <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
@@ -7907,6 +7920,7 @@ async function advStart(){
     gear:on=>{advOn=on;advGearBar()},
     near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${id==="shades"?"ร้านแว่น":"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
       b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
+    pray:cb=>{const b=$("advPray");if(!b)return;b.classList.remove("hidden");b.onclick=()=>{b.classList.add("hidden");advMod?.SND.unlock();cb()}},
     say:msg=>{const t=$("advToast");t.innerHTML=`<b>${escHtml(msg)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
     finish:st=>{advSel=1;advRe=true;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก! กด START เพื่อเริ่มด่าน 1 ใหม่ คะแนนดาวสะสมต่อ":`ผ่านด่าน ${st} แล้ว กด START เพื่อเริ่มด่าน 1 ใหม่ คะแนนดาวสะสมต่อ (ด่าน 6-10 สำหรับสมาชิก Premium)`)},
