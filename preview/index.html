@@ -2750,10 +2750,11 @@ body.adv-on{overflow:hidden}
 .adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
 .adv-jump{position:absolute;right:16px;bottom:18px;z-index:5;background:#ffd23f;color:#7a4b00}
 .adv-menu{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:rgba(15,23,42,.45)}
-.adv-menu-box{display:flex;flex-direction:column;gap:8px;width:min(300px,calc(100% - 40px));padding:20px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center}
-.adv-menu-box b{font-size:22px;color:#f57c00;margin-bottom:4px}
-.adv-menu-box button{padding:11px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}
-.adv-menu-box .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}.adv-menu-box .out{background:#fee2e2;color:#b91c1c}
+.adv-menu-box{display:flex;flex-direction:column;gap:7px;width:min(320px,calc(100% - 40px));max-height:calc(100% - 30px);overflow:auto;padding:18px 16px;border-radius:20px;text-align:center;border:5px solid #7a4a1c;box-shadow:inset 0 0 0 3px #e9c98f,0 7px 0 #4a2a0d,0 14px 24px rgba(0,0,0,.35);background:radial-gradient(circle at 12px 12px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) 12px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at 12px calc(100% - 12px),#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),#5a3412 0 3px,transparent 3.5px),linear-gradient(180deg,#fff8e6,#f3dcab)}
+.adv-menu-box b{font-size:24px;color:#6b3410;margin-bottom:4px;text-shadow:0 2px 0 #fff}
+.adv-menu-box button{display:flex;align-items:center;gap:10px;padding:8px 12px;border:3px solid #5a3412;border-radius:12px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px,#d79c60 8px 13px,#bf8043 13px 14px);color:#fff4d6;font:inherit;font-size:15.5px;font-weight:800;text-shadow:0 2px 0 #5a3412;box-shadow:0 4px 0 #3b2109;cursor:pointer;text-align:left}
+.adv-menu-box button:active{transform:translateY(3px);box-shadow:0 1px 0 #3b2109}.adv-menu-box .mi{flex:none;width:32px;height:32px;border-radius:9px;background:rgba(59,33,9,.35);display:grid;place-items:center;color:#fff4d6}.adv-menu-box .mi svg{width:20px;height:20px}
+.adv-menu-box .pri{background:repeating-linear-gradient(180deg,#8bd64a 0 6px,#79c43a 6px 8px);border-color:#2f6b14;text-shadow:0 2px 0 #2f6b14;box-shadow:0 4px 0 #1f4a0c}.adv-menu-box .out{background:repeating-linear-gradient(180deg,#e2735f 0 6px,#d4604c 6px 8px);border-color:#7f1d1d;text-shadow:0 2px 0 #7f1d1d;box-shadow:0 4px 0 #5a1010}
 .adv-x{width:32px;height:32px;border:0;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
 .adv-pts{display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#fff;color:#f57c00;font-weight:900}.adv-pts:before{content:"★";color:#ffc400}.adv-pts.bump{animation:advBump .25s}@keyframes advBump{50%{transform:scale(1.2)}}
 .adv-view{position:relative;flex:1;overflow:hidden;background:linear-gradient(180deg,#8fd3ff,#e8f7ff);touch-action:none}.adv-view canvas{display:block;width:100%;height:100%}
@@ -7902,15 +7903,15 @@ async function advStart(){
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
       <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">JUMP</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
-        <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
-        <button type="button" data-go="shop">ร้านไอเทม</button>
-        <button type="button" data-go="gamePage|เกม">เลือกเกม</button>
-        <button type="button" data-go="aunt">ทดสอบเสียงป้าข้างบ้าน</button>
-        <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
-        <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
-        <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
-        <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
-        <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
+        <button type="button" class="pri" data-go="resume"><i class="mi"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></i><span>เล่นต่อ</span></button>
+        <button type="button" data-go="stages"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H7v9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></i><span>เลือกด่าน</span></button>
+        <button type="button" data-go="shop"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="currentColor"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="2" fill="none"/></svg></i><span>ร้านไอเทม</span></button>
+        <button type="button" data-go="gamePage|เกม"><i class="mi"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5" fill="currentColor"/><path d="M7 11v3M5.5 12.5h3" stroke="#fff4d6" stroke-width="1.8"/><circle cx="16" cy="11.5" r="1.2" fill="#fff4d6"/><circle cx="18" cy="13.8" r="1.2" fill="#fff4d6"/></svg></i><span>เลือกเกม</span></button>
+        <button type="button" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z" fill="currentColor"/></svg></i><span>หน้าหลัก</span></button>
+        <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z" fill="currentColor"/><path d="M8 10h8M8 14h8M8 18h5" stroke="#fff4d6" stroke-width="1.6"/></svg></i><span>แบบทดสอบรายวิชา</span></button>
+        <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง"><i class="mi"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="currentColor"/><path d="M8 8l1.5 1.5L12 7M8 13l1.5 1.5L12 12M14 8h3M14 13h3" stroke="#fff4d6" stroke-width="1.6" fill="none"/></svg></i><span>แบบทดสอบเสมือนจริง</span></button>
+        <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ"><i class="mi"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zM10 20V4h4v16zM16 20v-7h4v7z" fill="currentColor"/></svg></i><span>ผลการทดสอบ</span></button>
+        <button type="button" class="out" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>ออกจากเกม</span></button></div></div>
       
       <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
@@ -7919,7 +7920,7 @@ async function advStart(){
     const place=()=>{const nar=innerWidth<=600,pts=$("advPts"),pr=$("advProg");if(!pts||!pr)return;if(nar&&pts.parentNode!==side){side.append(pts,pr)}else if(!nar&&pts.parentNode===side){top.insertBefore(pr,cn);top.insertBefore(pts,cn)}};place();addEventListener("resize",place)}
   ov.addEventListener("pointerdown",()=>advMod?.SND.unlock(),{capture:true});ov.addEventListener("touchend",()=>advMod?.SND.unlock(),{capture:true});
   const menu=$("advMenu");
-  $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true);{let c;try{c=localStorage.getItem("advAnsStyle")||"wood"}catch(e){c="wood"}const a=$("advAnsBtn");if(a)a.textContent="แบบตัวเลือก: "+({wood:"ป้ายไม้",bubble:"ฟองสี",candy:"ปุ่มลูกอม"}[c]||"ป้ายไม้")}};
+  $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
   const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
   /* หน้าเริ่ม: เลือกด่าน (เล่นได้ถึงด่านถัดจากที่ผ่าน) แล้วกด START */
   let advSel=Math.min(advBest()+1,advMax()),advRe=false;
@@ -7933,7 +7934,7 @@ async function advStart(){
       note.classList.add("hidden");advSel=n;advRe=false;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
     $("advGo").onclick=()=>{advMod?.SND.unlock();if(advRe){advRe=false;adv?.restart(advSel)}d.remove();adv?.pause(false)}};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
-    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="ansStyle"){const L=["wood","bubble","candy"],N={wood:"ป้ายไม้",bubble:"ฟองสี",candy:"ปุ่มลูกอม"};let cur;try{cur=localStorage.getItem("advAnsStyle")||"wood"}catch(e){cur="wood"}const nx=L[(L.indexOf(cur)+1)%L.length];try{localStorage.setItem("advAnsStyle",nx)}catch(e){}b.textContent="แบบตัวเลือก: "+N[nx];return}if(b.dataset.go==="aunt"){const S=advMod?.SND;if(!S)return;S.unlock();if(!window.speechSynthesis){alert("เบราว์เซอร์นี้อ่านออกเสียงไม่ได้");return}S.speak("ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ",true);setTimeout(()=>{if(!S.hasThai())alert("เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย\niPad/iPhone: ตั้งค่า > การช่วยการเข้าถึง > เนื้อหาที่พูด > เสียง > ภาษาไทย แล้วดาวน์โหลดเสียง\nและเปิดสวิตช์เสียงด้านข้างเครื่อง (ปิดโหมดเงียบ)")},800);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="stages"){menu.classList.add("hidden");advSel=adv?.debug().st||advSel;advRe=false;startBox();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
