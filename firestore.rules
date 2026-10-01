@@ -194,11 +194,6 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    function isPremium() {
-      return request.auth != null
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get("plan", "free") == "premium";
-    }
-
     // ตัวนับลำดับสมาชิก (รหัส #วันที่สมัคร+ลำดับ): เพิ่มทีละ 1 พร้อมกับบันทึกเลขในบัญชีของตัวเองเท่านั้น
     match /counters/member {
       allow read: if request.auth != null;
