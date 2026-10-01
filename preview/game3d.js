@@ -49,7 +49,7 @@ function makePencil(){
 }
 /* ต้นแอปเปิ้ล: พุ่มใบเขียวหลายก้อน มีลูกแอปเปิ้ลแดงติดรอบพุ่ม */
 function appleTree(){
-  const g=new THREE.Group(),s=rand(.85,1.25),leaf=[0x4caf32,0x5cb82f,0x43a12a,0x6cc43a],red=M(0xe53935,{roughness:.4}),stem=M(0x5d3a1a);
+  const g=new THREE.Group(),s=rand(1.55,2.15),leaf=[0x4caf32,0x5cb82f,0x43a12a,0x6cc43a],red=M(0xe53935,{roughness:.4}),stem=M(0x5d3a1a);
   const tr=new THREE.Mesh(new THREE.CylinderGeometry(.16*s,.24*s,1.5*s,8),M(0x8b5a2b,{flat:true}));tr.position.y=.75*s;tr.castShadow=true;g.add(tr);
   const blobs=[[0,2.1,0,.95],[-.55,1.8,.15,.7],[.55,1.85,-.1,.72],[0,2.55,-.1,.7],[.1,1.75,.45,.6]];
   for(const[x,y,z,r]of blobs){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(r*s,1),M(pick(leaf),{flat:true}));b.position.set(x*s,y*s,z*s);b.castShadow=true;g.add(b)}
@@ -89,7 +89,7 @@ function roundTree(){const g=new THREE.Group(),s=rand(.8,1.2);const tr=new THREE
 /* ต้นสนสูง: ชั้นกรวยซ้อน */
 function pineTree(){const g=new THREE.Group(),s=rand(.9,1.4);const tr=new THREE.Mesh(new THREE.CylinderGeometry(.1*s,.16*s,.9*s,6),M(0x6b4a2f,{flat:true}));tr.position.y=.45*s;tr.castShadow=true;g.add(tr);
   const c=pick([0x2e7d32,0x388e3c,0x43a047]);for(let k=0;k<3;k++){const m=new THREE.Mesh(new THREE.ConeGeometry((1-k*.25)*s,1.4*s,7),M(c,{flat:true}));m.position.y=(1.3+k*.75)*s;m.castShadow=true;g.add(m)}return g}
-const TREES=[[appleTree,3],[oakTree,2],[roundTree,2],[pineTree,1]];
+const TREES=[[appleTree,1]];
 function anyTree(){let t=Math.random()*TREES.reduce((a,b)=>a+b[1],0);for(const[f,w]of TREES){if((t-=w)<0)return f()}return appleTree()}
 function bush(){const g=new THREE.Group();for(let i=0;i<3;i++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.3,.45),1),M(pick([0x5cb82f,0x6cc43a,0x4caf32]),{flat:true}));b.position.set(i*.4-.4,.25,rand(-.1,.1));b.castShadow=true;g.add(b)}return g}
 function flower(){const g=new THREE.Group(),st=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.4,5),M(0x4caf32));st.position.y=.2;g.add(st);const h=new THREE.Mesh(new THREE.IcosahedronGeometry(.11,0),M(pick([0xff6fa5,0xa78bfa,0xffe066,0xff8a65]),{flat:true}));h.position.y=.45;g.add(h);return g}
@@ -165,7 +165,7 @@ export function startGame(root,api){
     const g=new THREE.Group();g.position.x=segX;segN++;
     const p=new THREE.Mesh(new THREE.BoxGeometry(SEG,.06,2.4),pathMat);p.position.set(SEG/2,.04,0);p.receiveShadow=true;g.add(p);
     for(const zz of[-1.3,1.3]){const e=new THREE.Mesh(new THREE.BoxGeometry(SEG,.05,.22),pathEdge);e.position.set(SEG/2,.03,zz);g.add(e)}
-    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?anyTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(5,14):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
+    for(let k=0;k<4;k++){const r=Math.random(),x=rand(0,SEG);if(r<.3)continue;const o=r<.6?anyTree():r<.85?bush():fence();o.position.set(x,0,r>=.85?-2.2:r<.6?-rand(4.5,13):-rand(2.5,8));o.rotation.y=rand(0,6);g.add(o)}
     const nf=TH.flowers;for(let k=0;k<nf;k++){const f=flower();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,9):rand(1.8,4));f.scale.setScalar(rand(.8,1.3));g.add(f)}
     for(let k=0;k<6;k++){const t=tuft();t.position.set(rand(0,SEG),0,Math.random()<.5?rand(1.6,4):-rand(1.6,4));g.add(t)}
     if(segN%3===0){const o=pick([windmill,house,house,pond])();o.position.set(rand(2,8),0,-rand(16,24));o.rotation.y=rand(-.4,.4);g.add(o)}
