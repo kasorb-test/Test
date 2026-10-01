@@ -2819,7 +2819,7 @@ body.adv-on{overflow:hidden}
 .adv-it-ic{flex:none;width:44px;height:44px;border-radius:12px;background:#f3e3c7;display:grid;place-items:center}.adv-it-ic svg{width:32px;height:32px}
 .adv-it div{flex:1;min-width:0}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
 .adv-it button{flex:none;min-width:74px;padding:7px 10px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;text-shadow:0 2px 0 #5a3412;cursor:pointer}
-.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
+.adv-it button.low{filter:saturate(.5);opacity:.85}.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
 .adv-shop-x{padding:9px 22px;border:3px solid #5a3412;border-radius:10px;background:#7a4a1c;color:#fff4d6;font:inherit;font-weight:800;cursor:pointer}
 @media(max-width:600px){.adv-gear{top:12px;right:8px}.adv-gs{width:42px;height:42px}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
@@ -7763,12 +7763,13 @@ const ADV_VERB=["วิ่ง","กิน","นอน","เขียน","อ่
 const advDeck={};const advDraw=(k,arr)=>{if(!advDeck[k]||!advDeck[k].length)advDeck[k]=shuf(arr.map((_,i)=>i));return arr[advDeck[k].pop()]};
 function advVocab(){const [pic,ok,...bad]=ADV_VOCAB[rnd(0,ADV_VOCAB.length-1)];const o=shuf([ok,...bad]);return {q:"ภาพนี้คือคำว่าอะไร",pic,opts:o,ans:o.indexOf(ok)}}
 function advIdiom(){
-  if(Math.random()<.35){const n=advDraw("noun",ADV_NOUN),v=advDraw("verb",ADV_VERB),k=rnd(0,2);
-    if(k===0){const isN=Math.random()<.5,w=isN?n:v,o=["คำนาม","คำกริยา"];return {q:`คำว่า "${w}" เป็นคำชนิดใด`,opts:o,ans:isN?0:1,box:true}}
-    const o=shuf([n,v]);return k===1?{q:"ข้อใดเป็นคำนาม",opts:o,ans:o.indexOf(n),box:true}:{q:"ข้อใดเป็นคำกริยา",opts:o,ans:o.indexOf(v),box:true}}
-  const [id,mean]=advDraw("idiom",ADV_IDIOM);let other;do{other=ADV_IDIOM[rnd(0,ADV_IDIOM.length-1)]}while(other[0]===id);
-  if(Math.random()<.6){const o=shuf([mean,other[1]]);return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
-  const o=shuf([id,other[0]]);return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
+  if(Math.random()<.3){const k=rnd(0,2);
+    if(k===0){const isN=Math.random()<.5,w=isN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),o=["คำนาม","คำกริยา","คำวิเศษณ์","คำสรรพนาม"];return {q:`คำว่า "${w}" เป็นคำชนิดใด`,opts:o,ans:isN?0:1,box:true}}
+    const wantN=k===1,ok=wantN?advDraw("noun",ADV_NOUN):advDraw("verb",ADV_VERB),pool=shuf((wantN?ADV_VERB:ADV_NOUN).slice()).slice(0,3),o=shuf([ok,...pool]);
+    return {q:wantN?"ข้อใดเป็นคำนาม":"ข้อใดเป็นคำกริยา",opts:o,ans:o.indexOf(ok),box:true}}
+  const [id,mean]=advDraw("idiom",ADV_IDIOM),others=shuf(ADV_IDIOM.filter(x=>x[0]!==id)).slice(0,3);
+  if(Math.random()<.6){const o=shuf([mean,...others.map(x=>x[1])]);return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
+  const o=shuf([id,...others.map(x=>x[0])]);return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
 function advQuestion(st){
   if(st===8)return advVocab();
   if(st===10)return advIdiom();
@@ -7825,17 +7826,17 @@ function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned()
 function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=coinsOf();
   sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
     <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small></div>
-      <button type="button" data-buy="${id}"${has||c<pr||!currentUser?" disabled":""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
+      <button type="button" data-buy="${id}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
     <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
   sh.classList.remove("hidden");
   $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
   sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advBuy(b.dataset.buy))}
-async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===id);if(!it||!currentUser||!currentData)return;const own=advOwned();if(own.includes(id))return;
-  if(coinsOf()<it[3]){advShop(id,"เหรียญยังไม่พอ ผ่านด่านหรือเช็คอินรายวันเพื่อสะสมเหรียญ");return}
+async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===id);if(!it)return;if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}const own=advOwned();if(own.includes(id))return;
+  if(coinsOf()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${coinsOf()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
   const gear=[...own,id],coins=coinsOf()-it[3];
   try{await updateDoc(doc(db,"users",currentUser.uid),{gear,coins});currentData.gear=gear;currentData.coins=coins;advMod?.SND.play("buy");const cc=$("advCoins");if(cc)cc.textContent=coins.toLocaleString();
     adv?.refreshGear();advGearBar();advShop(id,`ได้${it[1]}แล้ว`)}
-  catch(e){console.error(e);advShop(id,"ซื้อไม่สำเร็จ ลองใหม่อีกครั้ง")}}
+  catch(e){console.error(e);advShop(id,e?.code==="permission-denied"?"ซื้อไม่สำเร็จ: ระบบยังไม่เปิดให้ซื้อ (ต้อง Publish กฎ Firebase ฉบับล่าสุดก่อน)":"ซื้อไม่สำเร็จ ลองใหม่อีกครั้ง")}}
 async function advClear(st){
   let gain=0,note="";
   if(st===advBest()+1&&currentUser&&currentData){
@@ -7873,7 +7874,7 @@ async function advStart(){
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
   const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
   /* หน้าเริ่ม: เลือกด่าน (เล่นได้ถึงด่านถัดจากที่ผ่าน) แล้วกด START */
-  let advSel=Math.min(advBest()+1,advMax());
+  let advSel=Math.min(advBest()+1,advMax()),advRe=false;
   const startBox=msg=>{$("advStart")?.remove();adv?.pause(true);const d=document.createElement("div");d.className="adv-start";d.id="advStart";
     const chips=Array.from({length:10},(_,i)=>{const n=i+1,open=advOpen(n),prem=n>5&&advMax()<10;return `<button type="button" class="adv-chip${n===advSel?" on":""}${open?"":" lock"}${prem?" prem":""}" data-n="${n}" title="${escHtml(ADV_NAMES[i])}">${n}</button>`}).join("");
     d.innerHTML=`<div class="adv-start-box"><img src="mascot-2b.svg" alt="">${msg?`<p class="adv-done">${msg}</p>`:""}<h3 id="advStartT"></h3><div class="adv-stages">${chips}</div><p class="adv-lock-note hidden" id="advLockNote"></p><p>น้องดินสอจะเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ<br>ตอบคำถามให้ถูก แล้วไปด่านต่อไป</p><button type="button" class="adv-go" id="advGo">START</button></div>`;
@@ -7881,8 +7882,8 @@ async function advStart(){
     const title=()=>{$("advStartT").textContent=`ด่าน ${advSel} ${ADV_NAMES[advSel-1]}`};title();
     d.querySelectorAll(".adv-chip").forEach(b=>b.onclick=()=>{const n=+b.dataset.n,note=$("advLockNote");
       if(!advOpen(n)){note.textContent=n>5&&advMax()<10?"ด่าน 6-10 สำหรับสมาชิก Premium":`ผ่านด่าน ${n-1} ก่อน แล้วจะเล่นด่านนี้ได้`;note.classList.remove("hidden");return}
-      note.classList.add("hidden");advSel=n;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
-    $("advGo").onclick=()=>{advMod?.SND.unlock();d.remove();adv?.pause(false)}};
+      note.classList.add("hidden");advSel=n;advRe=false;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
+    $("advGo").onclick=()=>{advMod?.SND.unlock();if(advRe){advRe=false;adv?.restart(advSel)}d.remove();adv?.pause(false)}};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
     if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
@@ -7908,7 +7909,7 @@ async function advStart(){
       b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
     say:msg=>{const t=$("advToast");t.innerHTML=`<b>${escHtml(msg)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
-    finish:st=>{advSel=st;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก":`ผ่านด่าน ${st} แล้ว ด่าน 6-10 สำหรับสมาชิก Premium`)},
+    finish:st=>{advSel=1;advRe=true;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก! กด START เพื่อเริ่มด่าน 1 ใหม่ คะแนนดาวสะสมต่อ":`ผ่านด่าน ${st} แล้ว กด START เพื่อเริ่มด่าน 1 ใหม่ คะแนนดาวสะสมต่อ (ด่าน 6-10 สำหรับสมาชิก Premium)`)},
     hideQ:()=>{$("advQ").classList.add("hidden");$("advView").classList.remove("asking")},
     timer:f=>{$("advBar").style.width=f*100+"%"},
     shake:()=>{const v=$("advView");v.classList.remove("hurt");void v.offsetWidth;v.classList.add("hurt")},
