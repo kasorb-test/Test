@@ -7883,6 +7883,7 @@ async function advStart(){
       
       <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
+  ov.addEventListener("pointerdown",()=>advMod?.SND.unlock(),{capture:true});ov.addEventListener("touchend",()=>advMod?.SND.unlock(),{capture:true});
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
   const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};

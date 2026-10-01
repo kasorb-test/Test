@@ -40,7 +40,7 @@ const rand=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.len
 /* ===== เสียงเกม: สังเคราะห์ด้วย Web Audio ไม่ต้องโหลดไฟล์ เสียงเบา ๆ เปิดปิดได้ (จำไว้ในเครื่อง) ===== */
 export const SND=(()=>{let ctx=null,master=null,bgmG=null,on=true,bgmT=0,step=0,mode="day",nb=null;
   try{on=localStorage.getItem("advSound")!=="0"}catch(e){}
-  const init=()=>{if(ctx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();master=ctx.createGain();master.gain.value=on?.5:0;master.connect(ctx.destination);bgmG=ctx.createGain();bgmG.gain.value=.5;bgmG.connect(master)};
+  const init=()=>{if(ctx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();master=ctx.createGain();master.gain.value=on?.9:0;master.connect(ctx.destination);bgmG=ctx.createGain();bgmG.gain.value=.5;bgmG.connect(master)};
   const tone=(f,d,{type="triangle",v=.2,to=null,at=0,dest=null}={})=>{if(!ctx||!on)return;const t=ctx.currentTime+at,o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+d);
     g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0008,t+d);o.connect(g);g.connect(dest||master);o.start(t);o.stop(t+d+.05)};
   const noise=(d,{v=.2,f=1200,q=1,at=0,type="bandpass"}={})=>{if(!ctx||!on)return;if(!nb){nb=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1}
@@ -97,9 +97,16 @@ export const SND=(()=>{let ctx=null,master=null,bgmG=null,on=true,bgmT=0,step=0,
   const ambTick=()=>{const a=AMB[ambName];if(!a||!ctx||!on||ctx.state!=="running")return;const k=a.ev[Math.floor(Math.random()*a.ev.length)];try{ev[k]()}catch(e){}};
   function ambient(name){if(name===ambName&&amb)return;ambName=name;if(amb){amb.stop();amb=null}clearInterval(ambT);ambT=0;if(!ctx||!on)return;const a=AMB[name];if(!a)return;
     amb=bed(...a.bed);ambT=setInterval(()=>{if(Math.random()<.6)ambTick()},a.gap*1000)}
-  return {unlock(){init();if(ctx&&ctx.state!=="running")ctx.resume();if(!bgmT)bgmT=setInterval(tick,230);if(ambName&&!amb){const n=ambName;ambName="";ambient(n)}},play(k){try{fx[k]&&fx[k]()}catch(e){}},ambient(n){try{ambient(n)}catch(e){}},
-    setOn(v){on=!!v;try{localStorage.setItem("advSound",on?"1":"0")}catch(e){}if(master)master.gain.value=on?.5:0;if(on&&ambName&&!amb){const n=ambName;ambName="";ambient(n)}},isOn:()=>on,
-    mode(m){mode=m==="haunt"?"haunt":"day"},stop(){clearInterval(bgmT);bgmT=0;clearInterval(ambT);ambT=0;if(amb){amb.stop();amb=null}ambName=""}}})();
+  /* iPad/iPhone: เสียงจาก Web Audio ถูกปิดเมื่อเปิดโหมดเงียบ จึงบอก Safari ว่าเป็นเสียงสื่อ (playback) และเล่นไฟล์เสียงเงียบค้างไว้เพื่อปลดล็อก */
+  let silentEl=null;
+  const iosUnlock=()=>{try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
+    try{if(!silentEl){const n=4410,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))};
+      w(0,"RIFF");v.setUint32(4,36+n*2,true);w(8,"WAVEfmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,44100,true);v.setUint32(28,88200,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,n*2,true);
+      silentEl=new Audio(URL.createObjectURL(new Blob([b],{type:"audio/wav"})));silentEl.loop=true;silentEl.setAttribute("playsinline","");silentEl.volume=.01}
+      const p=silentEl.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}};
+  return {unlock(){iosUnlock();init();if(ctx&&ctx.state!=="running")ctx.resume();if(!bgmT)bgmT=setInterval(tick,230);if(ambName&&!amb){const n=ambName;ambName="";ambient(n)}},play(k){try{fx[k]&&fx[k]()}catch(e){}},ambient(n){try{ambient(n)}catch(e){}},
+    setOn(v){on=!!v;try{localStorage.setItem("advSound",on?"1":"0")}catch(e){}if(master)master.gain.value=on?.9:0;if(on&&ambName&&!amb){const n=ambName;ambName="";ambient(n)}},isOn:()=>on,state:()=>ctx?ctx.state:"none",
+    mode(m){mode=m==="haunt"?"haunt":"day"},stop(){try{silentEl&&silentEl.pause()}catch(e){}clearInterval(bgmT);bgmT=0;clearInterval(ambT);ambT=0;if(amb){amb.stop();amb=null}ambName=""}}})();
 
 function txt(text,{size=96,color="#6d28d9",bg="#ffffff",w=256,h=128,radius=40,border="#ffb84d"}={}){
   const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");
