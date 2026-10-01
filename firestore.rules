@@ -257,7 +257,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon", "outfit", "look"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -277,6 +277,16 @@ service cloud.firestore {
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["answered"])
             || (request.resource.data.answered is int && request.resource.data.answered >= 0
                 && request.resource.data.answered <= 20000))
+        // ชุดตัวละครบนบันไดยศ (ของแต่งตัว ไม่มีผลกับคะแนน)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["outfit"])
+            || request.resource.data.outfit in ["tee", "student", "track", "cadet", "khaki", "white", "navy", "gold"])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["look"])
+            || (request.resource.data.look is map
+                && request.resource.data.look.keys().hasOnly(["hair", "shirt", "pants", "shoe"])
+                && request.resource.data.look.get("hair", "m01").matches("[fm][0-9]{2}")
+                && request.resource.data.look.get("shirt", "") is string && request.resource.data.look.get("shirt", "").size() <= 10
+                && request.resource.data.look.get("pants", "") is string && request.resource.data.look.get("pants", "").size() <= 10
+                && request.resource.data.look.get("shoe", "") is string && request.resource.data.look.get("shoe", "").size() <= 10))
         // เหรียญ: เปลี่ยนได้ 3 ทางเท่านั้น คือเช็คอินรายวัน เหรียญขยัน และแลกโค้ดส่วนลด
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin"])
             || validCheckin(request.resource.data, resource.data))

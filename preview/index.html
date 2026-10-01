@@ -2678,6 +2678,59 @@ input{
 .st-track{z-index:2}
 /* คอม: เส้นทางยศเต็มความกว้าง กล่องเลื่อนยศกับผลรายวิชาเรียงลงมาด้านล่าง */
 @media(min-width:761px){.ovl{grid-template-columns:1fr!important}.ovl>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:start}.ovl>div:last-child>.ovc{margin-bottom:0}.ovc .stairs{height:320px!important}}
+/* ตัวละครเกม (SVG ทั้งตัว) */
+.st-kid.game .st-body{left:-3px;bottom:-2px;width:60px;height:100px}
+.st-kid.game .k-head{transform-box:fill-box;transform-origin:50% 90%;animation:kHead 2.4s ease-in-out infinite}
+@keyframes kHead{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.st-kid.game .k-eye{transform-box:fill-box;transform-origin:center;animation:kBlink 4s infinite}
+@keyframes kBlink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.st-me.air .st-kid.game .k-arm.l{transform:rotate(140deg)}.st-me.air .st-kid.game .k-arm.r{transform:rotate(-140deg)}
+/* ตัวละครแต่งได้: หัวเป็นรูปทรงผม ตัวเป็น SVG */
+.st-kid.look .st-body{left:-3px;bottom:-2px;width:60px;height:100px}
+.st-kid.look .chr-hd{position:absolute;left:50%;bottom:52px;height:50px;width:auto;transform:translateX(-50%);border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
+.st-kid.look .chr-hat{position:absolute;left:50%;bottom:84px;width:46px;transform:translateX(-50%);pointer-events:none}
+.st-kid.look.flip .chr-hd{transform:translateX(-50%) scaleX(-1)}
+.st-me.walk .st-kid.look .chr-hd,.st-me.walk .st-kid.look .chr-hat{animation:kBob .36s ease-in-out infinite}
+.st-kid.look .dl{position:absolute;left:50%;bottom:-2px;width:calc(var(--dw)*84px/190);height:101px;transform:translateX(-50%)}
+.st-kid.look.flip .dl{transform:translateX(-50%) scaleX(-1)}
+.st-kid.look .dl-up{position:absolute;left:0;bottom:16.8px;width:100%!important;height:84px!important;object-fit:contain;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
+.dl-legs{position:absolute;left:0;bottom:0;width:100%;height:19.5px;overflow:visible}
+.st-me.walk .st-kid.look .dl-up{animation:kBob .36s ease-in-out infinite}
+.st-me.air .st-kid.look .k-leg.l{transform:rotate(12deg)}.st-me.air .st-kid.look .k-leg.r{transform:rotate(-12deg)}
+.chr-mini{position:relative;display:block;width:44px;height:74px;margin:0 auto}
+.chr-mini .wd-svg{position:absolute;left:0;bottom:0;width:44px;height:74px}
+.chr-mini .chr-hd{position:absolute;left:50%;bottom:38px;height:37px;transform:translateX(-50%)}
+.chr-mini .chr-hat{position:absolute;left:50%;bottom:62px;width:34px;transform:translateX(-50%)}
+.wd-it.lock .chr-mini{filter:grayscale(1) brightness(.9)}
+.lk-tabs{display:flex;gap:6px;margin:0 0 8px;overflow-x:auto}
+.lk-tabs button{padding:6px 12px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;font:inherit;font-size:12.5px;font-weight:700;white-space:nowrap;cursor:pointer}
+.lk-tabs button.on{background:#16305f;border-color:#16305f;color:#fff}
+.lk-hair{flex:0 0 76px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border:1.5px solid #eef2f7;border-radius:14px;background:#f8fafc;font:inherit;cursor:pointer}
+.lk-hair img{height:54px;width:auto;max-width:68px;object-fit:contain}.lk-hair span{font-size:11px;color:#334155}
+.lk-hair.on{border-color:#ff8a3d;background:#fff7ed}
+.lk-sws{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.lk-sw{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid #eef2f7;border-radius:12px;background:#fff;font:inherit;cursor:pointer}
+.lk-sw i{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}.lk-sw span{font-size:11px;color:#334155}
+.lk-sw.on{border-color:#ff8a3d;background:#fff7ed}
+.lk-sub{margin:4px 0 6px;font-size:12px;font-weight:800;color:#64748b}
+.lk-custom{position:relative;cursor:pointer}.lk-custom input{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:conic-gradient(#f87171,#fbbf24,#34d399,#60a5fa,#a78bfa,#f472b6,#f87171);cursor:pointer}
+.lk-custom input::-webkit-color-swatch-wrapper{padding:0}.lk-custom input::-webkit-color-swatch{border:0;border-radius:50%;opacity:0}
+.lk-custom.on input::-webkit-color-swatch{opacity:1}
+/* ตู้เสื้อผ้า */
+.wd{margin:4px 0 6px}.wd-h{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}.wd-h b{font-size:14px;color:#16305f}.wd-h span{font-size:12px;color:#94a3b8}
+.wd-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.wd-it{flex:0 0 86px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border:1.5px solid #eef2f7;border-radius:14px;background:#f8fafc;font:inherit;cursor:pointer}
+.wd-it .wd-svg{width:44px;height:74px}.wd-it b{font-size:11px;color:#334155;line-height:1.25;text-align:center}.wd-it span{font-size:10.5px;font-weight:800;color:#e86208}
+.wd-it.on{border-color:#ff8a3d;background:#fff7ed;box-shadow:0 4px 12px rgba(255,106,0,.15)}.wd-it.on span{color:#15803d}
+.wd-it.lock{cursor:default;opacity:.6}.wd-it.lock .wd-svg{filter:grayscale(1) brightness(.9)}.wd-it.lock span{color:#64748b}
+@media(prefers-reduced-motion:reduce){.st-kid.game .k-head,.st-kid.game .k-eye{animation:none}}
+/* หันตัว / หมุนตัวแบบ 3 มิติ */
+#stMe{perspective:520px}
+.st-turn{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 60%}
+.st-turn.turning{animation:kTurn .3s ease-in-out}
+@keyframes kTurn{0%{transform:rotateY(0)}50%{transform:rotateY(90deg)}51%{transform:rotateY(-90deg)}100%{transform:rotateY(0)}}
+.st-turn.held .st-kid{animation:none}
+@media(prefers-reduced-motion:reduce){.st-turn.turning{animation:none}}
 /* ปุ่มเดินซ้ายขวา + ท่าเดิน */
 .st-pad{position:absolute;left:10px;bottom:14px;z-index:5;display:flex;gap:8px}
 .st-mv{width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 4px 0 #cbd5e1,0 6px 12px rgba(0,0,0,.15);cursor:pointer;touch-action:none;position:relative}
@@ -7348,6 +7401,164 @@ function bindShop(){
     catch(e){console.error(e);btn.disabled=false;alert("แลกไม่สำเร็จ ลองใหม่อีกครั้ง")}
   });
 }
+/* ===== ตัวละครเกมบนบันไดยศ + ตู้เสื้อผ้าตามเลเวล =====
+   วาดด้วย SVG ทั้งตัว แขนขาขยับได้ ทรงผมตามเพศในโปรไฟล์ ชุดปลดล็อกตามเลเวล เลือกแล้วจำไว้ที่ users/{uid}.outfit */
+const OUTFITS=[
+  {id:"tee",name:"เสื้อยืดกีฬา",lv:0,shirt:"#ff8a3d",sleeve:"#ff8a3d",pants:"#334155",shoe:"#f8fafc",sole:"#94a3b8",collar:"round",trim:"#fff"},
+  {id:"student",name:"ชุดนักเรียน",lv:1,shirt:"#ffffff",sleeve:"#ffffff",pants:"#1e3a8a",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#cbd5e1",tie:"#1e3a8a"},
+  {id:"track",name:"ชุดวอร์มฝึก",lv:2,shirt:"#1f3b73",sleeve:"#1f3b73",pants:"#1f3b73",shoe:"#f8fafc",sole:"#94a3b8",collar:"zip",trim:"#ffb21e",stripe:"#ffb21e"},
+  {id:"cadet",name:"ชุดนักเรียนนายสิบ",lv:4,shirt:"#b08d57",sleeve:"#b08d57",pants:"#8c6d3f",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#8c6d3f",badge:"#f5b301",belt:"#3f2d14",hat:"cap",hatc:"#8c6d3f"},
+  {id:"khaki",name:"เครื่องแบบกากี",lv:6,shirt:"#a3825a",sleeve:"#a3825a",pants:"#7a5f3b",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#7a5f3b",badge:"#f5b301",belt:"#111827",hat:"peak",hatc:"#6b5130",pocket:1},
+  {id:"white",name:"ชุดปกติขาว",lv:9,shirt:"#ffffff",sleeve:"#ffffff",pants:"#ffffff",shoe:"#111827",sole:"#111827",collar:"high",trim:"#e2e8f0",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#ffffff",gold:1},
+  {id:"navy",name:"ชุดพิธีการ",lv:12,shirt:"#16305f",sleeve:"#16305f",pants:"#0f2449",shoe:"#111827",sole:"#111827",collar:"high",trim:"#f5b301",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#16305f",gold:1,sash:"#e11d48"},
+  {id:"gold",name:"ชุดทองผู้พิชิต",lv:18,shirt:"#f5c542",sleeve:"#f5c542",pants:"#d9a400",shoe:"#7c5a00",sole:"#5a4100",collar:"high",trim:"#fff6c2",badge:"#fff",belt:"#7c5a00",hat:"crown",hatc:"#ffd84a",gold:1,cape:"#e11d48"}
+];
+const outfitOf=id=>OUTFITS.find(o=>o.id===id)||OUTFITS[0];
+function bestOutfit(lv){return OUTFITS.filter(o=>o.lv<=lv).pop()||OUTFITS[0]}
+/* เครื่องแบบตามเลเวลพักไว้ก่อน ตอนนี้ใส่ชุดลำลองเสมอ */
+const UNIFORMS_ON=false;
+function myOutfit(lv){if(!UNIFORMS_ON)return OUTFITS[0];const o=OUTFITS.find(x=>x.id===currentData?.outfit);return o&&o.lv<=lv?o:bestOutfit(lv)}
+const isFemale=()=>currentData?.gender==="female";
+/* ===== แต่งตัวละคร: ทรงผม (รูปหัวการ์ตูน chars/*.png) + สีเสื้อยืด กางเกงวอร์ม รองเท้าแตะ =====
+   ชุดลำลอง (Lv.0) ใช้สีที่เลือกเอง ชุดเลเวลอื่นเป็นเครื่องแบบตามเดิม เก็บไว้ที่ users/{uid}.look */
+const HAIRS={f:[["f01","มัดสูง"],["f02","ผมยาวตรง"],["f03","หางม้า"],["f04","มัดแกละ"],["f05","ประบ่า"],["f06","ผมสั้นตรง"],["f09","ผมสั้นทอม"],["f11","ผมหยิกฟ่อย"],["f12","ผมสองข้าง"],["f14","หางม้าต่ำ"]],
+  m:[["m01","แสกกลาง"],["m06","ซอยเกาหลี"],["m04","ผมตั้ง"],["m05","สกินเฮด"],["m10","รองทรง"],["m11","ผมยุ่ง"],["m12","แสกข้าง"],["m13","หยิกเกลียว"],["m14","ทูบล็อก"],["m15","ยาวประบ่า"]]};
+const SHIRTS=[["orig","ตามรูป",""],["white","ขาว","#ffffff"],["black","ดำ","#1f2937"],["navy","กรม","#1e3a8a"],["grey","เทา","#9ca3af"],["sky","ฟ้า","#93c5fd"],["pink","ชมพู","#f9a8d4"],["mint","เขียวอ่อน","#a7f3d0"],["cream","ครีม","#f5e6c8"]];
+const PANTS=[["orig","ตามรูป",""],["grey","เทา","#a1a1aa"],["black","ดำ","#18181b"],["navy","กรม","#1e3a8a"],["cream","ครีม","#e7d3b0"],["pink","ชมพู","#f9a8d4"],["sky","ฟ้า","#93c5fd"],["green","เขียว","#556b2f"],["brown","น้ำตาล","#7c4a2d"]];
+const SHOES=[["bw","ดำ-ขาว","#111827","#ffffff","slide"],["wb","ขาว-ดำ","#ffffff","#111827","slide"],["black","ดำล้วน","#111827","#111827","slide"],["pink","ชมพู","#f9a8d4","#f9a8d4","slide"],["cream","ครีม","#f5e6c8","#f5e6c8","slide"],["navy","กรม","#1e3a8a","#1e3a8a","slide"],["green","เขียว","#556b2f","#556b2f","slide"],["brown","น้ำตาล","#7c4a2d","#7c4a2d","slide"],
+  ["fblack","ดำ","#111827","#111827","flip"],["fwhite","ขาว","#ffffff","#cbd5e1","flip"],["fnavy","กรม","#1e3a8a","#1e3a8a","flip"],["fbrown","น้ำตาล","#7c4a2d","#7c4a2d","flip"],["fpink","ชมพู","#f9a8d4","#f9a8d4","flip"],["fcream","ครีม","#f5e6c8","#f5e6c8","flip"],["fgreen","เขียว","#556b2f","#556b2f","flip"],["fsky","ฟ้า","#93c5fd","#93c5fd","flip"],["fpurple","ม่วง","#c4b5fd","#c4b5fd","flip"]];
+const pick=(list,id)=>list.find(x=>x[0]===id)||(/^#[0-9a-f]{6}$/i.test(id||"")?[id,"สีที่เลือกเอง",id]:list[0]);
+function myLook(){
+  const L=currentData?.look||{},g=isFemale()?"f":"m",all=[...HAIRS.f,...HAIRS.m];
+  return {hair:all.some(h=>h[0]===L.hair)?L.hair:HAIRS[g][0][0],shirt:pick(SHIRTS,L.shirt)[0],pants:pick(PANTS,L.pants)[0],shoe:pick(SHOES,L.shoe)[0]};
+}
+/* ตัวละคร: ตัว/แขน/ขา เป็น SVG (ขยับได้) หัวเป็นรูปทรงผมที่เลือก หมวกของเครื่องแบบวางทับหัว */
+/* ชุดลำลอง: เสื้อยืดโอเวอร์ไซซ์แขนสั้น กางเกงวอร์มขาจั๊มมีเชือก รองเท้าแตะแบบสวม/หูหนีบ */
+function casualSvg(look,cls){
+  const shirt=pick(SHIRTS,look.shirt)[2],pants=pick(PANTS,look.pants)[2],sh=pick(SHOES,look.shoe),skin="#f6d2b0",line="rgba(0,0,0,.14)";
+  const light=c=>/^#f|^#e|^#a7|^#93|^#c4/i.test(c);
+  const foot=x=>sh[4]==="flip"?`<path d="M${x} 91 h12 a2.4 2.4 0 0 1 0 4.8 h-12 a2.4 2.4 0 0 1 0-4.8z" fill="${sh[2]}" stroke="${line}" stroke-width=".6"/><path d="M${x+3} 91.5 L${x+6} 88.5 L${x+9} 91.5" fill="none" stroke="${sh[3]==="#ffffff"?"#94a3b8":sh[3]}" stroke-width="1.4" stroke-linecap="round"/>`
+    :`<path d="M${x} 91 h12 a2.4 2.4 0 0 1 0 4.8 h-12 a2.4 2.4 0 0 1 0-4.8z" fill="${sh[2]}" stroke="${line}" stroke-width=".6"/><rect x="${x+1.5}" y="87.5" width="9" height="4.4" rx="1.6" fill="${sh[3]}" stroke="${line}" stroke-width=".6"/>${sh[0]==="bw"||sh[0]==="wb"?`<path d="M${x+3.5} 87.8 v4 M${x+6} 87.8 v4 M${x+8.5} 87.8 v4" stroke="${sh[2]}" stroke-width=".9"/>`:""}`;
+  const leg=(side,x,fx)=>`<g class="k-leg ${side}"><path d="M${x} 70 h9 l-1 15 h-7z" fill="${pants}" stroke="${line}" stroke-width=".6"/><rect x="${x+.6}" y="84" width="7.6" height="3.4" rx="1.2" fill="${pants}" stroke="${line}" stroke-width=".7"/><rect x="${x+2}" y="87.2" width="5" height="2.6" fill="${skin}"/>${foot(fx)}</g>`;
+  const arm=(side,sx,sy,ex,ey,hx,hy)=>`<g class="k-arm ${side}"><path d="M${sx} ${sy} L${ex} ${ey}" stroke="${skin}" stroke-width="5" stroke-linecap="round"/><circle cx="${hx}" cy="${hy}" r="3.4" fill="${skin}"/><path d="M${sx} ${sy-1} L${sx+(ex-sx)*.42} ${sy+(ey-sy)*.42}" stroke="${shirt}" stroke-width="9.5" stroke-linecap="round"/><path d="M${sx+(ex-sx)*.42} ${sy+(ey-sy)*.42-3.6} l${(ex-sx)>0?1:-1}.2 7" stroke="${line}" stroke-width=".6"/></g>`;
+  return `<svg class="${cls}" viewBox="0 0 60 100" aria-hidden="true">
+    ${leg("l",20.5,18.5)}${leg("r",30.5,29.5)}
+    <path d="M20 68 h20 v4 h-20z" fill="${pants}"/><path d="M28.6 69.5 q-1 4 -2.6 5 M31.4 69.5 q1 4 2.6 5" stroke="${light(pants)?"#94a3b8":"#e5e7eb"}" stroke-width=".9" fill="none" stroke-linecap="round"/>
+    <path d="M17 48 Q17 42 30 42 Q43 42 43 48 L44 70 Q30 73 16 70 Z" fill="${shirt}" stroke="${shirt==="#ffffff"?"#e2e8f0":line}" stroke-width=".8"/>
+    <path d="M25 43.5 Q30 48 35 43.5" fill="none" stroke="${light(shirt)?"#cbd5e1":"rgba(255,255,255,.25)"}" stroke-width="1.6"/>
+    <path d="M22 60 q8 2 16 0" stroke="${line}" stroke-width=".8" fill="none"/>
+    ${arm("l",18,47,11,63,10.6,65)}${arm("r",42,47,49,63,49.4,65)}</svg>`;
+}
+const DOLL={f01:[118,32,95,"#fbfafc","#b5b2bf"],f02:[139,33,106,"#272727","#f4d6c3"],f03:[135,21,91,"#1e3153","#fdc3cb"],f04:[142,37,110,"#f7f8fd","#080909"],f05:[117,28,89,"#1c3054","#9ac9f8"],f06:[125,21,99,"#242323","#e9b69b"],f09:[129,34,106,"#fafafb","#a6a1ad"],f11:[155,41,105,"#1e2f53","#85b7f0"],f12:[139,37,109,"#f7f5fa","#181918"],f14:[138,19,86,"#1f3255","#5e5c40"],m01:[105,24,92,"#212120","#9692a3"],m04:[123,21,89,"#212222","#3c3926"],m05:[101,30,89,"#faf9fc","#0a0b0c"],m06:[130,35,102,"#1c2e50","#b2aeb7"],m10:[107,27,97,"#a79ea6","#0b0c0b"],m11:[114,29,101,"#20201f","#eed8c7"],m12:[118,35,108,"#f3f2f7","#040a1b"],m13:[136,25,99,"#182d51","#9d9ba3"],m14:[138,48,104,"#222120","#212011"],m15:[126,36,105,"#f3f2f8","#102a50"]};
+/* ชุดลำลอง: ใช้ตัวละครทั้งตัวจากรูปต้นแบบ (หัว เสื้อยืด สะโพก เป็นรูปเดียวกัน) ต่อขากางเกงวอร์มและรองเท้าแตะด้านล่าง
+   เปลี่ยนสีเสื้อ/กางเกงด้วยมาสก์ chars/b/<id>_m.png (แดง = เสื้อ เขียว = กางเกง) บน canvas แล้วเก็บผลไว้ใช้ซ้ำ */
+const dollCache={};
+const hexRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function dollColor(list,v,orig){const x=pick(list,v);return x[0]==="orig"?orig:x[2]}
+function dollLegsSvg(d,look){
+  const [w,hl,hr,,po]=d,pants=dollColor(PANTS,look.pants,po),sh=pick(SHOES,look.shoe),skin="#f6d2b0",line="rgba(0,0,0,.18)";
+  const lw=(hr-hl)/2,gap=Math.max(3,lw*.12),fw=lw*1.05;
+  const foot=(x)=>{const y=27,c=sh[2],st=sh[3]==="#ffffff"&&sh[4]==="flip"?"#94a3b8":sh[3];
+    return `<path d="M${x-2} ${y} h${fw} a4 4 0 0 1 0 8 h-${fw} a4 4 0 0 1 0-8z" fill="${c}" stroke="${line}" stroke-width="1"/>`+(sh[4]==="flip"
+      ?`<path d="M${x+fw*.18} ${y+1} L${x+fw*.45} ${y-5} L${x+fw*.72} ${y+1}" fill="none" stroke="${st}" stroke-width="2.6" stroke-linecap="round"/>`
+      :`<rect x="${x+fw*.06}" y="${y-6}" width="${fw*.8}" height="8" rx="3" fill="${st}" stroke="${line}" stroke-width="1"/>${sh[0]==="bw"||sh[0]==="wb"?[.25,.45,.65].map(f=>`<path d="M${x+fw*f} ${y-5.5} v7" stroke="${c}" stroke-width="1.6"/>`).join(""):""}`)};
+  const leg=(side,x)=>{const lw2=lw-gap/2;return `<g class="k-leg ${side}"><path d="M${x} -6 h${lw2} q1 12 -1.5 22 h-${lw2-3} q-2.5 -10 -1.5 -22z" fill="${pants}" stroke="${line}" stroke-width="1"/><rect x="${x+1.5}" y="13" width="${lw2-3}" height="7" rx="3.4" fill="${pants}" stroke="${line}" stroke-width="1"/><path d="M${x+3} 16.5 h${lw2-6}" stroke="${line}" stroke-width=".8"/><rect x="${x+lw2*.28}" y="19.5" width="${lw2*.44}" height="6" fill="${skin}"/>${foot(x+lw*.02)}</g>`};
+  return `<svg class="dl-legs" viewBox="0 -6 ${w} 44" aria-hidden="true">${leg("l",hl+1)}${leg("r",hl+lw+gap/2)}</svg>`;
+}
+function dollHtml(look){
+  const id=DOLL[look.hair]?look.hair:"m01",d=DOLL[id],key=`${id}|${look.shirt}|${look.pants}`;
+  return `<span class="dl" style="--dw:${d[0]}">${dollLegsSvg(d,look)}<img class="dl-up" src="${dollCache[key]||`chars/b/${id}.png`}" data-doll="${key}" onload="dollPaint(this)" alt="" draggable="false"></span>`;
+}
+function dollPaint(img){
+  const key=img.dataset.doll;if(!key||img.dataset.done===key)return;img.dataset.done=key;
+  const [id,sv,pv]=key.split("|"),d=DOLL[id];if(!d)return;
+  const tS=dollColor(SHIRTS,sv,""),tP=dollColor(PANTS,pv,"");
+  if(!tS&&!tP)return;
+  if(dollCache[key]){img.src=dollCache[key];return}
+  const mk=new Image();mk.onload=()=>{try{
+    const W=img.naturalWidth,H=img.naturalHeight,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+    x.drawImage(img,0,0);const px=x.getImageData(0,0,W,H);x.clearRect(0,0,W,H);x.drawImage(mk,0,0,W,H);const m=x.getImageData(0,0,W,H).data,a=px.data;
+    const lum=(i)=>a[i]*.3+a[i+1]*.59+a[i+2]*.11;
+    [[0,tS],[1,tP]].forEach(([ch,t])=>{if(!t)return;const T=hexRgb(t);let sum=0,n=0;
+      for(let i=0;i<a.length;i+=4)if(m[i+ch]>128){sum+=lum(i);n++}
+      if(!n)return;const Lb=sum/n,k=Lb<90?2.2:1;
+      for(let i=0;i<a.length;i+=4){const wt=m[i+ch]/255;if(wt<.02)continue;const dl=(lum(i)-Lb)*k;
+        for(let j=0;j<3;j++)a[i+j]=Math.round(a[i+j]*(1-wt)+Math.max(0,Math.min(255,T[j]+dl))*wt)}});
+    x.clearRect(0,0,W,H);x.putImageData(px,0,0);const url=c.toDataURL("image/png");dollCache[key]=url;
+    document.querySelectorAll(`img.dl-up[data-doll="${key}"]`).forEach(el=>{el.dataset.done=key;el.src=url});
+  }catch(e){console.error(e)}};
+  mk.src=`chars/b/${id}_m.png`;
+}
+window.dollPaint=dollPaint;
+function charBodySvg(o,look,cls){
+  const casual=o.id==="tee";
+  const shirt=casual?pick(SHIRTS,look.shirt)[2]:o.shirt,sleeve=casual?shirt:o.sleeve,pants=casual?pick(PANTS,look.pants)[2]:o.pants;
+  const sh=pick(SHOES,look.shoe),shoe=casual?sh[2]:o.shoe,strap=casual?sh[3]:o.sole,skin="#f6d2b0";
+  const collar=casual?`<path d="M25 44 Q30 49 35 44" fill="none" stroke="${shirt==="#ffffff"?"#e2e8f0":"rgba(0,0,0,.18)"}" stroke-width="2"/>`
+    :o.collar==="shirt"?`<path d="M24 45 L30 52 L36 45 L33 44 L30 48 L27 44Z" fill="${o.trim}"/>`
+    :o.collar==="high"?`<rect x="24" y="43" width="12" height="5" rx="2" fill="${o.trim}"/>`
+    :o.collar==="zip"?`<path d="M30 45 V70" stroke="${o.trim}" stroke-width="1.6"/><path d="M26 44 L30 48 L34 44" fill="none" stroke="${o.trim}" stroke-width="2"/>`:"";
+  const foot=(x)=>casual?`<path d="M${x} 90 h12 a2.5 2.5 0 0 1 0 5 h-12 a2.5 2.5 0 0 1 0-5z" fill="${shoe}"/><rect x="${x+2}" y="88" width="8" height="3.2" rx="1.2" fill="${strap}"/>`
+    :`<path d="M${x} 88 h11 a3 3 0 0 1 3 3 v1 h-14z" fill="${shoe}"/><rect x="${x}" y="91" width="14" height="2" fill="${strap}"/>`;
+  const leg=(side,x,fx)=>`<g class="k-leg ${side}"><rect x="${x}" y="72" width="7.5" height="${casual?16:18}" rx="3" fill="${pants}"/>${casual?`<rect x="${x+1}" y="87" width="5.5" height="3" fill="${skin}"/>`:""}${foot(fx)}</g>`;
+  const arm=(side,x,path)=>`<g class="k-arm ${side}"><path d="${path}" stroke="${sleeve}" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="${x}" cy="67" r="3.6" fill="${skin}"/></g>`;
+  return `<svg class="${cls}" viewBox="0 0 60 100" aria-hidden="true">
+    ${o.cape?`<path d="M18 46 L42 46 L48 84 L12 84Z" fill="${o.cape}"/>`:""}
+    ${leg("l",22,19)}${leg("r",30.5,30)}
+    ${arm("l",13,"M20 48 Q14 56 13 64")}${arm("r",47,"M40 48 Q46 56 47 64")}
+    <path d="M19 47 Q19 42 30 42 Q41 42 41 47 L42 75 H18 Z" fill="${shirt}" ${shirt==="#ffffff"?'stroke="#e2e8f0" stroke-width=".8"':""}/>
+    ${casual?"":`${o.stripe?`<path d="M19 50 V74 M41 50 V74" stroke="${o.stripe}" stroke-width="2"/>`:""}${o.pocket?`<rect x="22" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/><rect x="32" y="53" width="6" height="5" rx="1" fill="none" stroke="${o.trim}" stroke-width="1"/>`:""}${o.tie?`<path d="M29 48 L31 48 L32.5 62 L30 65 L27.5 62Z" fill="${o.tie}"/>`:""}${o.sash?`<path d="M20 46 L40 70 L37 72 L18 49Z" fill="${o.sash}" opacity=".9"/>`:""}${o.badge?`<path d="M34.5 51 l2.5 1.2 2.5-1.2 v3.5 l-2.5 1.8-2.5-1.8z" fill="${o.badge}"/>`:""}${o.gold?`<rect x="18" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/><rect x="36" y="45" width="6" height="2.5" rx="1" fill="#f5b301"/>`:""}${o.belt?`<rect x="18" y="68" width="24" height="4" fill="${o.belt}"/><rect x="28" y="68" width="4" height="4" fill="#f5b301"/>`:""}`}
+    ${collar}</svg>`;
+}
+function hatSvg(o){
+  if(o.id==="tee"||!o.hat)return "";
+  const h=o.hat==="cap"?`<path d="M10 22 Q12 4 30 4 Q48 4 50 22 Z" fill="${o.hatc}"/><rect x="8" y="19" width="44" height="5" rx="2.5" fill="${o.hatc}" opacity=".85"/><circle cx="30" cy="12" r="3" fill="#f5b301"/>`
+    :o.hat==="peak"?`<path d="M8 20 Q11 0 30 0 Q49 0 52 20 Z" fill="${o.hatc}"/><rect x="8" y="16" width="44" height="6" fill="${o.gold?"#f5b301":"#3f2d14"}"/><path d="M9 22 Q30 30 51 22 L51 25 Q30 33 9 25Z" fill="#111827"/><circle cx="30" cy="9" r="3.6" fill="#f5b301"/>`
+    :`<path d="M13 22 L15 5 L22 13 L30 2 L38 13 L45 5 L47 22 Z" fill="${o.hatc}" stroke="#d99a00" stroke-width="1.2"/><circle cx="30" cy="14" r="2.4" fill="#e11d48"/>`;
+  return `<svg class="chr-hat" viewBox="0 0 60 34" aria-hidden="true">${h}</svg>`;
+}
+function charHtml(o,look,cls){
+  if(o.id==="tee")return dollHtml(look);
+  return `${charBodySvg(o,look,cls)}<img class="chr-hd" src="chars/${look.hair}.png" alt="" draggable="false">${hatSvg(o)}`;
+}
+function stCharHtml(lv){return `<div class="st-kid game look">${charHtml(myOutfit(lv),myLook(),"st-body")}</div>`}
+/* ตู้เสื้อผ้า: ชุดที่เลเวลถึงแล้วกดใส่ได้ ชุดที่ยังไม่ถึงแสดงเลเวลที่ต้องการ */
+function wardrobeHtml(lv){
+  const cur=myOutfit(lv).id,lk=myLook(),g=isFemale()?"f":"m",og=g==="f"?"m":"f";
+  const dd=DOLL[lk.hair]||DOLL.m01;
+  const sw=(list,key)=>list.map(x=>{const c=x[0]==="orig"?(key==="shirt"?dd[3]:dd[4]):x[2];return `<button type="button" class="lk-sw${lk[key]===x[0]?" on":""}" data-k="${key}" data-v="${x[0]}" title="${escHtml(x[1])}"><i style="background:${x.length>3&&x[2]!==x[3]?`linear-gradient(135deg,${x[2]} 50%,${x[3]} 50%)`:c}"></i><span>${escHtml(x[1])}</span></button>`}).join("");
+  const hairs=[...HAIRS[g],...HAIRS[og]].map(h=>`<button type="button" class="lk-hair${lk.hair===h[0]?" on":""}" data-k="hair" data-v="${h[0]}"><img src="chars/b/${h[0]}.png" alt="" loading="lazy"><span>${escHtml(h[1])}</span></button>`).join("");
+  return `<div class="wd"><div class="wd-h"><b>แต่งตัวละคร</b><span>เลือกตัวละคร สีเสื้อยืด กางเกงวอร์ม และรองเท้าแตะ</span></div>
+    <div class="lk-tabs">${[["hair","ตัวละคร"],["shirt","เสื้อยืด"],["pants","กางเกงวอร์ม"],["shoe","รองเท้าแตะ"]].map(([k,t],i)=>`<button type="button" data-tab="${k}" class="${i?"":"on"}">${t}</button>`).join("")}</div>
+    <div class="lk-pane" data-pane="hair"><div class="wd-row">${hairs}</div></div>
+    <div class="lk-pane hidden" data-pane="shirt"><div class="lk-sws">${sw(SHIRTS,"shirt")}<label class="lk-sw lk-custom${/^#/.test(lk.shirt)?" on":""}"><input type="color" data-k="shirt" value="${/^#/.test(lk.shirt)?lk.shirt:"#ff8a3d"}"><span>สีอื่น ๆ</span></label></div></div>
+    <div class="lk-pane hidden" data-pane="pants"><div class="lk-sws">${sw(PANTS,"pants")}<label class="lk-sw lk-custom${/^#/.test(lk.pants)?" on":""}"><input type="color" data-k="pants" value="${/^#/.test(lk.pants)?lk.pants:"#ff8a3d"}"><span>สีอื่น ๆ</span></label></div></div>
+    <div class="lk-pane hidden" data-pane="shoe"><p class="lk-sub">แบบสวม</p><div class="lk-sws">${sw(SHOES.filter(x=>x[4]==="slide"),"shoe")}</div><p class="lk-sub">แบบหูหนีบ</p><div class="lk-sws">${sw(SHOES.filter(x=>x[4]==="flip"),"shoe")}</div></div>
+    ${UNIFORMS_ON?`<div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div>`:""}</div></div>`;
+}
+function redrawChar(lv){const kid=document.querySelector("#stTurn .st-kid");if(!kid)return;const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
+function bindWardrobe(lv){
+  document.querySelectorAll(".lk-tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".lk-tabs button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".lk-pane").forEach(p=>p.classList.toggle("hidden",p.dataset.pane!==b.dataset.tab))});
+  let saveT=0;
+  document.querySelectorAll(".lk-custom input").forEach(inp=>inp.oninput=()=>{const k=inp.dataset.k;const look={...myLook(),[k]:inp.value};if(currentData)currentData.look=look;
+    document.querySelectorAll(`.lk-sw[data-k="${k}"]`).forEach(x=>x.classList.remove("on"));inp.closest(".lk-custom").classList.add("on");redrawChar(lv);
+    clearTimeout(saveT);saveT=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{look}).catch(e=>console.error(e)),700)});
+  document.querySelectorAll(".lk-hair,.lk-sw:not(.lk-custom)").forEach(b=>b.onclick=()=>{
+    const look={...myLook(),[b.dataset.k]:b.dataset.v};if(currentData)currentData.look=look;
+    if(b.dataset.k==="hair"){const dd=DOLL[look.hair];if(dd)document.querySelectorAll('.lk-sw[data-v="orig"] i').forEach(i=>i.style.background=i.closest("[data-k]").dataset.k==="shirt"?dd[3]:dd[4])}
+    document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach(x=>x.classList.toggle("on",x===b));document.querySelector(`.lk-custom input[data-k="${b.dataset.k}"]`)?.closest(".lk-custom").classList.remove("on");
+    if(b.dataset.k!=="hair"&&myOutfit(lv).id!=="tee"&&currentData){currentData.outfit="tee";document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o==="tee";x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"})}
+    redrawChar(lv);document.querySelectorAll(".wd-it").forEach(x=>{const m=x.querySelector(".chr-mini");if(m)m.innerHTML=charHtml(outfitOf(x.dataset.o),look,"wd-svg")});
+    clearTimeout(saveT);saveT=setTimeout(()=>{const upd={look};if(currentData?.outfit)upd.outfit=currentData.outfit;updateDoc(doc(db,"users",currentUser.uid),upd).catch(e=>console.error(e))},700);
+  });
+  document.querySelectorAll(".wd-it:not(.lock)").forEach(b=>b.onclick=async()=>{
+    const o=outfitOf(b.dataset.o);if(o.lv>lv)return;
+    if(currentData)currentData.outfit=o.id;
+    const kid=document.querySelector("#stTurn .st-kid");if(kid){const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
+    document.querySelectorAll(".wd-it").forEach(x=>{const on=x.dataset.o===o.id;x.classList.toggle("on",on);const sp=x.querySelector("span:last-child");if(!x.classList.contains("lock")&&sp)sp.textContent=on?"ใส่อยู่":"กดใส่"});
+    try{await updateDoc(doc(db,"users",currentUser.uid),{outfit:o.id})}catch(e){console.error(e)}
+  });
+}
 const ST_CW=84,ST_GAP=14,stH=l=>62+l*8,stX=l=>ST_GAP+l*(ST_CW+ST_GAP);
 function stairsHtml(lv,xp){
   const W=stX(MAX_LEVEL+1)+30,top=lv>=MAX_LEVEL;
@@ -7359,17 +7570,10 @@ function stairsHtml(lv,xp){
     <svg class="st-land" viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0 110 C30 60 70 60 100 110 C120 70 170 60 200 112 C230 80 270 76 300 114 C330 86 370 84 400 112 V200 H0Z" fill="#9be07f"/><g fill="#7fcf66"><circle cx="50" cy="96" r="3"/><circle cx="160" cy="92" r="3"/><circle cx="262" cy="100" r="3"/></g><path d="M0 140 C60 118 110 118 170 140 C230 120 290 120 400 138 V200 H0Z" fill="#6cc454"/></svg>
     <svg class="st-trees" viewBox="0 0 400 60" preserveAspectRatio="none"><g fill="#3fae3c"><circle cx="16" cy="48" r="13"/><circle cx="34" cy="44" r="16"/><circle cx="54" cy="50" r="11"/><circle cx="118" cy="50" r="11"/><circle cx="134" cy="46" r="14"/></g><g fill="#5cc94f"><circle cx="30" cy="40" r="6"/><circle cx="130" cy="42" r="5"/></g></svg></div><div class="st-floor"></div>${cols.join("")}
     ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+128}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+154}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
-    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-kid"><svg class="st-body" viewBox="0 0 60 64" aria-hidden="true">
-      <g class="k-arm l"><path d="M16 12 Q8 24 10 34" stroke="#1f3b73" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="10" cy="35" r="4.5" fill="#f6d2b0"/></g>
-      <g class="k-arm r"><path d="M44 12 Q52 24 50 34" stroke="#1f3b73" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="50" cy="35" r="4.5" fill="#f6d2b0"/></g>
-      <g class="k-leg l"><rect x="20" y="36" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="23.5" cy="58" rx="7" ry="4" fill="#111"/></g>
-      <g class="k-leg r"><rect x="31" y="36" width="9" height="20" rx="4" fill="#27324a"/><ellipse cx="36.5" cy="58" rx="7" ry="4" fill="#111"/></g>
-      <path d="M15 12 Q15 4 30 4 Q45 4 45 12 L44 40 H16 Z" fill="#16305f"/><path d="M26 4 L30 14 L34 4" fill="#fff"/><path d="M29 6 L30 16 L31 6" fill="#e11d48"/>
-      <rect x="16" y="34" width="28" height="4" fill="#0f2449"/><rect x="28" y="34" width="4" height="4" fill="#f5b301"/><path d="M36 17 l3 1.5 3-1.5 v4 l-3 2-3-2z" fill="#f5b301"/></svg>
-      <img class="st-head" src="${escHtml($("topAvatar").src)}" alt=""></div><i class="st-shadow"></i></div></div></div>
+    <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn">${stCharHtml(lv)}</div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
     <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
-    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
+    <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>${wardrobeHtml(lv)}`;
 }
 /* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
 /* เดินแบบเกม: ปุ่มซ้าย/ขวา (หรือลูกศร) เดิน ปุ่มกระโดด (หรือเว้นวรรค/ลูกศรขึ้น) กระโดด เดินขึ้นแท่นที่สูงกว่าได้เอง เดินลงแล้วตก
@@ -7393,12 +7597,30 @@ function bindStairs(lv){
     const gain=await claimDrop();say(gain?`+${gain}`:"เก็บไม่สำเร็จ");claiming=false;
     if(!gain){coin.classList.remove("got");return}refreshShop();
     const nd=activeDrop();if(nd)setTimeout(()=>{coin.classList.remove("got");coin.insertAdjacentHTML("afterend",`<em class="st-cklabel" style="left:${cx}px;bottom:${cb+26}px">${escHtml(nd.label)} +${nd.amount}</em>`)},900)};
-  const draw=()=>{me.style.left=(g.x-27)+"px";me.style.bottom=g.y+"px";kid?.classList.toggle("flip",g.dir<0);
+  const draw=()=>{me.style.left=(g.x-27)+"px";me.style.bottom=g.y+"px";
     const vw=tr.clientWidth,l=tr.scrollLeft;if(g.x<l+70||g.x>l+vw-70)tr.scrollLeft=g.x-vw/2};
+  /* หันตัวแบบ 3 มิติ: หมุนไปครึ่งทาง (หันข้าง) แล้วสลับทิศ แล้วหมุนกลับมาหันหน้า */
+  const turn=$("stTurn");let face=1,spin=null;
+  const setFace=d=>{if(d===face||!turn)return;face=d;turn.classList.remove("turning");void turn.offsetWidth;turn.classList.add("turning");
+    setTimeout(()=>kid?.classList.toggle("flip",face<0),150)};
+  /* แตะตัวละคร = หมุน 1 รอบ · ลากตัวละครซ้ายขวา = หมุนตามนิ้ว ปล่อยแล้วหมุนต่อจนหันหน้า */
+  const rot=deg=>{if(turn)turn.style.transform=`rotateY(${deg}deg)`};
+  const settle=(deg,vel)=>{cancelAnimationFrame(spin?.raf||0);const st={deg,vel};spin=st;
+    const tick=()=>{st.vel*=.94;st.deg+=st.vel;if(Math.abs(st.vel)<2){const target=Math.round(st.deg/360)*360;st.deg+=(target-st.deg)*.18;if(Math.abs(target-st.deg)<.5){rot(0);turn.style.transform="";spin=null;return}}
+      rot(st.deg);st.raf=requestAnimationFrame(tick)};st.raf=requestAnimationFrame(tick)};
+  let dragMe=null;
+  me.style.pointerEvents="auto";me.style.cursor="grab";me.style.touchAction="none";
+  me.addEventListener("pointerdown",e=>{e.stopPropagation();e.preventDefault();cancelAnimationFrame(spin?.raf||0);spin=null;
+    dragMe={x:e.clientX,last:e.clientX,t:performance.now(),deg:0,vel:0,moved:false};me.setPointerCapture?.(e.pointerId);turn?.classList.add("held")});
+  me.addEventListener("pointermove",e=>{if(!dragMe)return;const dx=e.clientX-dragMe.x;if(Math.abs(dx)>4)dragMe.moved=true;
+    const now=performance.now();dragMe.vel=(e.clientX-dragMe.last)*1.6;dragMe.last=e.clientX;dragMe.t=now;dragMe.deg=dx*1.6;rot(dragMe.deg)});
+  const endDrag=e=>{if(!dragMe)return;const d=dragMe;dragMe=null;turn?.classList.remove("held");
+    if(!d.moved)settle(0,24);else settle(d.deg,Math.max(-40,Math.min(40,d.vel)))};
+  me.addEventListener("pointerup",endDrag);me.addEventListener("pointercancel",endDrag);me.addEventListener("click",e=>e.stopPropagation());
   const step=now=>{
     const dt=Math.min(.04,(now-g.last)/1000);g.last=now;
     const v=(g.keys.r?1:0)-(g.keys.l?1:0);
-    if(v){g.dir=v;let nx=g.x+v*150*dt;
+    if(v){g.dir=v;setFace(v);let nx=g.x+v*150*dt;
       if(nx>maxX){nx=maxX;if(!top&&now-g.warned>1500){g.warned=now;say(`Lv.${lv+1} ต้องเลื่อนยศก่อน`)}}
       g.x=Math.max(minX,nx)}
     const gr=ground(g.x);
@@ -7450,7 +7672,7 @@ async function renderOverview(){
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
   box.insertAdjacentHTML("beforeend",shopHtml());bindShop();
-  bindStairs(lv);
+  bindStairs(lv);bindWardrobe(lv);
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
