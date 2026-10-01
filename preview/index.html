@@ -2724,25 +2724,47 @@ input{
 .lk-custom input::-webkit-color-swatch-wrapper{padding:0}.lk-custom input::-webkit-color-swatch{border:0;border-radius:50%;opacity:0}
 .lk-custom.on input::-webkit-color-swatch{opacity:1}
 /* ตู้เสื้อผ้า */
-.gm-hero{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:stretch;margin-bottom:18px}
-.gm-stage{position:relative;height:260px;border-radius:20px;overflow:hidden;cursor:pointer;background:radial-gradient(120% 90% at 50% 10%,#7c5cff 0%,#4c2fb8 45%,#1e1350 100%);box-shadow:0 10px 24px rgba(30,19,80,.3)}
-.gm-rays{position:absolute;left:50%;top:40%;width:520px;height:520px;margin:-260px 0 0 -260px;background:repeating-conic-gradient(rgba(255,255,255,.09) 0 10deg,transparent 10deg 20deg);animation:gmRot 24s linear infinite;pointer-events:none}
-@keyframes gmRot{to{transform:rotate(360deg)}}
-.gm-stage .lk-kid{bottom:56px}.gm-stage.spin .lk-kid .st-kid{animation:lkSpin .7s cubic-bezier(.3,.7,.4,1)}
-.gm-side{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px;border-radius:20px;background:#fff;border:1px solid #eef2f7}
-.gm-coin{display:flex;align-items:center;gap:8px}.gm-coin b{font-size:26px;color:#16305f}.gm-coin span{font-size:12px;color:#94a3b8}
-.gm-tip{margin:0;font-size:13px;line-height:1.6;color:#475569}
-.gm-dress{align-self:flex-start;padding:9px 16px;border:0;border-radius:999px;background:#16305f;color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
-.gm-h{margin:0 0 10px;font-size:16px;color:#16305f}
-.gm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.gm-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px 14px 14px;border:0;border-radius:18px;background:linear-gradient(160deg,var(--c1),var(--c2));color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 8px 18px rgba(15,23,42,.14);transition:transform .15s}
-.gm-card:hover{transform:translateY(-3px)}
-.gm-card b{font-size:16px;text-shadow:0 1px 2px rgba(0,0,0,.18)}.gm-d{font-size:12px;line-height:1.5;opacity:.95}
-.gm-ic{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.28)}.gm-ic svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.gm-soon{position:absolute;top:12px;right:12px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.9);color:#334155;font-size:10.5px;font-weight:800}
-.gm-card.shake{animation:gmShake .35s}@keyframes gmShake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-@media(max-width:700px){.gm-hero{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){.gm-rays{animation:none}}
+body.adv-on{overflow:hidden}
+.adv-ov{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;background:#0f172a}
+.adv-top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#16305f;color:#fff;font-size:15px}
+.adv-hearts{display:flex;gap:4px}.adv-ht{width:20px;height:18px;background:#ef4444;clip-path:path("M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z")}.adv-ht.off{background:rgba(255,255,255,.25)}
+.adv-cn{display:flex;align-items:center;gap:4px;margin-left:auto}.adv-prog{font-size:13px;opacity:.8}
+.adv-x{width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:16px;cursor:pointer}
+.adv-view{position:relative;flex:1;overflow:hidden;--s1:#7cc8ff;--s2:#d9f1ff;--gr:#5ec46a;background:linear-gradient(180deg,var(--s1),var(--s2) 75%);transition:background 1.2s}
+.adv-sign{position:absolute;bottom:70px;width:84px;height:62px;padding-top:8px;border-radius:8px 8px 0 0;background:#8a5a2b;border:3px solid #5e3a17;color:#fff4d6;font-weight:900;font-size:14px;text-align:center;box-shadow:inset 0 -26px 0 -22px #5e3a17}
+.adv-toast{position:absolute;left:50%;top:22%;transform:translate(-50%,0);padding:14px 26px;border-radius:18px;background:rgba(255,255,255,.96);box-shadow:0 12px 28px rgba(0,0,0,.2);text-align:center;z-index:6;opacity:0}
+.adv-toast.show{animation:advToast 1.8s ease forwards}.adv-toast b{display:block;font-size:24px;color:#16305f}.adv-toast span{display:inline-flex;align-items:center;gap:4px;margin-top:4px;color:#475569;font-weight:800}
+@keyframes advToast{0%{opacity:0;transform:translate(-50%,16px) scale(.9)}15%,75%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-14px)}}
+.adv-dress{padding:7px 12px;border:0;border-radius:999px;background:rgba(255,255,255,.15);color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+.adv-view.hurt{animation:advHurt .4s}@keyframes advHurt{20%,60%{transform:translateX(-6px);filter:saturate(2) hue-rotate(-20deg)}40%,80%{transform:translateX(6px)}}
+.adv-sky{position:absolute;inset:0;pointer-events:none}
+.adv-cl{position:absolute;width:120px;height:36px;border-radius:40px;background:#fff;opacity:.9;animation:advCl 40s linear infinite}.adv-cl:before{content:"";position:absolute;left:24px;top:-18px;width:50px;height:46px;border-radius:50%;background:#fff}
+.adv-cl.c1{top:12%;left:10%}.adv-cl.c2{top:22%;left:55%;animation-duration:55s;transform:scale(.8)}.adv-cl.c3{top:8%;left:85%;animation-duration:70s}
+@keyframes advCl{from{translate:0}to{translate:-120vw}}
+.adv-world{position:absolute;left:0;bottom:0;width:10px;height:100%;will-change:transform;z-index:2}
+.adv-ground{position:absolute;left:0;right:0;bottom:0;height:70px;z-index:1;background:linear-gradient(var(--gr) 0 14px,#b9692f 14px);background-image:linear-gradient(var(--gr) 0 14px,transparent 14px),repeating-linear-gradient(90deg,#c97a3d 0 38px,#a95a24 38px 40px),repeating-linear-gradient(0deg,#c97a3d 0 26px,#a95a24 26px 28px)}
+.adv-hill{position:absolute;bottom:66px;left:300px;width:420px;height:190px;border-radius:50% 50% 0 0;background:var(--gr);filter:brightness(1.15);opacity:.75}.adv-hill.h2{width:300px;height:140px}
+.adv-bush{position:absolute;bottom:66px;width:90px;height:34px;border-radius:30px 30px 0 0;background:var(--gr);filter:brightness(1.25)}
+.adv-blk{position:absolute;bottom:230px;width:46px;height:46px;margin-left:-23px;border-radius:6px;background:#ffb21e;border:3px solid #8a4b00;box-shadow:inset -4px -4px 0 #d98a00,inset 4px 4px 0 #ffd57a;color:#fff;font-weight:900;font-size:26px;line-height:40px;text-align:center;text-shadow:2px 2px 0 #8a4b00;animation:advBob 1.6s ease-in-out infinite}
+.adv-blk.used{background:#a0703f;box-shadow:inset -4px -4px 0 #7a5028;animation:advHit .25s}@keyframes advHit{50%{transform:translateY(-12px)}}@keyframes advBob{50%{transform:translateY(-4px)}}
+.adv-pop{position:absolute;left:50%;top:-10px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6b0,#ffc400 55%,#c98a00);animation:advPop .7s ease-out forwards}@keyframes advPop{to{transform:translateY(-70px);opacity:0}}
+.adv-flag{position:absolute;bottom:70px;width:6px;height:260px;background:#e2e8f0;border-radius:3px}.adv-flag:before{content:"";position:absolute;left:-5px;top:-12px;width:16px;height:16px;border-radius:50%;background:#ffd23f}
+.adv-flag i{position:absolute;left:6px;top:6px;width:54px;height:36px;background:#22c55e;clip-path:polygon(0 0,100% 50%,0 100%);transition:top 1s ease-in}.adv-flag.down i{top:210px}
+.adv-castle{position:absolute;bottom:70px;width:140px;height:120px;background:#9a5a2b;clip-path:polygon(0 25%,12% 25%,12% 0,26% 0,26% 25%,43% 25%,43% 0,57% 0,57% 25%,74% 25%,74% 0,88% 0,88% 25%,100% 25%,100% 100%,62% 100%,62% 62%,38% 62%,38% 100%,0 100%)}
+.adv-me{position:absolute;bottom:68px;width:54px;height:98px;margin:0 0 0 -27px;transform-origin:50% 100%;z-index:3}
+.adv-me .st-kid{transform:scale(1.35);transform-origin:50% 100%}
+.adv-q{position:absolute;left:50%;top:14px;width:min(560px,calc(100% - 24px));transform:translateX(-50%);padding:14px;border-radius:18px;background:rgba(255,255,255,.97);box-shadow:0 12px 30px rgba(0,0,0,.25);z-index:5}
+.adv-qt{font-size:22px;font-weight:900;color:#16305f;text-align:center;margin-bottom:8px}
+.adv-tm{height:6px;border-radius:3px;background:#e2e8f0;overflow:hidden;margin-bottom:10px}.adv-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#22c55e,#ffd23f,#ef4444)}
+.adv-os{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.adv-os button{position:relative;padding:12px 8px;border:0;border-radius:12px;background:#eef4ff;color:#16305f;font:inherit;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #c7d6f5}
+.adv-os button small{position:absolute;left:8px;top:5px;font-size:10px;opacity:.5}
+.adv-os button.ok{background:#22c55e;color:#fff;box-shadow:0 3px 0 #15803d}.adv-os button.bad{background:#ef4444;color:#fff;box-shadow:0 3px 0 #b91c1c}
+.adv-msg{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 32px));transform:translate(-50%,-50%);padding:22px;border-radius:20px;background:#fff;text-align:center;box-shadow:0 14px 34px rgba(0,0,0,.3);z-index:6}
+.adv-big{display:block;font-size:24px;color:#16305f;margin-bottom:6px}.adv-msg p{margin:0 0 14px;color:#475569;display:flex;align-items:center;justify-content:center;gap:4px}
+.adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:12px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00}
+@media(max-width:600px){.adv-qt{font-size:19px}.adv-os button{font-size:16px}.adv-blk{bottom:215px}}
+@media(prefers-reduced-motion:reduce){.adv-cl,.adv-blk{animation:none}}
 .sb-game{margin-top:10px}
 .lk-wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
 .lk-opts{min-width:0}
@@ -7643,27 +7665,151 @@ function wardrobeHtml(lv){
     <div class="lk-pane hidden" data-pane="shoe"><p class="lk-sub">แบบรองเท้าแตะ</p><div class="lk-fits">${SHOE_T.map(([p,t])=>`<button type="button" class="lk-fit lk-sht${shT===p?" on":""}" data-p="${p}">${t}</button>`).join("")}</div><p class="lk-sub">สีรองเท้าแตะ</p><div class="lk-dots">${[["orig","ตามรูป","#1f1d1d"],...PASTEL].map(c=>`<button type="button" class="lk-dot lk-shc${shC===c[0]?" on":""}" data-c="${c[0]}" title="${escHtml(c[1])}" aria-label="${escHtml(c[1])}" style="background:${c[2]}"></button>`).join("")}</div></div></div></div>
     ${UNIFORMS_ON?`<div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div>`:""}</div></div>`;
 }
-/* ===== หน้าเกม: ตัวละครที่เลือกยืนบนแท่น + รายการเกมฝึกสมอง (โจทย์สร้างใหม่ทุกครั้ง ไม่ใช้ข้อสอบจริง) ===== */
-const GAMES=[
-  {id:"math",name:"คิดเลขเร็ว",desc:"บวก ลบ คูณ หาร ตอบให้ทันเวลา ตอบถูกติดกันได้คอมโบ",c1:"#ffb38a",c2:"#ff7a45",ic:'<path d="M12 5v14M5 12h14"/><path d="M5 4l3 3M8 4 5 7"/><path d="M16 17h4"/>'},
-  {id:"seq",name:"อนุกรมตัวเลข",desc:"ดูชุดตัวเลข แล้วเลือกตัวถัดไปให้ถูก",c1:"#a5d3f5",c2:"#4f8fe8",ic:'<path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/>'},
-  {id:"pair",name:"จับคู่การ์ด",desc:"เปิดการ์ดหาคู่โจทย์กับคำตอบ ฝึกความจำ",c1:"#c4b5fd",c2:"#8b5cf6",ic:'<rect x="3" y="5" width="8" height="12" rx="2"/><rect x="13" y="7" width="8" height="12" rx="2"/>'},
-  {id:"logic",name:"เงื่อนไขสัญลักษณ์",desc:"A > B, B > C ข้อสรุปไหนถูก ฝึกตรรกะ",c1:"#bdeedb",c2:"#22a06b",ic:'<path d="M5 8l5 4-5 4"/><path d="M13 16h6"/>'},
-  {id:"fast",name:"เลือกให้ไว",desc:"ข้อไหนมากที่สุด น้อยที่สุด กดให้เร็วที่สุด",c1:"#fde68a",c2:"#e8a400",ic:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'}];
-function renderGamePage(){
-  const box=$("gmBox");if(!box)return;const lk=myLook(),lv=typeof getLevel==="function"&&currentData?getLevel(Number(currentData.xp)||0):0;
-  const nm=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===lk.hair)||["",""])[1];
-  box.innerHTML=`<div class="gm-hero"><div class="gm-stage" id="gmStage" title="แตะเพื่อหมุนตัว"><i class="gm-rays"></i><i class="lk-podium"><i></i></i>
-      <div class="lk-kid"><div class="st-kid game look">${charHtml(myOutfit(lv),lk,"st-body")}</div></div><span class="lk-name">${escHtml(nm)}</span></div>
-    <div class="gm-side"><div class="gm-coin"><i class="st-coin mini"></i><b>${coinsOf().toLocaleString()}</b><span>เหรียญของฉัน</span></div>
-      <p class="gm-tip">เลือกเกมด้านล่างแล้วเริ่มเล่นได้เลย ตอบถูกได้เหรียญ ยิ่งตอบถูกติดกันยิ่งได้เยอะ</p>
-      <button type="button" class="gm-dress" id="gmDress">แต่งตัวละคร</button></div></div>
-    <h3 class="gm-h">เลือกเกม</h3>
-    <div class="gm-grid">${GAMES.map(g=>`<button type="button" class="gm-card" data-g="${g.id}" style="--c1:${g.c1};--c2:${g.c2}"><span class="gm-ic"><svg viewBox="0 0 24 24" aria-hidden="true">${g.ic}</svg></span><b>${g.name}</b><span class="gm-d">${g.desc}</span><span class="gm-soon">เร็ว ๆ นี้</span></button>`).join("")}</div>`;
-  const stg=$("gmStage");stg.onclick=()=>{stg.classList.remove("spin");void stg.offsetWidth;stg.classList.add("spin")};
-  $("gmDress").onclick=()=>{showAppPage("scorePage","ภาพรวมผลการทดสอบ");setTimeout(()=>document.querySelector(".wd")?.scrollIntoView({block:"start",behavior:"smooth"}),900)};
-  box.querySelectorAll(".gm-card").forEach(b=>b.onclick=()=>{b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake")});
+/* ===== เกมผจญภัยตอบคำถาม (แนวมาริโอ้): เดินไปเจอกล่อง ? ตอบถูกกระโดดชนกล่องได้เหรียญ ผ่านครบถึงธงคือผ่านด่าน =====
+   โจทย์สร้างใหม่ทุกครั้งตามความยากของด่าน (คิดเลข อนุกรม เปรียบเทียบ เงื่อนไข) ไม่ใช้ข้อสอบจริง
+   บันทึก users/{uid}.game {stage: ด่านสูงสุดที่ผ่าน, day, got: ด่านใหม่ที่ผ่านวันนี้} ผ่านด่านใหม่ได้ 3 เหรียญ วันละไม่เกิน 10 ด่าน */
+const ADV_COIN=3,ADV_CAP=10;
+const advBest=()=>Number(currentData?.game?.stage)||0;
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function advOpts(ans,near){const set=new Set([ans]);let g=0;while(set.size<4&&g++<60){const d=rnd(1,Math.max(3,near))*(Math.random()<.5?-1:1);const v=ans+d;if(v>=0||ans<0)set.add(v)}let k=1;while(set.size<4)set.add(ans+near+k++);const o=shuf([...set]);return {opts:o.map(String),ans:o.indexOf(ans)}}
+function advQuestion(st){
+  const kinds=["math"];if(st>=2)kinds.push("seq");if(st>=3)kinds.push("cmp");if(st>=5)kinds.push("logic");
+  const k=kinds[rnd(0,kinds.length-1)];
+  if(k==="math"){
+    const top=st<3?20:st<6?50:100;let a,b,q,ans;const ops=["+","-"];if(st>=4)ops.push("×");if(st>=6)ops.push("÷");
+    const op=ops[rnd(0,ops.length-1)];
+    if(op==="+"){a=rnd(2,top);b=rnd(2,top);ans=a+b}
+    else if(op==="-"){a=rnd(5,top);b=rnd(1,a);ans=a-b}
+    else if(op==="×"){a=rnd(2,st<8?9:12);b=rnd(2,st<8?9:12);ans=a*b}
+    else{b=rnd(2,9);ans=rnd(2,12);a=b*ans}
+    q=`${a} ${op} ${b} = ?`;
+    if(st>=8&&Math.random()<.4){const c=rnd(2,9);q=`${a} ${op} ${b} + ${c} = ?`;ans+=c}
+    return {q,...advOpts(ans,Math.max(3,Math.round(Math.abs(ans)*.15)))};
+  }
+  if(k==="seq"){
+    let s=[],ans;const t=st<4?0:rnd(0,st<7?1:2);
+    if(t===0){const a=rnd(1,20),d=rnd(2,st<4?5:12);for(let i=0;i<5;i++)s.push(a+d*i)}
+    else if(t===1){const a=rnd(1,4),r=rnd(2,3);for(let i=0;i<5;i++)s.push(a*r**i)}
+    else{const a=rnd(1,10),d1=rnd(2,6),d2=rnd(1,4);let v=a;for(let i=0;i<5;i++){s.push(v);v+=i%2?d2:d1}}
+    ans=s.pop();return {q:`${s.join(", ")}, ?`,...advOpts(ans,Math.max(2,Math.round(ans*.12)))};
+  }
+  if(k==="cmp"){
+    const mk=()=>{const a=rnd(2,st<6?12:25),b=rnd(2,9),o=rnd(0,2);return o===0?[`${a} + ${b}`,a+b]:o===1?[`${a} × ${b}`,a*b]:[`${a*b} ÷ ${b}`,a]};
+    let xs=[],vals=new Set();while(xs.length<4){const e=mk();if(!vals.has(e[1])){vals.add(e[1]);xs.push(e)}}
+    const big=Math.random()<.5,want=big?Math.max(...xs.map(x=>x[1])):Math.min(...xs.map(x=>x[1]));
+    return {q:`ข้อใด${big?"มากที่สุด":"น้อยที่สุด"}`,opts:xs.map(x=>x[0]),ans:xs.findIndex(x=>x[1]===want)};
+  }
+  const L=shuf(["ก","ข","ค","ง"]).slice(0,3);/* L[0] > L[1] > L[2] */
+  const right=`${L[0]} > ${L[2]}`,wrong=shuf([`${L[2]} > ${L[0]}`,`${L[1]} > ${L[0]}`,`${L[2]} > ${L[1]}`,`${L[0]} = ${L[2]}`]).slice(0,3);
+  const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
+const ADV_SKY=[["#7cc8ff","#d9f1ff","#5ec46a"],["#ffb47a","#ffe3c4","#6cbf5a"],["#9d8cff","#d9d2ff","#4fae7b"],["#1e2a5a","#4a5aa8","#3d8f5f"]];
+let adv=null;
+/* โลกเกมยาวต่อเนื่อง: สร้างด่านล่วงหน้า 2 ด่าน ผ่านธงแล้วเดินต่อเข้าด่านถัดไปทันที */
+function advBuild(st,x0){
+  const n=Math.min(8,4+Math.floor(st/3)),gap=320,w=$("advWorld"),seg={st,blocks:[],flagX:0};
+  let h=`<div class="adv-sign" style="left:${x0+70}px">ด่าน ${st}</div>`;
+  for(let i=0;i<n;i++){const x=x0+250+i*gap;seg.blocks.push({x});h+=`<div class="adv-blk" data-s="${st}" data-i="${i}" style="left:${x}px">?</div><div class="adv-bush" style="left:${x+120}px"></div>`;if(i%2===0)h+=`<div class="adv-hill${i%4?" h2":""}" style="left:${x-80}px"></div>`}
+  seg.flagX=x0+250+(n-1)*gap+330;h+=`<div class="adv-flag" data-s="${st}" style="left:${seg.flagX}px"><i></i></div>`;
+  if(st%5===0)h+=`<div class="adv-castle" style="left:${seg.flagX+60}px"></div>`;
+  w.insertAdjacentHTML("beforeend",h);seg.end=seg.flagX+120;return seg;
+}
+function advSky(st){const k=ADV_SKY[Math.floor((st-1)/3)%ADV_SKY.length],v=$("advView");if(!v)return;v.style.setProperty("--s1",k[0]);v.style.setProperty("--s2",k[1]);v.style.setProperty("--gr",k[2])}
+function advStart(st){
+  advClose();const lk=myLook();
+  const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
+  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน ${st}</b><span class="adv-hearts" id="advHearts"></span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-dress" id="advDress">แต่งตัว</button><button type="button" class="adv-x" id="advX" aria-label="ออกจากเกม">✕</button></div>
+    <div class="adv-view" id="advView"><div class="adv-sky"><i class="adv-cl c1"></i><i class="adv-cl c2"></i><i class="adv-cl c3"></i></div>
+      <div class="adv-world" id="advWorld"><div class="st-me adv-me" id="advMe" style="left:120px"><div class="st-kid game look">${charHtml(myOutfit(0),lk,"st-body")}</div></div></div>
+      <div class="adv-ground" id="advGround"></div>
+      <div class="adv-q hidden" id="advQ"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
+  document.body.appendChild(ov);document.body.classList.add("adv-on");
+  adv={st,segs:[],x:120,y:0,hearts:3,mode:"walk",jumpT:0,raf:0,last:0,q:null,qT:0,qMax:0,cur:null,hit:false};
+  let x=40;for(let k=0;k<2;k++){const sg=advBuild(st+k,x);adv.segs.push(sg);x=sg.end}
+  advSky(st);advTarget();
+  $("advX").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")};
+  $("advDress").onclick=()=>{advClose();showAppPage("scorePage","ภาพรวมผลการทดสอบ");setTimeout(()=>document.querySelector(".wd")?.scrollIntoView({block:"start",behavior:"smooth"}),900)};
+  advHearts();adv.last=performance.now();adv.raf=requestAnimationFrame(advTick);
+}
+/* เป้าหมายถัดไป: กล่อง ? ที่ยังไม่ได้ชน หรือธงของด่านปัจจุบัน */
+function advTarget(){
+  const sg=adv.segs.find(g=>g.st===adv.st);if(!sg)return;
+  const b=sg.blocks.find(b=>!b.used);adv.cur=b?{kind:"blk",b,x:b.x-28}:{kind:"flag",x:sg.flagX-24};
+  adv.qMax=Math.max(6,13-Math.floor(adv.st/2));
+}
+function advHearts(){const h=$("advHearts");if(h)h.innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<adv.hearts?"":" off"}"></i>`).join("")}
+function advTick(now){
+  if(!adv)return;const dt=Math.min(50,now-adv.last)/1000;adv.last=now;const me=$("advMe"),view=$("advView");if(!me||!view)return;
+  if(adv.mode==="walk"){
+    adv.x=Math.min(adv.cur.x,adv.x+170*dt);
+    if(adv.x>=adv.cur.x){if(adv.cur.kind==="blk")advAsk();else advFlag()}
+  }else if(adv.mode==="jump"){
+    adv.jumpT+=dt/.62;const t=Math.min(1,adv.jumpT);adv.y=Math.sin(Math.PI*t)*74;
+    if(t>=.5&&!adv.hit){adv.hit=true;advBump()}
+    if(t>=1){adv.y=0;adv.mode="walk";adv.hit=false;advTarget()}
+  }else if(adv.mode==="ask"){
+    adv.qT-=dt;const bar=$("advBar");if(bar)bar.style.width=Math.max(0,adv.qT/adv.qMax*100)+"%";
+    if(adv.qT<=0)advAnswer(-1);
+  }
+  me.style.transform=`translate(0,${-adv.y}px)`;me.style.left=adv.x+"px";
+  me.classList.toggle("walk",adv.mode==="walk");me.classList.toggle("air",adv.mode==="jump");
+  const cam=Math.max(0,adv.x-view.clientWidth*.3);
+  $("advWorld").style.transform=`translateX(${-cam}px)`;$("advGround").style.backgroundPosition=`${-cam}px 0`;
+  adv.raf=requestAnimationFrame(advTick);
+}
+function advAsk(){
+  adv.mode="ask";adv.q=advQuestion(adv.st);adv.qT=adv.qMax;const box=$("advQ");
+  box.innerHTML=`<div class="adv-qt">${escHtml(adv.q.q)}</div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-os">${adv.q.opts.map((o,i)=>`<button type="button" data-i="${i}"><small>${i+1}</small>${escHtml(o)}</button>`).join("")}</div>`;
+  box.classList.remove("hidden");box.querySelectorAll("button").forEach(b=>b.onclick=()=>advAnswer(+b.dataset.i));
+}
+function advAnswer(i){
+  if(!adv||adv.mode!=="ask")return;const box=$("advQ"),ok=i===adv.q.ans;
+  box.querySelectorAll("button").forEach((b,k)=>{b.disabled=true;if(k===adv.q.ans)b.classList.add("ok");else if(k===i)b.classList.add("bad")});
+  adv.mode="wait";
+  setTimeout(()=>{if(!adv)return;box.classList.add("hidden");
+    if(ok){adv.mode="jump";adv.jumpT=0}
+    else{adv.hearts--;advHearts();const v=$("advView");v.classList.remove("hurt");void v.offsetWidth;v.classList.add("hurt");
+      if(adv.hearts<=0)advLose();else setTimeout(()=>adv&&advAsk(),450)}
+  },ok?380:900);
+}
+function advBump(){
+  const b=adv.cur.b;b.used=true;const sg=adv.segs.find(g=>g.st===adv.st),i=sg.blocks.indexOf(b);
+  const el=document.querySelector(`.adv-blk[data-s="${adv.st}"][data-i="${i}"]`);if(el){el.classList.add("used");el.textContent="";const c=document.createElement("i");c.className="adv-pop";el.appendChild(c)}
+}
+function advToast(html){const t=$("advToast");if(!t)return;t.innerHTML=html;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show")}
+/* ถึงธง: ผ่านด่าน บันทึกถ้าเป็นด่านใหม่ แล้วเดินต่อเข้าด่านถัดไปเลย ผ่านด่านได้หัวใจคืน 1 ดวง */
+async function advFlag(){
+  adv.mode="flag";const st=adv.st;document.querySelector(`.adv-flag[data-s="${st}"]`)?.classList.add("down");
+  let gain=0,note="";
+  if(st===advBest()+1&&currentUser&&currentData){
+    const day=thaiDay(),g=currentData.game||{stage:0,day:0,got:0},had=Number(g.day)===day?Number(g.got)||0:0,give=had<ADV_CAP;
+    const game={stage:st,day,got:give?had+1:had},upd={game};if(give)upd.coins=coinsOf()+ADV_COIN;
+    try{await updateDoc(doc(db,"users",currentUser.uid),upd);currentData.game=game;if(give){currentData.coins=upd.coins;gain=ADV_COIN}}
+    catch(e){console.error(e);note="บันทึกไม่สำเร็จ"}
+    if(!give&&!note)note=`วันนี้รับเหรียญครบ ${ADV_CAP} ด่านแล้ว`;
+  }
+  if(!adv)return;$("advCoins").textContent=coinsOf().toLocaleString();
+  advToast(`<b>ผ่านด่าน ${st}!</b>${gain?`<span><i class="st-coin mini"></i> +${gain}</span>`:note?`<span>${escHtml(note)}</span>`:""}`);
+  setTimeout(()=>{if(!adv)return;
+    adv.st=st+1;$("advSt").textContent=`ด่าน ${adv.st}`;advSky(adv.st);if(adv.hearts<3){adv.hearts++;advHearts()}
+    const last=adv.segs[adv.segs.length-1];adv.segs.push(advBuild(last.st+1,last.end));
+    while(adv.segs.length>3)adv.segs.shift();
+    document.querySelectorAll("#advWorld [data-s]").forEach(e=>{if(+e.dataset.s<adv.st-1)e.remove()});
+    document.querySelectorAll("#advWorld .adv-sign,#advWorld .adv-bush,#advWorld .adv-hill,#advWorld .adv-castle").forEach(e=>{if(parseFloat(e.style.left)<adv.x-1600)e.remove()});
+    advTarget();adv.mode="walk"},1100);
+}
+function advMsg(html){const m=$("advMsg");m.innerHTML=html;m.classList.remove("hidden");return m}
+function advLose(){
+  adv.mode="done";const st=adv.st;
+  advMsg(`<b class="adv-big">หัวใจหมดแล้ว</b><p>ไม่เป็นไร เล่นต่อจากด่าน ${st} ได้เลย</p><div class="adv-btns"><button type="button" class="pri" id="advRe">เล่นต่อ</button><button type="button" id="advHome">ออกจากเกม</button></div>`);
+  $("advRe").onclick=()=>advStart(st);$("advHome").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")};
+}
+window.advDbg=()=>adv&&adv.q?adv.q.ans:0;
+function advClose(){if(adv)cancelAnimationFrame(adv.raf);adv=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+document.addEventListener("keydown",e=>{if(!adv)return;if(adv.mode==="ask"&&/^[1-4]$/.test(e.key))advAnswer(+e.key-1);if(e.key==="Escape"){advClose();showAppPage("homePage","หน้าหลัก")}});
+/* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
+function renderGamePage(){const box=$("gmBox");if(box)box.innerHTML="";advStart(advBest()+1)}
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
 function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
 /* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */

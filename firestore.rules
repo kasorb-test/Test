@@ -46,6 +46,19 @@ service cloud.firestore {
         && n.get("coins", 0) == o.get("coins", 0) + (g.n - had) * 2
         && !n.diff(o).affectedKeys().hasAny(["checkin", "coupons", "lastCoupon", "today"]);
     }
+    // เกมผจญภัย: ผ่านด่านใหม่ได้ทีละ 1 ด่าน ได้ 3 เหรียญ วันละไม่เกิน 10 ด่าน (เกินนั้นผ่านด่านได้แต่ไม่ได้เหรียญ)
+    function validGame(n, o) {
+      let g = n.game;
+      let prev = o.get("game", {"stage": 0, "day": 0, "got": 0});
+      let had = prev.day == g.day ? prev.got : 0;
+      return g.keys().hasOnly(["stage", "day", "got"])
+        && g.stage is int && g.stage == prev.stage + 1
+        && g.day is int && g.day == thaiDayNow()
+        && g.got is int
+        && ((had < 10 && g.got == had + 1 && n.get("coins", 0) == o.get("coins", 0) + 3)
+            || (had >= 10 && g.got == had && n.get("coins", 0) == o.get("coins", 0)))
+        && !n.diff(o).affectedKeys().hasAny(["checkin", "diligence", "coupons", "lastCoupon"]);
+    }
     // แลกโค้ดส่วนลด: เพิ่มโค้ดใหม่ครั้งละ 1 โค้ด ราคาและจำนวนบาทตรงกับที่แอดมินตั้งไว้ โค้ดเดิมแก้ไม่ได้
     function validCoupon(n, o) {
       let cps = coinSite().coupons;
@@ -257,7 +270,7 @@ service cloud.firestore {
       // สมาชิกแก้โปรไฟล์ตัวเอง
       allow update: if isOwner(uid)
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon", "outfit", "look"])
+             .hasOnly(["nickname", "nicknameChangedAt", "quote", "gender", "avatar", "photo", "today", "xp", "answered", "memberNo", "memberDate", "items", "village", "plot", "villageHidden", "coins", "checkin", "diligence", "coupons", "lastCoupon", "outfit", "look", "game"])
         // รหัสสมาชิก: ตั้งได้ครั้งเดียว และต้องตรงกับตัวนับที่เพิ่งเพิ่มในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["memberDate"])
             || (request.resource.data.memberDate is string
@@ -295,8 +308,10 @@ service cloud.firestore {
             || validDiligence(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["coupons", "lastCoupon"])
             || validCoupon(request.resource.data, resource.data))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["game"])
+            || validGame(request.resource.data, resource.data))
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["coins"])
-            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin", "diligence", "lastCoupon"]))
+            || request.resource.data.diff(resource.data).affectedKeys().hasAny(["checkin", "diligence", "lastCoupon", "game"]))
         // หมู่บ้าน: รหัสหมู่บ้าน เลขบ้าน 0-19 ต้องเป็นหลังที่ตัวเองจองไว้ในคำสั่งเดียวกัน
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["village", "plot"])
             || (request.resource.data.village is string && request.resource.data.village.matches("v[0-9a-z]{4,20}")
