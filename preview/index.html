@@ -2772,7 +2772,46 @@ body.adv-on{overflow:hidden}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
 @media(max-width:600px){.adv-qt{font-size:21px}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
+/* ปุ่มเกมแบบป้ายไม้: แผ่นไม้ทรงลูกศรชี้ทาง ลายไม้แนวนอน ตอกตะปู ขอบน้ำตาลเข้ม (ใช้ทั้งบันไดยศและเกม) ปุ่ม JUMP กับ START เป็นป้ายไม้แผ่นตรง */
+.st-mv,.adv-k[data-h]{position:relative;padding:0;border:0!important;border-radius:0!important;color:transparent!important;font-size:0!important;background:#5a3412!important;box-shadow:none!important;
+  clip-path:polygon(30% 0,100% 0,100% 100%,30% 100%,0 50%);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;transition:transform .06s}
+.st-mv.r,.adv-k[data-h="r"]{clip-path:polygon(0 0,70% 0,100% 50%,70% 100%,0 100%)}
+.st-mv{width:62px;height:44px}.adv-k[data-h]{width:88px;height:58px}
+.st-mv:before,.adv-k[data-h]:before{content:"";position:absolute;inset:4px;width:auto;height:auto;margin:0;border:0!important;transform:none!important;filter:none;clip-path:inherit;
+  background:radial-gradient(circle at 40% 30%,#3b2109 0 2.5px,transparent 3px) 0 0/100% 100% no-repeat,radial-gradient(circle at 80% 70%,#3b2109 0 2.5px,transparent 3px) 0 0/100% 100% no-repeat,
+    linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 35%,rgba(0,0,0,0) 70%,rgba(0,0,0,.18)),
+    repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px,#d79c60 8px 13px,#bf8043 13px 14px)}
+.st-mv.r:before,.adv-k[data-h="r"]:before{background:radial-gradient(circle at 20% 30%,#3b2109 0 2.5px,transparent 3px) 0 0/100% 100% no-repeat,radial-gradient(circle at 60% 70%,#3b2109 0 2.5px,transparent 3px) 0 0/100% 100% no-repeat,
+    linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 35%,rgba(0,0,0,0) 70%,rgba(0,0,0,.18)),repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px,#d79c60 8px 13px,#bf8043 13px 14px)}
+.adv-pad{filter:drop-shadow(0 5px 0 #3b2109) drop-shadow(0 8px 8px rgba(0,0,0,.3))}
+.st-mv:active,.adv-k[data-h].on,.adv-k[data-h]:active{transform:translateY(4px)}
+.st-jumpbtn,.adv-jump,.adv-go{position:absolute;border:4px solid #5a3412!important;border-radius:10px!important;color:#fff4d6!important;font:inherit;font-weight:900;letter-spacing:.1em;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(circle at 9px 9px,#3b2109 0 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 9px) 9px,#3b2109 0 2.5px,transparent 3px),radial-gradient(circle at 9px calc(100% - 9px),#3b2109 0 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 9px) calc(100% - 9px),#3b2109 0 2.5px,transparent 3px),
+    linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 35%,rgba(0,0,0,0) 70%,rgba(0,0,0,.18)),repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px,#d79c60 8px 13px,#bf8043 13px 14px)!important;
+  box-shadow:0 5px 0 #3b2109,0 9px 12px rgba(0,0,0,.3)!important;text-shadow:-2px -2px 0 #5a3412,2px -2px 0 #5a3412,-2px 2px 0 #5a3412,2px 2px 0 #5a3412,0 3px 0 #3b2109}
+.st-jumpbtn{padding:9px 20px;font-size:17px}
+.adv-jump{width:auto!important;height:58px!important;padding:0 24px;font-size:21px!important}
+.st-jumpbtn:active,.adv-jump:active{transform:translateY(4px);box-shadow:0 1px 0 #3b2109,0 3px 6px rgba(0,0,0,.25)!important}
+/* หน้าจอเริ่มเกม */
+.adv-start{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(15,23,42,.35)}
+.adv-start-box{width:min(340px,calc(100% - 40px));padding:22px 20px;border-radius:24px;background:#fffaf0;border:4px solid #6b3f17;box-shadow:0 8px 0 #4a2a0d,0 16px 30px rgba(0,0,0,.3);text-align:center}
+.adv-start-box img{width:84px;height:auto;margin-top:-62px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}
+.adv-start-box h3{margin:6px 0 4px;font-size:26px;color:#6b3f17}.adv-start-box p{margin:0 0 6px;font-size:13.5px;color:#475569;line-height:1.6}
+.adv-go{position:relative!important;margin-top:10px;padding:12px 44px;font-size:24px;animation:advGo 1.2s ease-in-out infinite}
+.adv-go:active{transform:translateY(4px)}@keyframes advGo{50%{transform:scale(1.06)}}
 .sb-game{margin-top:10px}
+.adv-stages{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0 6px}
+.adv-chip{position:relative;height:38px;border:3px solid #5a3412;border-radius:8px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-size:17px;font-weight:900;cursor:pointer;text-shadow:0 2px 0 #5a3412}
+.adv-chip.on{outline:3px solid #ffd23f;outline-offset:1px;transform:translateY(-2px)}
+.adv-chip.lock{filter:grayscale(.9) brightness(.85);color:#e5e7eb}.adv-chip.lock:after{content:"🔒";position:absolute;right:-6px;top:-9px;font-size:12px;text-shadow:none}
+.adv-chip.prem.lock:after{content:"P";right:-7px;top:-8px;width:16px;height:16px;border-radius:50%;background:#f59e0b;color:#fff;font-size:10px;line-height:16px}
+.adv-lock-note{margin:0 0 4px!important;color:#b45309!important;font-weight:700}.adv-done{margin:0 0 2px!important;color:#15803d!important;font-weight:800;font-size:15px!important}
+.adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
+.adv-ops{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.adv-ops button{display:flex;align-items:center;gap:6px;padding:7px 8px;border:2px solid var(--c);border-radius:12px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
+.adv-ops button b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:14px}
+.adv-view.scare:after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 30%,rgba(90,0,30,.75));animation:advScare 1.6s forwards}
+@keyframes advScare{0%{opacity:0}12%{opacity:1}30%{opacity:.6}45%{opacity:1}100%{opacity:0}}
 .lk-wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
 .lk-opts{min-width:0}
 .lk-stage{position:relative;height:250px;border-radius:18px;overflow:hidden;cursor:pointer;background:#f6cf9a;box-shadow:0 8px 20px rgba(120,72,30,.25)}
@@ -2807,10 +2846,6 @@ body.adv-on{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.st-turn.turning{animation:none}}
 /* ปุ่มเดินซ้ายขวา + ท่าเดิน */
 .st-pad{position:absolute;left:10px;bottom:14px;z-index:5;display:flex;gap:8px}
-.st-mv{width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 4px 0 #cbd5e1,0 6px 12px rgba(0,0,0,.15);cursor:pointer;touch-action:none;position:relative}
-.st-mv:active{transform:translateY(3px);box-shadow:0 1px 0 #cbd5e1}
-.st-mv:before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;border-top:4px solid #16305f;border-left:4px solid #16305f;margin:-7px 0 0 -4px;transform:rotate(-45deg)}
-.st-mv.r:before{margin-left:-10px;transform:rotate(135deg)}
 .st-kid.flip .st-body{transform:scaleX(-1)}
 .st-me.walk .k-leg.l{animation:kWalkL .36s ease-in-out infinite}.st-me.walk .k-leg.r{animation:kWalkR .36s ease-in-out infinite}
 .st-me.walk .k-arm.l{animation:kWalkR .36s ease-in-out infinite}.st-me.walk .k-arm.r{animation:kWalkL .36s ease-in-out infinite}
@@ -7678,10 +7713,34 @@ function wardrobeHtml(lv){
    บันทึก users/{uid}.game {stage: ด่านสูงสุดที่ผ่าน, day, got: ด่านใหม่ที่ผ่านวันนี้} ผ่านด่านใหม่ได้ 3 เหรียญ วันละไม่เกิน 10 ด่าน */
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
+/* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
+const ADV_NAMES=["ทุ่งหญ้า","ทุ่งดอกไม้","คลองและสะพานหิน","ฟาร์มสัตว์","ชายทะเล","น้ำตก","หมู่บ้าน","ตลาดคำศัพท์","บ้านผีสิง","สำนวนไทย"];
+const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
+const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function advOpts(ans,near){const set=new Set([ans]);let g=0;while(set.size<4&&g++<60){const d=rnd(1,Math.max(3,near))*(Math.random()<.5?-1:1);const v=ans+d;if(v>=0||ans<0)set.add(v)}let k=1;while(set.size<4)set.add(ans+near+k++);const o=shuf([...set]);return {opts:o.map(String),ans:o.indexOf(ans)}}
+/* ด่าน 8 คำศัพท์: ดูภาพแล้วเลือกคำที่สะกดถูก, ด่าน 10 สำนวนไทย: เลือกความหมายให้ตรงกับสำนวน (หรือกลับกัน) */
+const ADV_VOCAB=[["⌚","watch","whatch","wacth","watsh"],["🍎","apple","aple","appel","aplle"],["🍌","banana","bananna","banena","banan"],["🍊","orange","orenge","oragne","orang"],["🍇","grapes","graps","grepes","grapse"],
+  ["🍉","watermelon","watermellon","watermelone","wotermelon"],["🍓","strawberry","strawbery","strawberri","strowberry"],["🍅","tomato","tomatoe","tamato","tomoto"],["🥕","carrot","carot","carrat","karrot"],["🌽","corn","corne","korn","conr"],
+  ["🥚","egg","eeg","egge","eg"],["🍞","bread","braed","bred","breed"],["🥛","milk","mikl","milc","mielk"],["🐟","fish","fich","fisch","fsh"],["🐔","chicken","chiken","chickan","chikken"],["🍚","rice","rise","rics","ricce"],
+  ["🍰","cake","caek","kake","cak"],["☂️","umbrella","umbrela","umbralla","ambrella"],["👟","shoes","shose","sheos","shoos"],["👕","shirt","shrit","sirt","shirtt"],["👓","glasses","glases","glassess","glasess"],
+  ["📖","book","bok","boook","buk"],["✏️","pencil","pensil","pencel","pencill"],["⏰","clock","clok","colck","klock"],["🔑","key","kee","kye","kei"],["📱","phone","fone","phon","phoen"],["🏠","house","hause","houes","hous"],
+  ["🚗","car","kar","carr","cra"],["🚲","bicycle","bicycel","bycicle","bicicle"],["🌸","flower","flowr","flouer","flawer"],["🌳","tree","tre","trea","tri"],["🌙","moon","mon","mooon","moun"],["⭐","star","stra","starr","sdar"],
+  ["🐱","cat","kat","catt","cta"],["🐶","dog","dgo","dogg","doog"],["🐘","elephant","elefant","elephent","elepant"],["🐦","bird","brid","burd","berd"],["💵","money","mony","monney","monee"],["🧺","basket","baskit","baskett","bascket"]];
+const ADV_IDIOM=[["น้ำขึ้นให้รีบตัก","มีโอกาสแล้วรีบทำ"],["ช้า ๆ ได้พร้าเล่มงาม","ทำช้าแต่ได้ผลดี"],["ไก่ได้พลอย","ได้ของดีแต่ไม่รู้ค่า"],["กระต่ายตื่นตูม","ตกใจง่ายไม่ไตร่ตรอง"],
+  ["ขี่ช้างจับตั๊กแตน","ลงทุนมากได้ผลน้อย"],["ตำน้ำพริกละลายแม่น้ำ","ลงทุนไปอย่างสูญเปล่า"],["น้ำซึมบ่อทราย","ได้มาเรื่อย ๆ ไม่ขาด"],["ปิดทองหลังพระ","ทำดีแต่ไม่มีใครเห็น"],
+  ["หนีเสือปะจระเข้","หนีภัยหนึ่งเจออีกภัย"],["สีซอให้ควายฟัง","สอนคนที่ไม่รับรู้"],["เข้าเมืองตาหลิ่วต้องหลิ่วตาตาม","ทำตามธรรมเนียมที่นั่น"],["ฝนทั่งให้เป็นเข็ม","เพียรพยายามจนสำเร็จ"],
+  ["จับปลาสองมือ","หวังสองทางพร้อมกัน"],["ชักใบให้เรือเสีย","พูดออกนอกเรื่อง"],["เกลือเป็นหนอน","คนในคิดทรยศ"],["คางคกขึ้นวอ","ได้ดีแล้วลืมตัว"],
+  ["ปากว่าตาขยิบ","พูดอย่างหนึ่งทำอีกอย่าง"],["วัวหายล้อมคอก","เสียหายแล้วค่อยป้องกัน"],["มือไม่พายเอาเท้าราน้ำ","ไม่ช่วยแล้วยังขัดขวาง"],["ผักชีโรยหน้า","ทำดีแค่ภายนอก"],
+  ["ดินพอกหางหมู","งานค้างจนพอกพูน"],["เส้นผมบังภูเขา","เรื่องง่ายแต่คิดไม่ออก"],["ทำคุณบูชาโทษ","ทำดีแต่ได้ผลร้าย"],["ขว้างงูไม่พ้นคอ","ผลร้ายย้อนกลับมาหาตัว"],["หวานอมขมกลืน","จำใจยอมทนไว้"],["ข้าวใหม่ปลามัน","คู่แต่งงานใหม่"]];
+function advVocab(){const [pic,ok,...bad]=ADV_VOCAB[rnd(0,ADV_VOCAB.length-1)];const o=shuf([ok,...bad]);return {q:"ภาพนี้คือคำว่าอะไร",pic,opts:o,ans:o.indexOf(ok)}}
+function advIdiom(){const all=shuf(ADV_IDIOM.slice()),pick4=all.slice(0,4),[id,mean]=pick4[0];
+  if(Math.random()<.6){const o=shuf(pick4.map(x=>x[1]));return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
+  const o=shuf(pick4.map(x=>x[0]));return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
 function advQuestion(st){
+  if(st===8)return advVocab();
+  if(st===10)return advIdiom();
   const kinds=["math"];if(st>=2)kinds.push("seq");if(st>=3)kinds.push("cmp");if(st>=5)kinds.push("logic");
   const k=kinds[rnd(0,kinds.length-1)];
   if(k==="math"){
@@ -7732,10 +7791,10 @@ async function advStart(){
   ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
-      <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
-      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
+      <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-pic hidden" id="advPic"></div><div class="adv-ops hidden" id="advOps"></div><div class="adv-qh" id="advQh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
+      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ ▶ เดินเร็ว · ลากจอเพื่อหมุนดูรอบตัว</div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
-      <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">⤒</button>
+      <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">JUMP</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
         <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
         <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
@@ -7743,12 +7802,25 @@ async function advStart(){
         <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
         <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
         <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
+      
       <div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
-  menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu){menu.classList.add("hidden");adv?.pause(false)}return}
-    if(b.dataset.go==="resume"){menu.classList.add("hidden");adv?.pause(false);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+  const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
+  /* หน้าเริ่ม: เลือกด่าน (เล่นได้ถึงด่านถัดจากที่ผ่าน) แล้วกด START */
+  let advSel=Math.min(advBest()+1,advMax());
+  const startBox=msg=>{$("advStart")?.remove();adv?.pause(true);const d=document.createElement("div");d.className="adv-start";d.id="advStart";
+    const chips=Array.from({length:10},(_,i)=>{const n=i+1,open=advOpen(n),prem=n>5&&advMax()<10;return `<button type="button" class="adv-chip${n===advSel?" on":""}${open?"":" lock"}${prem?" prem":""}" data-n="${n}" title="${escHtml(ADV_NAMES[i])}">${n}</button>`}).join("");
+    d.innerHTML=`<div class="adv-start-box"><img src="mascot-2b.svg" alt="">${msg?`<p class="adv-done">${msg}</p>`:""}<h3 id="advStartT"></h3><div class="adv-stages">${chips}</div><p class="adv-lock-note hidden" id="advLockNote"></p><p>น้องดินสอจะเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ<br>ตอบคำถามให้ถูก แล้วไปด่านต่อไป</p><button type="button" class="adv-go" id="advGo">START</button></div>`;
+    $("advView").appendChild(d);
+    const title=()=>{$("advStartT").textContent=`ด่าน ${advSel} ${ADV_NAMES[advSel-1]}`};title();
+    d.querySelectorAll(".adv-chip").forEach(b=>b.onclick=()=>{const n=+b.dataset.n,note=$("advLockNote");
+      if(!advOpen(n)){note.textContent=n>5&&advMax()<10?"ด่าน 6-10 สำหรับสมาชิก Premium":`ผ่านด่าน ${n-1} ก่อน แล้วจะเล่นด่านนี้ได้`;note.classList.remove("hidden");return}
+      note.classList.add("hidden");advSel=n;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
+    $("advGo").onclick=()=>{d.remove();adv?.pause(false)}};
+  menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
+    if(b.dataset.go==="resume"){resume();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
@@ -7762,7 +7834,13 @@ async function advStart(){
     stage:(st,need,done)=>{$("advSt").textContent=`ด่าน ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
     pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
-    ask:q=>{$("advQt").textContent=q;$("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
+    ask:q=>{$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
+      ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);
+      ops.querySelectorAll("button").forEach(b=>b.onclick=()=>adv?.choose(+b.dataset.i));
+      $("advQh").textContent=q.box?"แตะคำตอบ หรือแตะตัวเลขในฉาก":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
+      $("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
+    scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
+    finish:st=>{advSel=st;startBox(st>=10?"ผ่านครบ 10 ด่านแล้ว เก่งมาก":`ผ่านด่าน ${st} แล้ว ด่าน 6-10 สำหรับสมาชิก Premium`)},
     hideQ:()=>$("advQ").classList.add("hidden"),
     timer:f=>{$("advBar").style.width=f*100+"%"},
     shake:()=>{const v=$("advView");v.classList.remove("hurt");void v.offsetWidth;v.classList.add("hurt")},
@@ -7773,7 +7851,7 @@ async function advStart(){
   try{
     const mod=await import("./game3d.js");if(!$("advOv"))return;
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc()});window.advGame=adv;
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel});window.advGame=adv;startBox();
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
@@ -7834,7 +7912,7 @@ function stairsHtml(lv,xp){
     ${ck?`<i class="st-coin big" id="stCoin" style="left:${cx-11}px;bottom:${stH(lv)+128}px"></i><em class="st-cklabel" style="left:${cx}px;bottom:${stH(lv)+154}px">${escHtml(drop.label)} +${Number(drop.amount)}</em>`:""}
     <div class="st-me" id="stMe" style="left:${cx-27}px;bottom:${stH(lv)}px"><div class="st-turn" id="stTurn">${stCharHtml(lv)}</div><i class="st-shadow"></i></div></div></div>
     <span class="st-bank" id="stBank"><i class="st-coin mini"></i><b>${coins.toLocaleString()}</b></span>
-    <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">กระโดด</button><span class="st-plus" id="stPlus"></span></div>
+    <div class="st-pad"><button type="button" class="st-mv" id="stLeft" aria-label="เดินซ้าย"></button><button type="button" class="st-mv r" id="stRight" aria-label="เดินขวา"></button></div><button type="button" class="st-jumpbtn" id="stJump">JUMP</button><span class="st-plus" id="stPlus"></span></div>
     <p class="st-cap">${top?"ถึงยศสูงสุดแล้ว":`คุณอยู่ Lv.${lv} ${escHtml(rankLabel(lv))} · ${xp.toLocaleString()} XP · กำลังไต่ขึ้น Lv.${lv+1}`}<br><small>กดลูกศรเพื่อเดิน กดกระโดดเพื่อเก็บเหรียญ ปัดเพื่อดูยศทั้งหมด · ${ck?"กระโดดเก็บเหรียญได้เลย":"เช็คอินพรุ่งนี้ หรือทำข้อสอบเพิ่มเพื่อรับเหรียญขยัน"}</small></p>`;
 }
 /* เลื่อนไปที่ยศของตัวเอง ลากเลื่อนด้วยเมาส์ได้ แตะ/กดปุ่ม/เว้นวรรค = กระโดด ถ้ามีเหรียญเช็คอินหรือเหรียญขยันรออยู่ จะเก็บเหรียญ */
