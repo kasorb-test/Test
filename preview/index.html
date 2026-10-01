@@ -2696,7 +2696,8 @@ input{
 .st-me.walk .st-kid.look .dl-leg.l{animation:kStepL .5s linear infinite}.st-me.walk .st-kid.look .dl-leg.r{animation:kStepR .5s linear infinite}
 .st-me.air .st-kid.look .dl-leg.l{transform:rotate(9deg);animation:none}.st-me.air .st-kid.look .dl-leg.r{transform:rotate(-9deg);animation:none}
 @keyframes kStepL{0%,50%,100%{transform:none}25%{transform:translateY(-5px) rotate(5deg)}}@keyframes kStepR{0%,50%,100%{transform:none}75%{transform:translateY(-5px) rotate(-5deg)}}
-.st-kid.look .dl.dlf .dl-up{filter:none}.st-kid.look .dl.dlf{filter:drop-shadow(0 2px 3px rgba(22,48,95,.2));width:calc(var(--dw)*122px/300);height:122px}.st-kid.look .dl.dlf .dl-up{bottom:0;height:122px!important}
+/* ไม่ใส่ filter เงากับตัวละครเต็มตัว เพราะในฉาก 3D จะเกิดกรอบสี่เหลี่ยมสว่างรอบตัว */
+.st-kid.look .dl.dlf .dl-up{filter:none}.st-kid.look .dl.dlf{width:calc(var(--dw)*122px/300);height:122px}.st-kid.look .dl.dlf .dl-up{bottom:0;height:122px!important}
 .st-kid.look .dl-up{position:absolute;left:0;bottom:29.2px;width:100%!important;height:84px!important;object-fit:contain;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
 .dl-legs{position:absolute;left:0;bottom:0;width:100%;height:31.8px;overflow:visible}
 .st-me.walk .st-kid.look .dl-up{animation:kBob .36s ease-in-out infinite}
