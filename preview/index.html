@@ -2730,12 +2730,27 @@ body.adv-on{overflow:hidden}
 .adv-hearts{display:flex;gap:3px}.adv-ht{width:20px;height:18px;background:#ff3b5c;clip-path:path("M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z")}.adv-ht.off{background:rgba(255,255,255,.35)}
 .adv-prog{display:flex;gap:3px}.adv-prog i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.4)}.adv-prog i.on{background:#fff36b;box-shadow:0 0 6px #fff36b}
 .adv-cn{display:flex;align-items:center;gap:4px;margin-left:auto;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.18)}
+.adv-menu-btn{padding:6px 12px;border:0;border-radius:999px;background:#fff;color:#f57c00;font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.adv-top>b,.adv-menu-btn,.adv-cn,.adv-pts{white-space:nowrap;flex:0 0 auto}
+@media(max-width:440px){.adv-top{gap:6px;padding:8px 8px}.adv-prog{display:none}.adv-ht{width:17px;height:16px}}
+.adv-clock{position:absolute;right:12px;top:12px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 0 rgba(0,0,0,.1);pointer-events:none}
+.adv-clock b{font-size:22px;line-height:1.1;color:#16305f;font-variant-numeric:tabular-nums}.adv-clock span{font-size:11.5px;color:#475569;white-space:nowrap}
+@media(max-width:600px){.adv-clock{top:10px;left:10px;right:auto;align-items:flex-start}.adv-clock b{font-size:18px}}
+.adv-pad{position:absolute;left:14px;bottom:18px;display:flex;gap:12px;z-index:5}
+.adv-k{width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
+.adv-jump{position:absolute;right:16px;bottom:18px;z-index:5;background:#ffd23f;color:#7a4b00}
+.adv-menu{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+.adv-menu-box{display:flex;flex-direction:column;gap:8px;width:min(300px,calc(100% - 40px));padding:20px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center}
+.adv-menu-box b{font-size:22px;color:#f57c00;margin-bottom:4px}
+.adv-menu-box button{padding:11px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}
+.adv-menu-box .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}.adv-menu-box .out{background:#fee2e2;color:#b91c1c}
 .adv-x{width:32px;height:32px;border:0;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
 .adv-pts{display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#fff;color:#f57c00;font-weight:900}.adv-pts:before{content:"★";color:#ffc400}.adv-pts.bump{animation:advBump .25s}@keyframes advBump{50%{transform:scale(1.2)}}
 .adv-view{position:relative;flex:1;overflow:hidden;background:linear-gradient(180deg,#8fd3ff,#e8f7ff);touch-action:none}.adv-view canvas{display:block;width:100%;height:100%}
 .adv-view.hurt{animation:advHurt .45s}@keyframes advHurt{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 .adv-load{position:absolute;inset:0;display:grid;place-items:center;color:#16305f;font-weight:800}
-.adv-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);color:#fff;font-size:12.5px;white-space:nowrap;pointer-events:none}
+.adv-hint{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.35);color:#fff;font-size:12.5px;white-space:nowrap;pointer-events:none}
 .adv-q{position:absolute;left:50%;top:12px;width:min(520px,calc(100% - 24px));transform:translateX(-50%);padding:12px 16px;border-radius:20px;background:rgba(255,255,255,.96);border:3px solid #ffb84d;box-shadow:0 8px 0 rgba(0,0,0,.08);text-align:center;z-index:6;animation:advQin .3s both}
 @keyframes advQin{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
 .adv-qt{font-size:24px;font-weight:900;color:#5b21b6}.adv-qh{margin-top:4px;font-size:12px;color:#94a3b8}
@@ -3758,14 +3773,6 @@ window.alert=m=>{uiAlert(m)};
     </button>
 </div>
 </div>
-<div class="sidebar-home sb-game">
-<button class="nav-btn" data-page="gamePage" data-title="เกม">
-<span class="menu-inline">
-<svg aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg>
-<span>เกม</span>
-</span>
-</button>
-</div>
 <div class="menu-group" data-group="results">
 <button class="group-toggle" data-toggle-group="results" type="button">
 <span class="group-left">
@@ -3789,6 +3796,14 @@ window.alert=m=>{uiAlert(m)};
       ประวัติการทำแบบทดสอบ
     </button>
 </div>
+</div>
+<div class="sidebar-home sb-game">
+<button class="nav-btn" data-page="gamePage" data-title="เกม">
+<span class="menu-inline">
+<svg aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg>
+<span>เกม</span>
+</span>
+</button>
 </div>
 <div class="menu-group" data-group="account">
 <button class="group-toggle" data-toggle-group="account" type="button">
@@ -3874,8 +3889,8 @@ LINE OA @kasorb
 <button type="button" class="tn-item tn-side" id="tnSide" aria-label="เปิดแถบเมนู"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 6h16M4 12h16M4 18h16"></path> </svg><span>เมนู</span></button>
 <button type="button" class="tn-item" data-page="homePage" data-title="หน้าหลัก"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M3 11.5 12 4l9 7.5"></path> <path d="M5.5 10.5V20h13v-9.5"></path> <path d="M9.5 20v-5h5v5"></path> </svg><span>หน้าหลัก</span></button>
 <button type="button" class="tn-item tn-group" data-menu="tests"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 4h16v16H4z"></path> <path d="M8 9h8M8 13h8M8 17h5"></path> </svg><span class="lg">แบบทดสอบ</span><span class="sm">ทดสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
-<button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="results"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M4 19V9"></path> <path d="M10 19V5"></path> <path d="M16 19v-7"></path> <path d="M22 19H2"></path> </svg><span class="lg">ผลการทดสอบ</span><span class="sm">ผลสอบ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="account"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M20 21a8 8 0 0 0-16 0"></path> <circle cx="12" cy="7" r="4"></circle> </svg><span class="lg">บัญชีของฉัน</span><span class="sm">บัญชี</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="contact"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path> <path d="M8 12h.01M12 12h.01M16 12h.01"></path> </svg><span class="lg">ติดต่อเรา</span><span class="sm">ติดต่อ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 </nav>
@@ -7704,13 +7719,29 @@ async function advClear(st){
 async function advStart(){
   advClose();
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
-  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-x" id="advX" aria-label="ออกจากเกม">✕</button></div>
+  ov.innerHTML=`<div class="adv-top"><b id="advSt">ด่าน 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
+      <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
-      <div class="adv-hint" id="advHint">แตะจอเพื่อกระโดดเก็บเหรียญที่ลอยสูง</div>
+      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง กดค้าง ◀ ถอยกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
+      <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
+      <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">⤒</button>
+      <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
+        <button type="button" class="pri" data-go="resume">เล่นต่อ</button>
+        <button type="button" data-go="homePage|หน้าหลัก">หน้าหลัก</button>
+        <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา">แบบทดสอบรายวิชา</button>
+        <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง">แบบทดสอบเสมือนจริง</button>
+        <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ">ผลการทดสอบ</button>
+        <button type="button" class="out" data-go="homePage|หน้าหลัก">ออกจากเกม</button></div></div>
       <div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
-  $("advX").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")};
+  const menu=$("advMenu");
+  $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
+  menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu){menu.classList.add("hidden");adv?.pause(false)}return}
+    if(b.dataset.go==="resume"){menu.classList.add("hidden");adv?.pause(false);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+  ov.querySelectorAll(".adv-k[data-h]").forEach(b=>{const on=e=>{e.preventDefault();b.classList.add("on");adv?.hold(b.dataset.h,true);$("advHint")?.classList.add("hidden")},off=()=>{b.classList.remove("on");adv?.hold(b.dataset.h,false)};
+    b.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
+  $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});
   const ui={
     stage:(st,need,done)=>{$("advSt").textContent=`ด่าน ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
@@ -7727,9 +7758,15 @@ async function advStart(){
     const mod=await import("./game3d.js");if(!$("advOv"))return;
     $("advLoad")?.remove();
     adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui});window.advGame=adv;
+    const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+    const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
+      t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
+      $("advPart").textContent=`${d.getUTCDate()} ${TM[d.getUTCMonth()]} · ${c.partTh} · ${c.seasonTh}${c.rain?" · ฝนตก":c.cloudy?" · เมฆมาก":c.mist?" · หมอก":""}${c.temp!=null?` · ${c.temp}°C`:""}`};
+    tickClock();advClockT=setInterval(tickClock,1000);
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }
-function advClose(){if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+let advClockT=0;
+function advClose(){clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
 function renderGamePage(){const box=$("gmBox");if(box)box.innerHTML="";advStart()}

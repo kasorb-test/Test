@@ -3,6 +3,32 @@
    หน้าเว็บส่ง api มาให้: question(st) best() clear(st) -> {gain,note} exit() coins() */
 import * as THREE from "./vendor/three.module.min.js";
 
+/* ช่วงเวลาและฤดูตามเวลาประเทศไทย (UTC+7) */
+const NIGHT={sky:["#0f1840","#1f2f6e","#33489a","#4d64b0"],fog:0x2c3a72,ground:0x4a8a4a,path:0xb8a882,pathEdge:0x958566,hill1:0x3d7048,hill2:0x45608a,mount:0x3a4c80,mounts:[0x3a4c80,0x43568c,0x34467a,0x4a5d92],snow:false,water:0x2a4a8a,tuft:0x2f5a2a,
+  hemi:[0x9aa8e8,0x3a4a3a],hemiI:1.05,light:0xc8d4ff,sunI:1,sunCore:"#fdfcf2",sunGlow:"#b9c8ff",sunPos:[-18,44],flowers:3,birds:false,birdColor:0x000000,night:true};
+const DAWN={sky:["#5f74c6","#c79ac2","#ffc4a0","#fff0d6"],fog:0xf3d6c8,ground:0x7fc24c,path:0xecd0a0,pathEdge:0xd2ae7c,hill1:0x5ca848,hill2:0x93b88a,mount:0x8c9cc8,mounts:[0x8c9cc8,0x9aa6cf,0x8494c0,0xa4a9cf],snow:false,water:0x8fb7ff,tuft:0x5aa832,
+  hemi:[0xffe2d0,0x7a9a6a],hemiI:1,light:0xffcfa0,sunI:1.4,sunCore:"#fff6dc",sunGlow:"#ffc38a",sunPos:[-22,12],flowers:3,birds:true,birdColor:0x3a3a5a};
+const SEASON=[["cool","ฤดูหนาว"],["cool","ฤดูหนาว"],["hot","ฤดูร้อน"],["hot","ฤดูร้อน"],["hot","ฤดูร้อน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["rain","ฤดูฝน"],["cool","ฤดูหนาว"],["cool","ฤดูหนาว"]];
+export function thaiClock(now=Date.now()){const d=new Date(now+7*3600e3),h=d.getUTCHours()+d.getUTCMinutes()/60,mo=d.getUTCMonth();
+  const part=h>=5&&h<7?"dawn":h>=7&&h<16?"day":h>=16&&h<18.6?"sunset":"night",sea=SEASON[mo];
+  const w=weatherNow();return {d,h,part,season:sea[0],seasonTh:sea[1],temp:w?w.temp:null,cloudy:w?w.cloudy:false,partTh:{dawn:"เช้าตรู่",day:h<12?"ช่วงเช้า":"ช่วงบ่าย",sunset:"ยามเย็น",night:h>=18.6&&h<22?"หัวค่ำ":"กลางคืน"}[part],rain:w?!!w.rain:sea[0]==="rain"&&h>=14&&h<19,mist:sea[0]==="cool"&&h>=5&&h<9.5};}
+/* สภาพอากาศจริงกรุงเทพฯ จาก Open-Meteo (ฟรี ไม่ต้องใช้คีย์) โหลดใหม่ทุก 10 นาที ถ้าโหลดไม่ได้ใช้ค่าตามฤดูแทน */
+let WX=null,wxAt=0;
+const RAIN_CODES=[51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99];
+export async function loadWeather(){if(Date.now()-wxAt<6e5&&WX)return WX;wxAt=Date.now();
+  try{const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=13.7563&longitude=100.5018&current=temperature_2m,precipitation,weather_code,cloud_cover&timezone=Asia%2FBangkok");
+    const c=(await r.json()).current;WX={rain:(c.precipitation||0)>0.05||RAIN_CODES.includes(c.weather_code),storm:c.weather_code>=95,cloudy:(c.cloud_cover||0)>=70,temp:Math.round(c.temperature_2m)}}catch(e){}
+  return WX}
+export const weatherNow=()=>window.__advWeather||WX;
+const mixHex=(a,b,k)=>new THREE.Color(a).lerp(new THREE.Color(b),k).getHex(),mixStr=(a,b,k)=>"#"+new THREE.Color(a).lerp(new THREE.Color(b),k).getHexString();
+const themeCache={};
+function themeFor(c){const key=[c.part,c.season,c.rain,c.mist,c.cloudy].join("-");if(themeCache[key])return themeCache[key];
+  const B={dawn:DAWN,day:THEMES.day,sunset:THEMES.sunset,night:NIGHT}[c.part],T={...B,key};
+  if(c.season==="rain"||c.rain||c.cloudy){const k=c.rain?.45:c.cloudy?.22:.18;T.sky=B.sky.map(x=>mixStr(x,c.part==="night"?"#0d1226":"#8a95a6",k));T.fog=mixHex(B.fog,0x9aa4b2,k);T.ground=mixHex(B.ground,0x3f9d3a,.35);T.light=mixHex(B.light,0xb8c4d6,k);T.sunI=B.sunI*(1-k*.8);T.hemiI=B.hemiI*(1-k*.3);T.cloudGray=k}
+  if(c.season==="hot"){T.sunI=B.sunI*1.12;T.ground=mixHex(B.ground,0xa9c24a,.25);T.flowers=4}
+  if(c.season==="cool"){T.ground=mixHex(B.ground,0xa8c070,.25);T.flowers=8}
+  T.fogNear=c.mist?12:c.rain?30:50;T.fogFar=c.mist?80:c.rain?120:190;if(c.mist)T.fog=mixHex(T.fog,0xf2f4f6,.6);
+  T.rain=c.rain;T.stars=c.part==="night";return themeCache[key]=T}
 const THEMES={
   day:{sky:["#3d9be9","#7cc4f5","#c8e9ff","#f2fbff"],fog:0xd9efff,ground:0x86cf4a,path:0xf0d29c,pathEdge:0xd9b47a,hill1:0x63b844,hill2:0x8fca73,mount:0x86a9c6,mounts:[0x86a9c6,0x7fa3bf,0x93b6cf,0x8fb8a8],snow:true,water:0x4fb3ff,tuft:0x5aa832,
     hemi:[0xffffff,0x8aa86a],hemiI:1.1,light:0xfff2d6,sunI:1.9,sunCore:"#fffbe6",sunGlow:"#fff3a8",sunPos:[18,46],flowers:3,birds:true,birdColor:0x34495e},
@@ -121,22 +147,26 @@ export function startGame(root,api){
   root.appendChild(renderer.domElement);
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,W()/H(),.1,240);
   /* ===== บรรยากาศ: เลือกธีมได้ (กลางวัน / เย็น / ทุ่งดอกไม้) ท้องฟ้าไล่สี พระอาทิตย์ ภูเขาไกล เนินสองชั้น กังหันลม บ้านไร่ บ่อน้ำ นก ===== */
-  const TH=THEMES[api.theme||window.__advTheme||"day"]||THEMES.day;
+  /* ธีมสลับตามด่าน ทุก 3 ด่าน: กลางวัน > ยามเย็น > ทุ่งดอกไม้ (ล็อกธีมได้ผ่าน api.theme สำหรับทดสอบ) */
+  const nowMs=()=>window.__advNow||Date.now(),curTheme=()=>THEMES[api.theme||window.__advTheme]||themeFor(thaiClock(nowMs()));
+  let TH=curTheme();
   const hemi=new THREE.HemisphereLight(TH.hemi[0],TH.hemi[1],TH.hemiI);scene.add(hemi);
   const sun=new THREE.DirectionalLight(TH.light,TH.sunI);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-16,right:16,top:12,bottom:-12,near:1,far:60});scene.add(sun);scene.add(sun.target);
-  const skyC=document.createElement("canvas");skyC.width=4;skyC.height=512;{const x=skyC.getContext("2d"),gr=x.createLinearGradient(0,0,0,512);TH.sky.forEach((c,k)=>gr.addColorStop(k/(TH.sky.length-1),c));x.fillStyle=gr;x.fillRect(0,0,4,512)}
+  const skyC=document.createElement("canvas");skyC.width=4;skyC.height=512;const drawSky=cols=>{const x=skyC.getContext("2d"),gr=x.createLinearGradient(0,0,0,512);cols.forEach((c,k)=>gr.addColorStop(k/(cols.length-1),"#"+c.getHexString()));x.fillStyle=gr;x.fillRect(0,0,4,512)};drawSky(TH.sky.map(c=>new THREE.Color(c)));
   const skyT=new THREE.CanvasTexture(skyC);skyT.colorSpace=THREE.SRGBColorSpace;scene.background=skyT;
-  scene.fog=new THREE.Fog(TH.fog,50,190);
+  scene.fog=new THREE.Fog(TH.fog,TH.fogNear||50,TH.fogFar||190);
   const groundMat=M(TH.ground,{roughness:1}),ground=new THREE.Mesh(new THREE.PlaneGeometry(600,300),groundMat);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
   const pathMat=M(TH.path,{roughness:.95}),pathEdge=M(TH.pathEdge,{roughness:1});
   function setSky(){}
   /* พระอาทิตย์: แผ่นเรืองแสงไกล ๆ ตามกล้อง */
-  const sunSp=(()=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);
+  const sunC=document.createElement("canvas");sunC.width=sunC.height=256;
+  const drawSun=(core,glow)=>{const x=sunC.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);x.clearRect(0,0,256,256);g.addColorStop(0,core);g.addColorStop(.28,core);g.addColorStop(.36,glow+"cc");g.addColorStop(1,glow+"00");x.fillStyle=g;x.fillRect(0,0,256,256)};
+  const sunSp=(()=>{const c=sunC;const x=c.getContext("2d"),g=x.createRadialGradient(128,128,10,128,128,128);
     g.addColorStop(0,TH.sunCore);g.addColorStop(.28,TH.sunCore);g.addColorStop(.36,TH.sunGlow+"cc");g.addColorStop(1,TH.sunGlow+"00");x.fillStyle=g;x.fillRect(0,0,256,256);
     const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,fog:false,depthWrite:false,transparent:true}));sp.scale.set(70,70,1);scene.add(sp);return sp})();
   /* ชั้นฉากหลังวนซ้ำตามตำแหน่งตัวละคร (parallax): ภูเขา > เนินไกล > เนินใกล้ */
   const layers=[];
-  function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span})}
+  function layer(make,n,span,z){const items=[];for(let k=0;k<n;k++){const m=make(k);m.position.x=-span/2+k*span/n+rand(-4,4);m.position.z=z+rand(-6,6);scene.add(m);items.push(m)}layers.push({items,span,kind:layers.length})}
   /* ภูเขาโค้งแบบธรรมชาติ: โปรไฟล์ทรงระฆังหมุนรอบแกน สูงต่ำสลับกัน บางลูกยอดเอียง */
   let mk=0;
   layer(()=>{const big=mk++%2===0,h=big?rand(30,46):rand(14,24),r=h*rand(1.1,1.6),pts=[];
@@ -174,8 +204,32 @@ export function startGame(root,api){
   }
   for(let i=0;i<9;i++)addSeg();
   const hills=[];
+  /* เปลี่ยนธีมแบบค่อย ๆ ไล่สี 2 วินาที: ท้องฟ้า หมอก พื้น ทาง แสง พระอาทิตย์ ภูเขา เนิน */
+  let fade=null;const C=v=>new THREE.Color(v);
+  function snapshot(){return{sky:(fade?fade.cur.sky:TH.sky.map(C)),fog:scene.fog.color.clone(),ground:groundMat.color.clone(),path:pathMat.color.clone(),edge:pathEdge.color.clone(),
+    fn:scene.fog.near,ff:scene.fog.far,hs:hemi.color.clone(),hg:hemi.groundColor.clone(),hi:hemi.intensity,lc:sun.color.clone(),li:sun.intensity,sp:fade?fade.cur.sp:TH.sunPos.slice(),
+    lay:layers.map(L=>L.items.map(g=>{const m=g.isMesh?g:g.children[0];return m.material.color.clone()}))}}
+  function target(T){return{fn:T.fogNear||50,ff:T.fogFar||190,sky:T.sky.map(C),fog:C(T.fog),ground:C(T.ground),path:C(T.path),edge:C(T.pathEdge),hs:C(T.hemi[0]),hg:C(T.hemi[1]),hi:T.hemiI,lc:C(T.light),li:T.sunI,sp:T.sunPos.slice(),
+    lay:layers.map(L=>L.items.map(()=>C(L.kind===0?pick(T.mounts||[T.mount]):L.kind===1?T.hill2:T.hill1)))}}
+  function fadeTo(T){const from=snapshot();TH=T;fade={s0:starMat.opacity,r0:rainMat.opacity,t:0,from,to:target(T),cur:{sky:from.sky.map(c=>c.clone()),sp:from.sp.slice()}}}
+  function stepFade(dt){if(!fade)return;fade.t=Math.min(1,fade.t+dt/2);const k=fade.t*fade.t*(3-2*fade.t),f=fade.from,t=fade.to,cur=fade.cur;
+    cur.sky=f.sky.map((c,i)=>c.clone().lerp(t.sky[i],k));drawSky(cur.sky);skyT.needsUpdate=true;
+    scene.fog.color.copy(f.fog).lerp(t.fog,k);scene.fog.near=f.fn+(t.fn-f.fn)*k;scene.fog.far=f.ff+(t.ff-f.ff)*k;starMat.opacity=fade.s0+((TH.stars?1:0)-fade.s0)*k;rainMat.opacity=fade.r0+((TH.rain?.55:0)-fade.r0)*k;groundMat.color.copy(f.ground).lerp(t.ground,k);pathMat.color.copy(f.path).lerp(t.path,k);pathEdge.color.copy(f.edge).lerp(t.edge,k);
+    hemi.color.copy(f.hs).lerp(t.hs,k);hemi.groundColor.copy(f.hg).lerp(t.hg,k);hemi.intensity=f.hi+(t.hi-f.hi)*k;sun.color.copy(f.lc).lerp(t.lc,k);sun.intensity=f.li+(t.li-f.li)*k;
+    cur.sp=[f.sp[0]+(t.sp[0]-f.sp[0])*k,f.sp[1]+(t.sp[1]-f.sp[1])*k];
+    layers.forEach((L,li)=>L.items.forEach((g,ii)=>{const m=g.isMesh?g:g.children[0];m.material.color.copy(f.lay[li][ii]).lerp(t.lay[li][ii],k)}));
+    if(fade.t>=1){drawSun(TH.sunCore,TH.sunGlow);sunSp.material.map.needsUpdate=true;fade=null}}
+  /* ดาวกลางคืน และสายฝนช่วงบ่ายฤดูฝน */
+  const starGeo=new THREE.BufferGeometry(),sp=[];for(let k=0;k<500;k++){const a=rand(-1.3,1.3),e=rand(.12,1.2),r=200;sp.push(Math.sin(a)*r*Math.cos(e),Math.sin(e)*r*.9+10,-Math.cos(a)*r*Math.cos(e))}
+  starGeo.setAttribute("position",new THREE.Float32BufferAttribute(sp,3));const starMat=new THREE.PointsMaterial({color:0xffffff,size:1.4,sizeAttenuation:false,transparent:true,opacity:TH.stars?1:0,fog:false,depthWrite:false});
+  const stars=new THREE.Points(starGeo,starMat);scene.add(stars);
+  const RN=900,rainGeo=new THREE.BufferGeometry(),rp=new Float32Array(RN*6);for(let k=0;k<RN;k++){const x=rand(-20,30),y=rand(0,18),z=rand(-14,8);rp.set([x,y,z,x-.15,y-.7,z],k*6)}
+  rainGeo.setAttribute("position",new THREE.BufferAttribute(rp,3));const rainMat=new THREE.LineBasicMaterial({color:0xcfe3ff,transparent:true,opacity:TH.rain?.55:0,depthWrite:false});
+  const rain=new THREE.LineSegments(rainGeo,rainMat);scene.add(rain);
+  let themeCheck=0;loadWeather().then(()=>{const T=curTheme();if(T!==TH)fadeTo(T)});
+  const lamp=new THREE.PointLight(0xfff0c8,0,14,1.6);scene.add(lamp);
   const P=makePencil();scene.add(P);
-  const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.4,t:0,fall:null,hop:null};
+  const S={st:api.best()+1,x:0,y:0,vy:0,hearts:3,pts:0,mode:"walk",need:0,done:0,nextQ:0,coins:[],ans:[],q:null,qT:0,qMax:10,arch:null,archX:0,jump:null,speed:3.6,t:0,fall:null,hop:null,dir:0,face:1,paused:false};
   const ui=api.ui;
   function stage(st){S.st=st;S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
@@ -211,7 +265,7 @@ export function startGame(root,api){
   }
   /* ควบคุม: ตอนมีคำถามแตะตัวเลข (หรือกด 1-4) ตอนเดินแตะจอ/เว้นวรรค/ลูกศรขึ้น เพื่อกระโดดเก็บเหรียญที่ลอยสูง */
   const ray=new THREE.Raycaster(),v2=new THREE.Vector2();
-  function hop(){if(S.mode==="walk"&&S.y<=0.01){S.hop={vy:7.5}}}
+  function hop(){if(S.mode==="walk"&&S.y<=0.01&&!S.paused){S.hop={vy:7.5}}}
   function tap(e){
     const r=renderer.domElement.getBoundingClientRect();v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
     if(S.mode==="ask"){ray.setFromCamera(v2,cam);const hit=ray.intersectObjects(S.ans.filter(a=>!a.userData.gone),true)[0];
@@ -221,7 +275,11 @@ export function startGame(root,api){
     hop();
   }
   renderer.domElement.addEventListener("pointerup",tap);
-  function key(e){if(S.mode==="ask"&&/^[1-4]$/.test(e.key))choose(+e.key-1);if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();hop()}}
+  const held={l:0,r:0};const setDir=()=>{S.dir=(held.r?1:0)-(held.l?1:0)};
+  function key(e){if(S.paused)return;if(S.mode==="ask"&&/^[1-4]$/.test(e.key))choose(+e.key-1);if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();hop()}
+    if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();held[e.key==="ArrowLeft"?"l":"r"]=1;setDir()}}
+  function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
+  document.addEventListener("keyup",keyUp);
   document.addEventListener("keydown",key);
   function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=W()<600?62:45;cam.updateProjectionMatrix()}
   addEventListener("resize",resize);resize();
@@ -229,9 +287,10 @@ export function startGame(root,api){
   stage(S.st);ui.hearts(3);ui.pts(0);
   let last=performance.now(),raf=0;
   function tick(now){
-    const dt=Math.min(.05,(now-last)/1000);last=now;S.t+=dt;
-    const walking=S.mode==="walk"||S.mode==="cheer";
-    if(walking){S.x+=S.speed*dt;
+    const dt0=Math.min(.05,(now-last)/1000);last=now;if(S.paused){raf=requestAnimationFrame(tick);return}const dt=dt0;S.t+=dt;
+    /* เดินเอง: กดค้าง ◀ ▶ หรือลูกศรซ้ายขวา ถอยกลับไปเก็บเหรียญได้ แต่ไม่เกินจุดเริ่มด่านของฉากที่ยังโหลดอยู่ */
+    const mv=S.mode==="cheer"?1:S.mode==="walk"?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
+    if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);if(mv>0)S.face=1;
       if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop)ask();
       if(S.arch&&S.mode==="walk"&&S.x>=S.archX-.3)passArch()}
     if(S.hop){S.hop.vy-=20*dt;S.y=Math.max(0,S.y+S.hop.vy*dt);if(S.y<=0)S.hop=null}
@@ -242,21 +301,21 @@ export function startGame(root,api){
     const ud=P.userData,sw=walking&&!S.hop?Math.sin(S.t*11):0,air=S.mode==="jumping"||S.mode==="falling"||!!S.hop;
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
     ud.body.position.y=.12+(walking?Math.abs(Math.sin(S.t*11))*.08:Math.sin(S.t*3)*.03);ud.body.rotation.z=walking?sw*.05:0;
-    const face=S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:Math.PI/2;P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
+    const face=S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:walking?S.face*Math.PI/2:(S.face>0?Math.PI/2.6:-Math.PI/2.6);P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
     ud.shadow.position.y=.02-S.y;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
       if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){world.remove(c);S.coins.splice(i,1)}continue}
       if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.pts+=1;ui.pts(S.pts)}
-      else if(c.position.x<S.x-10){world.remove(c);S.coins.splice(i,1)}}
+      else if(c.position.x<S.x-40){world.remove(c);S.coins.splice(i,1)}}
     for(const a of S.ans){const u=a.userData;
       if(u.gone){a.scale.multiplyScalar(1-dt*5)}else if(u.drop){a.position.y-=dt*7;a.rotation.z+=dt*4}
       else{a.scale.setScalar(Math.min(1,a.scale.x+dt*5));a.position.y=u.base+Math.sin(S.t*2.4+u.i)*.12}}
     S.ans=S.ans.filter(a=>{if(a.scale.x<.04||a.position.y<-4){world.remove(a);return false}return true});
     for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];b.userData.v.y-=9*dt;b.position.addScaledVector(b.userData.v,dt);b.rotation.x+=dt*6;b.userData.life-=dt;if(b.userData.life<=0){world.remove(b);bursts.splice(i,1)}}
     while(segX<S.x+60)addSeg();
-    while(segs.length&&segs[0].position.x+SEG<S.x-25){world.remove(segs.shift())}
+    while(segs.length&&segs[0].position.x+SEG<S.x-45){world.remove(segs.shift())}
     for(const L of layers)for(const m of L.items){if(m.position.x<S.x-L.span/2)m.position.x+=L.span}
-    sunSp.position.set(S.x+TH.sunPos[0],TH.sunPos[1],-170);
+    stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=curTheme();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
@@ -267,5 +326,5 @@ export function startGame(root,api){
     renderer.render(scene,cam);raf=requestAnimationFrame(tick);
   }
   raf=requestAnimationFrame(tick);
-  return {stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length})};
+  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length}),goStage:n=>stage(n)};
 }
