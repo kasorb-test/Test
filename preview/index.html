@@ -2736,7 +2736,7 @@ body.adv-on{overflow:hidden}
 .adv-ov{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;background:#0f172a;font-family:inherit}
 .adv-top{display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(180deg,#ff9a3d,#f57c00);color:#fff;font-size:15px;box-shadow:0 3px 0 #c45f00;z-index:3}
 .adv-top>b{padding:4px 12px;border-radius:999px;background:rgba(0,0,0,.18)}
-.adv-hearts{display:flex;gap:3px}.adv-ht{width:20px;height:18px;background:#ff3b5c;clip-path:path("M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z")}.adv-ht.off{background:rgba(255,255,255,.35)}
+.adv-hearts{display:flex;gap:3px}.adv-ht{flex:0 0 auto;width:20px;height:18px;background:#ff3b5c;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 18%27%3E%3Cpath d=%27M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 18%27%3E%3Cpath d=%27M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z%27/%3E%3C/svg%3E") center/contain no-repeat}.adv-ht.off{background:rgba(255,255,255,.35)}
 .adv-prog{display:flex;gap:3px}.adv-prog i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.4)}.adv-prog i.on{background:#fff36b;box-shadow:0 0 6px #fff36b}
 .adv-cn{display:flex;align-items:center;gap:4px;margin-left:auto;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.18)}
 .adv-menu-btn{padding:6px 12px;border:0;border-radius:999px;background:#fff;color:#f57c00;font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.12)}
@@ -2771,7 +2771,7 @@ body.adv-on{overflow:hidden}
 .adv-msg{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 32px));transform:translate(-50%,-50%);padding:22px;border-radius:22px;background:#fff;border:3px solid #ffb84d;text-align:center;z-index:7}
 .adv-big{display:block;font-size:24px;color:#f57c00;margin-bottom:6px}.adv-msg p{margin:0 0 14px;color:#475569}
 .adv-btns{display:flex;gap:8px;justify-content:center}.adv-btns button{padding:10px 18px;border:0;border-radius:14px;background:#eef2f7;color:#16305f;font:inherit;font-weight:800;cursor:pointer}.adv-btns .pri{background:#ffd23f;color:#5a3a00;box-shadow:0 3px 0 #c99a00}
-@media(max-width:600px){.adv-q{top:auto;bottom:96px;padding:8px 12px;border-radius:16px}.adv-q.box{top:8px;bottom:auto}.adv-view.asking .adv-clock{display:none}.adv-q.box .adv-qt{font-size:16px}.adv-q.box .adv-ops button{padding:5px 8px;font-size:13px}.adv-q.box .adv-ops button b{width:22px;height:22px;font-size:13px}.adv-qt{font-size:19px}.adv-qh{display:none}.adv-pic{font-size:44px;margin:2px 0}.adv-ops{gap:5px;margin-top:6px}.adv-ops button{padding:6px 7px;font-size:13px}.adv-view.asking .adv-pad,.adv-view.asking .adv-jump{opacity:.35}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
+@media(max-width:600px){.adv-q{top:20%;bottom:auto;padding:8px 12px;border-radius:16px}.adv-view.asking .adv-clock{display:none}.adv-q.box .adv-qt{font-size:16px}.adv-q.box .adv-ops button{padding:5px 8px;font-size:13px}.adv-q.box .adv-ops button b{width:22px;height:22px;font-size:13px}.adv-qt{font-size:19px}.adv-qh{display:none}.adv-pic{font-size:44px;margin:2px 0}.adv-ops{gap:5px;margin-top:6px}.adv-ops button{padding:6px 7px;font-size:13px}.adv-view.asking .adv-pad,.adv-view.asking .adv-jump{opacity:.35}.adv-plat{width:80px;margin-left:-40px}.adv-plat span{font-size:17px;min-width:48px}.adv-dress{display:none}}
 @media(prefers-reduced-motion:reduce){.adv-cl{animation:none}}
 /* ปุ่มเกมแบบป้ายไม้: แผ่นไม้ทรงลูกศรชี้ทาง ลายไม้แนวนอน ตอกตะปู ขอบน้ำตาลเข้ม (ใช้ทั้งบันไดยศและเกม) ปุ่ม JUMP กับ START เป็นป้ายไม้แผ่นตรง */
 .st-mv,.adv-k[data-h]{position:relative;padding:0;border:0!important;border-radius:0!important;color:transparent!important;font-size:0!important;background:#5a3412!important;box-shadow:none!important;
@@ -2838,7 +2838,7 @@ body.adv-on{overflow:hidden}
 .adv-side{display:none}
 @media(max-width:600px){.adv-side{position:absolute;right:8px;top:10px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 6px;border-radius:14px;background:rgba(122,74,28,.88);border:2px solid #5a3412;box-shadow:0 3px 0 #3b2109}
   .adv-side .adv-pts{font-size:13px;padding:2px 7px}.adv-side .adv-prog{display:grid!important;grid-template-columns:repeat(4,9px);gap:3px}
-  .adv-q.box{left:8px;right:auto;transform:none;width:calc(100% - 78px)}}
+  .adv-q,.adv-q.box{left:8px;right:auto;transform:none;width:calc(100% - 78px)}.adv-q.box{top:96px;left:50%;transform:translateX(-50%);width:calc(100% - 24px)}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
 .adv-ops{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
 .adv-ops button{display:flex;align-items:center;gap:8px;padding:7px 10px;border:3px solid #a8743a;border-radius:12px;background:#fffdf6;box-shadow:0 3px 0 #a8743a;font:inherit;font-size:14px;font-weight:700;color:#1e293b;text-align:left;cursor:pointer;line-height:1.3}
@@ -7751,7 +7751,7 @@ function wardrobeHtml(lv){
 const ADV_COIN=3,ADV_CAP=10;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
-const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","English Market","Haunted House","Thai Temple"];
+const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","Vocabulary Market","Haunted House","Thai Temple"];
 const advAdmin=()=>(currentUser?.email||"").toLowerCase()===ADMIN_EMAIL,advMax=()=>isPremium()||advAdmin()?10:5;
 const advOpen=n=>advAdmin()||n<=Math.min(advBest()+1,advMax());
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
