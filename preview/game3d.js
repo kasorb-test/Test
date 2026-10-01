@@ -968,8 +968,8 @@ export function startGame(root,api){
   function ask(br,water){
     for(const o of S.ans)world.remove(o);S.ans=[];
     S.mode="ask";S.q=api.question(S.st);S.qT=S.qMax+(S.q.box?4:0);S.qn++;S.qBr=br||null;
-    const mid=br?(br.x0+br.x1)/2:0,mk=biomeOf(S.st)==="market"&&!water&&!br,xs=[0,1,2,3].map(i=>water?S.x-2.7+i*1.8:br?mid-2.7+i*1.8:mk?S.x+2.8+i*2.7:S.x+2.6+i*1.9);
-    S.ans=S.q.opts.map((o,i)=>{const a=answer(S.q.box?String(i+1):o,i);const low=biomeOf(S.st)==="market"&&!water&&!br;a.position.set(xs[i],water?1.5+(i%2)*1:low?.75:(br?groundY(xs[i]):0)+2.2+(i%2)*1.1,water?.9:low?.6:0);a.userData.base=a.position.y;a.scale.setScalar(.01);world.add(a);return a});
+    const mid=br?(br.x0+br.x1)/2:0,mk=biomeOf(S.st)==="market"&&!water&&!br,xs=[0,1,2,3].map(i=>water?S.x-2.7+i*1.8:br?mid-2.7+i*1.8:mk?S.x+(W()<600?1.8+i*1.7:2.8+i*2.7):W()<600?S.x+1.5+i*1.45:S.x+2.6+i*1.9);
+    S.ans=S.q.opts.map((o,i)=>{const a=answer(S.q.box?String(i+1):o,i);const low=biomeOf(S.st)==="market"&&!water&&!br;if(S.q.box&&W()<600)a.visible=false;a.position.set(xs[i],water?1.5+(i%2)*1:low?.75:(br?groundY(xs[i]):0)+2.2+(i%2)*1.1,water?.9:low?.6:0);a.userData.base=a.position.y;a.scale.setScalar(.01);world.add(a);return a});
     ui.ask(S.q);
   }
   /* ตกน้ำแล้วต้องตอบข้อใหม่ให้ถูกก่อนถึงจะปีนขึ้นสะพานได้ ตอบผิดเสียหัวใจแล้วได้ข้อใหม่ */
@@ -982,7 +982,7 @@ export function startGame(root,api){
     if(S.inWater){waterChoose(i);return}
     if(S.mode!=="ask")return;S.mode="jumping";ui.hideQ();const ok=i===S.q.ans;
     if(i<0){mark(S.ans[S.q.ans],"#22c55e");SND.play("wrong");if(S.qBr){S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr};return}punish();hurt();setTimeout(clearAns,600);return}
-    const a=S.ans[i],to=new THREE.Vector3(a.position.x,Math.max(0,a.position.y-.9-groundY(a.position.x)),0);
+    const a=S.ans[i],to=a.visible?new THREE.Vector3(a.position.x,Math.max(0,a.position.y-.9-groundY(a.position.x)),0):new THREE.Vector3(S.x,0,0);
     S.jump={from:new THREE.Vector3(S.x,S.y,0),to,t:0,dur:.55,done:()=>{
       if(ok){SND.play("ok");for(const l of leeches)l.drop=1;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);
         S.fall={vy:2};S.mode="falling";S.afterFall=()=>{clearAns();S.mode="walk";afterAnswer(true)}}
@@ -1070,7 +1070,7 @@ export function startGame(root,api){
     if(S.freeze>0)S.freeze-=dt;const mv=S.mode==="cheer"?1:S.mode==="walk"&&!(S.freeze>0)?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
     if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);if(mv>0)S.face=1;
       if(S.mode==="walk"&&!S.arch&&!S.hop&&!S.bq&&S.done<S.need&&biomeOf(S.st)==="canal"){const br=bridges.find(b=>b.seg.parent===world&&S.x>b.x0+.7&&S.x<b.x0+2);if(br)ask(br)}
-      if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop&&groundY(S.x)<.01)ask();
+      if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop&&groundY(S.x)<.01&&!(S.freeze>0)&&!critters.some(c=>c.kind==="auntie"||c.kind==="chicks"||c.kind==="vendor"))ask();
       if(S.shrine&&!S.prayed&&S.mode==="walk"&&S.x>=S.shrineX-.2){S.x=S.shrineX-.2;S.mode="pray";ui.pray&&ui.pray(()=>{if(S.mode==="pray"){S.mode="bow";S.bow={t:0,rang:0}}})}
       if(S.arch&&S.mode==="walk"&&S.x>=S.archX-.3)passArch()}
     if(S.hop){S.hop.vy-=20*dt;S.y=Math.max(0,S.y+S.hop.vy*dt);if(S.y<=0)S.hop=null}
@@ -1185,10 +1185,10 @@ export function startGame(root,api){
       else if(a.kind==="foam"){o.scale.z=1+Math.sin(t*1.6)*.6;o.position.z=-6.6+Math.sin(t*1.6)*.35}}
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
     const narrow=W()<600,asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
-    const back=S.mode==="walk"&&S.dir<0,lead=S.inWater||S.mode==="splash"?0:narrow?(asking?4.2:back?-.4:2.2):(asking?4:back?-.6:3),dist=narrow?(asking?14:11):(asking?12:10.5);
-    const ly=narrow?4.2:1.9;if(!view.drag){view.idle+=dt;if(view.idle>2.5){view.yaw*=1-Math.min(1,dt*2.5);view.pitch*=1-Math.min(1,dt*2.5)}}
+    const back=S.mode==="walk"&&S.dir<0,lead=S.inWater||S.mode==="splash"?0:narrow?(asking?3.1:back?-.4:2.2):(asking?4:back?-.6:3),dist=narrow?(asking?14:11):(asking?12:10.5);
+    const ly=narrow?2.3:1.9;if(!view.drag){view.idle+=dt;if(view.idle>2.5){view.yaw*=1-Math.min(1,dt*2.5);view.pitch*=1-Math.min(1,dt*2.5)}}
     /* กล้องยึดตำแหน่งน้องดินสอแนวนอนตรง ๆ (ไม่หน่วง) จึงไม่ส่ายไปมา ค่อย ๆ ปรับเฉพาะระยะนำหน้า ความไกล และความสูง */
-    const kS=1-Math.exp(-dt*(view.drag?12:2.2));camS.lead+=(lead-camS.lead)*kS;camS.dist+=(dist-camS.dist)*kS;camS.ly+=(ly-camS.ly)*kS;camS.h+=(((narrow?3.6:3.2)+S.y*.2)-camS.h)*(1-Math.exp(-dt*4));
+    const kS=1-Math.exp(-dt*(view.drag?12:2.2));camS.lead+=(lead-camS.lead)*kS;camS.dist+=(dist-camS.dist)*kS;camS.ly+=(ly-camS.ly)*kS;camS.h+=(((narrow?3.0:3.2)+S.y*.2)-camS.h)*(1-Math.exp(-dt*4));
     const px=(S.mode==="splash"||S.mode==="climb"||S.inWater)?P.position.x:S.x,piv=new THREE.Vector3(px+camS.lead,camS.ly,0),off=new THREE.Vector3(0,camS.h-camS.ly+view.pitch*camS.dist,camS.dist).applyAxisAngle(new THREE.Vector3(0,1,0),view.yaw);
     cam.position.copy(piv).add(off);camPiv.copy(piv);cam.lookAt(camPiv);
     /* เงา: ขยับแหล่งแสงเป็นช่วง ๆ ไม่ขยับทุกเฟรม เงาจะได้ไม่สั่นระยิบ */
@@ -1198,7 +1198,7 @@ export function startGame(root,api){
   /* เริ่มด่านที่เลือกใหม่ทั้งฉาก (ใช้ตอนเลือกด่านก่อนกด START) */
   function restart(n){for(const g of segs)world.remove(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
     for(const c of S.coins)world.remove(c);S.coins.length=0;for(const a of S.ans)world.remove(a);S.ans=[];if(S.arch){world.remove(S.arch);S.arch=null}if(S.shrine){world.remove(S.shrine);S.shrine=null}clearCritters();
-    Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?4.2:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.6:3.2});cam.position.set(camPiv.x,nw?3.6:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
+    Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?2.3:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.0:3.2});cam.position.set(camPiv.x,nw?3.0:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
   raf=requestAnimationFrame(tick);
   return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
 }
