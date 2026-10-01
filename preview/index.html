@@ -2693,6 +2693,7 @@ input{
 .st-me.walk .st-kid.look .chr-hd,.st-me.walk .st-kid.look .chr-hat{animation:kBob .36s ease-in-out infinite}
 .st-kid.look .dl{position:absolute;left:50%;bottom:-2px;width:calc(var(--dw)*84px/190);height:113px;transform:translateX(-50%)}
 .st-kid.look.flip .dl{transform:translateX(-50%) scaleX(-1)}
+.st-kid.look .dl.dlf{width:calc(var(--dw)*122px/300);height:122px}.st-kid.look .dl.dlf .dl-up{bottom:0;height:122px!important}
 .st-kid.look .dl-up{position:absolute;left:0;bottom:29.2px;width:100%!important;height:84px!important;object-fit:contain;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
 .dl-legs{position:absolute;left:0;bottom:0;width:100%;height:31.8px;overflow:visible}
 .st-me.walk .st-kid.look .dl-up{animation:kBob .36s ease-in-out infinite}
@@ -7471,21 +7472,26 @@ function dollLegsSvg(d,look){
   const leg=(side,x)=>{const cx=x+lw2/2;return `<g class="k-leg ${side}">${foot(cx)}<path d="M${x} -6 h${lw2} L${x+lw2+1.6} 46.6 Q${cx} 48.8 ${x-1.6} 46.6 Z" fill="${pants}" stroke="${line}" stroke-width="1"/><path d="M${x+lw2*.62} -2 L${x+lw2+1.2} 45" stroke="rgba(0,0,0,.1)" stroke-width="${lw2*.22}"/><path d="M${x+lw2*.2} 42 q${lw2*.3} 1.8 ${lw2*.6} -.2" stroke="${line}" stroke-width=".8" fill="none" stroke-linecap="round"/></g>`};
   return `<svg class="dl-legs" viewBox="0 -6 ${w} 72" aria-hidden="true">${leg("l",hl+1)}${leg("r",hl+lw+gap/2)}</svg>`;
 }
+/* ตัวละครที่มีรูปเต็มตัว ใช้ขาและรองเท้าแตะจากรูปจริง สลับรูปตามแบบรองเท้า (สวม/คีบ) มาสก์สีน้ำเงิน = รองเท้า */
+const DOLL_FULL={m21:{slide:["m21s",87],flip:["m21f",88]}};
 function dollHtml(look){
   const id=DOLL[look.hair]?look.hair:(isFemale()?"f01":"m21"),d=DOLL[id],key=`${id}|${look.shirt}|${look.pants}`;
+  const fl=DOLL_FULL[id];
+  if(fl){const v=fl[pick(SHOES,look.shoe)[4]]||fl.slide,fk=`${v[0]}|${look.shirt}|${look.pants}|${look.shoe}`;
+    return `<span class="dl dlf" style="--dw:${v[1]}"><img class="dl-up" src="${dollCache[fk]||`chars/b/${v[0]}.png`}" data-doll="${fk}" onload="dollPaint(this)" alt="" draggable="false"></span>`}
   return `<span class="dl" style="--dw:${d[0]}">${dollLegsSvg(d,look)}<img class="dl-up" src="${dollCache[key]||`chars/b/${id}.png`}" data-doll="${key}" onload="dollPaint(this)" alt="" draggable="false"></span>`;
 }
 function dollPaint(img){
   const key=img.dataset.doll;if(!key||img.dataset.done===key)return;img.dataset.done=key;
-  const [id,sv,pv]=key.split("|"),d=DOLL[id];if(!d)return;
-  const tS=dollColor(SHIRTS,sv,""),tP=dollColor(PANTS,pv,"");
-  if(!tS&&!tP)return;
+  const [id,sv,pv,bv]=key.split("|");
+  const tS=dollColor(SHIRTS,sv,""),tP=dollColor(PANTS,pv,""),tB=bv?pick(SHOES,bv)[2]:"";
+  if(!tS&&!tP&&!tB)return;
   if(dollCache[key]){img.src=dollCache[key];return}
   const mk=new Image();mk.onload=()=>{try{
     const W=img.naturalWidth,H=img.naturalHeight,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
     x.drawImage(img,0,0);const px=x.getImageData(0,0,W,H);x.clearRect(0,0,W,H);x.drawImage(mk,0,0,W,H);const m=x.getImageData(0,0,W,H).data,a=px.data;
     const lum=(i)=>a[i]*.3+a[i+1]*.59+a[i+2]*.11;
-    [[0,tS],[1,tP]].forEach(([ch,t])=>{if(!t)return;const T=hexRgb(t);let sum=0,n=0;
+    [[0,tS],[1,tP],[2,tB]].forEach(([ch,t])=>{if(!t)return;const T=hexRgb(t);let sum=0,n=0;
       for(let i=0;i<a.length;i+=4)if(m[i+ch]>128){sum+=lum(i);n++}
       if(!n)return;const Lb=sum/n,k=Lb<90?2.2:1;
       for(let i=0;i<a.length;i+=4){const wt=m[i+ch]/255;if(wt<.02)continue;const dl=(lum(i)-Lb)*k;
@@ -7533,7 +7539,7 @@ function wardrobeHtml(lv){
   const cur=myOutfit(lv).id,lk=myLook(),g=isFemale()?"f":"m",og=g==="f"?"m":"f";
   const dd=DOLL[lk.hair]||DOLL.m01;
   const sw=(list,key)=>list.map(x=>{const c=x[0]==="orig"?(key==="shirt"?dd[3]:dd[4]):x[2];return `<button type="button" class="lk-sw${lk[key]===x[0]?" on":""}" data-k="${key}" data-v="${x[0]}" title="${escHtml(x[1])}"><i style="background:${x.length>3&&x[2]!==x[3]?`linear-gradient(135deg,${x[2]} 50%,${x[3]} 50%)`:c}"></i><span>${escHtml(x[1])}</span></button>`}).join("");
-  const hairs=[...HAIRS[g],...HAIRS[og]].map(h=>`<button type="button" class="lk-hair${lk.hair===h[0]?" on":""}" data-k="hair" data-v="${h[0]}"><img src="chars/b/${h[0]}.png" alt="" loading="lazy"><span>${escHtml(h[1])}</span></button>`).join("");
+  const hairs=[...HAIRS[g],...HAIRS[og]].map(h=>`<button type="button" class="lk-hair${lk.hair===h[0]?" on":""}" data-k="hair" data-v="${h[0]}"><img src="chars/b/${DOLL_FULL[h[0]]?DOLL_FULL[h[0]].slide[0]:h[0]}.png" alt="" loading="lazy"><span>${escHtml(h[1])}</span></button>`).join("");
   return `<div class="wd"><div class="wd-h"><b>แต่งตัวละคร</b><span>เลือกตัวละคร สีเสื้อยืด กางเกงวอร์ม และรองเท้าแตะ</span></div>
     <div class="lk-tabs">${[["hair","ตัวละคร"],["shirt","เสื้อยืด"],["pants","กางเกงวอร์ม"],["shoe","รองเท้าแตะ"]].map(([k,t],i)=>`<button type="button" data-tab="${k}" class="${i?"":"on"}">${t}</button>`).join("")}</div>
     <div class="lk-pane" data-pane="hair"><div class="wd-row">${hairs}</div></div>
