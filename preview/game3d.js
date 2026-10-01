@@ -1010,8 +1010,7 @@ export function startGame(root,api){
       if(Math.random()<.35){const sb=boat();sb.scale.setScalar(rand(2,3));sb.position.set(rand(0,10),0,-rand(40,90));sb.rotation.y=rand(-.5,.5);g.add(sb);anim.push({seg:g,obj:sb,kind:"boat",ph:rand(0,6)})}
     }else if(B==="waterfall"){
       /* น้ำตก: ผาหินกับสายน้ำทุก 3 ชิ้น ที่เหลือเป็นหิน เฟิร์น ต้นไม้ กอไผ่ */
-      if(segN%2===0){const wf=waterfall();wf.position.set(5,0,-15);g.add(wf)}
-      else{for(let k=0;k<2;k++){const t=Math.random()<.5?roundTree():bamboo(.9);t.position.set(rand(0,SEG),0,-rand(5,12));g.add(t)}}
+      {const wf=waterfall(),odd=segN%2;wf.position.set(5,0,odd?-17:-15);if(odd)wf.scale.setScalar(.8);g.add(wf)}
       for(let k=0;k<5;k++){const fr=Math.random()<.25,r=rock(fr?rand(.2,.4):rand(.3,.8),Math.random()<.4);r.position.set(rand(0,SEG),.1,fr?rand(2,4):-rand(2,8));g.add(r)}
       for(let k=0;k<4;k++){const f=fern();f.position.set(rand(0,SEG),0,Math.random()<.7?-rand(1.8,7):rand(1.8,3.5));g.add(f)}
       for(let k=0;k<5;k++){const t=tuft();t.position.set(rand(0,SEG),0,rand(-4,4)*(Math.random()<.5?1:-1));g.add(t)}
