@@ -2696,7 +2696,8 @@ input{
 .st-me.walk .st-kid.look .dl-leg.l{animation:kStepL .5s linear infinite}.st-me.walk .st-kid.look .dl-leg.r{animation:kStepR .5s linear infinite}
 .st-me.air .st-kid.look .dl-leg.l{transform:rotate(9deg);animation:none}.st-me.air .st-kid.look .dl-leg.r{transform:rotate(-9deg);animation:none}
 @keyframes kStepL{0%,50%,100%{transform:none}25%{transform:translateY(-5px) rotate(5deg)}}@keyframes kStepR{0%,50%,100%{transform:none}75%{transform:translateY(-5px) rotate(-5deg)}}
-.st-kid.look .dl.dlf{width:calc(var(--dw)*122px/300);height:122px}.st-kid.look .dl.dlf .dl-up{bottom:0;height:122px!important}
+/* ไม่ใส่ filter เงากับตัวละครเต็มตัว เพราะในฉาก 3D จะเกิดกรอบสี่เหลี่ยมสว่างรอบตัว */
+.st-kid.look .dl.dlf .dl-up{filter:none}.st-kid.look .dl.dlf{width:calc(var(--dw)*122px/300);height:122px}.st-kid.look .dl.dlf .dl-up{bottom:0;height:122px!important}
 .st-kid.look .dl-up{position:absolute;left:0;bottom:29.2px;width:100%!important;height:84px!important;object-fit:contain;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(22,48,95,.2))}
 .dl-legs{position:absolute;left:0;bottom:0;width:100%;height:31.8px;overflow:visible}
 .st-me.walk .st-kid.look .dl-up{animation:kBob .36s ease-in-out infinite}
@@ -7497,8 +7498,8 @@ function dollLegsSvg(d,look){
 }
 /* ตัวละครที่มีรูปเต็มตัว ใช้ขาและรองเท้าแตะจากรูปจริง สลับรูปตามแบบรองเท้า (สวม/คีบ) มาสก์สีน้ำเงิน = รองเท้า */
 /* [ไฟล์, ความกว้าง, แนวเป้า (สัดส่วนความสูง), แนวแบ่งขาซ้าย/ขวา] แยกตามแบบกางเกง (ขายาว/ขาสั้น) และแบบรองเท้า */
-const DOLL_FULL={m21:{long:{slide:["m21s",87,.70,.471],flip:["m21f",88,.71,.455]},short:{slide:["m31s",90,.637,.489]}},
-  f21:{long:{slide:["f21s",88,.70,.477]}},f22:{short:{slide:["f22s",84,.64,.5]}}};
+const DOLL_FULL={m21:{long:{slide:["m21s",87,.70,.471],flip:["m21f",88,.71,.455]},short:{slide:["m31s",90,.725,.489]}},
+  f21:{long:{slide:["f21s",88,.70,.477]}},f22:{short:{slide:["f22s",84,.67,.5]}}};
 const FITS=[["long","ขายาว"],["short","ขาสั้น"]];
 const fullOf=(id,fit)=>{const D=DOLL_FULL[id];if(!D)return null;return D[fit]||D.long||D.short};
 function dollHtml(look){
@@ -7510,27 +7511,34 @@ function dollHtml(look){
     return `<span class="dl dlf" style="--dw:${v[1]}">${im(" dl-leg l")} style="clip-path:inset(${hy-1}% ${100-sx}% 0 0);transform-origin:${sx*.55}% ${hy}%">${im(" dl-leg r")} style="clip-path:inset(${hy-1}% 0 0 ${sx}%);transform-origin:${sx+(100-sx)*.45}% ${hy}%">${im("")} style="clip-path:inset(0 0 ${100-hy-.8}% 0)"></span>`}
   return `<span class="dl" style="--dw:${d[0]}">${dollLegsSvg(d,look)}<img class="dl-up" src="${dollCache[key]||`chars/b/${id}.png`}" data-doll="${key}" onload="dollPaint(this)" alt="" draggable="false"></span>`;
 }
-function dollPaint(img){
-  const key=img.dataset.doll;if(!key||img.dataset.done===key)return;img.dataset.done=key;
+/* สร้างรูปที่เติมสีแล้วเก็บไว้ในแคช (โหลดรูปต้นแบบกับมาสก์เอง) ใช้ทั้งตอนแสดงและตอนเตรียมล่วงหน้าก่อนเปลี่ยนสี จะได้ไม่กะพริบ */
+const dollJobs={};
+const loadImg=src=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=src});
+function dollUrl(key){
+  if(dollCache[key])return Promise.resolve(dollCache[key]);
+  if(dollJobs[key])return dollJobs[key];
   const [id,sv,pv,bv]=key.split("|");
   const tS=dollColor(SHIRTS,sv,""),tP=dollColor(PANTS,pv,""),tB=bv?pick(SHOES,bv)[2]:"";
-  if(!tS&&!tP&&!tB)return;
-  if(dollCache[key]){img.src=dollCache[key];return}
-  const mk=new Image();mk.onload=()=>{try{
+  if(!tS&&!tP&&!tB)return Promise.resolve(null);
+  return dollJobs[key]=Promise.all([loadImg(`chars/b/${id}.png`),loadImg(`chars/b/${id}_m.png`)]).then(([img,mk])=>{
     const W=img.naturalWidth,H=img.naturalHeight,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
     x.drawImage(img,0,0);const px=x.getImageData(0,0,W,H);x.clearRect(0,0,W,H);x.drawImage(mk,0,0,W,H);const m=x.getImageData(0,0,W,H).data,a=px.data;
     const lum=(i)=>a[i]*.3+a[i+1]*.59+a[i+2]*.11;
     [[0,tS],[1,tP],[2,tB]].forEach(([ch,t])=>{if(!t)return;const T=hexRgb(t);let sum=0,n=0;
       for(let i=0;i<a.length;i+=4)if(m[i+ch]>128){sum+=lum(i);n++}
       if(!n)return;const Lb=sum/n,dark=Lb<90;
-      /* ฐานสีเข้ม (ดำ/กรม): คูณสีใหม่ตามความสว่างเดิมแบบนุ่ม ๆ ฐานสีอ่อน (ขาว): บวกเงาเดิมลงบนสีใหม่ */
+      /* ฐานสีเข้ม (ดำ): ยกความสว่างขึ้นแบบนุ่ม ๆ ฐานสีอ่อน (ขาว): คูณสีใหม่ตามเงาเดิม */
       for(let i=0;i<a.length;i+=4){const wt=m[i+ch]/255;if(wt<.02)continue;const L=lum(i),f=dark?.8+.28*Math.max(-1,Math.min(1.4,(L-Lb)/Lb)):Math.min(1.06,L/Lb);
         for(let j=0;j<3;j++)a[i+j]=Math.round(a[i+j]*(1-wt)+Math.max(0,Math.min(255,T[j]*f))*wt)}});
-    x.clearRect(0,0,W,H);x.putImageData(px,0,0);const url=c.toDataURL("image/png");dollCache[key]=url;
-    document.querySelectorAll(`img[data-doll="${key}"]`).forEach(el=>{el.dataset.done=key;el.src=url});
-  }catch(e){console.error(e)}};
-  mk.src=`chars/b/${id}_m.png`;
+    x.clearRect(0,0,W,H);x.putImageData(px,0,0);return dollCache[key]=c.toDataURL("image/png");
+  }).catch(e=>{console.error(e);return null}).finally(()=>delete dollJobs[key]);
 }
+function dollPaint(img){
+  const key=img.dataset.doll;if(!key||img.dataset.done===key)return;img.dataset.done=key;
+  dollUrl(key).then(url=>{if(url)document.querySelectorAll(`img[data-doll="${key}"]`).forEach(el=>{el.dataset.done=key;if(el.src!==url)el.src=url})});
+}
+/* คีย์รูปของชุดที่ใส่อยู่ (เฉพาะตัวละครเต็มตัว) */
+function dollKeyOf(look){const fv=fullOf(look.hair,look.fit);if(!fv)return "";const v=fv[pick(SHOES,look.shoe)[4]]||fv.slide;return `${v[0]}|${look.shirt}|${look.pants}|${look.shoe}`}
 window.dollPaint=dollPaint;
 function charBodySvg(o,look,cls){
   const casual=o.id==="tee";
@@ -7599,7 +7607,12 @@ function wardrobeHtml(lv){
     ${UNIFORMS_ON?`<div class="wd-h" style="margin-top:12px"><b>ตู้เสื้อผ้า</b><span>เลื่อนยศแล้วปลดล็อกชุดใหม่</span></div><div class="wd-row">${OUTFITS.map(o=>{const open=o.lv<=lv;return `<button type="button" class="wd-it${o.id===cur?" on":""}${open?"":" lock"}" data-o="${o.id}"${open?"":" disabled"}><span class="chr-mini">${charHtml(o,lk,"wd-svg")}</span><b>${escHtml(o.id==="tee"?"ชุดลำลอง":o.name)}</b><span>${open?(o.id===cur?"ใส่อยู่":"กดใส่"):`Lv.${o.lv}`}</span></button>`}).join("")}</div>`:""}</div></div>`;
 }
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
-function redrawChar(lv){redrawStage(lv);const kid=document.querySelector("#stTurn .st-kid");if(!kid)return;const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
+function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
+/* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */
+function swapInPlace(k){const els=[...document.querySelectorAll("#lkStage img[data-doll],#stTurn img[data-doll]")],id=k.split("|")[0];
+  if(!els.length||!els.every(e=>e.dataset.doll.split("|")[0]===id))return false;
+  const src=dollCache[k]||`chars/b/${id}.png`;els.forEach(e=>{e.dataset.doll=k;e.dataset.done=k;if(e.getAttribute("src")!==src)e.src=src});return true}
+function redrawChar2(lv){const k=dollKeyOf(myLook());if(k&&swapInPlace(k))return;redrawStage(lv);const kid=document.querySelector("#stTurn .st-kid");if(!kid)return;const flip=kid.classList.contains("flip");kid.outerHTML=stCharHtml(lv);if(flip)document.querySelector("#stTurn .st-kid")?.classList.add("flip")}
 function bindWardrobe(lv){
   const stg=$("lkStage");if(stg)stg.onclick=()=>{stg.classList.remove("spin");void stg.offsetWidth;stg.classList.add("spin")};
   document.querySelectorAll(".lk-tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".lk-tabs button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".lk-pane").forEach(p=>p.classList.toggle("hidden",p.dataset.pane!==b.dataset.tab))});
