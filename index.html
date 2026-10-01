@@ -2737,7 +2737,7 @@ body.adv-on{overflow:hidden}
 .adv-clock b{font-size:22px;line-height:1.1;color:#16305f;font-variant-numeric:tabular-nums}.adv-clock span{font-size:11.5px;color:#475569;white-space:nowrap}
 @media(max-width:600px){.adv-clock{top:10px;left:10px;right:auto;align-items:flex-start}.adv-clock b{font-size:18px}}
 .adv-pad{position:absolute;left:14px;bottom:18px;display:flex;gap:12px;z-index:5}
-.adv-k{width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.adv-k{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
 .adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
 .adv-jump{position:absolute;right:16px;bottom:18px;z-index:5;background:#ffd23f;color:#7a4b00}
 .adv-menu{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:rgba(15,23,42,.45)}
@@ -7723,7 +7723,7 @@ async function advStart(){
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-qh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
-      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง กดค้าง ◀ ถอยกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
+      <div class="adv-hint" id="advHint">น้องดินสอเดินเอง แตะหรือกดค้าง ◀ เดินกลับเก็บเหรียญ ▶ เดินเร็ว ⤒ กระโดด</div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
       <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">⤒</button>
       <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
@@ -7739,8 +7739,14 @@ async function advStart(){
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu){menu.classList.add("hidden");adv?.pause(false)}return}
     if(b.dataset.go==="resume"){menu.classList.add("hidden");adv?.pause(false);return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
-  ov.querySelectorAll(".adv-k[data-h]").forEach(b=>{const on=e=>{e.preventDefault();b.classList.add("on");adv?.hold(b.dataset.h,true);$("advHint")?.classList.add("hidden")},off=()=>{b.classList.remove("on");adv?.hold(b.dataset.h,false)};
-    b.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
+  /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
+  const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
+  const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
+  padBtns.forEach(b=>{const h=b.dataset.h,o=h==="l"?"r":"l";let downAt=0,down=false;
+    const on=e=>{e.preventDefault();if(down)return;down=true;downAt=Date.now();release(o);clearTimeout(padT[h]);b.classList.add("on");adv?.hold(h,true);$("advHint")?.classList.add("hidden")};
+    const off=()=>{if(!down)return;down=false;if(Date.now()-downAt<600){padT[h]=setTimeout(()=>release(h),2000)}else release(h)};
+    b.addEventListener("pointerdown",on);b.addEventListener("touchstart",on,{passive:false});
+    ["pointerup","pointercancel","touchend","touchcancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
   $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});
   const ui={
     stage:(st,need,done)=>{$("advSt").textContent=`ด่าน ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
