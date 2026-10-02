@@ -1241,7 +1241,7 @@ export function startGame(root,api){
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(br,water){
     for(const o of S.ans)freeObj(o);S.ans=[];
-    S.mode="ask";S.q=api.question(S.st);S.qT=S.qMax+(S.q.box?4:0);S.qn++;S.qBr=br||null;
+    S.mode="ask";S.q=api.question(S.st);S.qT=S.qMax+(S.q.box?4:0);S.qFull=S.qT;S.qn++;S.qBr=br||null;
     const mid=br?(br.x0+br.x1)/2:0,mk=biomeOf(S.st)==="market"&&!water&&!br,xs=[0,1,2,3].map(i=>water?S.x-2.7+i*1.8:br?mid-2.7+i*1.8:mk?S.x+(NARROW()?1.8+i*1.7:2.8+i*2.7):NARROW()?S.x+1.5+i*1.45:S.x+2.6+i*1.9);
     S.ans=S.q.opts.map((o,i)=>{const a=answer(S.q.box?String(i+1):o,i);const low=biomeOf(S.st)==="market"&&!water&&!br;if(S.q.box&&NARROW())a.visible=false;a.position.set(xs[i],water?1.5+(i%2)*1:low?.75:(br?groundY(xs[i]):0)+2.2+(i%2)*1.1,water?.9:low?.6:0);a.userData.base=a.position.y;a.scale.setScalar(.01);world.add(a);return a});
     ui.ask(S.q);
@@ -1349,7 +1349,8 @@ export function startGame(root,api){
   function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
   document.addEventListener("keyup",keyUp);
   document.addEventListener("keydown",key);
-  function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=NARROW()?62:45;cam.updateProjectionMatrix()}
+  let drawn=0;
+  function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=NARROW()?62:45;cam.updateProjectionMatrix();if(drawn&&S.paused)renderer.render(scene,cam)}
   addEventListener("resize",resize);resize();
 
   stage(S.st);ui.hearts(3);ui.pts(0);
@@ -1370,7 +1371,7 @@ export function startGame(root,api){
     if(S.inWater&&S.mode!=="ask"&&S.mode!=="wet"&&S.mode!=="climb"&&S.mode!=="dead"&&S.mode!=="splash")climbOut();
     if(S.mode==="wet"&&S.inWater){S.wetT=(S.wetT||0)+dt;if(S.wetT>3){S.wetT=0;clearAns();ask(S.inWater.br,true)}}else S.wetT=0;
     if(S.mode==="climb"&&!S.climb&&S.inWater)climbOut();
-    if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
+    if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,Math.min(1,S.qT/(S.qFull||S.qMax))));if(S.qT<=0)choose(-1)}
     if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,wc=sp.br.wx?sp.br.wx(2.2):mid,tx=Math.max(wc-.8,Math.min(wc+.8,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
       if(!sp.fs){sp.fs=1;SND.play("fall")}if(fy<.05&&!sp.hit){sp.hit=1;SND.play("plunge");scareFish(fx,S.z);splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบข้อใหม่ให้ถูกเพื่อขึ้นจากน้ำ");hurt()}
       if(sp.hit&&t>1.3&&!sp.asked&&S.mode==="splash"){sp.asked=1;S.x=fx;S.inWater={x:fx,br:sp.br};clearAns();ask(sp.br,true)}
@@ -1517,7 +1518,7 @@ export function startGame(root,api){
     cam.position.copy(piv).add(off);camPiv.copy(piv);cam.lookAt(camPiv);
     /* เงา: ขยับแหล่งแสงเป็นช่วง ๆ ไม่ขยับทุกเฟรม เงาจะได้ไม่สั่นระยิบ */
     const sx=Math.round(S.x/2)*2;sun.position.set(sx-4,16,10);sun.target.position.set(sx+4,0,0);
-    renderer.render(scene,cam);raf=requestAnimationFrame(tick);
+    renderer.render(scene,cam);drawn=1;raf=requestAnimationFrame(tick);
   }
   /* เริ่มด่านที่เลือกใหม่ทั้งฉาก (ใช้ตอนเลือกด่านก่อนกด START) */
   function restart(n){for(const g of segs)freeObj(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
