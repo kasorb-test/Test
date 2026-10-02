@@ -1038,6 +1038,10 @@ export function startGame(root,api){
       for(let k=0;k<22;k++){const z=rand(-30,12),side=Math.random()<.5?-1:1,r=rock(rand(.25,.6),Math.random()<.45);r.position.set(cxz(z)+side*(w/2+rand(.05,.45)),.08,z);g.add(r)}
       for(let k=0;k<6;k++){const z=rand(-20,6),side=Math.random()<.5?-1:1,rd=new THREE.Group();for(let j=0;j<6;j++){const c=new THREE.Mesh(new THREE.ConeGeometry(.03,rand(.7,1.2),4),M(pick([0x5a8f2a,0x6b9e33,0x4c7f22])));c.position.set(rand(-.15,.15),.45,rand(-.15,.15));c.rotation.set(rand(-.2,.2),0,rand(-.2,.2));rd.add(c)}rd.position.set(cxz(z)+side*(w/2+.3),0,z);g.add(rd)}
       for(let k=0;k<10;k++){const f=fish();f.scale.setScalar(rand(.8,1.2));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.3,1.3),ph:rand(0,40),sp:rand(.003,.006),y:rand(.07,.11),z0:-30,len:62})}
+      /* กอหญ้าริมตลิ่งเป็นบางจุด */
+      for(let k=0;k<16;k++){const z=rand(-28,28),side=Math.random()<.5?-1:1,tf=new THREE.Group(),gm=M(pick([0x5fae3a,0x6cbf45,0x4f9a30,0x7cc24f]),{side:THREE.DoubleSide,roughness:.9});
+        for(let j=0;j<9;j++){const h=rand(.28,.55),bl=new THREE.Mesh(new THREE.ConeGeometry(.035,h,3),gm);const a=rand(0,6.28),r=rand(0,.12);bl.position.set(Math.cos(a)*r,h/2,Math.sin(a)*r);bl.rotation.set(Math.sin(a)*rand(.2,.5),0,-Math.cos(a)*rand(.2,.5));tf.add(bl)}
+        tf.scale.setScalar(rand(1.5,2.2));tf.position.set(cxz(z)+side*(w/2+rand(.35,.75)),0,z);g.add(tf)}
       /* ใต้น้ำใส: ปะการังกิ่ง ดอกไม้น้ำ กรวดสี มองเห็นผ่านผิวน้ำ */
       for(let k=0;k<14;k++){const z=rand(-28,28),cr=new THREE.Group(),cc=pick([0xff7a59,0xff5c8a,0xffa64d,0xe05cff,0xff8fab]),cm=M(cc,{roughness:.7});
         for(let j=0;j<5;j++){const br=new THREE.Mesh(new THREE.CylinderGeometry(.012,.026,rand(.08,.13),5),cm);br.position.set(rand(-.06,.06),.05,rand(-.06,.06));br.rotation.set(rand(-.6,.6),0,rand(-.6,.6));cr.add(br);const tip=new THREE.Mesh(new THREE.SphereGeometry(.022,6,5),cm);tip.position.set(br.position.x+Math.sin(br.rotation.z)*-.05,.1,br.position.z+Math.sin(br.rotation.x)*.05);cr.add(tip)}
