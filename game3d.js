@@ -303,6 +303,8 @@ function arch(st){
 
 export function startGame(root,api){
   const W=()=>root.clientWidth,H=()=>root.clientHeight;
+  /* จอแคบ = กว้างไม่ถึง 600px หรือจอแนวตั้ง (มือถือที่เปิดโหมดดูแบบคอม ความกว้างจะเป็นแบบคอมแต่จอยังสูง) */
+  const NARROW=()=>W()<600||W()/Math.max(1,H())<.75;
   const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.setSize(W(),H());
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
   root.appendChild(renderer.domElement);
@@ -1237,8 +1239,8 @@ export function startGame(root,api){
   function ask(br,water){
     for(const o of S.ans)freeObj(o);S.ans=[];
     S.mode="ask";S.q=api.question(S.st);S.qT=S.qMax+(S.q.box?4:0);S.qn++;S.qBr=br||null;
-    const mid=br?(br.x0+br.x1)/2:0,mk=biomeOf(S.st)==="market"&&!water&&!br,xs=[0,1,2,3].map(i=>water?S.x-2.7+i*1.8:br?mid-2.7+i*1.8:mk?S.x+(W()<600?1.8+i*1.7:2.8+i*2.7):W()<600?S.x+1.5+i*1.45:S.x+2.6+i*1.9);
-    S.ans=S.q.opts.map((o,i)=>{const a=answer(S.q.box?String(i+1):o,i);const low=biomeOf(S.st)==="market"&&!water&&!br;if(S.q.box&&W()<600)a.visible=false;a.position.set(xs[i],water?1.5+(i%2)*1:low?.75:(br?groundY(xs[i]):0)+2.2+(i%2)*1.1,water?.9:low?.6:0);a.userData.base=a.position.y;a.scale.setScalar(.01);world.add(a);return a});
+    const mid=br?(br.x0+br.x1)/2:0,mk=biomeOf(S.st)==="market"&&!water&&!br,xs=[0,1,2,3].map(i=>water?S.x-2.7+i*1.8:br?mid-2.7+i*1.8:mk?S.x+(NARROW()?1.8+i*1.7:2.8+i*2.7):NARROW()?S.x+1.5+i*1.45:S.x+2.6+i*1.9);
+    S.ans=S.q.opts.map((o,i)=>{const a=answer(S.q.box?String(i+1):o,i);const low=biomeOf(S.st)==="market"&&!water&&!br;if(S.q.box&&NARROW())a.visible=false;a.position.set(xs[i],water?1.5+(i%2)*1:low?.75:(br?groundY(xs[i]):0)+2.2+(i%2)*1.1,water?.9:low?.6:0);a.userData.base=a.position.y;a.scale.setScalar(.01);world.add(a);return a});
     ui.ask(S.q);
   }
   /* ตกน้ำแล้วต้องตอบข้อใหม่ให้ถูกก่อนถึงจะปีนขึ้นสะพานได้ ตอบผิดเสียหัวใจแล้วได้ข้อใหม่ */
@@ -1344,7 +1346,7 @@ export function startGame(root,api){
   function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
   document.addEventListener("keyup",keyUp);
   document.addEventListener("keydown",key);
-  function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=W()<600?62:45;cam.updateProjectionMatrix()}
+  function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=NARROW()?62:45;cam.updateProjectionMatrix()}
   addEventListener("resize",resize);resize();
 
   stage(S.st);ui.hearts(3);ui.pts(0);
@@ -1503,7 +1505,7 @@ export function startGame(root,api){
       else if(a.kind==="bat"){o.position.set(a.x0+Math.sin(t*.8)*2.5,a.y0+Math.sin(t*2.3)*.4,a.z0+Math.cos(t*.8)*1.5);o.rotation.y=-Math.atan2(Math.cos(t*.8)*2,-Math.sin(t*.8)*1.2);const f=Math.sin(t*16)*.7;o.userData.ws[0].rotation.y=f;o.userData.ws[1].rotation.y=-f}
       else if(a.kind==="foam"){o.scale.z=1+Math.sin(t*1.6)*.6;o.position.z=-6.6+Math.sin(t*1.6)*.35}}
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
-    const narrow=W()<600,asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
+    const narrow=NARROW(),asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
     const asp=Math.max(.3,W()/H()),fitD=hw=>hw/(Math.tan(cam.fov*Math.PI/360)*asp),beachW=biomeOf(S.st)==="beach"&&!asking,back=S.mode==="walk"&&S.dir<0,lead=S.inWater||S.mode==="splash"?0:narrow?(asking?3.6:back?-.4:2.2):(asking?4:back?-.6:3),dist=(narrow?(asking||S.inWater?Math.max(14,fitD(5.6)):Math.max(11,fitD(4.4))):(asking?12:10.5))*(beachW?1.45:1);
     const ly=narrow?2.95:1.9;if(!view.drag){view.idle+=dt;if(view.idle>2.5){view.yaw*=1-Math.min(1,dt*2.5);view.pitch*=1-Math.min(1,dt*2.5)}}
     /* กล้องยึดตำแหน่งน้องดินสอแนวนอนตรง ๆ (ไม่หน่วง) จึงไม่ส่ายไปมา ค่อย ๆ ปรับเฉพาะระยะนำหน้า ความไกล และความสูง */
@@ -1517,7 +1519,7 @@ export function startGame(root,api){
   /* เริ่มด่านที่เลือกใหม่ทั้งฉาก (ใช้ตอนเลือกด่านก่อนกด START) */
   function restart(n){for(const g of segs)freeObj(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
     for(const c of S.coins)freeObj(c);S.coins.length=0;for(const a of S.ans)freeObj(a);S.ans=[];if(S.arch){freeObj(S.arch);S.arch=null}if(S.shrine){freeObj(S.shrine);S.shrine=null}clearCritters();
-    Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?2.3:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.0:3.2});cam.position.set(camPiv.x,nw?3.0:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
+    Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=NARROW(),ly=nw?2.3:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.0:3.2});cam.position.set(camPiv.x,nw?3.0:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
   raf=requestAnimationFrame(tick);
   return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),pz:+P.position.z.toFixed(2),py:+P.position.y.toFixed(2),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw,mem:{...renderer.info.memory}}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},_hearts:n=>{S.hearts=n},_scare:v=>{S.qn=v+1;scare()},_crit:()=>critters.map(c=>c.kind+":"+(c.att||0)+":"+(c.o.parent===world?"w":"arm")+":"+c.t.toFixed(1)),refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
 }
