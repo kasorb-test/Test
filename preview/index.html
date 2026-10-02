@@ -8067,7 +8067,7 @@ async function advStart(){
     const off=()=>{if(!down)return;down=false;if(Date.now()-downAt<600){padT[h]=setTimeout(()=>release(h),2000)}else release(h)};
     b.addEventListener("pointerdown",on);b.addEventListener("touchstart",on,{passive:false});
     ["pointerup","pointercancel","touchend","touchcancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
-  $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});
+  $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});ov.addEventListener("contextmenu",e=>e.preventDefault());
   const ui={
     stage:(st,need,done)=>{try{sessionStorage.setItem("kasorbGameStage",String(st))}catch(e){}$("advSt").textContent=`Stage ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
