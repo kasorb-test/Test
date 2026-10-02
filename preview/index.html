@@ -7842,13 +7842,14 @@ let adv=null,advMod=null,advSayQ=[],advSayT=0;
 /* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
 function advSayNext(){const t=$("advToast");if(!t||!advSayQ.length){advSayT=0;return}const m=advSayQ.shift();t.innerHTML=`<b>${escHtml(m)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show");advSayT=setTimeout(advSayNext,2400)}
 /* ไอเทมในเกม: ซื้อด้วยเหรียญครั้งเดียวใช้ได้ตลอด ใส่อัตโนมัติตามสภาพอากาศ/ฉาก หรือแตะที่แถบไอเทมเพื่อใส่/ถอดเอง (ราคาตรงกับ firestore.rules) */
-const ADV_GEAR=[["umbrella","ร่ม","กางเองเวลาฝนตก",30],["cap","หมวกแก๊ป","ใส่เดินเล่นได้ทุกด่าน",20],["straw","หมวกชาวนา","ใส่เองในฟาร์มและหมู่บ้าน",20],["fan","พัด","โบกเองวันที่ร้อนจัด 35 องศาขึ้นไป",25],["coat","เสื้อกันหนาว","ใส่เองวันที่อากาศเย็น",40],["shades","แว่นกันแดด","ใส่เองตอนเดินริมทะเล",30]];
+const ADV_GEAR=[["umbrella","ร่ม","กางกันฝน",30],["cap","หมวกแก๊ป","ใส่ได้ทุกด่าน",20],["straw","หมวกชาวนา","หมวกปีกกว้างกันแดด",20],["fan","พัด","โบกคลายร้อน",25],["coat","เสื้อกันหนาว","ใส่อุ่น ๆ หน้าหนาว",40],["scarf","ผ้าพันคอ","พันคออุ่น ๆ หน้าหนาว",25],["shades","แว่นกันแดด","ใส่เดินริมทะเล",30]];
 const ADV_ICON={umbrella:'<svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 6.5 3 11h18c0-4.5-4-8-9-8z" fill="#ff7043"/><path d="M12 11v7a2 2 0 0 1-4 0" stroke="#5d4037" stroke-width="1.8" fill="none"/></svg>',
   cap:'<svg viewBox="0 0 24 24"><path d="M4 15c0-5 3.5-8 8-8s8 3 8 8z" fill="#1e88e5"/><path d="M12 15h10c0 1.6-1.5 2-3 2h-7z" fill="#1565c0"/></svg>',
   straw:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="15" rx="10" ry="3" fill="#d9b56a"/><path d="M7 15c0-4 2-7 5-7s5 3 5 7z" fill="#e6c27a"/><rect x="7" y="12" width="10" height="2" fill="#e53935"/></svg>',
   fan:'<svg viewBox="0 0 24 24"><path d="M12 20L3 9a12 12 0 0 1 18 0z" fill="#ec407a"/><path d="M12 20L7.5 6.5M12 20V5.5M12 20l4.5-13.5" stroke="#fff" stroke-width="1"/></svg>',
   coat:'<svg viewBox="0 0 24 24"><path d="M8 4l4 3 4-3 4 3-2 4h-1v9H7v-9H6L4 7z" fill="#d32f2f"/><path d="M12 7v13" stroke="#7f1d1d"/><path d="M7 7.5c2 1 8 1 10 0" stroke="#ffeb3b" stroke-width="2" fill="none"/></svg>',
   shades:'<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="4" fill="#222"/><circle cx="17" cy="12" r="4" fill="#222"/><path d="M11 11h2" stroke="#222" stroke-width="2"/></svg>',
+  scarf:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="8" rx="8" ry="3.5" fill="none" stroke="#ec407a" stroke-width="3"/><path d="M13 10l1 10h3l-1-10z" fill="#ec407a"/><path d="M13.6 17h3" stroke="#fff" stroke-width="1.4"/></svg>',
   shop:'<svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="#fff4d6"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="#fff4d6" stroke-width="2" fill="none"/></svg>',
   sndOn:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" stroke="#fff" stroke-width="2" fill="none"/></svg>',
   sndOff:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2"/></svg>'};
@@ -7858,15 +7859,15 @@ const ADV_HATC={cap:["#1c1c1f","#1e3a8a","#c62828","#ec407a","#2e7d32","#f5f5f5"
 let advHatCol={};try{advHatCol=JSON.parse(localStorage.getItem("advHatCol")||"{}")||{}}catch(e){}
 const advSavePref=()=>{try{localStorage.setItem("advGearPref",JSON.stringify(advPref))}catch(e){}};
 function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned();
-  bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)}${advPref[id]==null?" (อัตโนมัติ)":""}">${ADV_ICON[id]}${advPref[id]==null?'<i>A</i>':""}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
+  bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)} (แตะเพื่อใส่/ถอด)">${ADV_ICON[id]}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
   bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.g;if(id==="shop"){advShop();return}
-    if(advPref[id]==null)advPref[id]=advOn[id]?0:1;else delete advPref[id];advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
+    advPref[id]=advPref[id]===1?0:1;advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
 const advCoins=()=>window.__advCoins??coinsOf();
 function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=advCoins();
   sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
     <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small>${has&&ADV_HATC[id]?`<span class="adv-hc">${ADV_HATC[id].map((c,i)=>`<button type="button" data-hc="${id}" data-c="${c}" style="--c:${c}" class="${(advHatCol[id]||ADV_HATC[id][0])===c?"on":""}" aria-label="สีหมวก ${i+1}"></button>`).join("")}</span>`:""}</div>
       <button type="button" data-buy="${id}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
-    <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
+    <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด แตะไอเทมที่แถบด้านขวาเพื่อใส่หรือถอดเอง</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
   sh.classList.remove("hidden");
   $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
   sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advConfirm(b.dataset.buy));
@@ -7956,8 +7957,11 @@ async function advStart(){
       $("advQh").textContent=q.box?"แตะที่คำตอบได้เลย":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
       $("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
     gear:on=>{advOn=on;advGearBar()},
-    near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${id==="shades"?"ร้านแว่น":"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
+    near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${({shades:"ร้านแว่น",umbrella:"ร้านร่ม",coat:"ร้านเสื้อกันหนาว",scarf:"ร้านเสื้อกันหนาว"})[id]||"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
       b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
+    /* ฝนตก: มีร่มแล้วถามว่ากางไหม ยังไม่มีบอกว่าข้างหน้ามีร้านร่ม */
+    rain:has=>{const b=$("advNear");if(!b)return;b.innerHTML=has?"☂ ฝนตกแล้ว กางร่มไหม? แตะเพื่อกาง":"☂ ฝนตกแล้ว ข้างหน้ามีร้านขายร่ม";b.classList.remove("hidden");
+      b.onclick=()=>{b.classList.add("hidden");if(has){advPref.umbrella=1;advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()}else advShop("umbrella")};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
     pray:cb=>{const b=$("advPray");if(!b)return;b.classList.remove("hidden");b.onclick=()=>{b.classList.add("hidden");advMod?.SND.unlock();cb()}},
     say:msg=>{advSayQ.push(msg);if(!advSayT)advSayNext()},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},

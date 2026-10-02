@@ -62,7 +62,7 @@ service cloud.firestore {
     // แลกโค้ดส่วนลด: เพิ่มโค้ดใหม่ครั้งละ 1 โค้ด ราคาและจำนวนบาทตรงกับที่แอดมินตั้งไว้ โค้ดเดิมแก้ไม่ได้
     // ไอเทมในเกม: ซื้อครั้งละ 1 ชิ้นด้วยเหรียญตามราคาที่กำหนด ซื้อแล้วใช้ได้ตลอด
     function validGear(n, o) {
-      let price = {"umbrella": 30, "cap": 20, "straw": 20, "fan": 25, "coat": 40, "shades": 30};
+      let price = {"umbrella": 30, "cap": 20, "straw": 20, "fan": 25, "coat": 40, "scarf": 25, "shades": 30};
       let before = o.get("gear", []);
       let add = n.gear.removeAll(before);
       return n.gear is list && n.gear.size() == before.size() + 1 && n.gear.hasAll(before)

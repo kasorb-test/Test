@@ -655,7 +655,9 @@ export function startGame(root,api){
     const am=pick(AWN),aw=new THREE.Mesh(new THREE.PlaneGeometry(W+.3,1.95),am);aw.rotation.x=-Math.PI/2+.26;aw.position.set(0,2.42,.25);aw.castShadow=true;g.add(aw);
     const va=new THREE.Mesh(new THREE.BoxGeometry(W+.3,.22,.03),am);va.position.set(0,2.06,1.2);g.add(va);
     for(let t=0;t<3;t++){const cx=-1+t,col=cols[t%cols.length],r=nm==="ปลาสด"?.0:.11;const tray=new THREE.Mesh(new THREE.CylinderGeometry(.42,.36,.08,12),M(0xb07a3a));tray.position.set(cx,.95,.05);g.add(tray);
-      if(o.shades){for(let f=0;f<3;f++){const sg=shadesMini(pick([0xe53935,0x1e88e5,0xffb300,0x8e24aa,0x111111]));sg.position.set(cx+(f-1)*.24,1.05,.05+(f%2)*.12);g.add(sg)}}
+      if(o.umb){for(let f=0;f<2;f++){const u=new THREE.Group(),c=new THREE.Mesh(new THREE.ConeGeometry(.24,.16,8,1,true),new THREE.MeshStandardMaterial({color:pick([0xff7043,0x1e88e5,0xffca28,0xab47bc,0x43a047]),side:THREE.DoubleSide,flatShading:true}));c.position.y=.32;u.add(c);const st=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.34,5),M(0x5d4037));st.position.y=.16;u.add(st);u.position.set(cx+(f-.5)*.3,.98,.05);u.rotation.z=(f-.5)*.4;g.add(u)}}
+      else if(o.warm){const cm=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.24,6),M(pick([0xd32f2f,0x1565c0,0x6d4c41]),{flat:true}));cm.position.set(cx-.13,1.1,.05);g.add(cm);const sc=new THREE.Mesh(new THREE.TorusGeometry(.1,.035,6,14),M(pick([0xffeb3b,0xec407a,0x43a047,0x29b6f6])));sc.rotation.x=Math.PI/2;sc.position.set(cx+.17,1.02,.05);g.add(sc)}
+      else if(o.shades){for(let f=0;f<3;f++){const sg=shadesMini(pick([0xe53935,0x1e88e5,0xffb300,0x8e24aa,0x111111]));sg.position.set(cx+(f-1)*.24,1.05,.05+(f%2)*.12);g.add(sg)}}
       else g.add(goods(nm,cx,.98,.05))}
     if(nm==="เนื้อสด")for(let k=0;k<3;k++){const hk=new THREE.Mesh(new THREE.TorusGeometry(.05,.012,4,8,Math.PI),M(0x9e9e9e,{metalness:.7}));hk.position.set(-1+k,2.05,.5);g.add(hk);const mt=new THREE.Mesh(new THREE.BoxGeometry(.22,.4,.12),M(0xb71c1c,{roughness:.5}));mt.position.set(-1+k,1.78,.5);g.add(mt)}
     const v=person({hat:Math.random()<.3,long:Math.random()<.5});v.rotation.y=-Math.PI/2;v.position.set(rand(-.8,.8),0,-D/2-.45);g.add(v);anim.push({seg:null,obj:v,kind:"wave",ph:rand(0,6)});
@@ -1112,6 +1114,8 @@ export function startGame(root,api){
       if(segN%4===1&&B!=="haunted"&&B!=="beach"){const h=house();put(h,rand(2,8),rand(24,36))}}
     if(Math.random()<.32&&!(B==="canal"&&segN%2===0)){const c=chest(),cx=rand(2,8);c.position.set(cx,0,-1.75);c.rotation.y=rand(-.25,.25);g.add(c);chests.push({seg:g,o:c,x:cx,open:0})}
     if(B==="beach"&&segN%4===2){const sh=stall({name:"ร้านแว่น",shades:true});sh.position.set(5,0,-3.6);g.add(sh);shops.push({seg:g,x:5,id:"shades",shown:false})}
+    else if(!(B==="canal"&&segN%2===0)&&B!=="market"&&rainNow()&&!owns("umbrella")&&segN%4===1){const sh=stall({name:"ร้านร่ม",umb:true});sh.position.set(6,0,-3.6);g.add(sh);shops.push({seg:g,x:6,id:"umbrella",shown:false})}
+    else if(!(B==="canal"&&segN%2===0)&&B!=="market"&&coldNow()&&(!owns("coat")||!owns("scarf"))&&segN%5===3){const sh=stall({name:"ร้านเสื้อกันหนาว",warm:true});sh.position.set(6,0,-3.6);g.add(sh);shops.push({seg:g,x:6,id:owns("coat")?"scarf":"coat",shown:false})}
     for(const a of anim)if(!a.seg)a.seg=g;
     world.add(g);segs.push(g);segX+=SEG;
   }
@@ -1162,18 +1166,23 @@ export function startGame(root,api){
     const coat=new THREE.Group();const cm=new THREE.Mesh(new THREE.CylinderGeometry(.47,.5,.62,6),M(0xd32f2f,{flat:true}));cm.position.y=.9;cm.castShadow=true;coat.add(cm);
     for(let k=0;k<3;k++){const bn=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),M(0xffffff));bn.position.set(0,.72+k*.17,.46);coat.add(bn)}
     const sc=new THREE.Mesh(new THREE.TorusGeometry(.44,.075,8,24),M(0xffeb3b));sc.rotation.x=Math.PI/2;sc.position.y=1.24;coat.add(sc);const tl=new THREE.Mesh(new THREE.BoxGeometry(.13,.42,.06),M(0xffeb3b));tl.position.set(.2,1.03,.46);tl.rotation.z=.15;coat.add(tl);b.add(coat);GEAR.coat=coat;
+    const scarf=new THREE.Group(),scM=M(0xec407a,{roughness:.8}),stp=M(0xffffff,{roughness:.8});const ring=new THREE.Mesh(new THREE.TorusGeometry(.44,.09,8,24),scM);ring.rotation.x=Math.PI/2;ring.position.y=1.74;scarf.add(ring);
+    for(let k=0;k<2;k++){const t=new THREE.Mesh(new THREE.BoxGeometry(.15,.42,.06),scM);t.position.set(.16+k*.12,1.5,.45);t.rotation.z=.12+k*.1;scarf.add(t);const bd=new THREE.Mesh(new THREE.BoxGeometry(.155,.05,.065),stp);bd.position.set(.16+k*.12+Math.sin(.12+k*.1)*.13,1.37,.45);bd.rotation.z=t.rotation.z;scarf.add(bd)}
+    b.add(scarf);GEAR.scarf=scarf;
     const um=new THREE.Group();const pole=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,2.9,6),M(0x5d4037));pole.position.y=2.25;um.add(pole);
     const can=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,8,1,true),new THREE.MeshStandardMaterial({color:0xff7043,side:THREE.DoubleSide,flatShading:true}));can.position.y=3.85;can.castShadow=true;um.add(can);
     const tip=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),M(0x5d4037));tip.position.y=4.12;um.add(tip);const hk=new THREE.Mesh(new THREE.TorusGeometry(.08,.02,6,12,Math.PI),M(0x5d4037));hk.position.set(.08,.8,0);hk.rotation.z=Math.PI;um.add(hk);um.position.set(.62,0,0);b.add(um);GEAR.umbrella=um;
     const fan=new THREE.Mesh(new THREE.CircleGeometry(.34,14,Math.PI/6,Math.PI*2/3),new THREE.MeshStandardMaterial({color:0xec407a,side:THREE.DoubleSide}));fan.position.set(0,-.55,.05);P.userData.arms[0].add(fan);GEAR.fan=fan;
     for(const k in GEAR)GEAR[k].visible=false}
   let gearT=1,gearKey="";
-  const owns=id=>(api.gear?api.gear():[]).includes(id),pref=id=>(api.gearPref?api.gearPref():{})[id];
-  function wantGear(id){if(!owns(id))return false;const pr=pref(id);if(pr===1)return true;if(pr===0)return false;const c=thaiClock(nowMs()),bm=biomeOf(S.st);
-    if(id==="umbrella")return !!(c.rain||TH.rain);if(id==="fan")return c.temp!=null&&c.temp>=35;if(id==="coat")return (c.temp!=null&&c.temp<=22)||(c.season==="cool"&&c.part==="night");
-    if(id==="shades")return bm==="beach";if(id==="straw")return bm==="farm"||bm==="village";if(id==="cap")return !wantGear("straw");return false}
+  function owns(id){return (api.gear?api.gear():[]).includes(id)}function pref(id){return (api.gearPref?api.gearPref():{})[id]}
+  /* ไอเทมที่ซื้อแล้ว ผู้เล่นเลือกใส่เองทั้งหมด (แตะที่แถบด้านขวา) ไม่ใส่ให้อัตโนมัติ */
+  function wantGear(id){return owns(id)&&pref(id)===1}
+  function rainNow(){const c=thaiClock(nowMs());return !!(c.rain||TH.rain)}function coldNow(){const c=thaiClock(nowMs());return c.season==="cool"||(c.temp!=null&&c.temp<=22)}
   function applyGear(){const on={};for(const k in GEAR)on[k]=wantGear(k);if(on.straw)on.cap=false;for(const k in GEAR)GEAR[k].visible=on[k];P.userData.avY=on.straw?3.4:on.cap?3.35:3.15;{const hc=api.hatCol?api.hatCol():{};const H=HATM;if(H){H.cap.color.set(hc.cap||0x1c1c1f);H.straw.color.set(hc.straw||0xe53935)}}
-    const key=JSON.stringify(on);if(key!==gearKey){gearKey=key;ui.gear&&ui.gear(on)}}
+    const key=JSON.stringify(on);if(key!==gearKey){gearKey=key;ui.gear&&ui.gear(on)}
+    /* ฝนตก: ถามว่าจะกางร่มไหม ถ้ายังไม่มีร่ม บอกว่าข้างหน้ามีร้านขายร่ม */
+    if(rainNow()&&!on.umbrella&&!S.rainAsked&&S.mode==="walk"){S.rainAsked=true;if(owns("umbrella"))ui.rain&&ui.rain(true);else ui.rain&&ui.rain(false)}}
   /* รูปประจำตัวของนักเรียน ลอยอยู่บนหัวน้องดินสอ */
   if(api.avatar){const im=new Image();im.crossOrigin="anonymous";im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");
       x.fillStyle="#fff";x.beginPath();x.arc(128,118,112,0,Math.PI*2);x.fill();x.beginPath();x.moveTo(104,222);x.lineTo(152,222);x.lineTo(128,252);x.fill();
@@ -1184,7 +1193,7 @@ export function startGame(root,api){
   const ui=api.ui;
   function stage(st){
     setBiome(st);
-    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
+    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;S.rainAsked=false;clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=starMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(br,water){
