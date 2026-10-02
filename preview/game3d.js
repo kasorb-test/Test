@@ -374,7 +374,7 @@ export function startGame(root,api){
   const canalRip=canvasTex0(128,256,x=>{x.fillStyle="#ffffff";x.fillRect(0,0,128,256);for(let i=0;i<90;i++){const y=Math.random()*256,X=Math.random()*128,L=10+Math.random()*30;x.strokeStyle=`rgba(${Math.random()<.6?'255,255,255':'170,215,235'},${(.35+Math.random()*.5).toFixed(2)})`;x.lineWidth=1+Math.random()*1.6;x.beginPath();x.moveTo(X,y);x.quadraticCurveTo(X+L/2,y-3,X+L,y);x.stroke()}
     for(let i=0;i<40;i++){x.fillStyle="rgba(200,230,245,.5)";x.fillRect(Math.random()*128,Math.random()*256,1.5,1.5)}});
   canalRip.wrapS=canalRip.wrapT=THREE.RepeatWrapping;
-  const canalWater=new THREE.MeshStandardMaterial({vertexColors:true,map:canalRip,transparent:true,opacity:.9,roughness:.12,metalness:.08,emissive:0x0d4f9e,emissiveIntensity:.22,depthWrite:false}),canalBed=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1});
+  const canalWater=new THREE.MeshStandardMaterial({vertexColors:true,map:canalRip,transparent:true,opacity:.6,roughness:.06,metalness:.05,emissive:0x1565c0,emissiveIntensity:.2,depthWrite:false}),canalBed=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1});
   /* ผิวน้ำไหล: ลายระลอกคลื่นเลื่อนตามทางน้ำ */
   {const c=document.createElement("canvas");c.width=64;c.height=128;const x=c.getContext("2d");x.fillStyle="#3da5d6";x.fillRect(0,0,64,128);for(let i=0;i<70;i++){x.fillStyle=`rgba(${Math.random()<.5?'255,255,255':'120,210,245'},${(.15+Math.random()*.45).toFixed(2)})`;x.fillRect(Math.random()*64,Math.random()*128,4+Math.random()*14,1.5+Math.random()*2)}
     const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;canalMat.map=t}
@@ -1025,7 +1025,7 @@ export function startGame(root,api){
     if(B==="canal"&&segN%2===0){
       /* คลองคดเคี้ยว ตลิ่งดินกับหญ้า สะพานหินโค้งข้ามคลอง ปลากระโดด */
       pathPiece(0,5-w/2-1.5);pathPiece(5+w/2+1.5,SEG);
-      g.add(ribbon(cxz,40,-45,w/2+.32,.022,M(0x6a5638,{roughness:1}),90));g.add(ribbon3(cxz,40,-45,w/2,.03,canalBed,0xd8c79a,0x2f5f9a));g.add(ribbon3(cxz,40,-45,w/2,.17,canalWater,0x6cc6f2,0x1476d6));
+      g.add(ribbon(cxz,40,-45,w/2+.32,.022,M(0x6a5638,{roughness:1}),90));g.add(ribbon3(cxz,40,-45,w/2,.03,canalBed,0xd9cc9c,0x3f9cc9));{const wm=ribbon3(cxz,40,-45,w/2,.17,canalWater,0x6fd0ff,0x1a86e0);g.add(wm);anim.push({seg:g,obj:wm,kind:"wave",ph:0})}
       /* ขอบคลองเรียงหินก้อนแบน มีตะไคร่ */
       {const n=150,kb=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshStandardMaterial({roughness:.95,flatShading:true}),n),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler(),col=new THREE.Color(),KC=[0x8d8d86,0x7b8077,0x9a958a,0x6f7a5e,0x868e78];
         for(let k=0;k<n;k++){const side=k%2?1:-1,z=36-(k>>1)*1.05+rand(-.2,.2),sz=rand(.2,.32);e.set(rand(-.3,.3),rand(0,6),rand(-.3,.3));q.setFromEuler(e);m4.compose(new THREE.Vector3(cxz(z)+side*(w/2+rand(.02,.14)),.08,z),q,new THREE.Vector3(sz*1.3,sz*.5,sz));kb.setMatrixAt(k,m4);kb.setColorAt(k,col.set(pick(KC)))}
@@ -1037,7 +1037,16 @@ export function startGame(root,api){
       for(let k=0;k<7;k++){const z=rand(-25,8),sw=seaweed();sw.scale.set(.8,.16,.8);sw.position.set(cxz(z)+rand(-w/2+.3,w/2-.3),.03,z);g.add(sw);anim.push({seg:g,obj:sw,kind:"weed",ph:rand(0,6)})}
       for(let k=0;k<22;k++){const z=rand(-30,12),side=Math.random()<.5?-1:1,r=rock(rand(.25,.6),Math.random()<.45);r.position.set(cxz(z)+side*(w/2+rand(.05,.45)),.08,z);g.add(r)}
       for(let k=0;k<6;k++){const z=rand(-20,6),side=Math.random()<.5?-1:1,rd=new THREE.Group();for(let j=0;j<6;j++){const c=new THREE.Mesh(new THREE.ConeGeometry(.03,rand(.7,1.2),4),M(pick([0x5a8f2a,0x6b9e33,0x4c7f22])));c.position.set(rand(-.15,.15),.45,rand(-.15,.15));c.rotation.set(rand(-.2,.2),0,rand(-.2,.2));rd.add(c)}rd.position.set(cxz(z)+side*(w/2+.3),0,z);g.add(rd)}
-      for(let k=0;k<5;k++){const f=fish();f.scale.setScalar(rand(.9,1.3));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.2,1.2),ph:rand(0,40),sp:rand(.004,.008)})}
+      for(let k=0;k<10;k++){const f=fish();f.scale.setScalar(rand(.8,1.2));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.3,1.3),ph:rand(0,40),sp:rand(.003,.006),y:rand(.07,.11),z0:-30,len:62})}
+      /* ใต้น้ำใส: ปะการังกิ่ง ดอกไม้น้ำ กรวดสี มองเห็นผ่านผิวน้ำ */
+      for(let k=0;k<14;k++){const z=rand(-28,28),cr=new THREE.Group(),cc=pick([0xff7a59,0xff5c8a,0xffa64d,0xe05cff,0xff8fab]),cm=M(cc,{roughness:.7});
+        for(let j=0;j<5;j++){const br=new THREE.Mesh(new THREE.CylinderGeometry(.012,.026,rand(.08,.13),5),cm);br.position.set(rand(-.06,.06),.05,rand(-.06,.06));br.rotation.set(rand(-.6,.6),0,rand(-.6,.6));cr.add(br);const tip=new THREE.Mesh(new THREE.SphereGeometry(.022,6,5),cm);tip.position.set(br.position.x+Math.sin(br.rotation.z)*-.05,.1,br.position.z+Math.sin(br.rotation.x)*.05);cr.add(tip)}
+        cr.scale.setScalar(rand(1.3,1.9));cr.position.set(cxz(z)+rand(-w/2+.4,w/2-.4),.03,z);g.add(cr)}
+      for(let k=0;k<16;k++){const z=rand(-28,28),fw=new THREE.Group(),st=new THREE.Mesh(new THREE.CylinderGeometry(.008,.01,.1,4),M(0x3f9a35));st.position.y=.05;fw.add(st);const pc=pick([0xffffff,0xfff176,0xff8fb8,0x9fd4ff]);
+        for(let j=0;j<5;j++){const pt=new THREE.Mesh(new THREE.SphereGeometry(.018,6,4),M(pc,{roughness:.5}));const a=j/5*Math.PI*2;pt.position.set(Math.cos(a)*.022,.11,Math.sin(a)*.022);fw.add(pt)}
+        const cen=new THREE.Mesh(new THREE.SphereGeometry(.012,6,4),M(0xffc400));cen.position.y=.115;fw.add(cen);fw.scale.setScalar(rand(1.2,1.6));fw.position.set(cxz(z)+rand(-w/2+.3,w/2-.3),.03,z);g.add(fw);anim.push({seg:g,obj:fw,kind:"weed",ph:rand(0,6)})}
+      {const n=90,pb=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshStandardMaterial({roughness:.9,flatShading:true}),n),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler(),col=new THREE.Color(),PC=[0xd7ccc8,0xbcaaa4,0x90a4ae,0xffe0b2,0xa1887f,0xcfd8dc];
+        for(let k=0;k<n;k++){const z=rand(-30,30),sz=rand(.04,.11);e.set(rand(0,3),rand(0,6),rand(0,3));q.setFromEuler(e);m4.compose(new THREE.Vector3(cxz(z)+rand(-w/2+.15,w/2-.15),.04,z),q,new THREE.Vector3(sz*1.3,sz*.55,sz));pb.setMatrixAt(k,m4);pb.setColorAt(k,col.set(pick(PC)))}pb.instanceColor.needsUpdate=true;g.add(pb)}
       stoneBridge(g,5-w/2-1.5,w+3);{const sx=segX;bridges.push({seg:g,x0:sx+5-w/2-1.5,x1:sx+5+w/2+1.5,wx:z=>sx+cxz(z)})}
       for(let k=0;k<3;k++){const f=fish(),z=-rand(3,14);g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cxz(z),z,ph:rand(0,30),sp:rand(.06,.1)})}
       for(let k=0;k<6;k++){const z=-rand(2,26),r=new THREE.Mesh(new THREE.ConeGeometry(.05,.9,4),M(0x3f8f2a));r.position.set(cxz(z)+(Math.random()<.5?-1:1)*(w/2+.35),.45,z);g.add(r)}
@@ -1385,7 +1394,7 @@ export function startGame(root,api){
     stepFade(dt);themeCheck+=dt;if(themeCheck>20){themeCheck=0;loadWeather();const T=themeNow();if(T!==TH)fadeTo(T)}lamp.position.set(S.x+.6,2.6,2.4);lamp.intensity+=((TH.night?18:0)-lamp.intensity)*Math.min(1,dt*2);stars.position.x=S.x;rain.position.x=S.x;if(rainMat.opacity>0.01){const a=rainGeo.attributes.position.array;for(let k=0;k<RN;k++){let y=a[k*6+1]-22*dt;if(y<0)y+=18;a[k*6+1]=y;a[k*6+4]=y-.7}rainGeo.attributes.position.needsUpdate=true}const spp=fade?fade.cur.sp:TH.sunPos;sunSp.position.set(S.x+spp[0],spp[1],-170);
     for(const b of birds){b.position.x+=dt*2.2;if(b.position.x>S.x+30)b.position.x=S.x-30;b.position.y+=Math.sin(S.t*1.3+b.userData.ph)*dt*.4;for(const w of b.children)w.rotation.z=w.userData.s*Math.sin(S.t*8+b.userData.ph)*.6}
     for(const h of spinners)h.rotation.z+=dt*1.2;
-    fallTex.offset.y+=dt*2.2;fallTexA.offset.y+=dt*1.6;fallTexB.offset.y+=dt*2.4;canalMat.map.offset.y-=dt*.35;canalRip.offset.y-=dt*.22;clearWater.opacity=.45+Math.sin(S.t*1.3)*.03;if(!clearWater.map&&canalMat.map){clearWater.map=canalMat.map;clearWater.needsUpdate=true}ground.position.x=S.x;
+    fallTex.offset.y+=dt*2.2;fallTexA.offset.y+=dt*1.6;fallTexB.offset.y+=dt*2.4;canalMat.map.offset.y-=dt*.35;canalRip.offset.y-=dt*.45;clearWater.opacity=.45+Math.sin(S.t*1.3)*.03;if(!clearWater.map&&canalMat.map){clearWater.map=canalMat.map;clearWater.needsUpdate=true}ground.position.x=S.x;
     {const on=biomeOf(S.st)==="beach"&&!TH.night;glit.visible=on;if(on){const a=glitGeo.attributes.position.array,sx=(fade?fade.cur.sp:TH.sunPos)[0];for(let k=0;k<GN;k++){if(Math.random()<.08||Math.abs(a[k*3]-S.x)>90){const z=-rand(14,150),sp=1.2+(-z)*.06;a[k*3]=S.x+3+sx*(-z/170)+rand(-sp,sp);a[k*3+1]=.3;a[k*3+2]=z}}glitGeo.attributes.position.needsUpdate=true;glitMat.opacity=.55+Math.sin(S.t*9)*.25;glitMat.color.set(TH.light)}}
     gearT+=dt;if(gearT>.5){gearT=0;applyGear()}if(GEAR.fan.visible)GEAR.fan.rotation.z=Math.sin(S.t*14)*.45;
     for(let i=chests.length-1;i>=0;i--){const c=chests[i];if(c.seg.parent!==world){chests.splice(i,1);continue}const u=c.o.userData;
@@ -1460,7 +1469,7 @@ export function startGame(root,api){
       else if(a.kind==="sea"){const pa=o.geometry.attributes.position,ar=pa.array,bs=a.base;for(let v=0;v<ar.length;v+=3){const wx=a.gx+bs[v],z=bs[v+2],far=Math.min(1,Math.max(0,(shoreZ(wx)-z)/6));const sw=Math.sin(wx*.18+z*.55+S.t*1.3);ar[v+1]=.13+far*(.08*(sw*sw*sw+1)+.035*(Math.sin(wx*.7+S.t*1.6+z*.35)+1)+.025*(Math.sin(wx*.23-S.t*1.1+z*.6)+1))*(1+Math.min(1,(shoreZ(wx)-z)/40))}pa.needsUpdate=true;if((S.t*10|0)%3===0)o.geometry.computeVertexNormals()}
       else if(a.kind==="breaker"){const c=((S.t*.18+a.ph)%1);o.position.z=-9*(1-c);o.position.y=Math.sin(Math.PI*c)*.15;o.material.opacity=Math.sin(Math.PI*c)*.8;o.scale.z=1+c}
       else if(a.kind==="foam2"){const k=(Math.sin(S.t*1.4)+1)/2;o.position.z=.25-k*.5;o.material.opacity=.45+k*.45}
-      else if(a.kind==="koi"){const L=a.len||48,z0=a.z0!=null?a.z0:-36,z=z0+((t*a.sp)%1+1)%1*L,zz=a.local?z:z;o.position.set(a.fx(zz)+a.off+Math.sin(t*.9)*.25,.1,zz);o.rotation.set(0,-Math.PI/2+Math.cos(t*.9)*.3,Math.sin(t*3)*.05)}
+      else if(a.kind==="koi"){const L=a.len||48,z0=a.z0!=null?a.z0:-36,z=z0+((t*a.sp)%1+1)%1*L,zz=a.local?z:z;o.position.set(a.fx(zz)+a.off+Math.sin(t*.9)*.25,a.y||.1,zz);o.rotation.set(0,-Math.PI/2+Math.cos(t*.9)*.3,Math.sin(t*3)*.05)}
       else if(a.kind==="monk"){o.userData.head.rotation.x=Math.sin(t*.8)*.05}
       else if(a.kind==="hoe"){const c=(t*1.1)%1,k=c<.4?c/.4:1-(c-.4)/.6;o.userData.arms[1].rotation.z=.8-k*2.4;o.userData.arms[0].rotation.z=.6-k*2;o.rotation.z=-k*.25}
       else if(a.kind==="plant"){o.rotation.z=-.85;o.position.y=-.15;const k=Math.sin(t*2.5);o.userData.arms[0].rotation.z=o.userData.arms[1].rotation.z=.3+Math.max(0,k)*.5}
@@ -1470,6 +1479,7 @@ export function startGame(root,api){
       else if(a.kind==="cloth"){o.rotation.y=Math.sin(t*1.7)*.3}
       else if(a.kind==="sweep"){const k=Math.sin(t*2.4);o.userData.arms[1].rotation.z=.55+k*.35;o.userData.arms[0].rotation.z=.75+k*.3;o.rotation.y=a.ry+k*.15;o.rotation.z=.08}
       else if(a.kind==="offer"){const u=o.userData,c=(t*.35)%1,k=c<.5?Math.sin(c*2*Math.PI):0;u.arms[0].rotation.z=u.arms[1].rotation.z=.4+k*.8;o.rotation.z=-k*.12}
+      else if(a.kind==="wave"){const P=o.geometry.attributes.position;if(!o.userData.base)o.userData.base=P.array.slice();const B0=o.userData.base,tt=S.t;for(let v=0;v<P.count;v++){const x=B0[v*3],z=B0[v*3+2];P.array[v*3+1]=B0[v*3+1]+Math.sin(z*1.7+tt*2.2+x*.8)*.022+Math.sin(z*3.1-tt*1.6)*.01}P.needsUpdate=true;if(((S.t*10)|0)%3===0)o.geometry.computeVertexNormals()}
       else if(a.kind==="weed"){for(const [k,c] of o.children.entries())c.rotation.z=Math.sin(t*1.6+k)*.25}
       else if(a.kind==="swim"){const q=t*a.sp;o.position.set(a.x0+Math.cos(q)*a.r,a.y0+Math.sin(q*2)*.05,a.z0+Math.sin(q)*a.r*.6);o.rotation.y=-q-Math.PI/2}
       else if(a.kind==="walker"){const ph=t*a.sp,v=Math.cos(ph);o.position.x=a.x0+Math.sin(ph)*a.rg;o.rotation.y=v>=0?0:Math.PI;const sw=Math.sin(S.t*7+a.ph)*.5,u=o.userData;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;u.arms[0].rotation.z=-sw*.8;u.arms[1].rotation.z=sw*.8}
