@@ -8116,6 +8116,8 @@ async function advStart(){
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }
 let advClockT=0;
+/* สลับไปแอปอื่นหรือหน้าอื่น: หยุดเสียงเกมและเพลงหน้าแรก กลับมาที่หน้านี้แล้วดังต่อ */
+document.addEventListener("visibilitychange",()=>{const h=document.hidden;try{advMod?.SND.bg(h)}catch(e){}try{ST_MUSIC.bg(h)}catch(e){}});
 function advClose(){try{sessionStorage.removeItem("kasorbInGame");sessionStorage.removeItem("kasorbGameStage")}catch(e){}clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
@@ -8185,7 +8187,8 @@ const ST_MUSIC=(()=>{let ctx=null,out=null,timer=0,step=0,next=0,on=true,nb=null
       if(b%4===0)kick(next);if(b===4||(b===7&&bar%2))snare(next,b===7?.12:.25);if(b%2===1)snare(next,.05);
       if(b===0||b===4)bass(ch[0]-12,next,sp*3.5);if(b===0)for(const n of ch.slice(1))brass(n,next,sp*7.6,.035);if(m)brass(m,next,sp*(MEL[bar%8][b+1]===0?1.8:.9),.09);
       next+=sp;step++}};
-  return {start(){if(!on)return;init();if(!ctx)return;if(ctx.state!=="running")ctx.resume();if(timer)return;next=ctx.currentTime+.05;step=0;out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.35,ctx.currentTime+1);timer=setInterval(sched,60)},
+  return {bg(hide){try{if(!ctx)return;if(hide){if(ctx.state==="running")ctx.suspend()}else if(timer&&ctx.state!=="running")ctx.resume()}catch(e){}},
+    start(){if(!on)return;init();if(!ctx)return;if(ctx.state!=="running")ctx.resume();if(timer)return;next=ctx.currentTime+.05;step=0;out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(0,ctx.currentTime);out.gain.linearRampToValueAtTime(.35,ctx.currentTime+1);timer=setInterval(sched,60)},
     stop(){clearInterval(timer);timer=0;if(ctx&&out){out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(out.gain.value,ctx.currentTime);out.gain.linearRampToValueAtTime(0,ctx.currentTime+.3)}},
     toggle(){on=!on;try{localStorage.setItem("stMusic",on?"1":"0")}catch(e){}if(on)this.start();else this.stop();return on},isOn:()=>on,playing:()=>!!timer}})();
 window.__stMusic=ST_MUSIC;
