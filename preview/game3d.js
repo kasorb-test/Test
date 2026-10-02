@@ -374,7 +374,7 @@ export function startGame(root,api){
   const canalRip=canvasTex0(128,256,x=>{x.fillStyle="#ffffff";x.fillRect(0,0,128,256);for(let i=0;i<90;i++){const y=Math.random()*256,X=Math.random()*128,L=10+Math.random()*30;x.strokeStyle=`rgba(${Math.random()<.6?'255,255,255':'170,215,235'},${(.35+Math.random()*.5).toFixed(2)})`;x.lineWidth=1+Math.random()*1.6;x.beginPath();x.moveTo(X,y);x.quadraticCurveTo(X+L/2,y-3,X+L,y);x.stroke()}
     for(let i=0;i<40;i++){x.fillStyle="rgba(200,230,245,.5)";x.fillRect(Math.random()*128,Math.random()*256,1.5,1.5)}});
   canalRip.wrapS=canalRip.wrapT=THREE.RepeatWrapping;
-  const canalWater=new THREE.MeshStandardMaterial({vertexColors:true,map:canalRip,transparent:true,opacity:.74,roughness:.12,metalness:.08,emissive:0x0b4a66,emissiveIntensity:.18,depthWrite:false}),canalBed=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1});
+  const canalWater=new THREE.MeshStandardMaterial({vertexColors:true,map:canalRip,transparent:true,opacity:.9,roughness:.12,metalness:.08,emissive:0x0d4f9e,emissiveIntensity:.22,depthWrite:false}),canalBed=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1});
   /* ผิวน้ำไหล: ลายระลอกคลื่นเลื่อนตามทางน้ำ */
   {const c=document.createElement("canvas");c.width=64;c.height=128;const x=c.getContext("2d");x.fillStyle="#3da5d6";x.fillRect(0,0,64,128);for(let i=0;i<70;i++){x.fillStyle=`rgba(${Math.random()<.5?'255,255,255':'120,210,245'},${(.15+Math.random()*.45).toFixed(2)})`;x.fillRect(Math.random()*64,Math.random()*128,4+Math.random()*14,1.5+Math.random()*2)}
     const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;canalMat.map=t}
@@ -1025,7 +1025,7 @@ export function startGame(root,api){
     if(B==="canal"&&segN%2===0){
       /* คลองคดเคี้ยว ตลิ่งดินกับหญ้า สะพานหินโค้งข้ามคลอง ปลากระโดด */
       pathPiece(0,5-w/2-1.5);pathPiece(5+w/2+1.5,SEG);
-      g.add(ribbon(cxz,40,-45,w/2+.32,.022,M(0x6a5638,{roughness:1}),90));g.add(ribbon3(cxz,40,-45,w/2,.03,canalBed,0xd8c79a,0x3f7480));g.add(ribbon3(cxz,40,-45,w/2,.17,canalWater,0xa8ece4,0x2196d3));
+      g.add(ribbon(cxz,40,-45,w/2+.32,.022,M(0x6a5638,{roughness:1}),90));g.add(ribbon3(cxz,40,-45,w/2,.03,canalBed,0xd8c79a,0x2f5f9a));g.add(ribbon3(cxz,40,-45,w/2,.17,canalWater,0x6cc6f2,0x1476d6));
       /* ขอบคลองเรียงหินก้อนแบน มีตะไคร่ */
       {const n=150,kb=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshStandardMaterial({roughness:.95,flatShading:true}),n),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler(),col=new THREE.Color(),KC=[0x8d8d86,0x7b8077,0x9a958a,0x6f7a5e,0x868e78];
         for(let k=0;k<n;k++){const side=k%2?1:-1,z=36-(k>>1)*1.05+rand(-.2,.2),sz=rand(.2,.32);e.set(rand(-.3,.3),rand(0,6),rand(-.3,.3));q.setFromEuler(e);m4.compose(new THREE.Vector3(cxz(z)+side*(w/2+rand(.02,.14)),.08,z),q,new THREE.Vector3(sz*1.3,sz*.5,sz));kb.setMatrixAt(k,m4);kb.setColorAt(k,col.set(pick(KC)))}
