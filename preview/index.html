@@ -5306,7 +5306,7 @@ function xpForAnswer(correct,attempt){
 /* RANK */
 
 /*
-  ยศตามเลเวล รวม 19 ขั้น Lv.0 - Lv.18
+  ยศตามเลเวล รวม 21 ขั้น Lv.0 - Lv.20
   สมาชิก Freeแสดงเป็น "ผู้ทดลองสอบ" Lv.0 เสมอ
   สมาชิก Premiumขึ้นเลเวลเมื่อผ่านทั้ง 2 เงื่อนไข:
   - ทำแล้วขั้นต่ำ (% ของข้อสอบทั้งหมดในเว็บ นับข้อที่ไม่ซ้ำ)
@@ -5316,6 +5316,7 @@ function xpForAnswer(correct,attempt){
 const PREMIUM_RANKS=[
   "ผู้ทดลองสอบ",
   "ผู้สมัครสอบ",
+  "ผู้เตรียมตัวสอบ",
   "ผู้เข้าสอบ",
   "ผู้สอบผ่าน",
   "นสต.",
@@ -5332,15 +5333,16 @@ const PREMIUM_RANKS=[
   "พ.ต.อ.",
   "พล.ต.ต.",
   "พล.ต.ท.",
-  "พล.ต.อ."
+  "พล.ต.อ.",
+  "เกษียณราชการ"
 ];
 /* [ทำแล้วขั้นต่ำ %, XP ขั้นต่ำ] ของแต่ละเลเวล (Lv.1 ใช้เงื่อนไขทำข้อแรกแทน) */
 const LEVEL_RULES=[
   [0,0],[0,0],
-  [5,5000],[10,10000],[15,18000],[20,25000],[25,32000],
-  [30,40000],[35,48000],[40,56000],[50,68000],[60,80000],
-  [70,92000],[80,105000],[85,115000],[90,125000],[95,140000],
-  [98,155000],[100,180000]
+  [5,5000],[10,10000],[25,15000],[30,18000],[35,25000],
+  [40,32000],[45,40000],[50,48000],[55,56000],[60,68000],
+  [65,80000],[70,92000],[75,105000],[80,115000],[85,125000],
+  [90,140000],[95,155000],[98,170000],[100,180000]
 ];
 /*
   เลเวลปัจจุบัน คิดใหม่ทุกครั้งจากเปอร์เซ็นต์และ XP ตอนนี้
@@ -5384,8 +5386,8 @@ if(currentData?.plan!=="premium"){
 const level=currentLevel();
 let rank=premiumRank(level);
 
-/* ผู้หญิงต่อท้ายยศว่า "หญิง" ทุกยศ ตั้งแต่ Lv.1 */
-if(currentData?.gender==="female" && level>0){
+/* ผู้หญิงต่อท้ายยศว่า "หญิง" ทุกยศ ตั้งแต่ Lv.1 (ยกเว้น "เกษียณราชการ") */
+if(currentData?.gender==="female" && level>0 && level<MAX_LEVEL){
   rank += "หญิง";
 }
 
@@ -7506,7 +7508,7 @@ async function openAttempt(a,btn){
 /* ===== ภาพรวมผลการทดสอบ: บันไดยศ + เงื่อนไขเลื่อนยศ + ผลรายวิชา ===== */
 /* สีตามช่วงคะแนน: 0-29 แดง · 30-59 เหลือง · 60-79 ฟ้า · 80-100 เขียว */
 const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
-function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
+function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0&&lv<MAX_LEVEL?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
 /* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
 /* ===== เหรียญอัตโนมัติ + แลกส่วนลด =====
@@ -7570,12 +7572,12 @@ function bindShop(){
 const OUTFITS=[
   {id:"tee",name:"เสื้อยืดกีฬา",lv:0,shirt:"#ff8a3d",sleeve:"#ff8a3d",pants:"#334155",shoe:"#f8fafc",sole:"#94a3b8",collar:"round",trim:"#fff"},
   {id:"student",name:"ชุดนักเรียน",lv:1,shirt:"#ffffff",sleeve:"#ffffff",pants:"#1e3a8a",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#cbd5e1",tie:"#1e3a8a"},
-  {id:"track",name:"ชุดวอร์มฝึก",lv:2,shirt:"#1f3b73",sleeve:"#1f3b73",pants:"#1f3b73",shoe:"#f8fafc",sole:"#94a3b8",collar:"zip",trim:"#ffb21e",stripe:"#ffb21e"},
-  {id:"cadet",name:"ชุดนักเรียนนายสิบ",lv:4,shirt:"#b08d57",sleeve:"#b08d57",pants:"#8c6d3f",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#8c6d3f",badge:"#f5b301",belt:"#3f2d14",hat:"cap",hatc:"#8c6d3f"},
-  {id:"khaki",name:"เครื่องแบบกากี",lv:6,shirt:"#a3825a",sleeve:"#a3825a",pants:"#7a5f3b",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#7a5f3b",badge:"#f5b301",belt:"#111827",hat:"peak",hatc:"#6b5130",pocket:1},
-  {id:"white",name:"ชุดปกติขาว",lv:9,shirt:"#ffffff",sleeve:"#ffffff",pants:"#ffffff",shoe:"#111827",sole:"#111827",collar:"high",trim:"#e2e8f0",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#ffffff",gold:1},
-  {id:"navy",name:"ชุดพิธีการ",lv:12,shirt:"#16305f",sleeve:"#16305f",pants:"#0f2449",shoe:"#111827",sole:"#111827",collar:"high",trim:"#f5b301",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#16305f",gold:1,sash:"#e11d48"},
-  {id:"gold",name:"ชุดทองผู้พิชิต",lv:18,shirt:"#f5c542",sleeve:"#f5c542",pants:"#d9a400",shoe:"#7c5a00",sole:"#5a4100",collar:"high",trim:"#fff6c2",badge:"#fff",belt:"#7c5a00",hat:"crown",hatc:"#ffd84a",gold:1,cape:"#e11d48"}
+  {id:"track",name:"ชุดวอร์มฝึก",lv:3,shirt:"#1f3b73",sleeve:"#1f3b73",pants:"#1f3b73",shoe:"#f8fafc",sole:"#94a3b8",collar:"zip",trim:"#ffb21e",stripe:"#ffb21e"},
+  {id:"cadet",name:"ชุดนักเรียนนายสิบ",lv:5,shirt:"#b08d57",sleeve:"#b08d57",pants:"#8c6d3f",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#8c6d3f",badge:"#f5b301",belt:"#3f2d14",hat:"cap",hatc:"#8c6d3f"},
+  {id:"khaki",name:"เครื่องแบบกากี",lv:7,shirt:"#a3825a",sleeve:"#a3825a",pants:"#7a5f3b",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#7a5f3b",badge:"#f5b301",belt:"#111827",hat:"peak",hatc:"#6b5130",pocket:1},
+  {id:"white",name:"ชุดปกติขาว",lv:10,shirt:"#ffffff",sleeve:"#ffffff",pants:"#ffffff",shoe:"#111827",sole:"#111827",collar:"high",trim:"#e2e8f0",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#ffffff",gold:1},
+  {id:"navy",name:"ชุดพิธีการ",lv:13,shirt:"#16305f",sleeve:"#16305f",pants:"#0f2449",shoe:"#111827",sole:"#111827",collar:"high",trim:"#f5b301",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#16305f",gold:1,sash:"#e11d48"},
+  {id:"gold",name:"ชุดทองผู้พิชิต",lv:19,shirt:"#f5c542",sleeve:"#f5c542",pants:"#d9a400",shoe:"#7c5a00",sole:"#5a4100",collar:"high",trim:"#fff6c2",badge:"#fff",belt:"#7c5a00",hat:"crown",hatc:"#ffd84a",gold:1,cape:"#e11d48"}
 ];
 const outfitOf=id=>OUTFITS.find(o=>o.id===id)||OUTFITS[0];
 function bestOutfit(lv){return OUTFITS.filter(o=>o.lv<=lv).pop()||OUTFITS[0]}
