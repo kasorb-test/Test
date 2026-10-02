@@ -3368,7 +3368,7 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 .xbox{margin:4px 0 12px;padding:12px 14px;border:1.5px solid #333;border-radius:4px;background:#fff;white-space:pre-line;font-size:15.5px;line-height:1.75;color:#000;text-align:justify}
 .xtblw{overflow-x:auto;max-width:100%;margin:4px 0 12px}.xwrap>*,.xpaper{min-width:0}@media(max-width:600px){.xtbl{font-size:13px}.xtbl th,.xtbl td{padding:5px 6px}}
 .xtbl{border-collapse:collapse;font-size:15px;min-width:50%}
-.ssec{margin:18px 0 26px}.stag{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.5px;background:#fff}.stag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.ssec{margin:18px 0 26px}.chip2 .cn.arr{background:transparent;color:#ff6a00;font-size:18px}.stag{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.5px;background:#fff}.stag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
 .stag.or{color:#e86208;border-color:#fde0cb;background:#fff7f0}.stag.bl{color:#16305f;border-color:#d7e0f0;background:#f3f6fc}
 .stt{margin:12px 0 16px;font-size:26px;font-weight:900;color:#1b1b1b;line-height:1.3}@media(max-width:600px){.stt{font-size:22px}}
 .chips2{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:700px){.chips2{grid-template-columns:1fr 1fr}}.chips2 .chip2{width:100%;justify-content:flex-start;text-align:left}.chips2 .chip2 .cn{margin-left:auto}
@@ -4074,9 +4074,10 @@ LINE OA @kasorb
 <p class="page-desc">
 เลือกวิชาที่ต้องการฝึกทำแบบทดสอบ
 </p>
-<div class="stabs" id="subjTabs"><button type="button" data-t="subj" class="on">รายวิชา</button><button type="button" data-t="real" id="subjRealTab" class="hidden">ข้อสอบจริง <span class="tier pm">Premium</span></button><button type="button" class="gomock" id="subjGoMock">ข้อสอบเสมือนจริง ›</button></div>
+<div class="ssec" style="margin-top:6px"><div class="chips2"><button type="button" class="chip2 gomock2" id="subjGoMock"><svg class="ci" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>ข้อสอบเสมือนจริง</span><span class="cn arr">›</span></button></div></div>
 <div id="subjTrackBox" class="ssec"><span class="stag or">ตามสายงาน</span><h3 class="stt">เลือกดูตามสายงาน</h3><div class="chips2" id="subjTracks"></div></div>
 <div id="subjListBox" class="ssec"><span class="stag bl" id="subjListTag">ตามรายวิชา</span><h3 class="stt" id="subjListTitle">เลือกดูตามรายวิชา</h3><div class="chips2" id="subjList"></div></div>
+<div id="subjRealBox" class="ssec hidden"><span class="stag or">เฉพาะ Premium</span><h3 class="stt">ข้อสอบจริง</h3><div class="chips2"><button type="button" class="chip2" id="subjRealTog"><svg class="ci" viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg><span>ข้อสอบจริงรายวิชา</span><span class="cn arr" id="subjRealArr">▾</span></button></div><div class="chips2 hidden" id="subjRealList" style="margin-top:10px"></div></div>
 <div class="hidden" id="subjSetsBox"><button class="set-back" id="subjBack" type="button">เลือกวิชาอื่น</button><h3 id="subjName" class="subj-h"></h3><div id="subjSets"></div></div>
 </section>
 <!-- MOCK -->
@@ -7096,11 +7097,10 @@ const SLOTS=20,FREE_SLOTS=5;
 let subjToken=0,subjTab="subj",subjTrack=(()=>{try{return localStorage.getItem("kasorbSubjTrack")||"amnuay"}catch(e){return "amnuay"}})();
 async function renderSubjectPage(){
   const my=++subjToken;
-  if(subjTab==="real"&&!isPremium()) subjTab="subj";
-  $("subjRealTab").classList.toggle("hidden",!isPremium());
-  document.querySelectorAll("#subjTabs [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===subjTab));
+  subjTab="subj";
+  $("subjRealBox").classList.toggle("hidden",!isPremium());
   $("subjSetsBox").classList.add("hidden");$("subjListBox").classList.remove("hidden");const box=$("subjList");
-  $("subjTrackBox").classList.toggle("hidden",subjTab!=="subj");
+  $("subjTrackBox").classList.remove("hidden");
   $("subjListTag").textContent=subjTab==="real"?"เฉพาะ Premium":"ตามรายวิชา";
   $("subjListTitle").textContent=subjTab==="real"?"ข้อสอบจริงรายวิชา":`รายวิชาของ${(TRACKS.find(t=>t[0]===subjTrack)||[])[1]||""}`;
   box.innerHTML='<p class="small">กำลังโหลด…</p>';
@@ -7112,7 +7112,7 @@ async function renderSubjectPage(){
   const kind=subjTab==="real"?"real":"subject";
   const subjSets=list.filter(e=>e.kind==="subject");
   const cnt=n=>`<span class="cn${n?"":" z"}">${n}</span>`;
-  $("subjTracks").innerHTML=shownTracks().map(([id,name])=>{const subs=subjectsOf(id);return `<button type="button" data-id="${id}" class="chip2${id===subjTrack?" on":""}">${ICO.layers}<span>${escHtml(name)}</span>${cnt(subjSets.filter(e=>subs.includes(e.subject)).length)}</button>`}).join("");
+  $("subjTracks").innerHTML=shownTracks().map(([id,name])=>{const subs=subjectsOf(id);return `<button type="button" data-id="${id}" class="chip2${id===subjTrack?" on":""}">${ICO.layers}<span>${escHtml(name)}</span></button>`}).join("");
   $("subjTracks").querySelectorAll("button").forEach(b=>b.onclick=()=>{subjTrack=b.dataset.id;try{localStorage.setItem("kasorbSubjTrack",subjTrack)}catch(e){}renderSubjectPage()});
   box.innerHTML="";
   const subs=subjTab==="real"?REAL_SUBJECTS:subjectsOf(subjTrack);
@@ -7123,6 +7123,10 @@ async function renderSubjectPage(){
     b.onclick=()=>openSubject(sub,sets,kind);
     box.appendChild(b);
   });
+  /* ข้อสอบจริง (Premium) อยู่ใต้รายวิชา กดเปิดดูได้ */
+  const rl=$("subjRealList");rl.innerHTML="";
+  if(isPremium())REAL_SUBJECTS.forEach(sub=>{const sets=list.filter(e=>e.kind==="real"&&e.subject===sub);const b=document.createElement("button");b.type="button";b.className="chip2";
+    b.innerHTML=`${subjIcon(sub)}<span>ข้อสอบจริง${escHtml(subjShow(sub))}</span>${cnt(sets.length)}`;b.onclick=()=>openSubject(sub,sets,"real");rl.appendChild(b)});
 }
 /* ไอคอนเส้นของแต่ละวิชา */
 const svgI=d=>`<svg class="ci" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -7148,7 +7152,7 @@ function subjIcon(sub){
   return ICO.shield;
 }
 async function openSubject(sub,sets,kind){
-  $("subjListBox").classList.add("hidden");$("subjTrackBox").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");
+  $("subjListBox").classList.add("hidden");$("subjTrackBox").classList.add("hidden");$("subjRealBox").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");
   $("subjName").textContent=(kind==="real"?"ข้อสอบจริง":"")+subjShow(sub);
   const box=$("subjSets");box.innerHTML="";
   const prog=await loadProgress().catch(()=>({best:{}}));
@@ -7184,7 +7188,7 @@ async function openSubject(sub,sets,kind){
   window.scrollTo(0,0);
 }
 $("subjBack").onclick=()=>renderSubjectPage();
-document.querySelectorAll("#subjTabs [data-t]").forEach(b=>b.onclick=()=>{subjTab=b.dataset.t;renderSubjectPage()});
+$("subjRealTog").onclick=()=>{const l=$("subjRealList"),open=l.classList.toggle("hidden");$("subjRealArr").textContent=open?"▾":"▴"};
 $("subjGoMock").onclick=()=>showAppPage("mockPage","แบบทดสอบเสมือนจริง");
 $("hhMock").onclick=()=>showAppPage("mockPage","แบบทดสอบเสมือนจริง");
 $("hhSubj").onclick=()=>showAppPage("subjectPage","แบบทดสอบรายวิชา");
