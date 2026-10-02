@@ -3439,6 +3439,14 @@ sub{font-size:.72em;vertical-align:sub;line-height:0}
 .omr .o{flex:0 0 19px;width:19px;height:19px;border-radius:50%;border:1.3px solid #e07a45;display:grid;place-items:center;font-size:11px;color:#e07a45;line-height:1;cursor:pointer;padding:0;background:transparent}
 .omr .o.f{background:#111;border-color:#111;color:#111}
 .omr .lab{display:flex;gap:4px;padding:0 2px 4px 32px;font-size:11px;color:#c2410c;font-weight:700}.omr .lab span{width:19px;text-align:center}
+.omr .hd .ht{display:flex;flex-direction:column;line-height:1.15}.omr .hd .ht small{font-family:Arial,sans-serif;font-size:9.5px;letter-spacing:.22em;opacity:.75}
+.omr .omtg{flex:0 0 auto;margin:0;padding:5px 10px;border-radius:999px;border:1.3px solid currentColor;background:#fff;color:inherit;font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.omr .omi{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;margin:0 0 6px;padding:6px 4px 7px;border-bottom:1.5px solid #e9a27a;font-size:12px;color:#7c2d12}.omr .omi span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dotted #f1c9ad;padding-bottom:2px}.omr .omi b{color:#111;font-weight:700}.omr .omi .w{grid-column:1/-1}.omr.wide .omi .w{grid-column:auto}
+.omr .omrc{font-size:11.5px;font-weight:700;color:#c2410c;text-align:right;margin:0 2px 4px}
+.omr.wide .omi{grid-template-columns:repeat(5,auto)}.omr.wide .cols{grid-template-columns:repeat(var(--oc),126px);column-gap:6px}.omr.wide .cols>div{border-left:1px solid #f1c9ad;padding-left:4px}.omr.wide .cols>div:first-child{border-left:0;padding-left:0}
+body.xomr-wide .xwrap{max-width:none;grid-template-columns:minmax(360px,1fr) auto}body.xomr-wide .xside{max-width:calc(100vw - 420px);overflow:auto}body.xomr-wide .xside .omr{width:max-content}
+.omr.navy .omi{border-bottom-color:#8ea4c9;color:#1e3a6e}.omr.navy .omi span{border-bottom-color:#d5deee}.omr.navy .omrc{color:#16305f}.omr.navy.wide .cols>div{border-left-color:#d5deee}
+.omr.navy{background:#f7f9fd;border-color:#8ea4c9}.omr.navy .hd{border-bottom-color:#8ea4c9;color:#16305f}.omr.navy .r{border-bottom-color:#d5deee}.omr.navy .r.end{border-bottom-color:#16305f}.omr.navy .n,.omr.navy .lab{color:#16305f}.omr.navy .o{border-color:#5a76a8;color:#5a76a8}.omr.navy .o.f{background:#111;border-color:#111;color:#111}
 .xdrawer{display:none}
 .xshield{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .xshield.hidden{display:none}
@@ -3450,7 +3458,7 @@ body.xhide #xPaper,body.xhide .omr{filter:blur(14px)}
  .xopts.row{grid-template-columns:repeat(4,1fr)}
  body.xsheet .xdrawer{display:block;position:fixed;inset:0;z-index:40;background:rgba(15,23,42,.4)}
  .xdbox{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:16px 14px 18px;max-height:75vh;overflow:auto}
- .xdbox .omr .cols{grid-template-columns:1fr 1fr}
+ .xdbox .omr .cols{grid-template-columns:1fr 1fr}.xdbox .omr.wide{overflow-x:auto}.xdbox .omr.wide .cols{grid-template-columns:repeat(var(--oc),126px)}.xdbox .omr.wide .omi{grid-template-columns:1fr 1fr}
 }
 /* ผลสอบ */
 .rcard{margin:0 0 16px;padding:24px;border-radius:20px;background:linear-gradient(120deg,#ff8a2b,#ff6a00 60%,#e2520a);color:#fff;box-shadow:0 10px 26px rgba(226,82,10,.25)}
@@ -7322,16 +7330,28 @@ function renderExam(){
   });
   renderOmr();paintAnswers();watchImgs(paper);
 }
+/* สีกระดาษคำตอบตามเลขชุด: ชุดคี่สีส้ม ชุดคู่สีกรม (ไม่มีเลขชุด = ส้ม) */
+const sheetNavy=title=>{const m=String(title||"").match(/ชุดที่\s*(\d+)/);return !!m&&+m[1]%2===0};
+/* กระดาษคำตอบตอนทำข้อสอบ: หัวกระดาษ (ชื่อ ชุดที่ สาย วันที่ เวลาเริ่ม)  ย่อ = 2 คอลัมน์  ขยาย = คอลัมน์ละ 25 ข้อเหมือนกระดาษจริง (จำไว้ในเครื่อง) */
+let omrWide=false;try{omrWide=localStorage.getItem("kasorbOmrWide")==="1"}catch(e){}
 function renderOmr(){
-  const n=exam.items.length,half=Math.ceil(n/2);
-  const ends=new Set((exam.meta.sections||[]).map(x=>x.to));
+  const n=exam.items.length,meta=exam.meta;
+  const ends=new Set((meta.sections||[]).map(x=>x.to));
   const row=i=>`<div class="r${ends.has(exam.items[i].n)?" end":""}"><span class="n" data-go="${i}">${exam.items[i].n}</span>${[0,1,2,3].map(k=>`<button type="button" class="o" data-i="${i}" data-k="${k}">${k+1}</button>`).join("")}</div>`;
-  const col=(a,b)=>`<div><div class="lab"><span>1</span><span>2</span><span>3</span><span>4</span></div>${Array.from({length:b-a},(_,j)=>row(a+j)).join("")}</div>`;
-  const html=`<div class="hd"><span>กระดาษคำตอบ</span><span class="omrc"></span></div><div class="cols">${col(0,half)}${col(half,n)}</div>`;
+  const col=(a,b)=>`<div><div class="lab"><span>1</span><span>2</span><span>3</span><span>4</span></div>${Array.from({length:Math.max(0,b-a)},(_,j)=>row(a+j)).join("")}</div>`;
+  const nc=omrWide?Math.max(1,Math.ceil(n/25)):2,per=omrWide?25:Math.ceil(n/2);
+  let cols="";for(let c=0;c<nc;c++)cols+=col(c*per,Math.min(n,(c+1)*per));
+  const setNo=(String(meta.title||"").match(/ชุดที่\s*(\d+)/)||[])[1]||"-";
+  const trk=(Array.isArray(meta.track)?meta.track:[]).map(id=>(TRACKS.find(t=>t[0]===id)||[])[1]).filter(Boolean).map(x=>x.replace(/^สาย/,"")).join(" / ")||"-";
+  const t0=new Date(exam.startedAt||Date.now());
+  const info=`<div class="omi"><span class="w">ชื่อ <b>${escHtml(currentData?.nickname||"-")}</b></span><span class="w">สาย <b>${escHtml(trk)}</b></span><span>ชุดที่ <b>${escHtml(setNo)}</b></span><span>วันที่ <b>${t0.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</b></span><span>เวลาเริ่ม <b>${t0.toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"})} น.</b></span></div>`;
+  const html=`<div class="hd"><span class="ht"><b>กระดาษคำตอบ</b><small>ANSWER SHEET</small></span><button type="button" class="omtg">${omrWide?"ย่อ (2 คอลัมน์)":`ขยาย (${Math.ceil(n/25)} คอลัมน์)`}</button></div>${info}<div class="omrc"></div><div class="cols" style="--oc:${nc}">${cols}</div>`;
+  document.body.classList.toggle("xomr-wide",omrWide);
   ["xOmr","xOmr2"].forEach(id=>{
-    const el=$(id);el.innerHTML=html;
+    const el=$(id);el.innerHTML=html;el.classList.toggle("navy",sheetNavy(meta.title));el.classList.toggle("wide",omrWide);
     el.querySelectorAll(".o").forEach(b=>b.onclick=()=>choose(+b.dataset.i,+b.dataset.k));
     el.querySelectorAll(".n").forEach(b=>b.onclick=()=>{document.body.classList.remove("xsheet");$("xq"+b.dataset.go).scrollIntoView({behavior:"smooth",block:"start"});});
+    el.querySelector(".omtg").onclick=()=>{omrWide=!omrWide;try{localStorage.setItem("kasorbOmrWide",omrWide?"1":"0")}catch(e){}renderOmr();paintAnswers()};
   });
 }
 function choose(i,k){
@@ -7479,7 +7499,7 @@ function renderAnswerSheet(){
   const part=(p,title,nums)=>`<div class="as-c as-p2${p.c>=pass(p.t)?" ok":""}"><span>${title} (${nums}) ${p.t}</span><div class="as-got">${p.c}</div><em>${p.c>=pass(p.t)?"ผ่านเกณฑ์":`ยังไม่ผ่าน (ผ่าน ${pass(p.t)})`}</em></div>`;
   const pct=Math.round(r.correct/n*100);
   const setNo=(r.meta.title.match(/ชุดที่\s*(\d+)/)||[])[1]||"";
-  $("rSheet").className="asheet navy";
+  $("rSheet").className="asheet"+(sheetNavy(r.meta.title)?" navy":"");
   $("rSheet").innerHTML=`<div class="as-head"><div class="as-logo"><b>กะสอบ</b><i>TEST</i></div>
     <div class="as-ht"><small>ANSWER SHEET</small><h3>${escHtml(r.meta.title)}</h3>
     <div class="as-info"><span>${escHtml(currentData?.nickname||"")} <b>${escHtml(codeOfData(currentData))}</b></span>${setNo?`<span>ชุดที่ <b>${escHtml(setNo)}</b></span>`:""}<span>${new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"})}</span><span>ใช้เวลา <b>${fmtTime(r.secs)}</b></span></div></div></div>
@@ -7890,7 +7910,7 @@ function advQuestion(st){
   const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
 /* เลขเวอร์ชันไฟล์เกม: ตอนเผยแพร่ สคริปต์จะใส่เลขใหม่ให้ เครื่องผู้เล่นจะได้โหลดไฟล์เกมใหม่ทุกครั้งที่อัปเดต ไม่ใช้ไฟล์เก่าที่ค้างในเครื่อง */
-const GAME_V="202610020736";
+const GAME_V="202610021013";
 /* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
 let adv=null,advMod=null,advSayQ=[],advSayT=0;
 /* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
