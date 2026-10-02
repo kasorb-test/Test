@@ -7,6 +7,7 @@ for f in index.html admin.html; do
 import sys,re;s=open(sys.argv[1],encoding="utf-8").read()
 s=s.replace("<title>[ทดลอง] ","<title>",1)
 s=re.sub(r'<div style="position:fixed;left:8px;bottom:8px;z-index:99999;[^>]*>หน้าทดลอง</div>',"",s)
+import time;s=s.replace('const GAME_V="dev";','const GAME_V="%s";'%time.strftime("%Y%m%d%H%M"),1)
 open(sys.argv[2],"w",encoding="utf-8").write(s)
 PY
 done
