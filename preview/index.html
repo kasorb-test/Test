@@ -8,7 +8,7 @@
 (function(){var d=false;try{d=localStorage.getItem("kasorbDesktop")==="1"}catch(e){}
 var z=Math.min(1,(Math.min(screen.width,screen.height)||390)/1200).toFixed(3);
 document.write('<meta name="viewport" content="'+(d?"width=1200,initial-scale="+z+",minimum-scale="+z:"width=device-width,initial-scale=1.0")+'">');
-if(d)document.documentElement.classList.add("desk-view");})();
+if(d){document.documentElement.classList.add("desk-view");if(Math.min(screen.width,screen.height)<900){document.documentElement.classList.add("desk-phone");document.documentElement.style.setProperty("--dz",(1/z).toFixed(2))}}})();
 </script>
 <noscript><meta content="width=device-width,initial-scale=1.0" name="viewport"/></noscript>
 <title>[ทดลอง] KASORB TEST</title>
@@ -2746,6 +2746,10 @@ body.adv-on{overflow:hidden}
 .adv-clock{position:absolute;right:12px;top:12px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 0 rgba(0,0,0,.1);pointer-events:none}
 .adv-clock b{font-size:22px;line-height:1.1;color:#16305f;font-variant-numeric:tabular-nums}.adv-clock span{font-size:11.5px;color:#475569;white-space:nowrap}
 @media(max-width:600px){.adv-clock{top:10px;left:10px;right:auto;align-items:flex-start}.adv-clock b{font-size:18px}}
+/* มือถือที่เปิดมุมมองคอม: หน้าเว็บยังเป็นมุมมองคอมเหมือนเดิม แต่ขยายแถบ ปุ่ม และกล่องในเกมให้ใหญ่เท่าตอนดูแบบมือถือ */
+html.desk-phone :is(.adv-top,.adv-pad,.adv-jump,.adv-clock,.adv-side,.adv-q,.adv-start-box,.adv-menu-box,.adv-msg,.adv-toast,.adv-shop,.adv-pray,.adv-near,.adv-gear){zoom:var(--dz,1)}
+/* มุมมองคอมบนมือถือ: จัดวางในเกมแบบเดียวกับมุมมองมือถือ (กล่อง 8 วงกลม มุมขวาบน ฯลฯ) */
+html.desk-phone .adv-clock{top:10px;left:10px;right:auto;align-items:flex-start}html.desk-phone .adv-clock b{font-size:18px}html.desk-phone .adv-q{top:20%;bottom:auto;padding:8px 12px;border-radius:16px}html.desk-phone .adv-view.asking .adv-clock{display:none}html.desk-phone .adv-q.box .adv-qt{font-size:16px}html.desk-phone .adv-q.box .adv-ops button{padding:5px 8px;font-size:13px}html.desk-phone .adv-q.box .adv-ops button b{width:22px;height:22px;font-size:13px}html.desk-phone .adv-qt{font-size:19px}html.desk-phone .adv-qh{display:none}html.desk-phone .adv-pic{font-size:44px;margin:2px 0}html.desk-phone .adv-ops{gap:5px;margin-top:6px}html.desk-phone .adv-ops button{padding:6px 7px;font-size:13px}html.desk-phone .adv-view.asking .adv-pad,html.desk-phone .adv-view.asking .adv-jump{opacity:.35}html.desk-phone .adv-plat{width:80px;margin-left:-40px}html.desk-phone .adv-plat span{font-size:17px;min-width:48px}html.desk-phone .adv-dress{display:none}html.desk-phone .adv-gear{top:84px;right:8px}html.desk-phone .adv-gs{width:42px;height:42px}html.desk-phone .adv-side{position:absolute;right:8px;top:10px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 6px;border-radius:14px;background:rgba(122,74,28,.88);border:2px solid #5a3412;box-shadow:0 3px 0 #3b2109}html.desk-phone .adv-side .adv-pts{font-size:13px;padding:2px 7px}html.desk-phone .adv-side .adv-prog{display:grid!important;grid-template-columns:repeat(4,10px);gap:4px}html.desk-phone .adv-side .adv-prog i{width:10px;height:10px}html.desk-phone .adv-q,html.desk-phone .adv-q.box{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 24px)}html.desk-phone .adv-q.box{top:96px}
 .adv-pad{position:absolute;left:14px;bottom:18px;display:flex;gap:12px;z-index:5}
 .adv-k{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
 .adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
@@ -8025,7 +8029,7 @@ async function advClear(st,got=0){
 async function advStart(){
   /* รีเฟรชระหว่างเล่น: กลับเข้าเกมที่ด่านเดิม (จำไว้ในแท็บนี้ ออกจากเกมแล้วลบทิ้ง) */
   let keepSt=0;try{keepSt=+sessionStorage.getItem("kasorbGameStage")||0}catch(e){}
-  advClose();advPhoneView(true);try{sessionStorage.setItem("kasorbInGame","1");if(keepSt)sessionStorage.setItem("kasorbGameStage",String(keepSt))}catch(e){}
+  advClose();try{sessionStorage.setItem("kasorbInGame","1");if(keepSt)sessionStorage.setItem("kasorbGameStage",String(keepSt))}catch(e){}
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
   ov.innerHTML=`<div class="adv-top"><b id="advSt">Stage 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="Menu">☰ MENU</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
@@ -8045,7 +8049,7 @@ async function advStart(){
   document.body.appendChild(ov);document.body.classList.add("adv-on");
   /* มือถือ: ย้ายดาวกับจุดความคืบหน้าไปไว้ข้างจอขวา แถบด้านบนจะได้ไม่ล้น */
   {const side=document.createElement("div");side.className="adv-side";$("advView").appendChild(side);const top=ov.querySelector(".adv-top"),cn=ov.querySelector(".adv-cn");
-    const place=()=>{const nar=innerWidth<=600,pts=$("advPts"),pr=$("advProg");if(!pts||!pr)return;if(nar&&pts.parentNode!==side){side.append(pts,pr)}else if(!nar&&pts.parentNode===side){top.insertBefore(pr,cn);top.insertBefore(pts,cn)}};place();addEventListener("resize",place)}
+    const place=()=>{const nar=innerWidth<=600||document.documentElement.classList.contains("desk-phone"),pts=$("advPts"),pr=$("advProg");if(!pts||!pr)return;if(nar&&pts.parentNode!==side){side.append(pts,pr)}else if(!nar&&pts.parentNode===side){top.insertBefore(pr,cn);top.insertBefore(pts,cn)}};place();addEventListener("resize",place)}
   ov.addEventListener("pointerdown",()=>advMod?.SND.unlock(),{capture:true});ov.addEventListener("touchend",()=>advMod?.SND.unlock(),{capture:true});
   const menu=$("advMenu");
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
@@ -8112,12 +8116,7 @@ async function advStart(){
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }
 let advClockT=0;
-/* โหมดดูแบบคอมบนมือถือ: ระหว่างเล่นเกมใช้ขนาดจอมือถือปกติ (แถบ ปุ่ม ตัวหนังสือในเกมจะไม่เล็ก) ออกจากเกมแล้วกลับเป็นแบบคอม */
-let advVp=null;
-function advPhoneView(on){const m=document.querySelector('meta[name="viewport"]');if(!m)return;
-  if(on){if(advVp===null&&document.documentElement.classList.contains("desk-view")&&Math.min(screen.width,screen.height)<900){advVp=m.getAttribute("content");m.setAttribute("content","width=device-width,initial-scale=1.0")}}
-  else if(advVp!==null){m.setAttribute("content",advVp);advVp=null}}
-function advClose(){advPhoneView(false);try{sessionStorage.removeItem("kasorbInGame");sessionStorage.removeItem("kasorbGameStage")}catch(e){}clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+function advClose(){try{sessionStorage.removeItem("kasorbInGame");sessionStorage.removeItem("kasorbGameStage")}catch(e){}clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
 /* หน้าเลือกเกม: การ์ดเกมที่มี เพิ่มเกมใหม่ได้ภายหลัง */
