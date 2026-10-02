@@ -2647,7 +2647,7 @@ input{
 .st-col.now{--g:#6be04c;--gd:#3fb830;box-shadow:0 0 0 3px #fff,0 0 18px 4px rgba(255,210,80,.8),inset -5px 0 0 rgba(0,0,0,.12)!important}
 .st-col.next{--dirt:#c98247}
 .st-col.top{--dirt:#e9b93a;--line:rgba(140,90,0,.3);--g:#ffe066;--gd:#e2b100;border-color:#8a6200!important;color:#fff!important}
-.st-goal{position:absolute;left:50%;top:-58px;width:4px;height:52px;margin-left:-2px;background:#e5e7eb;border-radius:2px}
+.st-goal{position:absolute;left:50%;top:-40px;width:4px;height:36px;margin-left:-2px;background:#e5e7eb;border-radius:2px}
 .st-goal:after{content:"";position:absolute;left:4px;top:2px;width:22px;height:14px;background:#ff5a36;clip-path:polygon(0 0,100% 50%,0 100%);animation:stFlagW 1.4s ease-in-out infinite;transform-origin:left center}
 @keyframes stFlagW{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.8)}}
 .st-col.top .st-star{position:absolute;left:50%;top:-78px;margin-left:-8px}
@@ -2910,6 +2910,8 @@ body.adv-on{overflow:hidden}
 .st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
 .st-track:active{cursor:grabbing}
 .st-world{position:relative;height:100%}
+/* มือถือ: เลื่อนดูขั้นอื่นเร็ว ๆ ส่วนที่ยังวาดไม่ทันเคยเป็นสีขาว ให้เป็นสีท้องฟ้าแทน และวาดฉากบันไดเป็นชั้นเดียวล่วงหน้า */
+.st-track{background:linear-gradient(180deg,#6ec6ff 0%,#a9dcff 55%,#d6f0ff 100%)}.st-world{transform:translateZ(0);will-change:transform}
 .st-world .st-scene{background:inherit}
 .st-next{position:absolute;left:50%;top:-30px;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#c2410c;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15);animation:gBobS 2s ease-in-out infinite}
 @keyframes gBobS{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
@@ -7950,7 +7952,7 @@ function advQuestion(st){
   const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
 /* เลขเวอร์ชันไฟล์เกม: ตอนเผยแพร่ สคริปต์จะใส่เลขใหม่ให้ เครื่องผู้เล่นจะได้โหลดไฟล์เกมใหม่ทุกครั้งที่อัปเดต ไม่ใช้ไฟล์เก่าที่ค้างในเครื่อง */
-const GAME_V="202610021411";
+const GAME_V="202610021420";
 /* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
 let adv=null,advMod=null,advSayQ=[],advSayT=0;
 /* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
