@@ -1038,7 +1038,7 @@ export function startGame(root,api){
       for(let k=0;k<22;k++){const z=rand(-30,12),side=Math.random()<.5?-1:1,r=rock(rand(.25,.6),Math.random()<.45);r.position.set(cxz(z)+side*(w/2+rand(.05,.45)),.08,z);g.add(r)}
       for(let k=0;k<6;k++){const z=rand(-20,6),side=Math.random()<.5?-1:1,rd=new THREE.Group();for(let j=0;j<6;j++){const c=new THREE.Mesh(new THREE.ConeGeometry(.03,rand(.7,1.2),4),M(pick([0x5a8f2a,0x6b9e33,0x4c7f22])));c.position.set(rand(-.15,.15),.45,rand(-.15,.15));c.rotation.set(rand(-.2,.2),0,rand(-.2,.2));rd.add(c)}rd.position.set(cxz(z)+side*(w/2+.3),0,z);g.add(rd)}
       for(let k=0;k<5;k++){const f=fish();f.scale.setScalar(rand(.9,1.3));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.2,1.2),ph:rand(0,40),sp:rand(.004,.008)})}
-      stoneBridge(g,5-w/2-1.5,w+3);bridges.push({seg:g,x0:segX+5-w/2-1.5,x1:segX+5+w/2+1.5});
+      stoneBridge(g,5-w/2-1.5,w+3);{const sx=segX;bridges.push({seg:g,x0:sx+5-w/2-1.5,x1:sx+5+w/2+1.5,wx:z=>sx+cxz(z)})}
       for(let k=0;k<3;k++){const f=fish(),z=-rand(3,14);g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cxz(z),z,ph:rand(0,30),sp:rand(.06,.1)})}
       for(let k=0;k<6;k++){const z=-rand(2,26),r=new THREE.Mesh(new THREE.ConeGeometry(.05,.9,4),M(0x3f8f2a));r.position.set(cxz(z)+(Math.random()<.5?-1:1)*(w/2+.35),.45,z);g.add(r)}
       for(let k=0;k<2;k++){const z=-rand(4,20),lp=new THREE.Mesh(new THREE.CircleGeometry(.28,10),M(0x4caf32));lp.rotation.x=-Math.PI/2;lp.position.set(cxz(z)+rand(-.8,.8),.05,z);g.add(lp)}
@@ -1230,7 +1230,7 @@ export function startGame(root,api){
   }
   /* ตกน้ำแล้วต้องตอบข้อใหม่ให้ถูกก่อนถึงจะปีนขึ้นสะพานได้ ตอบผิดเสียหัวใจแล้วได้ข้อใหม่ */
   /* ปีนกลับขึ้นสะพานเสมอ: เป้าหมายคือกลางสะพานที่ตกลงไป */
-  function climbOut(){const br=S.inWater.br||S.qBr,mid=(br.x0+br.x1)/2;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:Math.max(br.x0+.6,Math.min(br.x1-.6,mid))}}
+  function climbOut(){const br=S.inWater.br||S.qBr,mid=(br.x0+br.x1)/2;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:br.x0-.3}}
   function waterChoose(i){if(S.mode!=="ask")return;ui.hideQ();const ok=i===S.q.ans,a=S.ans[i];
     if(ok){S.joy=1.6;SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;ui.stage(S.st,S.need,S.done);S.bq=true;
       climbOut();setTimeout(clearAns,400)}
@@ -1256,7 +1256,7 @@ export function startGame(root,api){
     else S.nextQ=S.x+8;
   }
   function clearAns(){for(const a of S.ans)a.userData.gone=true}
-  function hurt(){S.hearts--;ui.hearts(S.hearts);ui.shake();if(S.hearts<=0){S.mode="dead";const w=critters.some(c=>c.kind!=="veg")||S.scared>0?(critters.some(c=>c.kind==="auntie")?4800:2600):600;setTimeout(()=>ui.lose(S.st,()=>{clearCritters();S.hearts=3;ui.hearts(3);clearAns();S.mode="walk";stage(S.st)}),w)}else if(S.mode==="jumping"){S.mode="walk";afterAnswer(false)}}
+  function hurt(){S.hearts--;ui.hearts(S.hearts);ui.shake();if(S.hearts<=0){S.mode="dead";const w=critters.some(c=>c.kind!=="veg")||S.scared>0?(critters.some(c=>c.kind==="auntie")?4800:2600):600;const wb=S.inWater?(S.inWater.br||S.qBr):null;setTimeout(()=>ui.lose(S.st,()=>{clearCritters();S.hearts=3;ui.hearts(3);clearAns();S.mode="walk";stage(S.st);if(wb){S.x=wb.x0-.3;S.y=0;P.rotation.z=0;held.l=held.r=0;setDir();S.wait=1;S.face=1}}),w)}else if(S.mode==="jumping"){S.mode="walk";afterAnswer(false)}}
   const bursts=[];
   function burst(pos){for(let i=0;i<16;i++){const s=new THREE.Mesh(new THREE.OctahedronGeometry(.12,0),M(pick([0xffd400,0xff6fa5,0x7dd3fc,0xa3e635]),{emissive:0x332200}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-2.5,2.5),rand(2,5),rand(-1.5,1.5));s.userData.life=1;world.add(s);bursts.push(s)}}
   /* ตอบผิดในบ้านผีสิง: ผีโผล่จากพื้นพุ่งเข้าหาจอ (ข้อละตัว) */
@@ -1301,7 +1301,7 @@ export function startGame(root,api){
   }
   /* ควบคุม: ตอนมีคำถามแตะตัวเลข (หรือกด 1-4) ตอนเดินแตะจอ/เว้นวรรค/ลูกศรขึ้น เพื่อกระโดดเก็บเหรียญที่ลอยสูง */
   const ray=new THREE.Raycaster(),v2=new THREE.Vector2();
-  function hop(){if(S.mode==="walk"&&S.y<=0.01&&!S.paused){S.hop={vy:7.5};SND.play("jump")}}
+  function hop(){S.wait=0;if(S.mode==="walk"&&S.y<=0.01&&!S.paused){S.hop={vy:7.5};SND.play("jump")}}
   function tap(e){
     const r=renderer.domElement.getBoundingClientRect();v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
     if(S.mode==="ask"){ray.setFromCamera(v2,cam);const hit=ray.intersectObjects(S.ans.filter(a=>!a.userData.gone),true)[0];
@@ -1318,7 +1318,7 @@ export function startGame(root,api){
   renderer.domElement.addEventListener("pointerup",e=>{const d=view.drag;view.drag=null;if(d&&d.moved)return;tap(e)});
   renderer.domElement.addEventListener("pointercancel",()=>{view.drag=null});
   renderer.domElement.style.touchAction="none";
-  const held={l:0,r:0};const setDir=()=>{S.dir=(held.r?1:0)-(held.l?1:0)};
+  const held={l:0,r:0};const setDir=()=>{S.dir=(held.r?1:0)-(held.l?1:0);if(S.dir)S.wait=0};
   function key(e){if(S.paused)return;if(S.mode==="ask"&&/^[1-4]$/.test(e.key))choose(+e.key-1);if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();hop()}
     if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();held[e.key==="ArrowLeft"?"l":"r"]=1;setDir()}}
   function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
@@ -1332,7 +1332,7 @@ export function startGame(root,api){
   function tick(now){
     const dt0=Math.min(.05,(now-last)/1000);last=now;if(S.paused){raf=requestAnimationFrame(tick);return}const dt=dt0;S.t+=dt;
     /* เดินเอง: กดค้าง ◀ ▶ หรือลูกศรซ้ายขวา ถอยกลับไปเก็บเหรียญได้ แต่ไม่เกินจุดเริ่มด่านของฉากที่ยังโหลดอยู่ */
-    if(S.freeze>0)S.freeze-=dt;const mv=S.mode==="cheer"?1:S.mode==="walk"&&!(S.freeze>0)?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
+    if(S.freeze>0)S.freeze-=dt;const mv=S.mode==="cheer"?1:S.mode==="walk"&&!(S.freeze>0)&&!(S.wait&&!S.dir)?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
     if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);if(mv>0)S.face=1;
       if(S.mode==="walk"&&!S.arch&&!S.hop&&!S.bq&&S.done<S.need&&biomeOf(S.st)==="canal"){const br=bridges.find(b=>b.seg.parent===world&&S.x>b.x0+.7&&S.x<b.x0+2);if(br)ask(br)}
       if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop&&groundY(S.x)<.01&&!(S.freeze>0)&&!critters.some(c=>c.kind==="auntie"||c.kind==="chicks"||c.kind==="vendor"))ask();
@@ -1346,13 +1346,13 @@ export function startGame(root,api){
     if(S.mode==="wet"&&S.inWater){S.wetT=(S.wetT||0)+dt;if(S.wetT>3){S.wetT=0;clearAns();ask(S.inWater.br,true)}}else S.wetT=0;
     if(S.mode==="climb"&&!S.climb&&S.inWater)climbOut();
     if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
-    if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,tx=Math.max(mid-1.3,Math.min(mid+1.3,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
+    if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,wc=sp.br.wx?sp.br.wx(2.2):mid,tx=Math.max(wc-.8,Math.min(wc+.8,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
       if(!sp.fs){sp.fs=1;SND.play("fall")}if(fy<.05&&!sp.hit){sp.hit=1;SND.play("plunge");splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบข้อใหม่ให้ถูกเพื่อขึ้นจากน้ำ");hurt()}
       if(sp.hit&&t>1.3&&!sp.asked&&S.mode==="splash"){sp.asked=1;S.x=fx;S.inWater={x:fx,br:sp.br};clearAns();ask(sp.br,true)}
       if(sp.hit){S.padT=(S.padT||0)+dt;if(S.padT>.6){S.padT=0;ripple(new THREE.Vector3(fx,.19,S.z));SND.play("paddle")}}
       if(sp.hit&&Math.random()<dt*6){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.04,.08),6,4),M(0xffffff,{transparent:true,opacity:.8}));b.position.set(fx+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
-    else if(S.mode==="climb"){const c=S.climb;c.t+=dt;const k=Math.min(1,c.t/.7),x=c.x0+(c.tx-c.x0)*k;P.position.set(x,-.75+(groundY(x)+.75)*k+Math.sin(Math.PI*k)*1.6,2.2*(1-k));P.rotation.z=.25*(1-k);
-      if(k>=1){S.x=c.tx;S.y=0;S.z=0;S.inWater=null;S.qBr=null;S.spl=null;P.rotation.z=0;S.mode="walk";S.wet=4;SND.play("paddle");afterAnswer(true)}}
+    else if(S.mode==="climb"){const c=S.climb;c.t+=dt;const k=Math.min(1,c.t/1),x=c.x0+(c.tx-c.x0)*k;P.position.set(x,-.75+(groundY(x)+.75)*k+Math.sin(Math.PI*k)*1.6,2.2*(1-k));P.rotation.z=.25*(1-k);
+      if(k>=1){S.x=c.tx;S.y=0;S.z=0;S.inWater=null;S.qBr=null;S.spl=null;P.rotation.z=0;S.mode="walk";held.l=held.r=0;setDir();S.wait=1;S.face=1;S.wet=4;SND.play("paddle");afterAnswer(true)}}
     else if(S.inWater){P.position.set(S.inWater.x,-.75+Math.sin(S.t*5)*.08,S.z);P.rotation.z=Math.sin(S.t*4)*.25;S.padT=(S.padT||0)+dt;if(S.padT>.7){S.padT=0;ripple(new THREE.Vector3(S.inWater.x,.19,S.z));SND.play("paddle")}if(Math.random()<dt*3){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.04,.08),6,4),M(0xffffff,{transparent:true,opacity:.8}));b.position.set(S.inWater.x+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
     else{/* กันหลุดออกนอกทาง: ถ้าไม่ได้อยู่ในน้ำ ดึงกลับมากลางทางเสมอ */
       if(S.z){S.z=Math.abs(S.z)<.02?0:S.z*(1-Math.min(1,dt*5))}P.position.set(S.x,S.y+groundY(S.x),S.z);
