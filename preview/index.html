@@ -2910,6 +2910,8 @@ body.adv-on{overflow:hidden}
 .st-track{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;cursor:grab;outline:none}
 .st-track:active{cursor:grabbing}
 .st-world{position:relative;height:100%}
+/* มือถือ: เลื่อนดูขั้นอื่นเร็ว ๆ ส่วนที่ยังวาดไม่ทันเคยเป็นสีขาว ให้เป็นสีท้องฟ้าแทน และวาดฉากบันไดเป็นชั้นเดียวล่วงหน้า */
+.st-track{background:linear-gradient(180deg,#6ec6ff 0%,#a9dcff 55%,#d6f0ff 100%)}.st-world{transform:translateZ(0);will-change:transform}
 .st-world .st-scene{background:inherit}
 .st-next{position:absolute;left:50%;top:-30px;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:#fff;color:#c2410c;font-size:10.5px;font-weight:800;font-style:normal;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15);animation:gBobS 2s ease-in-out infinite}
 @keyframes gBobS{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
