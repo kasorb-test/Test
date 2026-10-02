@@ -1038,7 +1038,7 @@ export function startGame(root,api){
       for(let k=0;k<22;k++){const z=rand(-30,12),side=Math.random()<.5?-1:1,r=rock(rand(.25,.6),Math.random()<.45);r.position.set(cxz(z)+side*(w/2+rand(.05,.45)),.08,z);g.add(r)}
       for(let k=0;k<6;k++){const z=rand(-20,6),side=Math.random()<.5?-1:1,rd=new THREE.Group();for(let j=0;j<6;j++){const c=new THREE.Mesh(new THREE.ConeGeometry(.03,rand(.7,1.2),4),M(pick([0x5a8f2a,0x6b9e33,0x4c7f22])));c.position.set(rand(-.15,.15),.45,rand(-.15,.15));c.rotation.set(rand(-.2,.2),0,rand(-.2,.2));rd.add(c)}rd.position.set(cxz(z)+side*(w/2+.3),0,z);g.add(rd)}
       for(let k=0;k<5;k++){const f=fish();f.scale.setScalar(rand(.9,1.3));g.add(f);anim.push({seg:g,obj:f,kind:"koi",fx:cxz,off:rand(-1.2,1.2),ph:rand(0,40),sp:rand(.004,.008)})}
-      stoneBridge(g,5-w/2-1.5,w+3);bridges.push({seg:g,x0:segX+5-w/2-1.5,x1:segX+5+w/2+1.5});
+      stoneBridge(g,5-w/2-1.5,w+3);{const sx=segX;bridges.push({seg:g,x0:sx+5-w/2-1.5,x1:sx+5+w/2+1.5,wx:z=>sx+cxz(z)})}
       for(let k=0;k<3;k++){const f=fish(),z=-rand(3,14);g.add(f);anim.push({seg:g,obj:f,kind:"fish",x:cxz(z),z,ph:rand(0,30),sp:rand(.06,.1)})}
       for(let k=0;k<6;k++){const z=-rand(2,26),r=new THREE.Mesh(new THREE.ConeGeometry(.05,.9,4),M(0x3f8f2a));r.position.set(cxz(z)+(Math.random()<.5?-1:1)*(w/2+.35),.45,z);g.add(r)}
       for(let k=0;k<2;k++){const z=-rand(4,20),lp=new THREE.Mesh(new THREE.CircleGeometry(.28,10),M(0x4caf32));lp.rotation.x=-Math.PI/2;lp.position.set(cxz(z)+rand(-.8,.8),.05,z);g.add(lp)}
@@ -1132,7 +1132,7 @@ export function startGame(root,api){
   }
   /* เปลี่ยนฉากเมื่อขึ้นด่านใหม่: สร้างชิ้นทางข้างหน้าใหม่ (เฉพาะส่วนที่ยังไม่เห็นบนจอ) */
   function setBiome(st){const nb=biomeOf(st);if(nb===curBiome)return;curBiome=nb;
-    const cut=S.x+14;while(segs.length&&segs[segs.length-1].position.x>=cut){const g=segs.pop();world.remove(g);segX-=SEG}lastB=segs.length?segs[segs.length-1].userData.B:null;
+    const cut=S.x+14;while(segs.length&&segs[segs.length-1].position.x>=cut){const g=segs.pop();freeObj(g);segX-=SEG}lastB=segs.length?segs[segs.length-1].userData.B:null;
     for(let i=anim.length-1;i>=0;i--)if(!live(anim[i]))anim.splice(i,1);for(let i=bridges.length-1;i>=0;i--)if(bridges[i].seg.parent!==world)bridges.splice(i,1);
     while(segX<S.x+60)addSeg()}
   for(let i=0;i<9;i++)addSeg();
@@ -1218,11 +1218,11 @@ export function startGame(root,api){
   const ui=api.ui;
   function stage(st){
     setBiome(st);
-    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;S.rainAsked=false;S.got=0;ui.pts&&ui.pts(0);clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
+    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){freeObj(S.shrine);S.shrine=null}S.prayed=false;S.rainAsked=false;S.got=0;ui.pts&&ui.pts(0);clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(br,water){
-    for(const o of S.ans)world.remove(o);S.ans=[];
+    for(const o of S.ans)freeObj(o);S.ans=[];
     S.mode="ask";S.q=api.question(S.st);S.qT=S.qMax+(S.q.box?4:0);S.qn++;S.qBr=br||null;
     const mid=br?(br.x0+br.x1)/2:0,mk=biomeOf(S.st)==="market"&&!water&&!br,xs=[0,1,2,3].map(i=>water?S.x-2.7+i*1.8:br?mid-2.7+i*1.8:mk?S.x+(W()<600?1.8+i*1.7:2.8+i*2.7):W()<600?S.x+1.5+i*1.45:S.x+2.6+i*1.9);
     S.ans=S.q.opts.map((o,i)=>{const a=answer(S.q.box?String(i+1):o,i);const low=biomeOf(S.st)==="market"&&!water&&!br;if(S.q.box&&W()<600)a.visible=false;a.position.set(xs[i],water?1.5+(i%2)*1:low?.75:(br?groundY(xs[i]):0)+2.2+(i%2)*1.1,water?.9:low?.6:0);a.userData.base=a.position.y;a.scale.setScalar(.01);world.add(a);return a});
@@ -1230,7 +1230,7 @@ export function startGame(root,api){
   }
   /* ตกน้ำแล้วต้องตอบข้อใหม่ให้ถูกก่อนถึงจะปีนขึ้นสะพานได้ ตอบผิดเสียหัวใจแล้วได้ข้อใหม่ */
   /* ปีนกลับขึ้นสะพานเสมอ: เป้าหมายคือกลางสะพานที่ตกลงไป */
-  function climbOut(){const br=S.inWater.br||S.qBr,mid=(br.x0+br.x1)/2;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:Math.max(br.x0+.6,Math.min(br.x1-.6,mid))}}
+  function climbOut(){const br=S.inWater.br||S.qBr,mid=(br.x0+br.x1)/2;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:br.x0-.3}}
   function waterChoose(i){if(S.mode!=="ask")return;ui.hideQ();const ok=i===S.q.ans,a=S.ans[i];
     if(ok){S.joy=1.6;SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;ui.stage(S.st,S.need,S.done);S.bq=true;
       climbOut();setTimeout(clearAns,400)}
@@ -1248,7 +1248,7 @@ export function startGame(root,api){
       else{SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.fall={vy:0};S.mode="falling";S.afterFall=()=>{punish();hurt();if(S.mode!=="dead"){clearAns();S.mode="walk";afterAnswer(false)}}}
     }};
   }
-  function mark(a,color){if(!a)return;a.userData.sp.material.map=numTex(a.userData.label,color);a.userData.sp.material.needsUpdate=true}
+  function mark(a,color){if(!a)return;const om=a.userData.sp.material.map;a.userData.sp.material.map=numTex(a.userData.label,color);if(om)om.dispose();a.userData.sp.material.needsUpdate=true}
   function afterAnswer(ok){
     if(ok){spawnCoins(S.x+2,9,true);if(S.done>=S.need){S.archX=S.x+14;
       if(biomeOf(S.st)==="thai"&&!S.prayed){S.shrineX=S.x+9;S.shrine=buddha();S.shrine.position.set(S.shrineX+2.2,0,-3.3);world.add(S.shrine);S.archX=S.x+16}
@@ -1256,14 +1256,17 @@ export function startGame(root,api){
     else S.nextQ=S.x+8;
   }
   function clearAns(){for(const a of S.ans)a.userData.gone=true}
-  function hurt(){S.hearts--;ui.hearts(S.hearts);ui.shake();if(S.hearts<=0){S.mode="dead";const w=critters.some(c=>c.kind!=="veg")||S.scared>0?(critters.some(c=>c.kind==="auntie")?4800:2600):600;setTimeout(()=>ui.lose(S.st,()=>{clearCritters();S.hearts=3;ui.hearts(3);clearAns();S.mode="walk";stage(S.st)}),w)}else if(S.mode==="jumping"){S.mode="walk";afterAnswer(false)}}
+  function hurt(){S.hearts--;ui.hearts(S.hearts);ui.shake();if(S.hearts<=0){S.mode="dead";const w=critters.some(c=>c.kind!=="veg")||S.scared>0?(critters.some(c=>c.kind==="auntie")?4800:2600):600;const wb=S.inWater?(S.inWater.br||S.qBr):null;setTimeout(()=>ui.lose(S.st,()=>{clearCritters();S.hearts=3;ui.hearts(3);clearAns();S.mode="walk";stage(S.st);if(wb){S.x=wb.x0-.3;S.y=0;P.rotation.z=0;held.l=held.r=0;setDir();S.wait=1;S.face=1}}),w)}else if(S.mode==="jumping"){S.mode="walk";afterAnswer(false)}}
   const bursts=[];
+  /* ฟองน้ำ หยดน้ำ ใช้รูปทรงกับวัสดุร่วมกัน ไม่สร้างใหม่ทุกเม็ด (เกิดหลายเม็ดต่อวินาที) */
+  const bubG=new THREE.SphereGeometry(1,6,4),bubM=M(0xffffff,{transparent:true,opacity:.8}),dripM=M(0x9fdcff,{transparent:true,opacity:.85,emissive:0x2a6a8a});
+  const pooled=(mat,r)=>{const m=new THREE.Mesh(bubG,mat);m.scale.setScalar(r);m.userData.keep=1;return m};
   function burst(pos){for(let i=0;i<16;i++){const s=new THREE.Mesh(new THREE.OctahedronGeometry(.12,0),M(pick([0xffd400,0xff6fa5,0x7dd3fc,0xa3e635]),{emissive:0x332200}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-2.5,2.5),rand(2,5),rand(-1.5,1.5));s.userData.life=1;world.add(s);bursts.push(s)}}
   /* ตอบผิดในบ้านผีสิง: ผีโผล่จากพื้นพุ่งเข้าหาจอ (ข้อละตัว) */
   const ghosts=[],ripples=[];
   function scare(){if(biomeOf(S.st)!=="haunted")return;const n=Math.max(0,S.qn-1),cyc=["lady","krasue","west","krahang","lady","west"][n%6],gh=cyc==="lady"?ladyGhost():cyc==="krasue"?krasue():cyc==="krahang"?krahang():ghost(Math.floor(n/3)%5);if(cyc!=="west"){setTimeout(()=>SND.play("thaighost"),250);setTimeout(()=>SND.play("howl"),450)}gh.position.set(S.x+1.4,-1.6,-.4);gh.scale.setScalar(.3);world.add(gh);ghosts.push({o:gh,t:0});SND.play("ghost");S.freeze=2.2;S.scared=2;setTimeout(()=>SND.play("gasp"),350);ui.scare&&ui.scare()}
   const critters=[],leeches=[];
-  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="village")return critter("auntie");if(b==="farm")critter("bite");else if(b==="waterfall")critter("bite","croc");else if(b==="thai")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
+  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="village")return critter("auntie");if(b==="farm")critter("bite","lion");else if(b==="waterfall")critter("bite","croc");else if(b==="thai")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
   function critter(kind,only){const x0=S.x;
     if(kind==="pelt"){S.freeze=3;const parts=[P.userData.body,P.userData.arms[0],P.userData.arms[1],P.userData.legs[0],P.userData.legs[1]];for(let k=0;k<4;k++){const v=(k%2===0?pick(VEGLEAF):pick(VEGTHROW))();v.scale.setScalar(2.2);v.position.set(x0+2.6,1.4,-1.6);world.add(v);
         const part=parts[k===0?0:1+Math.floor(Math.random()*4)],lp=part===P.userData.body?new THREE.Vector3(rand(-.3,.3),k===0?2.35:rand(.9,1.6),.42):new THREE.Vector3(0,-rand(.2,.5),.12);critters.push({o:v,kind:"veg",t:-k*.6,from:v.position.clone(),part,lp})}
@@ -1276,7 +1279,7 @@ export function startGame(root,api){
     if(kind==="crab"){const u=P.userData;S.crabHits=(S.crabHits||0)+1;const want=[[u.arms[0],"arm",-1],[u.arms[1],"arm",1]];if(S.crabHits>=2)want.push([u.legs[0],"leg",-1],[u.legs[1],"leg",1]);let n=0;
       for(const[part,pk,side]of want){if(critters.some(c=>c.kind==="crab"&&c.part===part&&!c.off))continue;const o=crab();o.scale.setScalar(2.2);o.position.set(x0+7,0,.5+side*.35);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:-n*.35,x0,part,pk,side});n++}
       SND.play("pinch");return}
-    const o=only==="croc"||(!only&&Math.random()<.5)?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
+    const o=only==="croc"?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     }
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
   const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา",
@@ -1285,21 +1288,23 @@ export function startGame(root,api){
     const bun=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),M(0x9e9e9e));bun.position.set(-.16,.16,0);a.userData.head.add(bun);
     const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.22,.1),M(0xc62828));bag.position.set(0,.85,-.36);a.add(bag);
     const tag=new THREE.Sprite(new THREE.SpriteMaterial({map:txt("ป้าข้างบ้าน",{size:60,color:"#ffffff",bg:"#d81b60",border:"#ffd23f",w:320,h:110,radius:30}),depthTest:false}));tag.scale.set(1.5,.52,1);tag.position.y=2.35;tag.renderOrder=21;a.add(tag);
-    if(!auntDeck.length)auntDeck=AUNT.slice().sort(()=>Math.random()-.5);const line=auntDeck.pop();
+    if(!auntDeck.length){const L=(api.aunt&&api.aunt())||AUNT;auntDeck=L.slice().sort(()=>Math.random()-.5)}const line=auntDeck.pop();
     const say=new THREE.Sprite(new THREE.SpriteMaterial({map:txt(line,{size:52,color:"#4a148c",bg:"#ffffff",border:"#d81b60",w:760,h:120,radius:44}),depthTest:false}));say.scale.set(3.4,.54,1);say.position.set(0,3.95,0);say.renderOrder=21;say.visible=false;a.add(say);
     a.userData.say=say;a.userData.line=line;return a}
-  function clearCritters(){S.scared=0;if(S.bang)S.bang.visible=false;P.userData.face.scale.set(1,1,1);for(const c of critters){c.o.parent&&c.o.parent.remove(c.o)}P.userData.arms[1].rotation.z=0;S.freeze=0;critters.length=0;for(const l of leeches)l.o.parent&&l.o.parent.remove(l.o);leeches.length=0}
+  /* คืนหน่วยความจำการ์ดจอเมื่อเอาของออกจากฉาก (ไม่งั้นเล่นนาน ๆ บนมือถือหน่วยความจำเต็ม ของที่มีลายผิวจะกลายเป็นสีดำ) */
+  function freeObj(o){if(!o)return;o.parent&&o.parent.remove(o);o.traverse(m=>{if(m.geometry)m.geometry.dispose();const ms=m.material?(Array.isArray(m.material)?m.material:[m.material]):[];for(const mt of ms){for(const k of["map","alphaMap","emissiveMap"])if(mt[k]&&mt[k]!==skyT)mt[k].dispose();mt.dispose()}})}
+  function clearCritters(){S.scared=0;if(S.bang)S.bang.visible=false;P.userData.face.scale.set(1,1,1);for(const c of critters)freeObj(c.o);P.userData.arms[1].rotation.z=0;S.freeze=0;critters.length=0;for(const l of leeches)freeObj(l.o);leeches.length=0}
   function ripple(pos,r=.35){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.025,4,24),M(0xffffff,{transparent:true,opacity:.7}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0})}
   function splash(pos){const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,6,24),M(0xffffff,{transparent:true,opacity:.9}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0});for(let i=0;i<40;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
   async function passArch(){
     S.mode="cheer";const st=S.st;burst(new THREE.Vector3(S.archX,2.5,0));if(S.arch&&S.arch.userData.tape)S.arch.userData.tape.visible=false;SND.play("clap");SND.play("sparkle");
     const r=await api.clear(st,S.got||0);S.got=0;ui.pts(0);ui.toast(st,r);if(S.hearts<3){S.hearts++;ui.hearts(S.hearts)}
     if(st>=(api.maxStage?api.maxStage():10)){setTimeout(()=>{S.mode="done";ui.finish&&ui.finish(st)},900);return}
-    setTimeout(()=>{if(S.mode==="dead")return;S.arch=null;stage(st+1);S.mode="walk"},900);
+    setTimeout(()=>{if(S.mode==="dead")return;const ga=S.arch;S.arch=null;if(ga){const sg=segs.find(g=>ga.position.x>=g.position.x&&ga.position.x<g.position.x+SEG);if(sg)sg.attach(ga)}stage(st+1);S.mode="walk"},900);
   }
   /* ควบคุม: ตอนมีคำถามแตะตัวเลข (หรือกด 1-4) ตอนเดินแตะจอ/เว้นวรรค/ลูกศรขึ้น เพื่อกระโดดเก็บเหรียญที่ลอยสูง */
   const ray=new THREE.Raycaster(),v2=new THREE.Vector2();
-  function hop(){if(S.mode==="walk"&&S.y<=0.01&&!S.paused){S.hop={vy:7.5};SND.play("jump")}}
+  function hop(){S.wait=0;if(S.mode==="walk"&&S.y<=0.01&&!S.paused){S.hop={vy:7.5};SND.play("jump")}}
   function tap(e){
     const r=renderer.domElement.getBoundingClientRect();v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
     if(S.mode==="ask"){ray.setFromCamera(v2,cam);const hit=ray.intersectObjects(S.ans.filter(a=>!a.userData.gone),true)[0];
@@ -1316,7 +1321,7 @@ export function startGame(root,api){
   renderer.domElement.addEventListener("pointerup",e=>{const d=view.drag;view.drag=null;if(d&&d.moved)return;tap(e)});
   renderer.domElement.addEventListener("pointercancel",()=>{view.drag=null});
   renderer.domElement.style.touchAction="none";
-  const held={l:0,r:0};const setDir=()=>{S.dir=(held.r?1:0)-(held.l?1:0)};
+  const held={l:0,r:0};const setDir=()=>{S.dir=(held.r?1:0)-(held.l?1:0);if(S.dir)S.wait=0};
   function key(e){if(S.paused)return;if(S.mode==="ask"&&/^[1-4]$/.test(e.key))choose(+e.key-1);if(e.key===" "||e.key==="ArrowUp"){e.preventDefault();hop()}
     if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();held[e.key==="ArrowLeft"?"l":"r"]=1;setDir()}}
   function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
@@ -1330,7 +1335,7 @@ export function startGame(root,api){
   function tick(now){
     const dt0=Math.min(.05,(now-last)/1000);last=now;if(S.paused){raf=requestAnimationFrame(tick);return}const dt=dt0;S.t+=dt;
     /* เดินเอง: กดค้าง ◀ ▶ หรือลูกศรซ้ายขวา ถอยกลับไปเก็บเหรียญได้ แต่ไม่เกินจุดเริ่มด่านของฉากที่ยังโหลดอยู่ */
-    if(S.freeze>0)S.freeze-=dt;const mv=S.mode==="cheer"?1:S.mode==="walk"&&!(S.freeze>0)?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
+    if(S.freeze>0)S.freeze-=dt;const mv=S.mode==="cheer"?1:S.mode==="walk"&&!(S.freeze>0)&&!(S.wait&&!S.dir)?(S.dir<0?-1:S.dir>0?1.6:1):0,walking=mv!==0;if(mv)S.face=Math.sign(mv);
     if(walking){const minX=(segs.length?segs[0].position.x:S.x)+4;S.x=Math.max(minX,S.x+mv*S.speed*dt);if(mv>0)S.face=1;
       if(S.mode==="walk"&&!S.arch&&!S.hop&&!S.bq&&S.done<S.need&&biomeOf(S.st)==="canal"){const br=bridges.find(b=>b.seg.parent===world&&S.x>b.x0+.7&&S.x<b.x0+2);if(br)ask(br)}
       if(S.mode==="walk"&&!S.arch&&S.x>=S.nextQ&&!S.hop&&groundY(S.x)<.01&&!(S.freeze>0)&&!critters.some(c=>c.kind==="auntie"||c.kind==="chicks"||c.kind==="vendor"))ask();
@@ -1344,19 +1349,19 @@ export function startGame(root,api){
     if(S.mode==="wet"&&S.inWater){S.wetT=(S.wetT||0)+dt;if(S.wetT>3){S.wetT=0;clearAns();ask(S.inWater.br,true)}}else S.wetT=0;
     if(S.mode==="climb"&&!S.climb&&S.inWater)climbOut();
     if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
-    if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,tx=Math.max(mid-1.3,Math.min(mid+1.3,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
+    if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,wc=sp.br.wx?sp.br.wx(2.2):mid,tx=Math.max(wc-.8,Math.min(wc+.8,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
       if(!sp.fs){sp.fs=1;SND.play("fall")}if(fy<.05&&!sp.hit){sp.hit=1;SND.play("plunge");splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบข้อใหม่ให้ถูกเพื่อขึ้นจากน้ำ");hurt()}
       if(sp.hit&&t>1.3&&!sp.asked&&S.mode==="splash"){sp.asked=1;S.x=fx;S.inWater={x:fx,br:sp.br};clearAns();ask(sp.br,true)}
       if(sp.hit){S.padT=(S.padT||0)+dt;if(S.padT>.6){S.padT=0;ripple(new THREE.Vector3(fx,.19,S.z));SND.play("paddle")}}
-      if(sp.hit&&Math.random()<dt*6){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.04,.08),6,4),M(0xffffff,{transparent:true,opacity:.8}));b.position.set(fx+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
-    else if(S.mode==="climb"){const c=S.climb;c.t+=dt;const k=Math.min(1,c.t/.7),x=c.x0+(c.tx-c.x0)*k;P.position.set(x,-.75+(groundY(x)+.75)*k+Math.sin(Math.PI*k)*1.6,2.2*(1-k));P.rotation.z=.25*(1-k);
-      if(k>=1){S.x=c.tx;S.y=0;S.z=0;S.inWater=null;S.qBr=null;S.spl=null;P.rotation.z=0;S.mode="walk";S.wet=4;SND.play("paddle");afterAnswer(true)}}
-    else if(S.inWater){P.position.set(S.inWater.x,-.75+Math.sin(S.t*5)*.08,S.z);P.rotation.z=Math.sin(S.t*4)*.25;S.padT=(S.padT||0)+dt;if(S.padT>.7){S.padT=0;ripple(new THREE.Vector3(S.inWater.x,.19,S.z));SND.play("paddle")}if(Math.random()<dt*3){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.04,.08),6,4),M(0xffffff,{transparent:true,opacity:.8}));b.position.set(S.inWater.x+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
+      if(sp.hit&&Math.random()<dt*6){const b=pooled(bubM,rand(.04,.08));b.position.set(fx+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
+    else if(S.mode==="climb"){const c=S.climb;c.t+=dt;const k=Math.min(1,c.t/1),x=c.x0+(c.tx-c.x0)*k;P.position.set(x,-.75+(groundY(x)+.75)*k+Math.sin(Math.PI*k)*1.6,2.2*(1-k));P.rotation.z=.25*(1-k);
+      if(k>=1){S.x=c.tx;S.y=0;S.z=0;S.inWater=null;S.qBr=null;S.spl=null;P.rotation.z=0;S.mode="walk";held.l=held.r=0;setDir();S.wait=1;S.face=1;S.wet=4;SND.play("paddle");afterAnswer(true)}}
+    else if(S.inWater){P.position.set(S.inWater.x,-.75+Math.sin(S.t*5)*.08,S.z);P.rotation.z=Math.sin(S.t*4)*.25;S.padT=(S.padT||0)+dt;if(S.padT>.7){S.padT=0;ripple(new THREE.Vector3(S.inWater.x,.19,S.z));SND.play("paddle")}if(Math.random()<dt*3){const b=pooled(bubM,rand(.04,.08));b.position.set(S.inWater.x+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
     else{/* กันหลุดออกนอกทาง: ถ้าไม่ได้อยู่ในน้ำ ดึงกลับมากลางทางเสมอ */
       if(S.z){S.z=Math.abs(S.z)<.02?0:S.z*(1-Math.min(1,dt*5))}P.position.set(S.x,S.y+groundY(S.x),S.z);
       /* ตัวเปียก: น้ำหยดจากตัว เดินไปมีหยดน้ำตกลงพื้น สะบัดตัวช่วงแรก */
       if(S.wet>0){S.wet-=dt;if(S.wet>3.3)P.rotation.z=Math.sin(S.t*38)*.12*(S.wet-3.3)/.7;else if(S.wet>3.2)P.rotation.z=0;
-        if(Math.random()<dt*16){const d=new THREE.Mesh(new THREE.SphereGeometry(rand(.025,.045),6,4),M(0x9fdcff,{transparent:true,opacity:.85,emissive:0x2a6a8a}));d.scale.y=1.6;d.position.set(P.position.x+rand(-.35,.35),P.position.y+rand(.3,2.1),P.position.z+rand(.05,.35));d.userData.v=new THREE.Vector3(rand(-.2,.2),-.4,0);d.userData.life=.45;world.add(d);bursts.push(d)}
+        if(Math.random()<dt*16){const d=pooled(dripM,rand(.025,.045));d.scale.y*=1.6;d.position.set(P.position.x+rand(-.35,.35),P.position.y+rand(.3,2.1),P.position.z+rand(.05,.35));d.userData.v=new THREE.Vector3(rand(-.2,.2),-.4,0);d.userData.life=.45;world.add(d);bursts.push(d)}
         if(Math.random()<dt*2.5)SND.play("drip")}}
     const ud=P.userData,sw=walking&&!S.hop?Math.sin(S.t*11):0,air=S.mode==="jumping"||S.mode==="falling"||!!S.hop;
     ud.legs[0].rotation.x=air?-.6:sw*.7;ud.legs[1].rotation.x=air?.3:-sw*.7;ud.arms[0].rotation.x=air?-2.2:-sw*.6;ud.arms[1].rotation.x=air?-2.2:sw*.6;
@@ -1364,16 +1369,16 @@ export function startGame(root,api){
     const face=S.mode==="pray"||S.mode==="bow"?Math.PI:S.mode==="ask"||S.mode==="dead"?.35:S.mode==="cheer"?S.t*8:walking?S.face*Math.PI/2:(S.face>0?Math.PI/2.6:-Math.PI/2.6);P.rotation.y+=(face-P.rotation.y)*(S.mode==="cheer"?1:Math.min(1,dt*8));
     ud.shadow.position.y=.02-S.y;if(ud.av)ud.av.position.y=(ud.avY||3.15)+Math.sin(S.t*3)*.05;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
-      if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){world.remove(c);S.coins.splice(i,1)}continue}
+      if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){freeObj(c);S.coins.splice(i,1)}continue}
       if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.got=(S.got||0)+1;ui.pts(S.got);SND.play("coin")}
-      else if(c.position.x<S.x-40){world.remove(c);S.coins.splice(i,1)}}
+      else if(c.position.x<S.x-40){freeObj(c);S.coins.splice(i,1)}}
     for(const a of S.ans){const u=a.userData;
       if(u.gone){a.scale.multiplyScalar(1-dt*5)}else if(u.drop){a.position.y-=dt*7;a.rotation.z+=dt*4}
       else{a.scale.setScalar(Math.min(1,a.scale.x+dt*5));a.position.y=u.base+Math.sin(S.t*2.4+u.i)*.12}}
-    S.ans=S.ans.filter(a=>{if(a.scale.x<.04||a.position.y<-4){world.remove(a);return false}return true});
-    for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];b.userData.v.y-=9*dt;b.position.addScaledVector(b.userData.v,dt);b.rotation.x+=dt*6;b.userData.life-=dt;if(b.userData.life<=0){world.remove(b);bursts.splice(i,1)}}
+    S.ans=S.ans.filter(a=>{if(a.scale.x<.04||a.position.y<-4){freeObj(a);return false}return true});
+    for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];b.userData.v.y-=9*dt;b.position.addScaledVector(b.userData.v,dt);b.rotation.x+=dt*6;b.userData.life-=dt;if(b.userData.life<=0){b.userData.keep?world.remove(b):freeObj(b);bursts.splice(i,1)}}
     while(segX<S.x+60)addSeg();
-    while(segs.length&&segs[0].position.x+SEG<S.x-45){world.remove(segs.shift())}
+    while(segs.length&&segs[0].position.x+SEG<S.x-45){freeObj(segs.shift())}
     for(const L of layers)for(const m of L.items){while(m.position.x<S.x-L.span/2)m.position.x+=L.span;while(m.position.x>S.x+L.span/2)m.position.x-=L.span}
     for(const m of layers[0].items)m.visible=biomeOf(S.st)!=="beach";
     for(const[li,pad]of[[1,30],[2,16]])for(const m of layers[li].items){const x=m.position.x;m.visible=!segs.some(g=>g.userData.beach&&x>g.position.x-pad&&x<g.position.x+SEG+pad)}
@@ -1394,13 +1399,13 @@ export function startGame(root,api){
       if(c.kind==="chicks"){const tx=c.x0+Math.cos(c.a)*.9,tz=Math.sin(c.a)*.7;if(t<1){o.position.x+=(tx-o.position.x)*Math.min(1,dt*4);o.position.z+=(tz-o.position.z)*Math.min(1,dt*4);o.rotation.y=-Math.atan2(tz-o.position.z,tx-o.position.x)}
         else if(t<3){o.rotation.y=-Math.atan2(-tz,c.x0-tx);o.userData.head.rotation.z=-Math.abs(Math.sin(t*14))*.9;if(Math.random()<dt*3)SND.play("peck");S.ouch=.2}
         else{o.position.x+=Math.cos(c.a)*dt*7;o.position.z+=Math.sin(c.a)*dt*5;o.rotation.y=-c.a}
-        if(t>4.2){world.remove(o);critters.splice(i,1)}continue}
+        if(t>4.2){freeObj(o);critters.splice(i,1)}continue}
       if(c.kind==="auntie"){const u=o.userData,sw=Math.sin(t*8)*.5;
         u.say.visible=t>1.1&&t<5;
         if(t<1.2){o.position.z=-7+5.4*(t/1.2);o.position.x=S.x+1.9;o.rotation.y=-Math.PI/2;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw}
         else if(t<5){o.position.x+=(S.x+1.9-o.position.x)*Math.min(1,dt*6);u.legs[0].rotation.z=u.legs[1].rotation.z=0;u.arms[0].rotation.x=-2.3+Math.sin(t*10)*.25;o.rotation.y=Math.PI+Math.sin(t*2)*.15;u.head.rotation.z=Math.sin(t*6)*.08}
-        else{u.arms[0].rotation.x=0;o.rotation.y=Math.PI/2;o.position.z-=dt*5;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;if(t>7){world.remove(o);critters.splice(i,1)}}continue}
-      if(c.kind==="vendor"){const u=o.userData;u.arms[1].rotation.x=-2.6+Math.abs(Math.sin(t*7))*2;u.say=null;if(t>2.6){o.position.z-=dt*4;o.rotation.y=Math.PI/2}if(t>3.9){world.remove(o);critters.splice(i,1)}continue}
+        else{u.arms[0].rotation.x=0;o.rotation.y=Math.PI/2;o.position.z-=dt*5;u.legs[0].rotation.z=sw;u.legs[1].rotation.z=-sw;if(t>7){freeObj(o);critters.splice(i,1)}}continue}
+      if(c.kind==="vendor"){const u=o.userData;u.arms[1].rotation.x=-2.6+Math.abs(Math.sin(t*7))*2;u.say=null;if(t>2.6){o.position.z-=dt*4;o.rotation.y=Math.PI/2}if(t>3.9){freeObj(o);critters.splice(i,1)}continue}
       if(c.kind==="veg"){if(t<0)continue;if(!c.said){c.said=1;SND.speakEn("Wots!",{rate:.5,pitch:1.05})}if(t<.6){const k=t/.6,tp=new THREE.Vector3();c.part.localToWorld(tp.copy(c.lp));world.worldToLocal(tp);o.position.lerpVectors(c.from,tp,k);o.position.y+=Math.sin(Math.PI*k)*1.5;o.rotation.x+=dt*12}
         else{critters.splice(i,1);world.remove(o);c.part.add(o);o.position.copy(c.lp);o.rotation.set(rand(-.5,.5),rand(0,6),rand(-.5,.5));leeches.push({o,t:0,veg:1});SND.play("splat");S.ouch=.15}continue}
       if(c.kind==="crab"){const part=c.part,isArm=c.pk==="arm";
@@ -1412,15 +1417,15 @@ export function startGame(root,api){
           if(hard){P.userData.body.rotation.z=Math.sin(t*20)*.06;if(c.side>0&&(!c.snd||t-c.snd>.6)){c.snd=t;SND.play("pinch")}S.ouch=.1}else if(c.side>0&&(!c.snd||t-c.snd>4)){c.snd=t;SND.play("pinch")}}
         else{if(c.att===1){c.att=2;c.t2=t;const wp=new THREE.Vector3();o.getWorldPosition(wp);part.remove(o);world.add(o);world.worldToLocal(wp);o.position.set(wp.x,0,.6);o.scale.setScalar(1.6);o.rotation.set(0,0,0);if(isArm)part.rotation.z=c.side*.35;else part.rotation.x=0}
           else if(!c.att){c.att=2;c.t2=t}
-          o.position.x+=dt*6;o.position.y=Math.abs(Math.sin(t*20))*.05;if(t-c.t2>1.3){world.remove(o);critters.splice(i,1)}}
+          o.position.x+=dt*6;o.position.y=Math.abs(Math.sin(t*20))*.05;if(t-c.t2>1.3){freeObj(o);critters.splice(i,1)}}
         continue}
       const stop=c.x0+(c.kind==="crab"?.75:o.userData.jaw?1.05:1.15);
       if(t<.9){o.position.x=c.x0+7-(7-(stop-c.x0))*(t/.9);o.position.y=c.kind==="crab"?Math.abs(Math.sin(t*20))*.05:0}
       else if(t<2.1){const k=Math.sin((t-.9)*12);if(o.userData.jaw)o.userData.jaw.rotation.z=Math.max(0,k)*.7;else if(o.userData.head){o.userData.head.rotation.z=-.7+k*.25;o.userData.head.position.x=.8+Math.max(0,k)*.15}else o.rotation.z=k*.08;
         const lg=P.userData.legs[0];lg.rotation.x=Math.sin(t*30)*.25;
         if(!c.snd||t-c.snd>.5){c.snd=t;SND.play(c.kind==="crab"?"pinch":"chomp");S.ouch=.35}}
-      else{o.rotation.y=0;o.position.x+=dt*8;if(t>3.2){world.remove(o);critters.splice(i,1)}}}
-    for(let i=leeches.length-1;i>=0;i--){const l=leeches[i];l.t+=dt;if(l.drop||(!l.veg&&l.t>12)){l.o.position.y-=dt*3;if(l.o.position.y<-.5){l.o.parent.remove(l.o);leeches.splice(i,1)}continue}if(l.veg)continue;if(l.o.position.y<1.7)l.o.position.y+=dt*.06;{const u=l.o.userData,c=(l.t*1.4+i)%1,hump=Math.sin(Math.PI*c);u.segs.forEach((sg,k)=>{const f=k/8;sg.position.set(0,f*(.42-.18*hump),Math.sin(Math.PI*f)*hump*.13)});u.mouth.position.set(0,.43-.18*hump,.02)}}
+      else{o.rotation.y=0;o.position.x+=dt*8;if(t>3.2){freeObj(o);critters.splice(i,1)}}}
+    for(let i=leeches.length-1;i>=0;i--){const l=leeches[i];l.t+=dt;if(l.drop||(!l.veg&&l.t>12)){l.o.position.y-=dt*3;if(l.o.position.y<-.5){freeObj(l.o);leeches.splice(i,1)}continue}if(l.veg)continue;if(l.o.position.y<1.7)l.o.position.y+=dt*.06;{const u=l.o.userData,c=(l.t*1.4+i)%1,hump=Math.sin(Math.PI*c);u.segs.forEach((sg,k)=>{const f=k/8;sg.position.set(0,f*(.42-.18*hump),Math.sin(Math.PI*f)*hump*.13)});u.mouth.position.set(0,.43-.18*hump,.02)}}
     if(S.scared>0){S.scared-=dt;const u=P.userData,k=Math.min(1,(2-S.scared)*4);u.arms[0].rotation.x=u.arms[1].rotation.x=-2.7+Math.sin(S.t*40)*.15;u.arms[0].rotation.z=.5;u.arms[1].rotation.z=-.5;P.position.x+=Math.sin(S.t*55)*.05;
       P.position.y+=Math.max(0,Math.sin(Math.min(1,(2-S.scared)*2)*Math.PI))*.5;P.rotation.y=0;u.face.scale.set(1+k*.35,1+k*.45,1);if(!S.bang){S.bang=new THREE.Sprite(new THREE.SpriteMaterial({map:txt("!!",{size:90,color:"#ffffff",bg:"#e53935",border:"#ffd23f",w:180,h:128,radius:40}),depthTest:false}));S.bang.scale.set(.8,.57,1);S.bang.renderOrder=26;S.bang.position.set(.55,2.75,0);P.add(S.bang)}S.bang.visible=true;
       if(S.scared<=0){u.arms[0].rotation.z=u.arms[1].rotation.z=0;u.face.scale.set(1,1,1);S.bang.visible=false}}
@@ -1438,14 +1443,14 @@ export function startGame(root,api){
         /* ลุกขึ้นพนมมืออธิษฐาน "ขอให้สอบติด" 1 ครั้ง แล้วก้มกราบ 3 ครั้ง พูด "สาธุ" ทุกครั้งที่กราบ */
         const q=b.pt/R;u.body.rotation.x=wish?.62*(1-Math.min(1,q/.25)):.62*Math.sin(Math.min(1,q/.85)*Math.PI);
         if(b.pt>=R){b.n++;b.pt=0;if(b.n>=3){u.body.rotation.x=0;u.arms.forEach((a,i)=>a.rotation.set(0,0,(i?1:-1)*.35));S.prayed=true;S.mode="walk";SND.play("sparkle");burst(new THREE.Vector3(S.shrineX+2.2,3,-3.2));ui.say&&ui.say("ขอให้สอบติด สมหวังทุกประการ")}}}}
-    for(let i=ripples.length-1;i>=0;i--){const R=ripples[i];R.t+=dt;R.o.scale.setScalar(1+R.t*3);R.o.material.opacity=Math.max(0,.9-R.t*.8);if(R.t>1.1){world.remove(R.o);ripples.splice(i,1)}}
+    for(let i=ripples.length-1;i>=0;i--){const R=ripples[i];R.t+=dt;R.o.scale.setScalar(1+R.t*3);R.o.material.opacity=Math.max(0,.9-R.t*.8);if(R.t>1.1){freeObj(R.o);ripples.splice(i,1)}}
     for(let i=ghosts.length-1;i>=0;i--){const G=ghosts[i];G.t+=dt;const t=G.t,o=G.o;
       /* ผีโผล่ขึ้นตรงหน้าน้อง (ด้านขวา ไม่ทับตัว) พุ่งเข้าหานิดหนึ่ง แล้วลอยออกไปทางขวา */
       const gx=S.x+2;if(t<.45){const k=t/.45;o.position.set(gx,-1.6+k*2.6,.5);o.scale.setScalar(.3+k*.9);o.rotation.y=-.5}
       else if(t<1.1){const k=(t-.45)/.65;o.position.set(gx-.25*Math.sin(k*Math.PI),1+Math.sin(t*14)*.1,.5+.4*k);o.scale.setScalar(1.2+.15*Math.sin(k*Math.PI));o.rotation.z=Math.sin(t*10)*.15}
       else{const k=Math.min(1,(t-1.1)/.8);o.position.set(gx+k*k*7,1+k*1.2,.9);o.rotation.z=-.3*k;o.traverse(m=>{if(m.material){m.material.transparent=true;m.material.opacity=(1-k*k)*.92}})}
       if(o.userData.wings){const f=Math.sin(t*18)*.7;o.userData.wings[0].rotation.y=f;o.userData.wings[1].rotation.y=-f}if(o.userData.thai===2){o.rotation.y=Math.sin(t*2)*.15;o.userData.halo.material.opacity=.5*(.7+Math.random()*.3)}if(o.userData.thai===1){o.rotation.y=Math.sin(t*3)*.3;const fl=Math.random()<.25?.25:1+Math.sin(t*37)*.3;for(const m of o.userData.glows)m.emissiveIntensity=1.3*fl;o.userData.light.intensity=4*fl;o.userData.halo.material.opacity=.6*fl}
-      if(t>1.9){world.remove(o);ghosts.splice(i,1)}}
+      if(t>1.9){freeObj(o);ghosts.splice(i,1)}}
     for(let i=anim.length-1;i>=0;i--){const a=anim[i];if(!live(a)){anim.splice(i,1);continue}const o=a.obj,t=S.t+a.ph;
       if(a.kind==="fish"){const c=(t*a.sp)%1;if(c<.08){const k=c/.08;o.visible=true;o.position.set(a.x+Math.sin(a.ph)*.6,Math.sin(Math.PI*k)*1.1-.05,a.z+(k-.5)*1.4);o.rotation.set(0,Math.PI/2,(.5-k)*2.4)}else o.visible=false}
       else if(a.kind==="graze"){const h=o.userData.head,c=(t*.25)%1;h.rotation.z=c<.6?-.75+Math.sin(t*6)*.06:-.1}
@@ -1486,9 +1491,9 @@ export function startGame(root,api){
     renderer.render(scene,cam);raf=requestAnimationFrame(tick);
   }
   /* เริ่มด่านที่เลือกใหม่ทั้งฉาก (ใช้ตอนเลือกด่านก่อนกด START) */
-  function restart(n){for(const g of segs)world.remove(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
-    for(const c of S.coins)world.remove(c);S.coins.length=0;for(const a of S.ans)world.remove(a);S.ans=[];if(S.arch){world.remove(S.arch);S.arch=null}if(S.shrine){world.remove(S.shrine);S.shrine=null}clearCritters();
+  function restart(n){for(const g of segs)freeObj(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
+    for(const c of S.coins)freeObj(c);S.coins.length=0;for(const a of S.ans)freeObj(a);S.ans=[];if(S.arch){freeObj(S.arch);S.arch=null}if(S.shrine){freeObj(S.shrine);S.shrine=null}clearCritters();
     Object.assign(S,{inWater:null,climb:null,x:0,y:0,z:0,mode:"walk",hop:null,jump:null,fall:null,spl:null,qBr:null,hearts:3,qn:0});ui.hearts(3);P.rotation.z=0;curBiome=biomeOf(n);for(let i=0;i<9;i++)addSeg();stage(n);if(fade){fade.t=1;stepFade(0)}{const nw=W()<600,ly=nw?2.3:1.9;camPiv.set(S.x+(nw?2.2:3),ly,0);Object.assign(camS,{lead:nw?2.2:3,dist:nw?11:10.5,ly,h:nw?3.0:3.2});cam.position.set(camPiv.x,nw?3.0:3.2,nw?11:10.5);cam.lookAt(camPiv)}renderer.render(scene,cam)}
   raf=requestAnimationFrame(tick);
-  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),pz:+P.position.z.toFixed(2),py:+P.position.y.toFixed(2),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},_hearts:n=>{S.hearts=n},_scare:v=>{S.qn=v+1;scare()},_crit:()=>critters.map(c=>c.kind+":"+(c.att||0)+":"+(c.o.parent===world?"w":"arm")+":"+c.t.toFixed(1)),refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
+  return {hold(side,on){held[side]=on?1:0;setDir()},hop,pause(v){S.paused=!!v;if(v){held.l=held.r=0;setDir()}},stop(){SND.stop();cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.removeEventListener("keyup",keyUp);removeEventListener("resize",resize);renderer.dispose();renderer.domElement.remove()},debug:()=>({...S,hasArch:!!S.arch,np:S.ans.length,gy:groundY(S.x),biome:biomeOf(S.st),pz:+P.position.z.toFixed(2),py:+P.position.y.toFixed(2),haunt:TH===HAUNT,fadeT:fade?fade.t:-1,ghosts:ghosts.length,yaw:view.yaw,mem:{...renderer.info.memory}}),goStage:n=>stage(n),restart,choose:i=>choose(i),punish,_almost:()=>{S.done=Math.max(0,S.need-1);S.nextQ=S.x+3},_hearts:n=>{S.hearts=n},_scare:v=>{S.qn=v+1;scare()},_crit:()=>critters.map(c=>c.kind+":"+(c.att||0)+":"+(c.o.parent===world?"w":"arm")+":"+c.t.toFixed(1)),refreshGear:()=>{gearT=1},look:(y,p=0)=>{view.yaw=y;view.pitch=p;view.idle=-999},warp:dx=>{S.x+=dx;S.nextQ=S.x+30;while(segX<S.x+60)addSeg()}};
 }
