@@ -1349,7 +1349,8 @@ export function startGame(root,api){
   function keyUp(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){held[e.key==="ArrowLeft"?"l":"r"]=0;setDir()}}
   document.addEventListener("keyup",keyUp);
   document.addEventListener("keydown",key);
-  function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=NARROW()?62:45;cam.updateProjectionMatrix()}
+  let drawn=0;
+  function resize(){renderer.setSize(W(),H());cam.aspect=W()/H();cam.fov=NARROW()?62:45;cam.updateProjectionMatrix();if(drawn&&S.paused)renderer.render(scene,cam)}
   addEventListener("resize",resize);resize();
 
   stage(S.st);ui.hearts(3);ui.pts(0);
@@ -1517,7 +1518,7 @@ export function startGame(root,api){
     cam.position.copy(piv).add(off);camPiv.copy(piv);cam.lookAt(camPiv);
     /* เงา: ขยับแหล่งแสงเป็นช่วง ๆ ไม่ขยับทุกเฟรม เงาจะได้ไม่สั่นระยิบ */
     const sx=Math.round(S.x/2)*2;sun.position.set(sx-4,16,10);sun.target.position.set(sx+4,0,0);
-    renderer.render(scene,cam);raf=requestAnimationFrame(tick);
+    renderer.render(scene,cam);drawn=1;raf=requestAnimationFrame(tick);
   }
   /* เริ่มด่านที่เลือกใหม่ทั้งฉาก (ใช้ตอนเลือกด่านก่อนกด START) */
   function restart(n){for(const g of segs)freeObj(g);segs.length=0;anim.length=0;bridges.length=0;chests.length=0;shops.length=0;segX=-20;segN=0;lastB=null;
