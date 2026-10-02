@@ -117,7 +117,13 @@
 .exp b.h{display:block;margin-bottom:4px;color:#c2410c;font-family:system-ui;font-size:14px}
 .qtools{position:absolute;top:18px;right:0;display:flex;gap:6px}
 .qtools button{width:auto;margin:0;padding:6px 12px;border-radius:9px;font-size:13px;font-family:system-ui}
-.qtools .ed{background:#16305f}.qtools .rm{background:#fdecec;color:#c62828}
+.qtools .ed{background:#16305f}.qtools .rm{background:#fdecec;color:#c62828}.qtools .rm.lock{background:#f1f1f1;color:#9a9a9a}
+.gpic{font-size:44px;line-height:1;margin:0 0 8px}.gqbox{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#eef2fb;color:#16305f;font-size:11px;font-weight:700;font-family:system-ui;vertical-align:middle}
+#gqChips button.on{background:#c2410c;color:#fff}#gqChips button i{font-style:normal;opacity:.75;margin-left:4px}
+.gform{margin:14px 0;padding:14px;border:1px solid #f1e3d6;border-radius:14px;background:#fffaf5;font-family:system-ui}.gform label{display:block;margin:10px 0 4px;font-size:13px;font-weight:700;color:#16305f}.gform textarea{min-height:64px}
+.gopt{display:flex;gap:8px;align-items:center;margin:6px 0}.gopt input[type=radio]{width:20px;height:20px;flex:0 0 20px;margin:0}.gopt input[type=text]{flex:1;margin:0}.gform .chkl{display:flex;gap:8px;align-items:center;font-weight:600}.gform .chkl input{width:18px;height:18px;margin:0}
+@media(max-width:760px){#gqPaper .xopts.row{grid-template-columns:repeat(2,1fr)}}
+.aurow{display:flex;gap:8px;align-items:center;margin:6px 0}.aurow input{flex:1;margin:0}.aurow button{width:auto;margin:0;padding:8px 12px;background:#fdecec;color:#c62828;border-radius:9px;font-size:13px}.aurow button:disabled{background:#f1f1f1;color:#9a9a9a}
 .addq{display:block;width:100%;margin:12px 0 0;padding:12px;border:2px dashed #f1c9a8;border-radius:12px;background:#fffaf5;color:#c2410c;font-weight:800;font-size:14px;font-family:system-ui}
 .qform{scroll-margin-top:130px;margin:14px 0;padding:16px;border:2px solid #ff6a00;border-radius:14px;background:#fff;font-family:system-ui}
 .qform h4{margin:0 0 4px;color:#c2410c}
@@ -173,7 +179,7 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 .fmtbar button{min-width:32px;height:30px;margin:0;padding:0 8px;border:1px solid #e5e7eb;border-radius:7px;background:#fff;color:#111;font:inherit;font-size:13px;cursor:pointer;width:auto}
 .fmtbar button:hover{border-color:#ff8a3d}.fmtbar button.sw{font-weight:800}
 .fmtbar .sep{width:1px;height:20px;background:#e5e7eb;margin:0 3px}.fmtbar .lb{font-size:12px;color:#6b7280;margin-right:1px}
-</style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>แบบทดสอบ</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แต่ละส่วนมีปุ่มบันทึกของตัวเอง แก้ส่วนไหนก็กดบันทึกเฉพาะส่วนนั้น</p><div class="hsec">
+</style></head><body><div id="boot" class="boot">กำลังโหลด…</div><script>setTimeout(function(){var b=document.getElementById("boot");if(b&&!b.classList.contains("hide"))b.textContent="โหลดไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้"},10000)</script><main class="hide"><h1 class="login-logo"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></h1><div id="login" class="card"><h2>เข้าสู่ระบบแอดมิน</h2><input id="email" type="email" placeholder="อีเมล"><div class="pw"><input id="pass" type="password" placeholder="รหัสผ่าน"><button id="eye" class="eye" type="button">แสดง</button></div><button id="go">เข้าสู่ระบบ</button><button id="forgot" class="light" type="button">ลืมรหัสผ่าน</button><p id="msg"></p></div></main><div id="shell" class="hide"><header class="mtop"><button type="button" class="mburger" id="mMenu" aria-label="เปิดเมนู"><i></i></button><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="mt-sub">ผู้ดูแลระบบ</span></header><div class="mshade" id="mShade"></div><aside class="side" id="side"><div class="brand"><span class="logo"><b class="logo-name">กะสอบ</b><i class="logo-test">ADMIN</i></span><span class="brand-sub">ผู้ดูแลระบบ</span></div><nav class="side-nav"><button type="button" data-go="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg><span>หน้าหลัก</span></button><button type="button" data-go="members"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 11a3 3 0 1 0 0-6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg><span>สมาชิก</span></button><button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg><span>อุปกรณ์</span></button><button type="button" data-go="exams"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg><span>แบบทดสอบ</span></button><button type="button" data-go="game"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7.5 10.5v4M5.5 12.5h4"/><circle cx="15.5" cy="11.5" r=".9"/><circle cx="17.5" cy="13.8" r=".9"/></svg><span>เกม</span></button></nav><button id="installBtn" type="button" class="side-install hide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7"/><path d="M9 11l3 3 3-3"/></svg><span>ติดตั้งลงหน้าจอ</span></button><button id="out" type="button" class="side-out">ออกจากระบบ</button></aside><section class="content"><div id="homeCard" class="card page" data-page="home"><h2>หน้าหลักของเว็บ</h2><p class="muted">แต่ละส่วนมีปุ่มบันทึกของตัวเอง แก้ส่วนไหนก็กดบันทึกเฉพาะส่วนนั้น</p><div class="hsec">
 <h3>การ์ดนับถอยหลัง</h3>
 <div class="row"><div><label>การ์ดที่ 1: สายงาน</label><input id="exam0Title"></div><div><label>วันสอบ</label><input id="exam0Date" type="date"></div></div>
 <div class="row"><div><label>การ์ดที่ 2: สายงาน</label><input id="exam1Title"></div><div><label>วันสอบ</label><input id="exam1Date" type="date"></div></div>
@@ -185,9 +191,7 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <div class="hsave"><button type="button" id="saveTS">บันทึกสายและรายวิชา</button><span id="tsMsg"></span></div></div>
 <div class="hsec"><h3>สไลด์ข่าวสาร</h3><p class="muted">1 ข่าว = 1 สไลด์ ข่าวแรกขึ้นก่อน (สูงสุด 10 ข่าว) ไม่ใส่รูปจะใช้พื้นสีแทน อัปโหลดรูปจากเครื่องได้เลย</p><div id="newsRows"></div><button type="button" id="newsAdd" class="nadd">+ เพิ่มข่าว</button>
 <div class="hsave"><button type="button" id="saveNews">บันทึกข่าวสาร</button><span id="newsMsg"></span></div></div>
-<div class="hsec"><h3>ส่วนลดที่แลกด้วยเหรียญ</h3><p class="muted">นักเรียนได้เหรียญอัตโนมัติจากการเช็คอินรายวัน (ลำดับ 7 วัน: 5, 5, 10, 10, 15, 15, 30) และจากความขยัน (ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 2 เหรียญ วันละไม่เกิน 20) ตั้งส่วนลดที่ใช้เหรียญแลกได้ที่นี่ นักเรียนจะได้โค้ดไว้แจ้งตอนชำระเงิน (ดูโค้ดและกดใช้แล้วได้ที่หน้าสมาชิก)</p>
-<div id="cpRows"></div><button type="button" class="addbtn" id="cpAdd">+ เพิ่มส่วนลด</button>
-<div class="hsave"><button type="button" id="saveCoins">บันทึกส่วนลด</button><span id="coinsMsg"></span></div></div>
+
 <div class="hsec"><h3>ข้อสอบประจำวัน</h3>
 <label>คำถาม</label><textarea id="dailyQ"></textarea>
 <label style="font-weight:400"><input id="dailyEng" type="checkbox" style="width:auto"> ข้อสอบภาษาอังกฤษ (ตัวเลือกเป็น A B C D แทน 1 2 3 4)</label>
@@ -216,7 +220,9 @@ em.pub{font-style:normal;font-weight:800;margin-right:6px;padding:1px 7px;border
 <label>ใช้กับสายสอบ</label><div class="tracks" id="sTracks"></div>
 <div class="row3"><div><label>ประเภท</label><select id="sTier"><option value="premium">Premium</option><option value="free">Free</option></select></div><div><label>เวลาสอบ (นาที)</label><input id="sMins" type="number" min="1" max="600"></div></div>
 <div class="btns" style="margin-bottom:12px"><button type="button" class="btn-navy" id="sSave">บันทึกการตั้งค่า</button><button type="button" class="btn-red" id="sDel">ลบชุดนี้</button></div></details>
-<div class="chips" id="exChips"></div><div class="xpaper" id="exPaper"></div></div></div></section></div>
+<div class="chips" id="exChips"></div><div class="xpaper" id="exPaper"></div></div></div><div id="gameCard" class="card page" data-page="game"><h2>เกม</h2><p class="muted">แก้ข้อสอบในเกมผจญภัยน้องดินสอ คำพูดป้าข้างบ้าน และส่วนลดที่แลกด้วยเหรียญ แก้แล้วบันทึกทันที นักเรียนเห็นตอนเข้าเกมครั้งถัดไป</p><div class="hsec"><h3>ข้อสอบในเกม</h3><p class="muted">แต่ละด่านล็อกจำนวนข้อขั้นต่ำไว้ ลบได้เฉพาะเมื่อมีมากกว่าขั้นต่ำ ถ้าอยากเอาข้อเดิมออก ให้กด แก้ไข หรือเพิ่มข้อใหม่ก่อนแล้วค่อยลบ ในเกมจะสุ่มข้อไม่ซ้ำจนครบ และสลับตำแหน่งตัวเลือกให้เอง</p><div class="chips" id="gqChips"></div><p id="gqMsg" class="ok"></p><div class="xpaper" id="gqPaper"><p class="muted">กำลังโหลด…</p></div></div><div class="hsec"><h3>คำพูดป้าข้างบ้าน</h3><p class="muted">ด่าน Village ตอบผิด ป้าข้างบ้านจะเดินมาพูดเปรียบเทียบกับลูกป้า ครั้งละ 1 ประโยค ไม่ซ้ำจนครบ (ต้องมีอย่างน้อย <span id="auMin">11</span> ประโยค)</p><div id="auRows"></div><button type="button" class="addbtn" id="auAdd">+ เพิ่มประโยค</button><div class="hsave"><button type="button" id="auSave">บันทึกคำพูดป้า</button><span id="auMsg"></span></div></div><div class="hsec"><h3>ส่วนลดที่แลกด้วยเหรียญ</h3><p class="muted">นักเรียนได้เหรียญจาก เช็คอินรายวัน (ลำดับ 7 วัน: 50, 50, 100, 100, 150, 150, 300) ความขยัน (ทำข้อสอบครบทุก 20 ข้อ ได้ 20 เหรียญ วันละไม่เกิน 10 ครั้ง) และเกม (เหรียญที่เก็บในด่าน สูงสุด 100 บวกโบนัสผ่านด่าน 20 วันละไม่เกิน 20 ครั้ง) ตั้งส่วนลดที่ใช้เหรียญแลกได้ที่นี่ นักเรียนจะได้โค้ดไว้แจ้งตอนชำระเงิน</p>
+<div id="cpRows"></div><button type="button" class="addbtn" id="cpAdd">+ เพิ่มส่วนลด</button>
+<div class="hsave"><button type="button" id="saveCoins">บันทึกส่วนลด</button><span id="coinsMsg"></span></div></div></div></section></div>
 <script>
 /* กล่องข้อความในหน้าเว็บ แทนกล่องของเบราว์เซอร์ (alert / confirm / prompt) */
 (function(){
@@ -303,6 +309,56 @@ $("saveCoins").onclick=async()=>{const msg=$("coinsMsg"),coupons={};let bad="";
   if(bad){msg.className="err";msg.textContent=bad;return}
   try{await setDoc(doc(db,"site","coins"),{coupons});msg.className="ok";msg.textContent="บันทึกแล้ว";loadCoins()}catch(e){msg.className="err";msg.textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`}};
 /* โค้ดส่วนลดของสมาชิก: แอดมินกดว่าใช้แล้วตอนรับชำระเงิน */
+/* ===== เกม: คลังข้อสอบรายด่าน (site/game.stages) + คำพูดป้าข้างบ้าน (site/game.aunt) ===== */
+const G_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","Vocabulary Market","Haunted House","Thai Temple"];
+const AUNT_DEF=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา","ลูกป้าสอบติดตั้งแต่ครั้งแรกเลยนะ","ลูกป้าซื้อรถให้ป้าแล้วนะ","ลูกป้าเป็นตำรวจแล้วนะ","ลูกป้าตอบข้อนี้ได้ตั้งแต่ปอสี่","ลูกป้าอ่านหนังสือวันละสิบชั่วโมง","ลูกป้าซื้อบ้านแล้วนะ"];
+let gm=null,gSt=1,gEdit=null;
+async function loadGame(){if(gm)return;$("gqPaper").innerHTML='<p class="muted">กำลังโหลด…</p>';
+  try{const [snap,def]=await Promise.all([getDoc(doc(db,"site","game")),fetch("game-bank.json?v="+Date.now()).then(r=>r.json())]);const d=snap.exists()?snap.data():{},st=d.stages||{};
+    gm={def,min:{},q:{},aunt:Array.isArray(d.aunt)&&d.aunt.length?d.aunt.slice():AUNT_DEF.slice()};
+    for(let i=1;i<=10;i++){gm.min[i]=(def[i]||[]).length;gm.q[i]=(Array.isArray(st[i])&&st[i].length?st[i]:def[i]||[]).map(x=>({...x,opts:[...x.opts]}))}
+    renderGame();renderAunt()}catch(e){$("gqPaper").innerHTML=`<p class="err">โหลดข้อมูลเกมไม่ได้ (${esc(e.code||e.message)})</p>`}}
+function gqView(it,n){const lab=k=>String(k+1);
+  return `<div class="xi">${it.pic?`<div class="gpic">${esc(it.pic)}</div>`:""}<p class="xq"><em>${n}.</em>${esc(it.q)}${it.box?'<span class="gqbox">กล่องคำตอบ</span>':""}</p><div class="xopts${it.opts.every(o=>String(o).length<=10)&&it.opts.length===4?" row":""}">${it.opts.map((c,k)=>`<div class="xc${k===+it.ans?" ok":""}"><b>${lab(k)}</b><span class="t">${esc(c)}</span></div>`).join("")}</div>
+  <div class="qtools"><button type="button" class="ed" data-ga="ed" data-i="${n-1}">แก้ไข</button><button type="button" class="rm${gm.q[gSt].length<=gm.min[gSt]?" lock":""}" data-ga="rm" data-i="${n-1}">ลบ</button></div></div>`}
+function gqForm(){const it=gEdit.it||{q:"",opts:["","","",""],ans:0},o=[0,1,2,3].map(k=>it.opts[k]??"");
+  return `<div class="gform" id="gqForm"><b>${gEdit.i<0?"เพิ่มข้อใหม่":"แก้ไขข้อ "+(gEdit.i+1)} · ด่าน ${gSt}</b>
+  <label>คำถาม</label><textarea id="gfQ" maxlength="200">${esc(it.q)}</textarea>
+  <label>ภาพ (อีโมจิ 1 ตัว ไม่ใส่ก็ได้ เช่น 🍎)</label><input id="gfPic" maxlength="8" value="${esc(it.pic||"")}">
+  <label>ตัวเลือก (อย่างน้อย 2 ข้อ เลือกวงกลมหน้าคำตอบที่ถูก)</label>${o.map((v,k)=>`<div class="gopt"><input type="radio" name="gfA" value="${k}"${k===+it.ans?" checked":""}><input type="text" id="gfO${k}" maxlength="60" value="${esc(v)}" placeholder="ตัวเลือก ${k+1}${k>1?" (ไม่ใส่ก็ได้)":""}"></div>`).join("")}
+  <label class="chkl"><input type="checkbox" id="gfBox"${it.box?" checked":""}> แสดงเป็นกล่องคำตอบ (ใช้เมื่อตัวเลือกยาว เช่น สำนวน)</label>
+  <p id="gfErr" class="ferr"></p><div class="btns"><button type="button" id="gfSave">บันทึกข้อนี้</button><button type="button" class="btn-light" id="gfCancel">ยกเลิก</button></div></div>`}
+function renderGame(){if(!gm)return;
+  $("gqChips").innerHTML=G_NAMES.map((nm,i)=>`<button type="button" data-st="${i+1}" class="${gSt===i+1?"on":""}">ด่าน ${i+1}<i>${gm.q[i+1].length}/${gm.min[i+1]}</i></button>`).join("");
+  $("gqChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{gSt=+b.dataset.st;gEdit=null;$("gqMsg").textContent="";renderGame()});
+  const L=gm.q[gSt];let h=`<div class="xsec"><span>ด่าน ${gSt} ${esc(G_NAMES[gSt-1])} (${L.length} ข้อ · ขั้นต่ำ ${gm.min[gSt]} ข้อ)</span></div>`;
+  L.forEach((it,i)=>{h+=gEdit&&gEdit.i===i?gqForm():gqView(it,i+1)});
+  h+=gEdit&&gEdit.i<0?gqForm():`<button type="button" class="addq" data-ga="add">+ เพิ่มข้อในด่าน ${gSt}</button>`;
+  $("gqPaper").innerHTML=h;
+  if($("gqForm")){$("gfCancel").onclick=()=>{gEdit=null;renderGame()};$("gfSave").onclick=gqSaveForm;$("gqForm").scrollIntoView({block:"nearest"})}}
+async function gqWrite(st,list,okMsg){const m=$("gqMsg");m.className="ok";m.textContent="กำลังบันทึก…";
+  try{await setDoc(doc(db,"site","game"),{stages:{[st]:list}},{merge:true});gm.q[st]=list;m.textContent=okMsg;return true}catch(e){m.className="err";m.textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`;return false}}
+async function gqSaveForm(){const q=$("gfQ").value.trim(),pic=$("gfPic").value.trim(),raw=[0,1,2,3].map(k=>$("gfO"+k).value.trim()),a=+(document.querySelector('input[name=gfA]:checked')?.value??0),err=$("gfErr");
+  if(!q){err.textContent="ใส่คำถามก่อน";return}if(!raw[a]){err.textContent="ตัวเลือกที่เลือกเป็นคำตอบยังว่างอยู่";return}
+  const keep=raw.map((v,k)=>[v,k]).filter(x=>x[0]);if(keep.length<2){err.textContent="ต้องมีตัวเลือกอย่างน้อย 2 ข้อ";return}
+  if(new Set(keep.map(x=>x[0])).size!==keep.length){err.textContent="ตัวเลือกซ้ำกัน";return}
+  const it={q,opts:keep.map(x=>x[0]),ans:keep.findIndex(x=>x[1]===a)};if(pic)it.pic=pic;if($("gfBox").checked)it.box=true;
+  const list=gm.q[gSt].slice(),i=gEdit.i;if(i<0)list.push(it);else list[i]=it;
+  if(await gqWrite(gSt,list,i<0?`เพิ่มข้อที่ ${list.length} แล้ว`:`แก้ไขข้อ ${i+1} แล้ว`)){gEdit=null;renderGame()}}
+$("gqPaper").addEventListener("click",async ev=>{const b=ev.target.closest("[data-ga]");if(!b||!gm)return;const i=+b.dataset.i,L=gm.q[gSt];
+  if(b.dataset.ga==="add"){gEdit={i:-1,it:null};renderGame();return}
+  if(b.dataset.ga==="ed"){gEdit={i,it:L[i]};renderGame();return}
+  if(b.dataset.ga==="rm"){if(L.length<=gm.min[gSt]){uiAlert(`ด่าน ${gSt} ต้องมีอย่างน้อย ${gm.min[gSt]} ข้อ ตอนนี้มี ${L.length} ข้อ\nถ้าจะเอาข้อนี้ออก ให้กด แก้ไข หรือเพิ่มข้อใหม่ก่อนแล้วค่อยลบ`);return}
+    if(!await uiConfirm(`ลบข้อ ${i+1} ของด่าน ${gSt}?\n"${L[i].q}"`,{ok:"ลบ",danger:true}))return;
+    const list=L.slice();list.splice(i,1);if(await gqWrite(gSt,list,`ลบแล้ว เหลือ ${list.length} ข้อ`))renderGame()}});
+function renderAunt(){if(!gm)return;const n=gm.aunt.length,min=AUNT_DEF.length;$("auMin").textContent=min;
+  $("auRows").innerHTML=gm.aunt.map((t,i)=>`<div class="aurow"><input maxlength="60" data-ai="${i}" value="${esc(t)}"><button type="button" data-ar="${i}"${n<=min?" disabled title=\"ต้องมีอย่างน้อย "+min+" ประโยค\"":""}>ลบ</button></div>`).join("");
+  $("auRows").querySelectorAll("input").forEach(x=>x.oninput=()=>{gm.aunt[+x.dataset.ai]=x.value});
+  $("auRows").querySelectorAll("button").forEach(x=>x.onclick=()=>{if(gm.aunt.length<=min)return;gm.aunt.splice(+x.dataset.ar,1);renderAunt()})}
+$("auAdd").onclick=()=>{if(!gm)return;gm.aunt.push("");renderAunt();const l=$("auRows").querySelectorAll("input");l[l.length-1]?.focus()};
+$("auSave").onclick=async()=>{if(!gm)return;const m=$("auMsg"),list=gm.aunt.map(t=>t.trim()).filter(Boolean),min=AUNT_DEF.length;
+  if(list.length<min){m.className="err";m.textContent=`ต้องมีอย่างน้อย ${min} ประโยค (ตอนนี้มี ${list.length})`;return}
+  try{await setDoc(doc(db,"site","game"),{aunt:list},{merge:true});gm.aunt=list;renderAunt();m.className="ok";m.textContent="บันทึกแล้ว"}catch(e){m.className="err";m.textContent=`บันทึกไม่สำเร็จ (${e.code||e.message})`}};
 async function editCoupons(id){const u=members.find(x=>x.id===id);if(!u)return;const who=u.nickname||u.email,cs=u.coupons||{};
   const list=Object.entries(cs).map(([code,c])=>[code,`${code} · ลด ${c.baht} บาท ${c.name?"· "+c.name:""}`,!!c.used]);
   const picked=await uiChecks(`โค้ดส่วนลดของ ${who} (ติ๊ก = ใช้แล้ว)`,list);if(!picked)return;
@@ -360,7 +416,7 @@ if(!await uiConfirm(`ยืนยันลบอุปกรณ์ทั้ง�
 try{await deleteDoc(doc(db,"devices",id));devices.delete(id);renderDevices();$("dmsg").className="ok";$("dmsg").textContent=`ลบอุปกรณ์ทั้งหมดของ ${who} แล้ว`}catch(e){$("dmsg").className="";$("dmsg").textContent=`รีเซ็ตไม่สำเร็จ (${e.code||e.message})`}}
 $("dq").oninput=renderDevices;
 async function load(){try{let s=await getDocs(collection(db,"users")),a=[];s.forEach(d=>{let u=d.data();if(u.role!=="admin"&&(u.email||"").toLowerCase()!==ADMIN)a.push({id:d.id,...u})});a.sort((x,y)=>(x.memberNo||1e9)-(y.memberNo||1e9)||(x.email||"").localeCompare(y.email||""));members=a;setDoc(doc(db,"site","home"),{members:a.length},{merge:true}).catch(()=>{});renderMembers();loadDevices();backfillMemberNo()}catch(e){$("users").textContent="โหลดรายชื่อไม่ได้"}}
-function goPage(name){if(!document.querySelector(`.page[data-page="${name}"]`))name="home";document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.dataset.page===name));document.querySelectorAll(".side-nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===name));try{localStorage.setItem("kasorbAdminPage",name)}catch(e){}if(name==="devices"&&members.length)loadDevices();window.scrollTo(0,0);measureSticky()}
+function goPage(name){if(!document.querySelector(`.page[data-page="${name}"]`))name="home";document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.dataset.page===name));document.querySelectorAll(".side-nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===name));try{localStorage.setItem("kasorbAdminPage",name)}catch(e){}if(name==="devices"&&members.length)loadDevices();if(name==="game")loadGame();window.scrollTo(0,0);measureSticky()}
 document.querySelectorAll(".side-nav button").forEach(b=>b.onclick=()=>{goPage(b.dataset.go);menu(false)});
 /* มือถือ: เปิด/ปิดเมนูด้านซ้าย */
 function menu(open){$("side").classList.toggle("open",open);$("mShade").classList.toggle("open",open)}
