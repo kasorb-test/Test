@@ -2738,7 +2738,7 @@ body.adv-on{overflow:hidden}
 .adv-top>b{padding:4px 12px;border-radius:999px;background:rgba(0,0,0,.18)}
 .adv-hearts{display:flex;gap:3px}.adv-ht{flex:0 0 auto;width:20px;height:18px;background:#ff3b5c;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 18%27%3E%3Cpath d=%27M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 18%27%3E%3Cpath d=%27M10 18 1.5 9.5A5 5 0 0 1 10 3a5 5 0 0 1 8.5 6.5Z%27/%3E%3C/svg%3E") center/contain no-repeat}.adv-ht.off{background:rgba(255,255,255,.35)}
 .adv-prog{display:flex;gap:3px}.adv-prog i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.4)}.adv-prog i.on{background:#fff36b;box-shadow:0 0 6px #fff36b}
-.adv-cn{display:flex;align-items:center;gap:4px;margin-left:auto;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.18)}
+.adv-cn.bump{animation:advBump .25s}.adv-cn{display:flex;align-items:center;gap:4px;margin-left:auto;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.18)}
 .adv-menu-btn{padding:6px 12px;border:0;border-radius:999px;background:#fff;color:#f57c00;font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.12)}
 .adv-top>b,.adv-menu-btn,.adv-cn,.adv-pts{white-space:nowrap;flex:0 0 auto}
 @media(max-width:440px){.adv-top{gap:6px;padding:8px 8px}.adv-prog{display:none}.adv-ht{width:17px;height:16px}}
@@ -2749,14 +2749,14 @@ body.adv-on{overflow:hidden}
 .adv-k{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
 .adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
 .adv-jump{position:absolute;right:16px;bottom:18px;z-index:5;background:#ffd23f;color:#7a4b00}
-.adv-menu{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+#gmRank{margin-top:20px}.adv-menu{position:absolute;inset:0;z-index:12;display:grid;place-items:center;background:rgba(15,23,42,.45)}
 .adv-menu-box{display:flex;flex-direction:column;gap:7px;width:min(320px,calc(100% - 40px));max-height:calc(100% - 30px);overflow:auto;padding:18px 16px;border-radius:20px;text-align:center;border:5px solid #7a4a1c;box-shadow:inset 0 0 0 3px #e9c98f,0 7px 0 #4a2a0d,0 14px 24px rgba(0,0,0,.35);background:radial-gradient(circle at 12px 12px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) 12px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at 12px calc(100% - 12px),#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),#5a3412 0 3px,transparent 3.5px),linear-gradient(180deg,#fff8e6,#f3dcab)}
 .adv-menu-box b{font-size:26px;color:#4a2208;margin-bottom:4px;text-shadow:0 2px 0 #fff3d6}
 .adv-menu-box button{display:flex;align-items:center;gap:10px;padding:8px 12px;border:3px solid #5a3412;border-radius:12px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px,#d79c60 8px 13px,#bf8043 13px 14px);color:#fffbea;font:inherit;font-size:17px;font-weight:900;letter-spacing:.2px;text-shadow:-1.5px -1.5px 0 #3b2109,1.5px -1.5px 0 #3b2109,-1.5px 1.5px 0 #3b2109,1.5px 1.5px 0 #3b2109,0 3px 0 #3b2109;box-shadow:0 4px 0 #3b2109;cursor:pointer;text-align:left}
 .adv-menu-box button:active{transform:translateY(3px);box-shadow:0 1px 0 #3b2109}.adv-menu-box .mi{flex:none;width:32px;height:32px;border-radius:9px;background:rgba(59,33,9,.35);display:grid;place-items:center;color:#fff4d6}.adv-menu-box .mi svg{width:20px;height:20px}
 .adv-menu-box .pri{background:repeating-linear-gradient(180deg,#8bd64a 0 6px,#79c43a 6px 8px);border-color:#2f6b14;text-shadow:-1.5px -1.5px 0 #1f4a0c,1.5px -1.5px 0 #1f4a0c,-1.5px 1.5px 0 #1f4a0c,1.5px 1.5px 0 #1f4a0c,0 3px 0 #1f4a0c;box-shadow:0 4px 0 #1f4a0c}.adv-menu-box .out{background:repeating-linear-gradient(180deg,#e2735f 0 6px,#d4604c 6px 8px);border-color:#7f1d1d;text-shadow:-1.5px -1.5px 0 #5a1010,1.5px -1.5px 0 #5a1010,-1.5px 1.5px 0 #5a1010,1.5px 1.5px 0 #5a1010,0 3px 0 #5a1010;box-shadow:0 4px 0 #5a1010}
 .adv-x{width:32px;height:32px;border:0;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
-.adv-pts{display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#fff;color:#f57c00;font-weight:900}.adv-pts:before{content:"★";color:#ffc400}.adv-pts.bump{animation:advBump .25s}@keyframes advBump{50%{transform:scale(1.2)}}
+.adv-pts{display:none!important;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#fff;color:#f57c00;font-weight:900}.adv-pts:before{content:"★";color:#ffc400}.adv-pts.bump{animation:advBump .25s}@keyframes advBump{50%{transform:scale(1.2)}}
 .adv-view{position:relative;flex:1;overflow:hidden;background:linear-gradient(180deg,#8fd3ff,#e8f7ff);touch-action:none}.adv-view canvas{display:block;width:100%;height:100%}
 .adv-view.hurt{animation:advHurt .45s}@keyframes advHurt{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 .adv-load{position:absolute;inset:0;display:grid;place-items:center;color:#16305f;font-weight:800}
@@ -2825,7 +2825,7 @@ body.adv-on{overflow:hidden}
 .adv-shop-box h3{margin:0;font-size:22px;color:#6b3f17}.adv-shop-c{margin:4px 0 8px;color:#475569}.adv-shop-msg{margin:0 0 8px;color:#b45309;font-weight:700}
 .adv-shop-list{display:grid;gap:8px;text-align:left}.adv-it{display:flex;align-items:center;gap:10px;padding:8px;border:2px solid #ead7b8;border-radius:14px;background:#fff}.adv-it.focus{border-color:#f59e0b;background:#fff8e1}
 .adv-it-ic{flex:none;width:44px;height:44px;border-radius:12px;background:#f3e3c7;display:grid;place-items:center}.adv-it-ic svg{width:32px;height:32px}
-.adv-it div{flex:1;min-width:0}.adv-hc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.adv-it .adv-hc button{width:24px;height:24px;min-width:0;padding:0;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #cbd5e1;background:var(--c);text-shadow:none;cursor:pointer}.adv-it .adv-hc button.on{box-shadow:0 0 0 3px #f59e0b}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
+.adv-it div{flex:1;min-width:0}.adv-gs{position:relative}.adv-gc{position:absolute;right:4px;bottom:4px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}.adv-gc.big{position:static;display:inline-block;vertical-align:middle;width:16px;height:16px}.adv-it .adv-hc button.own:after{content:"✓";display:grid;place-items:center;font-size:12px;color:#fff;text-shadow:0 0 2px #000}.adv-hc-n{display:block;margin-top:4px}.adv-hc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.adv-it .adv-hc button{width:24px;height:24px;min-width:0;padding:0;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #cbd5e1;background:var(--c);text-shadow:none;cursor:pointer}.adv-it .adv-hc button.on{box-shadow:0 0 0 3px #f59e0b}.adv-it b{display:block;color:#1e293b}.adv-it small{color:#64748b;font-size:12px}
 .adv-it button{flex:none;min-width:74px;padding:7px 10px;border:3px solid #5a3412;border-radius:10px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px);color:#fff4d6;font:inherit;font-weight:800;text-shadow:0 2px 0 #5a3412;cursor:pointer}
 .adv-it button.low{filter:saturate(.5);opacity:.85}.adv-it button:disabled{filter:grayscale(.8);opacity:.7;cursor:default}.adv-shop-note{margin:10px 0 8px;font-size:12px;color:#64748b}
 .adv-cf{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(15,23,42,.45)}
@@ -2837,7 +2837,7 @@ body.adv-on{overflow:hidden}
 @media(max-width:600px){.adv-gear{top:84px;right:8px}.adv-gs{width:42px;height:42px}}
 .adv-side{display:none}
 @media(max-width:600px){.adv-side{position:absolute;right:8px;top:10px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 6px;border-radius:14px;background:rgba(122,74,28,.88);border:2px solid #5a3412;box-shadow:0 3px 0 #3b2109}
-  .adv-side .adv-pts{font-size:13px;padding:2px 7px}.adv-side .adv-prog{display:grid!important;grid-template-columns:repeat(4,9px);gap:3px}
+  .adv-side .adv-pts{font-size:13px;padding:2px 7px}.adv-side .adv-prog{display:grid!important;grid-template-columns:repeat(4,10px);gap:4px}.adv-side .adv-prog i{width:10px;height:10px}
   .adv-q,.adv-q.box{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 24px)}.adv-q.box{top:96px}}
 .adv-pic{font-size:64px;line-height:1.1;margin:4px 0}
 .adv-ops{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
@@ -2920,6 +2920,8 @@ body.adv-on{overflow:hidden}
 .st-bank{position:absolute;left:10px;top:10px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:13px;color:#8a5a00}
 .st-coin.mini{position:static;width:16px;height:16px;animation:none}
 .hh-art{position:relative}.hh-music{position:absolute!important;right:10px;top:10px}
+/* ปุ่มเพลงหน้าแรกแบบมินิมอล: วงกลมกระจกฝ้าเล็ก ๆ ไอคอนเส้นบาง */
+.st-music.hh-music{width:34px;height:34px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(15,23,42,.12);color:#1f2937}.st-music.hh-music svg{width:17px;height:17px}.st-music.hh-music.off{background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.6);color:#94a3b8}
 .st-music{position:absolute;right:12px;top:12px;z-index:5;width:40px;height:40px;padding:0;border:3px solid #5a3412;border-radius:50%;background:#e8862a;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 0 #3b2109}.st-music svg{width:22px;height:22px}.st-music.off{background:#9ca3af;border-color:#6b7280}
 .st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
 .st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
@@ -3369,7 +3371,7 @@ body.exam-mode,body.review-mode{-webkit-user-select:none;user-select:none;-webki
 .ssec{margin:18px 0 26px}.stag{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.5px;background:#fff}.stag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
 .stag.or{color:#e86208;border-color:#fde0cb;background:#fff7f0}.stag.bl{color:#16305f;border-color:#d7e0f0;background:#f3f6fc}
 .stt{margin:12px 0 16px;font-size:26px;font-weight:900;color:#1b1b1b;line-height:1.3}@media(max-width:600px){.stt{font-size:22px}}
-.chips2{display:flex;flex-wrap:wrap;gap:10px}
+.chips2{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:700px){.chips2{grid-template-columns:1fr 1fr}}.chips2 .chip2{width:100%;justify-content:flex-start;text-align:left}.chips2 .chip2 .cn{margin-left:auto}
 .chip2{display:inline-flex;align-items:center;gap:10px;padding:13px 16px;border:1px solid #e7e7e7;border-radius:16px;background:#fff;font:inherit;font-size:15px;font-weight:800;color:#222;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.03);transition:border-color .15s,box-shadow .15s,transform .15s;text-align:left}
 .chip2:hover{border-color:#ffc9a3;box-shadow:0 6px 16px rgba(255,106,0,.12);transform:translateY(-1px)}
 .chip2 .ci{width:20px;height:20px;flex:0 0 auto;fill:none;stroke:#555;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -5306,7 +5308,7 @@ function xpForAnswer(correct,attempt){
 /* RANK */
 
 /*
-  ยศตามเลเวล รวม 19 ขั้น Lv.0 - Lv.18
+  ยศตามเลเวล รวม 21 ขั้น Lv.0 - Lv.20
   สมาชิก Freeแสดงเป็น "ผู้ทดลองสอบ" Lv.0 เสมอ
   สมาชิก Premiumขึ้นเลเวลเมื่อผ่านทั้ง 2 เงื่อนไข:
   - ทำแล้วขั้นต่ำ (% ของข้อสอบทั้งหมดในเว็บ นับข้อที่ไม่ซ้ำ)
@@ -5316,6 +5318,7 @@ function xpForAnswer(correct,attempt){
 const PREMIUM_RANKS=[
   "ผู้ทดลองสอบ",
   "ผู้สมัครสอบ",
+  "ผู้เตรียมตัวสอบ",
   "ผู้เข้าสอบ",
   "ผู้สอบผ่าน",
   "นสต.",
@@ -5332,15 +5335,16 @@ const PREMIUM_RANKS=[
   "พ.ต.อ.",
   "พล.ต.ต.",
   "พล.ต.ท.",
-  "พล.ต.อ."
+  "พล.ต.อ.",
+  "เกษียณราชการ"
 ];
 /* [ทำแล้วขั้นต่ำ %, XP ขั้นต่ำ] ของแต่ละเลเวล (Lv.1 ใช้เงื่อนไขทำข้อแรกแทน) */
 const LEVEL_RULES=[
   [0,0],[0,0],
-  [5,5000],[10,10000],[15,18000],[20,25000],[25,32000],
-  [30,40000],[35,48000],[40,56000],[50,68000],[60,80000],
-  [70,92000],[80,105000],[85,115000],[90,125000],[95,140000],
-  [98,155000],[100,180000]
+  [5,5000],[10,10000],[25,15000],[30,18000],[35,25000],
+  [40,32000],[45,40000],[50,48000],[55,56000],[60,68000],
+  [65,80000],[70,92000],[75,105000],[80,115000],[85,125000],
+  [90,140000],[95,155000],[98,170000],[100,180000]
 ];
 /*
   เลเวลปัจจุบัน คิดใหม่ทุกครั้งจากเปอร์เซ็นต์และ XP ตอนนี้
@@ -5384,8 +5388,8 @@ if(currentData?.plan!=="premium"){
 const level=currentLevel();
 let rank=premiumRank(level);
 
-/* ผู้หญิงต่อท้ายยศว่า "หญิง" ทุกยศ ตั้งแต่ Lv.1 */
-if(currentData?.gender==="female" && level>0){
+/* ผู้หญิงต่อท้ายยศว่า "หญิง" ทุกยศ ตั้งแต่ Lv.1 (ยกเว้น "เกษียณราชการ") */
+if(currentData?.gender==="female" && level>0 && level<MAX_LEVEL){
   rank += "หญิง";
 }
 
@@ -5579,6 +5583,7 @@ $("topProgressFill")
 
 
 if(document.getElementById("scorePage")?.classList.contains("active")) renderOverview();
+if(document.getElementById("gamePage")?.classList.contains("active")&&!document.body.classList.contains("adv-on")) renderRankZone();
 
 
 if(
@@ -7077,6 +7082,8 @@ $("setBack").onclick=()=>renderMockPage();
 /* ===== แบบทดสอบรายวิชา =====
    แท็บ รายวิชา: เลือกสาย > วิชาของสายนั้น > ชุดที่ 1-20 (1-5 ฟรี, 6-20 Premium)
    แท็บ ข้อสอบจริง (เห็นเฉพาะ Premium): 5 วิชา > ชุดข้อสอบจริงของวิชานั้น */
+/* ชื่อที่แสดงบนปุ่มวิชา: ตัดคำว่า "/ คณิตศาสตร์" ออก (ชื่อจริงยังใช้จับคู่ข้อสอบเหมือนเดิม) */
+const subjShow=s=>String(s).replace(/\s*\/\s*คณิตศาสตร์/,"");
 const SUBJECTS=["ความสามารถทั่วไป / คณิตศาสตร์","ภาษาไทย","ภาษาอังกฤษ","คอมพิวเตอร์สำนักงาน","กฎหมายที่ประชาชนควรรู้","สังคม วัฒนธรรม และอาเซียน","งานสารบรรณ","ลักษณะที่ 54"];
 const TRACK_SUBJECTS={amnuay:[0,1,2,3,4,6,7],pisut:[0,1,2,3,4,6,7],prab:[0,1,2,4,5],namwan:[0,1,2,4,5],plrom:[0,1,2,4,5],tcd:[0,1,2,4,5]};
 /* วิชาของแต่ละสาย: แอดมินแก้ได้ (site/home.trackSubjects) ไม่ได้ตั้งไว้ใช้ค่าเริ่มต้น */
@@ -7112,7 +7119,7 @@ async function renderSubjectPage(){
   subs.forEach(sub=>{
     const sets=list.filter(e=>e.kind===kind&&e.subject===sub);
     const b=document.createElement("button");b.type="button";b.className="chip2";
-    b.innerHTML=`${subjIcon(sub)}<span>${subjTab==="real"?"ข้อสอบจริง":""}${escHtml(sub)}</span>${cnt(sets.length)}`;
+    b.innerHTML=`${subjIcon(sub)}<span>${subjTab==="real"?"ข้อสอบจริง":""}${escHtml(subjShow(sub))}</span>${cnt(sets.length)}`;
     b.onclick=()=>openSubject(sub,sets,kind);
     box.appendChild(b);
   });
@@ -7142,7 +7149,7 @@ function subjIcon(sub){
 }
 async function openSubject(sub,sets,kind){
   $("subjListBox").classList.add("hidden");$("subjTrackBox").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");
-  $("subjName").textContent=(kind==="real"?"ข้อสอบจริง":"")+sub;
+  $("subjName").textContent=(kind==="real"?"ข้อสอบจริง":"")+subjShow(sub);
   const box=$("subjSets");box.innerHTML="";
   const prog=await loadProgress().catch(()=>({best:{}}));
   const LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>';
@@ -7505,14 +7512,14 @@ async function openAttempt(a,btn){
 /* ===== ภาพรวมผลการทดสอบ: บันไดยศ + เงื่อนไขเลื่อนยศ + ผลรายวิชา ===== */
 /* สีตามช่วงคะแนน: 0-29 แดง · 30-59 เหลือง · 60-79 ฟ้า · 80-100 เขียว */
 const pctGrade=p=>p<30?"g1":p<60?"g2":p<80?"g5":"g6";
-function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0?"หญิง":"")}
+function rankLabel(lv){return premiumRank(lv)+(currentData?.gender==="female"&&lv>0&&lv<MAX_LEVEL?"หญิง":"")}
 let ovMode=(()=>{try{return localStorage.getItem("kasorbOvMode")||"last"}catch(e){return "last"}})();
 /* บันไดยศแบบรูป: ขั้นก่อนหน้า > ขั้นปัจจุบัน > 2 ขั้นถัดไป > ยศสูงสุด รูปประจำตัวกำลังปีนบันไดขึ้นขั้นถัดไป */
 /* ===== เหรียญอัตโนมัติ + แลกส่วนลด =====
    เช็คอิน: เข้าแอปวันละครั้ง ได้ตามลำดับ 7 วัน (ขาดวันเริ่มนับใหม่) · ขยัน: ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 2 เหรียญ (วันละไม่เกิน 20)
    เก็บโดยกระโดดบนบันไดยศ · เหรียญแลกโค้ดส่วนลดตามที่แอดมินตั้งไว้ (site/coins.coupons)
    วันนับตามเวลาไทย กฎของ Firebase ตรวจซ้ำทุกครั้ง */
-const CHECKIN_REWARD=[5,5,10,10,15,15,30],DIL_PER=20,DIL_COIN=2,DIL_MAX=10;
+const CHECKIN_REWARD=[50,50,100,100,150,150,300],DIL_PER=20,DIL_COIN=20,DIL_MAX=10;
 const thaiDay=()=>Math.floor((Date.now()+7*3600000)/86400000);
 let coinSite={coupons:{}};
 async function loadCoinSite(){try{const s=await getDoc(doc(db,"site","coins"));const d=s.exists()?s.data():{};coinSite={coupons:d.coupons||{}}}catch(e){console.error(e)}}
@@ -7569,12 +7576,12 @@ function bindShop(){
 const OUTFITS=[
   {id:"tee",name:"เสื้อยืดกีฬา",lv:0,shirt:"#ff8a3d",sleeve:"#ff8a3d",pants:"#334155",shoe:"#f8fafc",sole:"#94a3b8",collar:"round",trim:"#fff"},
   {id:"student",name:"ชุดนักเรียน",lv:1,shirt:"#ffffff",sleeve:"#ffffff",pants:"#1e3a8a",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#cbd5e1",tie:"#1e3a8a"},
-  {id:"track",name:"ชุดวอร์มฝึก",lv:2,shirt:"#1f3b73",sleeve:"#1f3b73",pants:"#1f3b73",shoe:"#f8fafc",sole:"#94a3b8",collar:"zip",trim:"#ffb21e",stripe:"#ffb21e"},
-  {id:"cadet",name:"ชุดนักเรียนนายสิบ",lv:4,shirt:"#b08d57",sleeve:"#b08d57",pants:"#8c6d3f",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#8c6d3f",badge:"#f5b301",belt:"#3f2d14",hat:"cap",hatc:"#8c6d3f"},
-  {id:"khaki",name:"เครื่องแบบกากี",lv:6,shirt:"#a3825a",sleeve:"#a3825a",pants:"#7a5f3b",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#7a5f3b",badge:"#f5b301",belt:"#111827",hat:"peak",hatc:"#6b5130",pocket:1},
-  {id:"white",name:"ชุดปกติขาว",lv:9,shirt:"#ffffff",sleeve:"#ffffff",pants:"#ffffff",shoe:"#111827",sole:"#111827",collar:"high",trim:"#e2e8f0",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#ffffff",gold:1},
-  {id:"navy",name:"ชุดพิธีการ",lv:12,shirt:"#16305f",sleeve:"#16305f",pants:"#0f2449",shoe:"#111827",sole:"#111827",collar:"high",trim:"#f5b301",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#16305f",gold:1,sash:"#e11d48"},
-  {id:"gold",name:"ชุดทองผู้พิชิต",lv:18,shirt:"#f5c542",sleeve:"#f5c542",pants:"#d9a400",shoe:"#7c5a00",sole:"#5a4100",collar:"high",trim:"#fff6c2",badge:"#fff",belt:"#7c5a00",hat:"crown",hatc:"#ffd84a",gold:1,cape:"#e11d48"}
+  {id:"track",name:"ชุดวอร์มฝึก",lv:3,shirt:"#1f3b73",sleeve:"#1f3b73",pants:"#1f3b73",shoe:"#f8fafc",sole:"#94a3b8",collar:"zip",trim:"#ffb21e",stripe:"#ffb21e"},
+  {id:"cadet",name:"ชุดนักเรียนนายสิบ",lv:5,shirt:"#b08d57",sleeve:"#b08d57",pants:"#8c6d3f",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#8c6d3f",badge:"#f5b301",belt:"#3f2d14",hat:"cap",hatc:"#8c6d3f"},
+  {id:"khaki",name:"เครื่องแบบกากี",lv:7,shirt:"#a3825a",sleeve:"#a3825a",pants:"#7a5f3b",shoe:"#111827",sole:"#111827",collar:"shirt",trim:"#7a5f3b",badge:"#f5b301",belt:"#111827",hat:"peak",hatc:"#6b5130",pocket:1},
+  {id:"white",name:"ชุดปกติขาว",lv:10,shirt:"#ffffff",sleeve:"#ffffff",pants:"#ffffff",shoe:"#111827",sole:"#111827",collar:"high",trim:"#e2e8f0",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#ffffff",gold:1},
+  {id:"navy",name:"ชุดพิธีการ",lv:13,shirt:"#16305f",sleeve:"#16305f",pants:"#0f2449",shoe:"#111827",sole:"#111827",collar:"high",trim:"#f5b301",badge:"#f5b301",belt:"#f5b301",hat:"peak",hatc:"#16305f",gold:1,sash:"#e11d48"},
+  {id:"gold",name:"ชุดทองผู้พิชิต",lv:19,shirt:"#f5c542",sleeve:"#f5c542",pants:"#d9a400",shoe:"#7c5a00",sole:"#5a4100",collar:"high",trim:"#fff6c2",badge:"#fff",belt:"#7c5a00",hat:"crown",hatc:"#ffd84a",gold:1,cape:"#e11d48"}
 ];
 const outfitOf=id=>OUTFITS.find(o=>o.id===id)||OUTFITS[0];
 function bestOutfit(lv){return OUTFITS.filter(o=>o.lv<=lv).pop()||OUTFITS[0]}
@@ -7747,8 +7754,8 @@ function wardrobeHtml(lv){
 }
 /* ===== เกมผจญภัยตอบคำถาม (แนวมาริโอ้): เดินไปเจอกล่อง ? ตอบถูกกระโดดชนกล่องได้เหรียญ ผ่านครบถึงธงคือผ่านด่าน =====
    โจทย์สร้างใหม่ทุกครั้งตามความยากของด่าน (คิดเลข อนุกรม เปรียบเทียบ เงื่อนไข) ไม่ใช้ข้อสอบจริง
-   บันทึก users/{uid}.game {stage: ด่านสูงสุดที่ผ่าน, day, got: ด่านใหม่ที่ผ่านวันนี้} ผ่านด่านใหม่ได้ 3 เหรียญ วันละไม่เกิน 10 ด่าน */
-const ADV_COIN=3,ADV_CAP=10;
+   บันทึก users/{uid}.game {stage: ด่านสูงสุดที่ผ่าน, day, got: จำนวนครั้งที่รับเหรียญวันนี้} ผ่านด่านได้เหรียญที่เก็บ (ไม่เกิน 100) + โบนัส 20 วันละไม่เกิน 20 ครั้ง */
+const ADV_BONUS=20,ADV_MAXGOT=100,ADV_CAP=20;
 const advBest=()=>Number(currentData?.game?.stage)||0;
 /* สมาชิกทั่วไปเล่นได้ถึงด่าน 5 สมาชิก Premium เล่นได้ถึงด่าน 10 (แอดมินเลือกได้ทุกด่านเพื่อตรวจฉาก) */
 const ADV_NAMES=["Meadow","Flower Garden","Canal & Stone Bridge","Zoo","Beach","Waterfall","Village","Vocabulary Market","Haunted House","Thai Temple"];
@@ -7841,58 +7848,66 @@ let adv=null,advMod=null,advSayQ=[],advSayT=0;
 /* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
 function advSayNext(){const t=$("advToast");if(!t||!advSayQ.length){advSayT=0;return}const m=advSayQ.shift();t.innerHTML=`<b>${escHtml(m)}</b>`;t.classList.remove("hidden","show");void t.offsetWidth;t.classList.add("show");advSayT=setTimeout(advSayNext,2400)}
 /* ไอเทมในเกม: ซื้อด้วยเหรียญครั้งเดียวใช้ได้ตลอด ใส่อัตโนมัติตามสภาพอากาศ/ฉาก หรือแตะที่แถบไอเทมเพื่อใส่/ถอดเอง (ราคาตรงกับ firestore.rules) */
-const ADV_GEAR=[["umbrella","ร่ม","กางเองเวลาฝนตก",30],["cap","หมวกแก๊ป","ใส่เดินเล่นได้ทุกด่าน",20],["straw","หมวกชาวนา","ใส่เองในฟาร์มและหมู่บ้าน",20],["fan","พัด","โบกเองวันที่ร้อนจัด 35 องศาขึ้นไป",25],["coat","เสื้อกันหนาว","ใส่เองวันที่อากาศเย็น",40],["shades","แว่นกันแดด","ใส่เองตอนเดินริมทะเล",30]];
+const ADV_GEAR=[["umbrella","ร่ม","กางกันฝน",300],["cap","หมวกแก๊ป","ใส่ได้ทุกด่าน",200],["straw","หมวกชาวนา","หมวกปีกกว้างกันแดด",200],["fan","พัด","โบกคลายร้อน",250],["coat","เสื้อกันหนาว","แขนยาวมีฮู้ด ใส่อุ่น ๆ หน้าหนาว",400],["scarf","ผ้าพันคอ","พันคออุ่น ๆ หน้าหนาว",250],["shades","แว่นกันแดด","ใส่เดินริมทะเล",300]];
 const ADV_ICON={umbrella:'<svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 6.5 3 11h18c0-4.5-4-8-9-8z" fill="#ff7043"/><path d="M12 11v7a2 2 0 0 1-4 0" stroke="#5d4037" stroke-width="1.8" fill="none"/></svg>',
   cap:'<svg viewBox="0 0 24 24"><path d="M4 15c0-5 3.5-8 8-8s8 3 8 8z" fill="#1e88e5"/><path d="M12 15h10c0 1.6-1.5 2-3 2h-7z" fill="#1565c0"/></svg>',
   straw:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="15" rx="10" ry="3" fill="#d9b56a"/><path d="M7 15c0-4 2-7 5-7s5 3 5 7z" fill="#e6c27a"/><rect x="7" y="12" width="10" height="2" fill="#e53935"/></svg>',
   fan:'<svg viewBox="0 0 24 24"><path d="M12 20L3 9a12 12 0 0 1 18 0z" fill="#ec407a"/><path d="M12 20L7.5 6.5M12 20V5.5M12 20l4.5-13.5" stroke="#fff" stroke-width="1"/></svg>',
   coat:'<svg viewBox="0 0 24 24"><path d="M8 4l4 3 4-3 4 3-2 4h-1v9H7v-9H6L4 7z" fill="#d32f2f"/><path d="M12 7v13" stroke="#7f1d1d"/><path d="M7 7.5c2 1 8 1 10 0" stroke="#ffeb3b" stroke-width="2" fill="none"/></svg>',
   shades:'<svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="4" fill="#222"/><circle cx="17" cy="12" r="4" fill="#222"/><path d="M11 11h2" stroke="#222" stroke-width="2"/></svg>',
+  scarf:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="8" rx="8" ry="3.5" fill="none" stroke="#ec407a" stroke-width="3"/><path d="M13 10l1 10h3l-1-10z" fill="#ec407a"/><path d="M13.6 17h3" stroke="#fff" stroke-width="1.4"/></svg>',
   shop:'<svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="#fff4d6"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="#fff4d6" stroke-width="2" fill="none"/></svg>',
   sndOn:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" stroke="#fff" stroke-width="2" fill="none"/></svg>',
   sndOff:'<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2"/></svg>'};
 let advPref={},advOn={};try{advPref=JSON.parse(localStorage.getItem("advGearPref")||"{}")||{}}catch(e){}
 const advOwned=()=>window.__advGear||(Array.isArray(currentData?.gear)?currentData.gear:[]);
-const ADV_HATC={cap:["#1c1c1f","#1e3a8a","#c62828","#ec407a","#2e7d32","#f5f5f5"],straw:["#e53935","#1e88e5","#ec407a","#212121","#43a047","#fdd835"]};
-let advHatCol={};try{advHatCol=JSON.parse(localStorage.getItem("advHatCol")||"{}")||{}}catch(e){}
+/* สีของไอเทม: เลือกตอนซื้อเท่านั้น สีแรกคือสีเริ่มต้น (บันทึกเป็น "cap") สีอื่นบันทึกเป็น "cap@รหัสสี" อยากได้สีใหม่ต้องซื้อเพิ่ม */
+const ADV_HATC={cap:["1c1c1f","1e3a8a","c62828","ec407a","2e7d32","f5f5f5"],straw:["e53935","1e88e5","ec407a","212121","43a047","fdd835"],coat:["d32f2f","1565c0","2e7d32","6d4c41","f9a825","ad1457"],scarf:["ec407a","1e88e5","ffeb3b","43a047","ffffff","8e24aa"],umbrella:["ff7043","1e88e5","ab47bc","43a047","ffca28","e53935"]};
+const gearBase=g=>String(g).split("@")[0],gearCol=g=>{const b=gearBase(g),p=ADV_HATC[b];return String(g).includes("@")?String(g).split("@")[1]:p?p[0]:null};
+const gearVarId=(id,col)=>!col||!ADV_HATC[id]||ADV_HATC[id][0]===col?id:`${id}@${col}`;
+let advPick={};
 const advSavePref=()=>{try{localStorage.setItem("advGearPref",JSON.stringify(advPref))}catch(e){}};
 function advGearBar(){const bar=$("advGear");if(!bar)return;const own=advOwned();
-  bar.innerHTML=ADV_GEAR.filter(g=>own.includes(g[0])).map(([id,nm])=>`<button type="button" class="adv-gs${advOn[id]?" on":""}" data-g="${id}" title="${escHtml(nm)}${advPref[id]==null?" (อัตโนมัติ)":""}">${ADV_ICON[id]}${advPref[id]==null?'<i>A</i>':""}</button>`).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
+  bar.innerHTML=own.map(v=>{const it=ADV_GEAR.find(g=>g[0]===gearBase(v));if(!it)return "";const c=gearCol(v);return `<button type="button" class="adv-gs${advPref[v]===1?" on":""}" data-g="${escHtml(v)}" title="${escHtml(it[1])} (แตะเพื่อใส่/ถอด)">${ADV_ICON[it[0]]}${c?`<i class="adv-gc" style="background:#${c}"></i>`:""}</button>`}).join("")+`<button type="button" class="adv-gs shop" data-g="shop" title="ร้านไอเทม">${ADV_ICON.shop}</button>`;
   bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.g;if(id==="shop"){advShop();return}
-    if(advPref[id]==null)advPref[id]=advOn[id]?0:1;else delete advPref[id];advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
+    const on=advPref[id]!==1;for(const v of advOwned())if(gearBase(v)===gearBase(id))advPref[v]=0;advPref[id]=on?1:0;advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()})}
 const advCoins=()=>window.__advCoins??coinsOf();
 function advShop(focus,msg){const sh=$("advShop");if(!sh)return;adv?.pause(true);const own=advOwned(),c=advCoins();
   sh.innerHTML=`<div class="adv-shop-box"><h3>ร้านไอเทม</h3><p class="adv-shop-c">เหรียญของฉัน <i class="st-coin mini"></i> <b>${c.toLocaleString()}</b></p>${msg?`<p class="adv-shop-msg">${escHtml(msg)}</p>`:""}
-    <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const has=own.includes(id);return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small>${has&&ADV_HATC[id]?`<span class="adv-hc">${ADV_HATC[id].map((c,i)=>`<button type="button" data-hc="${id}" data-c="${c}" style="--c:${c}" class="${(advHatCol[id]||ADV_HATC[id][0])===c?"on":""}" aria-label="สีหมวก ${i+1}"></button>`).join("")}</span>`:""}</div>
-      <button type="button" data-buy="${id}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
-    <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด ใส่เองตามสภาพอากาศและฉาก หรือแตะไอเทมที่แถบด้านขวาเพื่อใส่/ถอด</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
+    <div class="adv-shop-list">${ADV_GEAR.map(([id,nm,ds,pr])=>{const pal=ADV_HATC[id],col=pal?(advPick[id]||pal.find(x=>!own.includes(gearVarId(id,x)))||pal[0]):null,vid=gearVarId(id,col),has=own.includes(vid),hasAny=own.some(v=>gearBase(v)===id);
+      return `<div class="adv-it${focus===id?" focus":""}"><span class="adv-it-ic">${ADV_ICON[id]}</span><div><b>${escHtml(nm)}</b><small>${escHtml(ds)}</small>${pal?`<span class="adv-hc">${pal.map((x,i)=>`<button type="button" data-hc="${id}" data-c="${x}" style="--c:#${x}" class="${x===col?"on":""}${own.includes(gearVarId(id,x))?" own":""}" aria-label="สี ${i+1}"></button>`).join("")}</span><small class="adv-hc-n">${hasAny?"เลือกสีแล้วกดซื้อ สีที่มีแล้วมีเครื่องหมายถูก":"เลือกสีก่อนซื้อ เปลี่ยนสีภายหลังต้องซื้อใหม่"}</small>`:""}</div>
+      <button type="button" data-buy="${escHtml(vid)}"${has?" disabled":""}${!has&&c<pr?' class="low"':""}>${has?"มีแล้ว":`<i class="st-coin mini"></i> ${pr}`}</button></div>`}).join("")}</div>
+    <p class="adv-shop-note">ซื้อครั้งเดียวใช้ได้ตลอด แตะไอเทมที่แถบด้านขวาเพื่อใส่หรือถอดเอง</p><button type="button" class="adv-shop-x" id="advShopX">กลับไปเล่น</button></div>`;
   sh.classList.remove("hidden");
   $("advShopX").onclick=()=>{sh.classList.add("hidden");if(!$("advStart")&&$("advMenu")?.classList.contains("hidden"))adv?.pause(false)};
   sh.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>advConfirm(b.dataset.buy));
-  sh.querySelectorAll("[data-hc]").forEach(b=>b.onclick=()=>{advHatCol[b.dataset.hc]=b.dataset.c;try{localStorage.setItem("advHatCol",JSON.stringify(advHatCol))}catch(e){}advMod?.SND.play("tap");adv?.refreshGear();advShop(b.dataset.hc)})}
+  sh.querySelectorAll("[data-hc]").forEach(b=>b.onclick=()=>{advPick[b.dataset.hc]=b.dataset.c;advMod?.SND.play("tap");advShop(b.dataset.hc)})}
 /* ยืนยันก่อนซื้อ: บอกชื่อ ราคา และเหรียญที่จะเหลือ */
-function advConfirm(id){const it=ADV_GEAR.find(g=>g[0]===id),sh=$("advShop");if(!it||!sh)return;
+function advConfirm(id){const it=ADV_GEAR.find(g=>g[0]===gearBase(id)),sh=$("advShop");if(!it||!sh)return;
   if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}
   if(advCoins()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${advCoins()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
-  const box=document.createElement("div");box.className="adv-cf";box.innerHTML=`<div class="adv-cf-box"><span class="adv-it-ic">${ADV_ICON[id]}</span><b>ซื้อ${escHtml(it[1])}?</b>
+  const box=document.createElement("div");box.className="adv-cf";box.innerHTML=`<div class="adv-cf-box"><span class="adv-it-ic">${ADV_ICON[id]}</span><b>ซื้อ${escHtml(it[1])}${gearCol(id)&&ADV_HATC[it[0]]?` <i class="adv-gc big" style="background:#${gearCol(id)}"></i>`:""}?</b>
     <p>ราคา <i class="st-coin mini"></i> ${it[3]} เหรียญ<br>ซื้อแล้วเหลือ ${(advCoins()-it[3]).toLocaleString()} เหรียญ</p>
     <div class="adv-cf-btns"><button type="button" class="no">ยกเลิก</button><button type="button" class="yes">ยืนยันซื้อ</button></div></div>`;
   sh.appendChild(box);box.querySelector(".no").onclick=()=>box.remove();box.onclick=e=>{if(e.target===box)box.remove()};
   box.querySelector(".yes").onclick=e=>{e.target.disabled=true;e.target.textContent="กำลังซื้อ…";advBuy(id)}}
-async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===id);if(!it)return;if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}const own=advOwned();if(own.includes(id))return;
+async function advBuy(id){const it=ADV_GEAR.find(g=>g[0]===gearBase(id));if(!it)return;if(!currentUser||!currentData){advShop(id,"เข้าสู่ระบบก่อนจึงจะซื้อไอเทมได้");return}const own=advOwned();if(own.includes(id))return;
   if(coinsOf()<it[3]){advShop(id,`เหรียญยังไม่พอ ต้องใช้ ${it[3]} เหรียญ (มี ${coinsOf()}) ผ่านด่านใหม่หรือเช็คอินรายวันเพื่อสะสมเหรียญ`);return}
-  const gear=[...own,id],coins=coinsOf()-it[3];
+  const gear=[...own,id],coins=coinsOf()-it[3];for(const v of own)if(gearBase(v)===it[0])advPref[v]=0;advPref[id]=1;advSavePref();
   try{await updateDoc(doc(db,"users",currentUser.uid),{gear,coins});currentData.gear=gear;currentData.coins=coins;advMod?.SND.play("buy");const cc=$("advCoins");if(cc)cc.textContent=coins.toLocaleString();
-    adv?.refreshGear();advGearBar();advShop(id,`ได้${it[1]}แล้ว`)}
+    adv?.refreshGear();advGearBar();advShop(it[0],`ได้${it[1]}แล้ว ใส่ให้แล้ว`)}
   catch(e){console.error(e);advShop(id,e?.code==="permission-denied"?"ซื้อไม่สำเร็จ: ระบบยังไม่เปิดให้ซื้อ (ต้อง Publish กฎ Firebase ฉบับล่าสุดก่อน)":"ซื้อไม่สำเร็จ ลองใหม่อีกครั้ง")}}
-async function advClear(st){
+let advGot=0;
+async function advClear(st,got=0){
   let gain=0,note="";
-  if(st===advBest()+1&&currentUser&&currentData){
-    const day=thaiDay(),g=currentData.game||{stage:0,day:0,got:0},had=Number(g.day)===day?Number(g.got)||0:0,give=had<ADV_CAP;
-    const game={stage:st,day,got:give?had+1:had},upd={game};if(give)upd.coins=coinsOf()+ADV_COIN;
-    try{await updateDoc(doc(db,"users",currentUser.uid),upd);currentData.game=game;if(give){currentData.coins=upd.coins;gain=ADV_COIN}}
-    catch(e){console.error(e);note="บันทึกไม่สำเร็จ"}
-    if(!give&&!note)note=`วันนี้รับเหรียญครบ ${ADV_CAP} ด่านแล้ว`;
+  if(currentUser&&currentData){
+    /* ผ่านด่าน: ได้เหรียญที่เก็บในด่าน (ไม่เกิน ADV_MAXGOT) + โบนัสผ่านด่าน วันละไม่เกิน ADV_CAP ครั้ง เล่นด่านเดิมซ้ำก็ได้เหรียญ */
+    const day=thaiDay(),g=currentData.game||{stage:0,day:0,got:0},had=Number(g.day)===day?Number(g.got)||0:0,give=had<ADV_CAP,best=Number(g.stage)||0;
+    const want=Math.max(0,Math.min(ADV_MAXGOT,Math.floor(Number(got)||0)))+ADV_BONUS;
+    const game={stage:st===best+1?st:best,day,got:give?had+1:had},upd={game};if(give)upd.coins=coinsOf()+want;
+    if(st<=best+1){try{await updateDoc(doc(db,"users",currentUser.uid),upd);currentData.game=game;if(give){currentData.coins=upd.coins;gain=want}}
+    catch(e){console.error(e);note="บันทึกไม่สำเร็จ"}}
+    if(!give&&!note)note=`วันนี้รับเหรียญครบ ${ADV_CAP} รอบแล้ว`;
   }
   const c=$("advCoins");if(c)c.textContent=coinsOf().toLocaleString();
   return {gain,note};
@@ -7900,22 +7915,19 @@ async function advClear(st){
 async function advStart(){
   advClose();
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
-  ov.innerHTML=`<div class="adv-top"><b id="advSt">Stage 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="เมนู">☰ เมนู</button></div>
+  ov.innerHTML=`<div class="adv-top"><b id="advSt">Stage 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="Menu">☰ MENU</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
       <div class="adv-clock" id="advClock"><b id="advTime">--:--</b><span id="advPart"></span></div>
       <div class="adv-q hidden" id="advQ"><div class="adv-qt" id="advQt"></div><div class="adv-tm"><i id="advBar"></i></div><div class="adv-pic hidden" id="advPic"></div><div class="adv-ops hidden" id="advOps"></div><div class="adv-qh" id="advQh">แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา</div></div>
       <div class="adv-pad"><button type="button" class="adv-k" data-h="l" aria-label="เดินซ้าย">◀</button><button type="button" class="adv-k" data-h="r" aria-label="เดินขวา">▶</button></div>
       <button type="button" class="adv-k adv-jump" id="advJump" aria-label="กระโดด">JUMP</button>
-      <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>พักเกม</b>
-        <button type="button" class="pri" data-go="resume"><i class="mi"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></i><span>เล่นต่อ</span></button>
-        <button type="button" data-go="stages"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H7v9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></i><span>เลือกด่าน</span></button>
-        <button type="button" data-go="shop"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="currentColor"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="2" fill="none"/></svg></i><span>ร้านไอเทม</span></button>
-        <button type="button" data-go="gamePage|เกม"><i class="mi"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5" fill="currentColor"/><path d="M7 11v3M5.5 12.5h3" stroke="#fff4d6" stroke-width="1.8"/><circle cx="16" cy="11.5" r="1.2" fill="#fff4d6"/><circle cx="18" cy="13.8" r="1.2" fill="#fff4d6"/></svg></i><span>เลือกเกม</span></button>
-        <button type="button" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z" fill="currentColor"/></svg></i><span>หน้าหลัก</span></button>
-        <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z" fill="currentColor"/><path d="M8 10h8M8 14h8M8 18h5" stroke="#fff4d6" stroke-width="1.6"/></svg></i><span>แบบทดสอบรายวิชา</span></button>
-        <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง"><i class="mi"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="currentColor"/><path d="M8 8l1.5 1.5L12 7M8 13l1.5 1.5L12 12M14 8h3M14 13h3" stroke="#fff4d6" stroke-width="1.6" fill="none"/></svg></i><span>แบบทดสอบเสมือนจริง</span></button>
-        <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ"><i class="mi"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zM10 20V4h4v16zM16 20v-7h4v7z" fill="currentColor"/></svg></i><span>ผลการทดสอบ</span></button>
-        <button type="button" class="out" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>ออกจากเกม</span></button></div></div>
+      <div class="adv-menu hidden" id="advMenu"><div class="adv-menu-box"><b>PAUSED</b>
+        <button type="button" class="pri" data-go="resume"><i class="mi"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></i><span>Resume</span></button>
+        <button type="button" data-go="stages"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H7v9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></i><span>Select Stage</span></button>
+        <button type="button" data-go="shop"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="currentColor"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="2" fill="none"/></svg></i><span>Item Shop</span></button>
+        <button type="button" data-go="gamePage|เกม|rank"><i class="mi"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4 10h16M9 3v4M15 3v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M9 15l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Check-in</span></button>
+        <button type="button" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z" fill="currentColor"/></svg></i><span>Home</span></button>
+        <button type="button" class="out" data-go="gamePage|เกม"><i class="mi"><svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Exit Game</span></button></div></div>
       
       <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
@@ -7938,7 +7950,7 @@ async function advStart(){
       note.classList.add("hidden");advSel=n;advRe=false;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
     $("advGo").onclick=()=>{advMod?.SND.unlock();if(advRe){advRe=false;adv?.restart(advSel)}d.remove();adv?.pause(false)}};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
-    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="stages"){menu.classList.add("hidden");advSel=adv?.debug().st||advSel;advRe=false;startBox();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="stages"){menu.classList.add("hidden");advSel=adv?.debug().st||advSel;advRe=false;startBox();return}const [pg,tt,sc]=b.dataset.go.split("|");advClose();showAppPage(pg,tt);if(sc)setTimeout(()=>$("gmRank")?.scrollIntoView({behavior:"smooth",block:"start"}),450)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
@@ -7951,15 +7963,19 @@ async function advStart(){
   const ui={
     stage:(st,need,done)=>{$("advSt").textContent=`Stage ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
-    pts:n=>{const p=$("advPts");if(p){p.textContent=n.toLocaleString();p.classList.remove("bump");void p.offsetWidth;p.classList.add("bump")}},
+    /* เหรียญที่เก็บในด่านนี้ แสดงรวมกับเหรียญที่มี (บันทึกจริงตอนผ่านด่าน) */
+    pts:n=>{advGot=n;const c=$("advCoins");if(c){c.textContent=(coinsOf()+n).toLocaleString();c.parentElement.classList.remove("bump");void c.offsetWidth;if(n)c.parentElement.classList.add("bump")}},
     ask:q=>{$("advView").classList.add("asking");$("advQt").textContent=q.q;const pic=$("advPic"),ops=$("advOps");pic.textContent=q.pic||"";pic.classList.toggle("hidden",!q.pic);
       ops.innerHTML=q.box?q.opts.map((o,i)=>`<button type="button" data-i="${i}" style="--c:${["#7b2ff7","#ff4fa3","#ff8a00","#0ea5e9"][i]}"><b>${i+1}</b>${escHtml(o)}</button>`).join(""):"";ops.classList.toggle("hidden",!q.box);$("advQ").classList.toggle("box",!!q.box);ops.classList.toggle("two",q.box&&q.opts.length===2);
       ops.querySelectorAll("button").forEach(b=>b.onclick=()=>adv?.choose(+b.dataset.i));
       $("advQh").textContent=q.box?"แตะที่คำตอบได้เลย":q.pic?"แตะคำที่สะกดถูก น้องดินสอจะกระโดดไปหา":"แตะตัวเลขที่เป็นคำตอบ น้องดินสอจะกระโดดไปหา";
       $("advQ").classList.remove("hidden");$("advHint")?.classList.add("hidden")},
     gear:on=>{advOn=on;advGearBar()},
-    near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${id==="shades"?"ร้านแว่น":"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
+    near:id=>{const it=ADV_GEAR.find(g=>g[0]===id),b=$("advNear");if(!it||!b)return;b.innerHTML=`แวะ${({shades:"ร้านแว่น",umbrella:"ร้านร่ม",coat:"ร้านเสื้อกันหนาว",scarf:"ร้านเสื้อกันหนาว"})[id]||"ร้านค้า"}: ${escHtml(it[1])} <i class="st-coin mini"></i> ${it[3]}`;b.classList.remove("hidden");
       b.onclick=()=>{b.classList.add("hidden");advShop(id)};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
+    /* ฝนตก: มีร่มแล้วถามว่ากางไหม ยังไม่มีบอกว่าข้างหน้ามีร้านร่ม */
+    rain:has=>{const b=$("advNear");if(!b)return;b.innerHTML=has?"☂ ฝนตกแล้ว กางร่มไหม? แตะเพื่อกาง":"☂ ฝนตกแล้ว ข้างหน้ามีร้านขายร่ม";b.classList.remove("hidden");
+      b.onclick=()=>{b.classList.add("hidden");if(has){advPref.umbrella=1;advSavePref();advMod?.SND.play("tap");adv?.refreshGear();advGearBar()}else advShop("umbrella")};clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add("hidden"),7000)},
     pray:cb=>{const b=$("advPray");if(!b)return;b.classList.remove("hidden");b.onclick=()=>{b.classList.add("hidden");advMod?.SND.unlock();cb()}},
     say:msg=>{advSayQ.push(msg);if(!advSayT)advSayNext()},
     scare:()=>{const v=$("advView");v.classList.remove("scare");void v.offsetWidth;v.classList.add("scare")},
@@ -7975,7 +7991,7 @@ async function advStart(){
     const mod=await import("./game3d.js?v="+(GAME_V==="dev"?Date.now():GAME_V));if(!$("advOv"))return;advMod=mod;
     const snd=$("advSnd"),sndIc=()=>{snd.innerHTML=mod.SND.isOn()?ADV_ICON.sndOn:ADV_ICON.sndOff};sndIc();snd.onclick=()=>{mod.SND.unlock();mod.SND.setOn(!mod.SND.isOn());sndIc()};
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref,hatCol:()=>advHatCol});advGearBar();window.advGame=adv;startBox();
+    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref});advGearBar();window.advGame=adv;startBox();
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
@@ -7992,7 +8008,13 @@ const GAMES=[{id:"adv",name:"Pencil Adventure",desc:"น้องดินสอ
   {id:"village",name:"Village Quest",desc:"เลือกทางไปหมู่บ้านอังกฤษ ภาษาไทย หรือคณิต",img:"mascot-2b-walk.svg",soon:true}];
 function renderGamePage(){const box=$("gmBox");if(!box)return;
   box.innerHTML=`<div class="gm-list">${GAMES.map(g=>`<button type="button" class="gm-card${g.soon?" soon":""}" data-g="${g.id}"${g.soon?" disabled":""}><img src="${g.img}" alt=""><b>${escHtml(g.name)}</b><span>${escHtml(g.desc)}</span><em>${g.soon?"เร็ว ๆ นี้":"เล่นเลย"}</em></button>`).join("")}</div>`;
-  box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play())}
+  box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play());
+  box.insertAdjacentHTML("beforeend",'<div id="gmRank"></div>');renderRankZone()}
+/* บันไดยศ + เช็คอินรับเหรียญ + แต่งตัว + ร้านแลกของ อยู่ในหน้าเกม */
+async function renderRankZone(){const box=$("gmRank");if(!box||!currentUser)return;
+  await loadCoinSite();const xp=Number(currentData?.xp)||0,lv=currentLevel();
+  box.innerHTML=`<div class="ovc gm-rank"><h3>บันไดยศ · เช็คอินรับเหรียญ</h3>${stairsHtml(lv,xp)}</div>`;
+  box.insertAdjacentHTML("beforeend",shopHtml());bindShop();bindStairs(lv);bindWardrobe(lv)}
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
 function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
 /* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */
@@ -8050,7 +8072,7 @@ const ST_MUSIC=(()=>{let ctx=null,out=null,timer=0,step=0,next=0,on=true,nb=null
     toggle(){on=!on;try{localStorage.setItem("stMusic",on?"1":"0")}catch(e){}if(on)this.start();else this.stop();return on},isOn:()=>on,playing:()=>!!timer}})();
 window.__stMusic=ST_MUSIC;
 /* หน้าหลัก: ปุ่มดนตรีในห้องที่น้องดินสอเดินถือป้าย เริ่มเล่นเมื่อแตะหน้าหลักครั้งแรก (เบราว์เซอร์ไม่ให้เล่นเองก่อนแตะ) */
-function bindHomeMusic(){const mb=$("hhMusic");if(!mb)return;const ic=()=>{mb.innerHTML=`<svg viewBox="0 0 24 24"><path d="M9 17V5l11-2v12" stroke="#fff" stroke-width="2" fill="none"/><circle cx="6.5" cy="17.5" r="2.5" fill="#fff"/><circle cx="17.5" cy="15" r="2.5" fill="#fff"/>${ST_MUSIC.isOn()?"":'<path d="M3 3l18 18" stroke="#fff" stroke-width="2.4"/>'}</svg>`;mb.classList.toggle("off",!ST_MUSIC.isOn())};ic();
+function bindHomeMusic(){const mb=$("hhMusic");if(!mb)return;const ic=()=>{mb.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17V5l10-2v12"/><circle cx="6.5" cy="17" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/>${ST_MUSIC.isOn()?"":'<path d="M4 4l16 16"/>'}</svg>`;mb.classList.toggle("off",!ST_MUSIC.isOn())};ic();
   mb.onclick=e=>{e.stopPropagation();if(ST_MUSIC.isOn()&&!ST_MUSIC.playing()){ST_MUSIC.start();return}ST_MUSIC.toggle();ic()};
   document.addEventListener("pointerdown",()=>{if($("homePage")?.classList.contains("active")&&!document.body.classList.contains("adv-on"))ST_MUSIC.start()},{capture:true})}
 bindHomeMusic();
@@ -8162,12 +8184,17 @@ async function renderOverview(){
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
   const badges=Object.entries(src).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ${mode==="sum"?` · ${v.n} ครั้ง`:v.at?` · ${v.at.toLocaleDateString("th-TH",{day:"numeric",month:"short"})}`:""}</em></div>`}).join("");
-  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}</div>
+  /* เส้นทางยศแบบเส้นระดับ: ทุกขั้นจากยศสูงสุดลงมา ขั้นปัจจุบันเด่น */
+  const steps=[];
+  for(let l=MAX_LEVEL;l>=0;l--){
+    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":l===MAX_LEVEL?"ยศสูงสุด":`อีก ${l-lv} ขั้น`}</small></div>`);
+    else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
+    else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
+  }
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
-  box.insertAdjacentHTML("beforeend",shopHtml());bindShop();
-  bindStairs(lv);bindWardrobe(lv);
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
