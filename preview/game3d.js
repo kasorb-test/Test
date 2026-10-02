@@ -659,6 +659,17 @@ export function startGame(root,api){
       else if(o.warm){const cm=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.24,6),M(pick([0xd32f2f,0x1565c0,0x6d4c41]),{flat:true}));cm.position.set(cx-.13,1.1,.05);g.add(cm);const sc=new THREE.Mesh(new THREE.TorusGeometry(.1,.035,6,14),M(pick([0xffeb3b,0xec407a,0x43a047,0x29b6f6])));sc.rotation.x=Math.PI/2;sc.position.set(cx+.17,1.02,.05);g.add(sc)}
       else if(o.shades){for(let f=0;f<3;f++){const sg=shadesMini(pick([0xe53935,0x1e88e5,0xffb300,0x8e24aa,0x111111]));sg.position.set(cx+(f-1)*.24,1.05,.05+(f%2)*.12);g.add(sg)}}
       else g.add(goods(nm,cx,.98,.05))}
+    /* ร้านเสื้อกันหนาว: ราวแขวนเสื้อข้างร้าน มีเสื้อฮู้ดกับผ้าพันคอแขวนบนไม้แขวน */
+    if(o.warm){const rk=new THREE.Group(),mt=M(0x9e9e9e,{metalness:.6,roughness:.35});for(const x of[-.85,.85]){const p=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,2,8),mt);p.position.set(x,1,0);rk.add(p);const ft=new THREE.Mesh(new THREE.BoxGeometry(.08,.04,.6),mt);ft.position.set(x,.02,0);rk.add(ft)}
+      const bar=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,1.8,8),mt);bar.rotation.z=Math.PI/2;bar.position.y=1.95;rk.add(bar);
+      [0xd32f2f,0x1565c0,0x2e7d32,0xf9a825].forEach((c,k)=>{const x=-.6+k*.4,hg=new THREE.Group();hg.position.set(x,1.95,0);
+        const hk=new THREE.Mesh(new THREE.TorusGeometry(.05,.012,4,10,Math.PI*1.4),mt);hk.position.y=.03;hk.rotation.z=-.3;hg.add(hk);
+        const sh=new THREE.Mesh(new THREE.BoxGeometry(.34,.025,.03),M(0x8d6e63));sh.position.y=-.08;hg.add(sh);
+        if(k===3){const sf=new THREE.Mesh(new THREE.BoxGeometry(.1,.7,.04),M(0xec407a));sf.position.y=-.45;hg.add(sf);const sf2=sf.clone();sf2.position.x=.12;hg.add(sf2)}
+        else{const cm=M(c,{roughness:.85}),bd=new THREE.Mesh(new THREE.BoxGeometry(.3,.5,.12),cm);bd.position.y=-.36;hg.add(bd);for(const sx of[-1,1]){const sl=new THREE.Mesh(new THREE.BoxGeometry(.08,.42,.1),cm);sl.position.set(sx*.19,-.35,0);sl.rotation.z=sx*.12;hg.add(sl)}
+          const hd=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8,0,Math.PI*2,0,Math.PI/2),cm);hd.position.set(0,-.13,-.05);hd.rotation.x=-.6;hg.add(hd);const zp=new THREE.Mesh(new THREE.BoxGeometry(.015,.46,.01),M(0xd9d9d9));zp.position.set(0,-.36,.065);hg.add(zp)}
+        rk.add(hg)});
+      rk.position.set(W/2+1.1,0,.3);rk.rotation.y=-.35;g.add(rk)}
     if(nm==="เนื้อสด")for(let k=0;k<3;k++){const hk=new THREE.Mesh(new THREE.TorusGeometry(.05,.012,4,8,Math.PI),M(0x9e9e9e,{metalness:.7}));hk.position.set(-1+k,2.05,.5);g.add(hk);const mt=new THREE.Mesh(new THREE.BoxGeometry(.22,.4,.12),M(0xb71c1c,{roughness:.5}));mt.position.set(-1+k,1.78,.5);g.add(mt)}
     const v=person({hat:Math.random()<.3,long:Math.random()<.5});v.rotation.y=-Math.PI/2;v.position.set(rand(-.8,.8),0,-D/2-.45);g.add(v);anim.push({seg:null,obj:v,kind:"wave",ph:rand(0,6)});
     const sg=new THREE.Mesh(new THREE.PlaneGeometry(1.5,.5),new THREE.MeshBasicMaterial({map:txt(SHOP_EN[nm]||nm,{size:70,color:"#7a3b00",bg:"#fff8e1",border:"#8d5a2b",w:300,h:100,radius:20}),transparent:true}));sg.position.set(0,2.3,1.23);g.add(sg);
@@ -1163,23 +1174,37 @@ export function startGame(root,api){
     const st=new THREE.Group(),sm=M(0xd9b56a,{flat:true});const brim=new THREE.Mesh(new THREE.CylinderGeometry(.82,.82,.04,28),sm);brim.castShadow=true;st.add(brim);const cr=new THREE.Mesh(new THREE.CylinderGeometry(.34,.42,.32,20),sm);cr.position.y=.17;st.add(cr);
     const bandM=M(0xe53935),bd=new THREE.Mesh(new THREE.CylinderGeometry(.425,.425,.08,20),bandM);bd.position.y=.06;st.add(bd);st.scale.setScalar(1.32);st.position.y=2.06;b.add(st);GEAR.straw=st;HATM={cap:capM,straw:bandM};
     const sh=shadesMini(0x111111,2.1);sh.position.set(0,.06,.43);face.add(sh);GEAR.shades=sh;
-    const coat=new THREE.Group();const cm=new THREE.Mesh(new THREE.CylinderGeometry(.47,.5,.62,6),M(0xd32f2f,{flat:true}));cm.position.y=.9;cm.castShadow=true;coat.add(cm);
-    for(let k=0;k<3;k++){const bn=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),M(0xffffff));bn.position.set(0,.72+k*.17,.46);coat.add(bn)}
-    const sc=new THREE.Mesh(new THREE.TorusGeometry(.44,.075,8,24),M(0xffeb3b));sc.rotation.x=Math.PI/2;sc.position.y=1.24;coat.add(sc);const tl=new THREE.Mesh(new THREE.BoxGeometry(.13,.42,.06),M(0xffeb3b));tl.position.set(.2,1.03,.46);tl.rotation.z=.15;coat.add(tl);b.add(coat);GEAR.coat=coat;
-    const scarf=new THREE.Group(),scM=M(0xec407a,{roughness:.8}),stp=M(0xffffff,{roughness:.8});const ring=new THREE.Mesh(new THREE.TorusGeometry(.44,.09,8,24),scM);ring.rotation.x=Math.PI/2;ring.position.y=1.74;scarf.add(ring);
+    /* เสื้อกันหนาวมีฮู้ด: ตัวเสื้อยาวคลุมลำตัวช่วงล่าง แขนยาวถึงข้อมือ ฮู้ดพับอยู่ด้านหลัง ซิปหน้า กระเป๋าสองข้าง ขอบแขนกับชายเสื้อสีเข้ม */
+    const coat=new THREE.Group(),coatM=M(0xd32f2f,{roughness:.85}),rib=M(0x2b2b2b,{roughness:.9}),zipM=M(0xd9d9d9,{metalness:.6,roughness:.3});
+    const cBody=new THREE.Mesh(new THREE.CylinderGeometry(.47,.53,.72,16),coatM);cBody.position.y=.92;cBody.castShadow=true;coat.add(cBody);
+    const hem=new THREE.Mesh(new THREE.CylinderGeometry(.535,.535,.08,16),rib);hem.position.y=.57;coat.add(hem);
+    const zip=new THREE.Mesh(new THREE.BoxGeometry(.035,.7,.02),zipM);zip.position.set(0,.93,.5);zip.rotation.x=-.08;coat.add(zip);
+    const pull=new THREE.Mesh(new THREE.BoxGeometry(.06,.1,.02),zipM);pull.position.set(.03,1.22,.49);coat.add(pull);
+    for(const sx of[-1,1]){const pk=new THREE.Mesh(new THREE.BoxGeometry(.2,.16,.03),M(0x000000,{transparent:true,opacity:.18}));pk.position.set(sx*.25,.78,.48);pk.rotation.y=sx*.45;coat.add(pk)}
+    const hood=new THREE.Mesh(new THREE.SphereGeometry(.36,16,10,0,Math.PI,0,Math.PI*.6),coatM);hood.rotation.y=Math.PI;hood.scale.set(1.3,1,.8);hood.position.set(0,1.3,-.32);hood.castShadow=true;coat.add(hood);
+    const hoodIn=new THREE.Mesh(new THREE.SphereGeometry(.33,16,10,0,Math.PI,0,Math.PI*.6),M(0xf5e6d3,{side:THREE.BackSide}));hoodIn.rotation.y=Math.PI;hoodIn.scale.set(1.3,1,.8);hoodIn.position.set(0,1.31,-.31);coat.add(hoodIn);
+    const coll=new THREE.Mesh(new THREE.TorusGeometry(.46,.06,8,24),coatM);coll.rotation.x=Math.PI/2;coll.position.y=1.27;coat.add(coll);
+    const extra=[];for(const a of P.userData.arms){const sl=new THREE.Group(),sv=new THREE.Mesh(new THREE.CylinderGeometry(.095,.1,.42,10),coatM);sv.position.y=-.22;sv.castShadow=true;sl.add(sv);const cuff=new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,.07,10),rib);cuff.position.y=-.42;sl.add(cuff);sl.visible=false;a.add(sl);extra.push(sl)}
+    coat.userData.extra=extra;b.add(coat);GEAR.coat=coat;HATM.coat=coatM;
+    const scarf=new THREE.Group(),scM=M(0xec407a,{roughness:.8});HATM.scarf=scM;const _sc=0,stp=M(0xffffff,{roughness:.8});const ring=new THREE.Mesh(new THREE.TorusGeometry(.44,.09,8,24),scM);ring.rotation.x=Math.PI/2;ring.position.y=1.74;scarf.add(ring);
     for(let k=0;k<2;k++){const t=new THREE.Mesh(new THREE.BoxGeometry(.15,.42,.06),scM);t.position.set(.16+k*.12,1.5,.45);t.rotation.z=.12+k*.1;scarf.add(t);const bd=new THREE.Mesh(new THREE.BoxGeometry(.155,.05,.065),stp);bd.position.set(.16+k*.12+Math.sin(.12+k*.1)*.13,1.37,.45);bd.rotation.z=t.rotation.z;scarf.add(bd)}
     b.add(scarf);GEAR.scarf=scarf;
     const um=new THREE.Group();const pole=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,2.9,6),M(0x5d4037));pole.position.y=2.25;um.add(pole);
-    const can=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,8,1,true),new THREE.MeshStandardMaterial({color:0xff7043,side:THREE.DoubleSide,flatShading:true}));can.position.y=3.85;can.castShadow=true;um.add(can);
+    const umM=new THREE.MeshStandardMaterial({color:0xff7043,side:THREE.DoubleSide,flatShading:true});HATM.umbrella=umM;const can=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,8,1,true),umM);can.position.y=3.85;can.castShadow=true;um.add(can);
     const tip=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),M(0x5d4037));tip.position.y=4.12;um.add(tip);const hk=new THREE.Mesh(new THREE.TorusGeometry(.08,.02,6,12,Math.PI),M(0x5d4037));hk.position.set(.08,.8,0);hk.rotation.z=Math.PI;um.add(hk);um.position.set(.62,0,0);b.add(um);GEAR.umbrella=um;
     const fan=new THREE.Mesh(new THREE.CircleGeometry(.34,14,Math.PI/6,Math.PI*2/3),new THREE.MeshStandardMaterial({color:0xec407a,side:THREE.DoubleSide}));fan.position.set(0,-.55,.05);P.userData.arms[0].add(fan);GEAR.fan=fan;
-    for(const k in GEAR)GEAR[k].visible=false}
+    for(const k in GEAR)GEAR[k].visible=false;for(const k in HATM)HATM[k].userData.def="#"+HATM[k].color.getHexString()}
   let gearT=1,gearKey="";
-  function owns(id){return (api.gear?api.gear():[]).includes(id)}function pref(id){return (api.gearPref?api.gearPref():{})[id]}
+  /* ไอเทมมีหลายสีได้: รหัส "cap" (สีเริ่มต้น) หรือ "cap@1e3a8a" ใส่ได้ทีละสีต่อชนิด */
+  function gearList(){return api.gear?api.gear():[]}
+  function owns(id){return gearList().some(g=>g.split("@")[0]===id)}function pref(id){return (api.gearPref?api.gearPref():{})[id]}
+  function wornVar(id){return gearList().find(g=>g.split("@")[0]===id&&pref(g)===1)}
   /* ไอเทมที่ซื้อแล้ว ผู้เล่นเลือกใส่เองทั้งหมด (แตะที่แถบด้านขวา) ไม่ใส่ให้อัตโนมัติ */
-  function wantGear(id){return owns(id)&&pref(id)===1}
+  function wantGear(id){return !!wornVar(id)}
   function rainNow(){const c=thaiClock(nowMs());return !!(c.rain||TH.rain)}function coldNow(){const c=thaiClock(nowMs());return c.season==="cool"||(c.temp!=null&&c.temp<=22)}
-  function applyGear(){const on={};for(const k in GEAR)on[k]=wantGear(k);if(on.straw)on.cap=false;for(const k in GEAR)GEAR[k].visible=on[k];P.userData.avY=on.straw?3.4:on.cap?3.35:3.15;{const hc=api.hatCol?api.hatCol():{};const H=HATM;if(H){H.cap.color.set(hc.cap||0x1c1c1f);H.straw.color.set(hc.straw||0xe53935)}}
+  function applyGear(){const on={};for(const k in GEAR)on[k]=wantGear(k);if(on.straw)on.cap=false;for(const k in GEAR)GEAR[k].visible=on[k];P.userData.avY=on.straw?3.4:on.cap?3.35:3.15;{const H=HATM;if(H)for(const k in H){const v=wornVar(k),c=v&&v.includes("@")?"#"+v.split("@")[1]:H[k].userData.def;H[k].color.set(c)}}
+    /* แขนเสื้อกันหนาวอยู่ที่แขน ต้องซ่อน/แสดงตามเสื้อ */
+    for(const sl of GEAR.coat.userData.extra||[])sl.visible=on.coat
     const key=JSON.stringify(on);if(key!==gearKey){gearKey=key;ui.gear&&ui.gear(on)}
     /* ฝนตก: ถามว่าจะกางร่มไหม ถ้ายังไม่มีร่ม บอกว่าข้างหน้ามีร้านขายร่ม */
     if(rainNow()&&!on.umbrella&&!S.rainAsked&&S.mode==="walk"){S.rainAsked=true;if(owns("umbrella"))ui.rain&&ui.rain(true);else ui.rain&&ui.rain(false)}}
@@ -1193,9 +1218,9 @@ export function startGame(root,api){
   const ui=api.ui;
   function stage(st){
     setBiome(st);
-    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;S.rainAsked=false;clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
+    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;S.rainAsked=false;S.got=0;ui.pts&&ui.pts(0);clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
-  function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=starMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
+  function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(br,water){
     for(const o of S.ans)world.remove(o);S.ans=[];
     S.mode="ask";S.q=api.question(S.st);S.qT=S.qMax+(S.q.box?4:0);S.qn++;S.qBr=br||null;
@@ -1207,7 +1232,7 @@ export function startGame(root,api){
   /* ปีนกลับขึ้นสะพานเสมอ: เป้าหมายคือกลางสะพานที่ตกลงไป */
   function climbOut(){const br=S.inWater.br||S.qBr,mid=(br.x0+br.x1)/2;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:Math.max(br.x0+.6,Math.min(br.x1-.6,mid))}}
   function waterChoose(i){if(S.mode!=="ask")return;ui.hideQ();const ok=i===S.q.ans,a=S.ans[i];
-    if(ok){S.joy=1.6;SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);S.bq=true;
+    if(ok){S.joy=1.6;SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;ui.stage(S.st,S.need,S.done);S.bq=true;
       climbOut();setTimeout(clearAns,400)}
     else{SND.play("wrong");if(a){mark(a,"#ef4444");a.userData.drop=true}mark(S.ans[S.q.ans],"#22c55e");ui.say&&ui.say("ยังไม่ถูก ลองข้อใหม่นะ");S.mode="wet";hurt();
       setTimeout(()=>{if(S.mode!=="wet"||!S.inWater)return;clearAns();ask(S.inWater.br,true)},1300)}}
@@ -1217,7 +1242,7 @@ export function startGame(root,api){
     if(i<0){mark(S.ans[S.q.ans],"#22c55e");SND.play("wrong");if(S.qBr){S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr};return}punish();hurt();setTimeout(clearAns,600);return}
     const a=S.ans[i],to=a.visible?new THREE.Vector3(a.position.x,Math.max(0,a.position.y-.9-groundY(a.position.x)),0):new THREE.Vector3(S.x,0,0);
     S.jump={from:new THREE.Vector3(S.x,S.y,0),to,t:0,dur:.55,done:()=>{
-      if(ok){S.joy=1.6;SND.play("ok");for(const l of leeches)l.drop=1;for(const c of critters)if(c.kind==="crab")c.off=1;S.crabHits=0;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);
+      if(ok){S.joy=1.6;SND.play("ok");for(const l of leeches)l.drop=1;for(const c of critters)if(c.kind==="crab")c.off=1;S.crabHits=0;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;ui.stage(S.st,S.need,S.done);
         S.fall={vy:2};S.mode="falling";S.afterFall=()=>{clearAns();S.mode="walk";afterAnswer(true)}}
       else if(S.qBr){SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr}}
       else{SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.fall={vy:0};S.mode="falling";S.afterFall=()=>{punish();hurt();if(S.mode!=="dead"){clearAns();S.mode="walk";afterAnswer(false)}}}
@@ -1268,7 +1293,7 @@ export function startGame(root,api){
   function splash(pos){const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,6,24),M(0xffffff,{transparent:true,opacity:.9}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0});for(let i=0;i<40;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
   async function passArch(){
     S.mode="cheer";const st=S.st;burst(new THREE.Vector3(S.archX,2.5,0));if(S.arch&&S.arch.userData.tape)S.arch.userData.tape.visible=false;SND.play("clap");SND.play("sparkle");
-    const r=await api.clear(st);ui.toast(st,r);if(S.hearts<3){S.hearts++;ui.hearts(S.hearts)}
+    const r=await api.clear(st,S.got||0);S.got=0;ui.pts(0);ui.toast(st,r);if(S.hearts<3){S.hearts++;ui.hearts(S.hearts)}
     if(st>=(api.maxStage?api.maxStage():10)){setTimeout(()=>{S.mode="done";ui.finish&&ui.finish(st)},900);return}
     setTimeout(()=>{if(S.mode==="dead")return;S.arch=null;stage(st+1);S.mode="walk"},900);
   }
@@ -1340,7 +1365,7 @@ export function startGame(root,api){
     ud.shadow.position.y=.02-S.y;if(ud.av)ud.av.position.y=(ud.avY||3.15)+Math.sin(S.t*3)*.05;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
       if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){world.remove(c);S.coins.splice(i,1)}continue}
-      if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.pts+=1;ui.pts(S.pts);SND.play("coin")}
+      if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.got=(S.got||0)+1;ui.pts(S.got);SND.play("coin")}
       else if(c.position.x<S.x-40){world.remove(c);S.coins.splice(i,1)}}
     for(const a of S.ans){const u=a.userData;
       if(u.gone){a.scale.multiplyScalar(1-dt*5)}else if(u.drop){a.position.y-=dt*7;a.rotation.z+=dt*4}
@@ -1359,7 +1384,7 @@ export function startGame(root,api){
     {const on=biomeOf(S.st)==="beach"&&!TH.night;glit.visible=on;if(on){const a=glitGeo.attributes.position.array,sx=(fade?fade.cur.sp:TH.sunPos)[0];for(let k=0;k<GN;k++){if(Math.random()<.08||Math.abs(a[k*3]-S.x)>90){const z=-rand(14,150),sp=1.2+(-z)*.06;a[k*3]=S.x+3+sx*(-z/170)+rand(-sp,sp);a[k*3+1]=.3;a[k*3+2]=z}}glitGeo.attributes.position.needsUpdate=true;glitMat.opacity=.55+Math.sin(S.t*9)*.25;glitMat.color.set(TH.light)}}
     gearT+=dt;if(gearT>.5){gearT=0;applyGear()}if(GEAR.fan.visible)GEAR.fan.rotation.z=Math.sin(S.t*14)*.45;
     for(let i=chests.length-1;i>=0;i--){const c=chests[i];if(c.seg.parent!==world){chests.splice(i,1);continue}const u=c.o.userData;
-      if(!c.open&&Math.abs(S.x-(c.seg.position.x+c.x))<.9&&S.mode!=="splash"){c.open=1;SND.play("chest");u.lk.visible=false;S.pts+=5;ui.pts(S.pts);
+      if(!c.open&&Math.abs(S.x-(c.seg.position.x+c.x))<.9&&S.mode!=="splash"){c.open=1;SND.play("chest");u.lk.visible=false;S.got=(S.got||0)+5;ui.pts(S.got);
         const wp=new THREE.Vector3(c.seg.position.x+c.x,.8,-1.75);for(let k=0;k<5;k++){const m=coinMesh();m.position.copy(wp);m.userData.v=new THREE.Vector3(rand(-1.2,1.2),rand(4,6),rand(.5,1.5));m.userData.life=1;m.scale.setScalar(.7);world.add(m);bursts.push(m)}
         if(S.hearts<3&&Math.random()<.25){S.hearts++;ui.hearts(S.hearts);SND.play("heart")}}
       if(c.open&&c.open<2){u.lid.rotation.x=Math.max(-1.9,u.lid.rotation.x-dt*7);u.glow.material.opacity=Math.max(0,u.glow.material.opacity-dt*1.5);if(u.lid.rotation.x<=-1.9)c.open=2}

@@ -31,10 +31,10 @@ service cloud.firestore {
       return c.keys().hasOnly(["day", "streak"])
         && c.day is int && c.day == thaiDayNow() && c.day > prev.day
         && c.streak == streak
-        && n.get("coins", 0) == o.get("coins", 0) + [5, 5, 10, 10, 15, 15, 30][streak - 1]
+        && n.get("coins", 0) == o.get("coins", 0) + [50, 50, 100, 100, 150, 150, 300][streak - 1]
         && !n.diff(o).affectedKeys().hasAny(["diligence", "coupons", "lastCoupon"]);
     }
-    // เหรียญขยัน: ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 2 เหรียญ วันละไม่เกิน 10 ครั้ง (20 เหรียญ)
+    // เหรียญขยัน: ทำข้อสอบครบทุก 20 ข้อในวันนั้น ได้ 20 เหรียญ วันละไม่เกิน 10 ครั้ง (200 เหรียญ)
     function validDiligence(n, o) {
       let g = n.diligence;
       let prev = o.get("diligence", {"day": 0, "n": 0});
@@ -43,31 +43,35 @@ service cloud.firestore {
         && g.day is int && g.day == thaiDayNow()
         && g.n is int && g.n > had && g.n <= 10
         && g.n * 20 <= n.get("today", {}).get("count", 0)
-        && n.get("coins", 0) == o.get("coins", 0) + (g.n - had) * 2
+        && n.get("coins", 0) == o.get("coins", 0) + (g.n - had) * 20
         && !n.diff(o).affectedKeys().hasAny(["checkin", "coupons", "lastCoupon", "today"]);
     }
-    // เกมผจญภัย: ผ่านด่านใหม่ได้ทีละ 1 ด่าน ได้ 3 เหรียญ วันละไม่เกิน 10 ด่าน (เกินนั้นผ่านด่านได้แต่ไม่ได้เหรียญ)
+    // เกมผจญภัย: ผ่านด่านได้เหรียญที่เก็บในด่าน (ไม่เกิน 100) + โบนัส 20 รวมไม่เกิน 120 ต่อครั้ง วันละไม่เกิน 20 ครั้ง
+    // ผ่านด่านใหม่ได้ทีละ 1 ด่าน เล่นด่านเดิมซ้ำก็ได้เหรียญ (stage คงเดิม) เกินโควตาวันนั้นผ่านด่านได้แต่ไม่ได้เหรียญ
     function validGame(n, o) {
       let g = n.game;
       let prev = o.get("game", {"stage": 0, "day": 0, "got": 0});
       let had = prev.day == g.day ? prev.got : 0;
+      let gain = n.get("coins", 0) - o.get("coins", 0);
       return g.keys().hasOnly(["stage", "day", "got"])
-        && g.stage is int && g.stage == prev.stage + 1
+        && g.stage is int && (g.stage == prev.stage + 1 || g.stage == prev.stage)
         && g.day is int && g.day == thaiDayNow()
         && g.got is int
-        && ((had < 10 && g.got == had + 1 && n.get("coins", 0) == o.get("coins", 0) + 3)
-            || (had >= 10 && g.got == had && n.get("coins", 0) == o.get("coins", 0)))
+        && ((had < 20 && g.got == had + 1 && gain >= 20 && gain <= 120)
+            || (had >= 20 && g.got == had && gain == 0))
         && !n.diff(o).affectedKeys().hasAny(["checkin", "diligence", "coupons", "lastCoupon"]);
     }
     // แลกโค้ดส่วนลด: เพิ่มโค้ดใหม่ครั้งละ 1 โค้ด ราคาและจำนวนบาทตรงกับที่แอดมินตั้งไว้ โค้ดเดิมแก้ไม่ได้
     // ไอเทมในเกม: ซื้อครั้งละ 1 ชิ้นด้วยเหรียญตามราคาที่กำหนด ซื้อแล้วใช้ได้ตลอด
     function validGear(n, o) {
-      let price = {"umbrella": 30, "cap": 20, "straw": 20, "fan": 25, "coat": 40, "scarf": 25, "shades": 30};
+      // รหัสไอเทม "cap" หรือมีสี "cap@1e3a8a" ราคาตามชนิด ซื้อสีใหม่ = ซื้อเพิ่มอีกชิ้น
+      let price = {"umbrella": 300, "cap": 200, "straw": 200, "fan": 250, "coat": 400, "scarf": 250, "shades": 300};
       let before = o.get("gear", []);
       let add = n.gear.removeAll(before);
       return n.gear is list && n.gear.size() == before.size() + 1 && n.gear.hasAll(before)
-        && add.size() == 1 && add[0] in price
-        && n.get("coins", 0) == o.get("coins", 0) - price[add[0]] && n.get("coins", 0) >= 0
+        && add.size() == 1 && add[0] is string && add[0].matches("^[a-z]+(@[0-9a-f]{6})?$")
+        && add[0].split("@")[0] in price
+        && n.get("coins", 0) == o.get("coins", 0) - price[add[0].split("@")[0]] && n.get("coins", 0) >= 0
         && !n.diff(o).affectedKeys().hasAny(["checkin", "diligence", "coupons", "lastCoupon", "game"]);
     }
     function validCoupon(n, o) {
