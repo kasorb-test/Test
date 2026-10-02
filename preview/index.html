@@ -2749,7 +2749,7 @@ body.adv-on{overflow:hidden}
 .adv-k{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;width:64px;height:64px;border:0;border-radius:50%;background:rgba(255,255,255,.85);color:#f57c00;font-size:26px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
 .adv-k.on{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);background:#fff}
 .adv-jump{position:absolute;right:16px;bottom:18px;z-index:5;background:#ffd23f;color:#7a4b00}
-.adv-menu{position:absolute;inset:0;z-index:12;display:grid;place-items:center;background:rgba(15,23,42,.45)}
+#gmRank{margin-top:20px}.adv-menu{position:absolute;inset:0;z-index:12;display:grid;place-items:center;background:rgba(15,23,42,.45)}
 .adv-menu-box{display:flex;flex-direction:column;gap:7px;width:min(320px,calc(100% - 40px));max-height:calc(100% - 30px);overflow:auto;padding:18px 16px;border-radius:20px;text-align:center;border:5px solid #7a4a1c;box-shadow:inset 0 0 0 3px #e9c98f,0 7px 0 #4a2a0d,0 14px 24px rgba(0,0,0,.35);background:radial-gradient(circle at 12px 12px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) 12px,#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at 12px calc(100% - 12px),#5a3412 0 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),#5a3412 0 3px,transparent 3.5px),linear-gradient(180deg,#fff8e6,#f3dcab)}
 .adv-menu-box b{font-size:26px;color:#4a2208;margin-bottom:4px;text-shadow:0 2px 0 #fff3d6}
 .adv-menu-box button{display:flex;align-items:center;gap:10px;padding:8px 12px;border:3px solid #5a3412;border-radius:12px;background:repeating-linear-gradient(180deg,#dba36a 0 6px,#cd9255 6px 8px,#d79c60 8px 13px,#bf8043 13px 14px);color:#fffbea;font:inherit;font-size:17px;font-weight:900;letter-spacing:.2px;text-shadow:-1.5px -1.5px 0 #3b2109,1.5px -1.5px 0 #3b2109,-1.5px 1.5px 0 #3b2109,1.5px 1.5px 0 #3b2109,0 3px 0 #3b2109;box-shadow:0 4px 0 #3b2109;cursor:pointer;text-align:left}
@@ -5579,6 +5579,7 @@ $("topProgressFill")
 
 
 if(document.getElementById("scorePage")?.classList.contains("active")) renderOverview();
+if(document.getElementById("gamePage")?.classList.contains("active")&&!document.body.classList.contains("adv-on")) renderRankZone();
 
 
 if(
@@ -7910,12 +7911,9 @@ async function advStart(){
         <button type="button" class="pri" data-go="resume"><i class="mi"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></i><span>Resume</span></button>
         <button type="button" data-go="stages"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H7v9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></i><span>Select Stage</span></button>
         <button type="button" data-go="shop"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z" fill="currentColor"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="2" fill="none"/></svg></i><span>Item Shop</span></button>
-        <button type="button" data-go="gamePage|เกม"><i class="mi"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5" fill="currentColor"/><path d="M7 11v3M5.5 12.5h3" stroke="#fff4d6" stroke-width="1.8"/><circle cx="16" cy="11.5" r="1.2" fill="#fff4d6"/><circle cx="18" cy="13.8" r="1.2" fill="#fff4d6"/></svg></i><span>Choose Game</span></button>
+        <button type="button" data-go="gamePage|เกม|rank"><i class="mi"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4 10h16M9 3v4M15 3v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M9 15l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Check-in</span></button>
         <button type="button" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z" fill="currentColor"/></svg></i><span>Home</span></button>
-        <button type="button" data-go="subjectPage|แบบทดสอบรายวิชา"><i class="mi"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z" fill="currentColor"/><path d="M8 10h8M8 14h8M8 18h5" stroke="#fff4d6" stroke-width="1.6"/></svg></i><span>Subject Tests</span></button>
-        <button type="button" data-go="mockPage|แบบทดสอบเสมือนจริง"><i class="mi"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="currentColor"/><path d="M8 8l1.5 1.5L12 7M8 13l1.5 1.5L12 12M14 8h3M14 13h3" stroke="#fff4d6" stroke-width="1.6" fill="none"/></svg></i><span>Mock Exams</span></button>
-        <button type="button" data-go="scorePage|ภาพรวมผลการทดสอบ"><i class="mi"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zM10 20V4h4v16zM16 20v-7h4v7z" fill="currentColor"/></svg></i><span>My Results</span></button>
-        <button type="button" class="out" data-go="homePage|หน้าหลัก"><i class="mi"><svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Exit Game</span></button></div></div>
+        <button type="button" class="out" data-go="gamePage|เกม"><i class="mi"><svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>Exit Game</span></button></div></div>
       
       <div class="adv-gear" id="advGear"></div><button type="button" class="adv-near hidden" id="advNear"></button><button type="button" class="adv-pray hidden" id="advPray">ไหว้พระ ขอพรให้สอบติด</button><div class="adv-shop hidden" id="advShop"></div><div class="adv-toast hidden" id="advToast"></div><div class="adv-msg hidden" id="advMsg"></div></div>`;
   document.body.appendChild(ov);document.body.classList.add("adv-on");
@@ -7938,7 +7936,7 @@ async function advStart(){
       note.classList.add("hidden");advSel=n;advRe=false;d.querySelectorAll(".adv-chip").forEach(x=>x.classList.toggle("on",x===b));title();adv?.restart(n)});
     $("advGo").onclick=()=>{advMod?.SND.unlock();if(advRe){advRe=false;adv?.restart(advSel)}d.remove();adv?.pause(false)}};
   menu.onclick=e=>{const b=e.target.closest("[data-go]");if(!b){if(e.target===menu)resume();return}
-    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="stages"){menu.classList.add("hidden");advSel=adv?.debug().st||advSel;advRe=false;startBox();return}const [pg,tt]=b.dataset.go.split("|");advClose();showAppPage(pg,tt)};
+    if(b.dataset.go==="resume"){resume();return}if(b.dataset.go==="shop"){menu.classList.add("hidden");advShop();return}if(b.dataset.go==="stages"){menu.classList.add("hidden");advSel=adv?.debug().st||advSel;advRe=false;startBox();return}const [pg,tt,sc]=b.dataset.go.split("|");advClose();showAppPage(pg,tt);if(sc)setTimeout(()=>$("gmRank")?.scrollIntoView({behavior:"smooth",block:"start"}),450)};
   /* ◀ ▶: กดค้างเดินตามทิศ ถ้าแตะสั้น ๆ จะเดินทิศนั้นต่อ 2 วินาที (แตะอีกปุ่มเพื่อเปลี่ยนทิศ) */
   const padBtns=[...ov.querySelectorAll(".adv-k[data-h]")],padT={};
   const release=h=>{clearTimeout(padT[h]);padT[h]=0;ov.querySelector(`.adv-k[data-h="${h}"]`)?.classList.remove("on");adv?.hold(h,false)};
@@ -7992,7 +7990,13 @@ const GAMES=[{id:"adv",name:"Pencil Adventure",desc:"น้องดินสอ
   {id:"village",name:"Village Quest",desc:"เลือกทางไปหมู่บ้านอังกฤษ ภาษาไทย หรือคณิต",img:"mascot-2b-walk.svg",soon:true}];
 function renderGamePage(){const box=$("gmBox");if(!box)return;
   box.innerHTML=`<div class="gm-list">${GAMES.map(g=>`<button type="button" class="gm-card${g.soon?" soon":""}" data-g="${g.id}"${g.soon?" disabled":""}><img src="${g.img}" alt=""><b>${escHtml(g.name)}</b><span>${escHtml(g.desc)}</span><em>${g.soon?"เร็ว ๆ นี้":"เล่นเลย"}</em></button>`).join("")}</div>`;
-  box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play())}
+  box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play());
+  box.insertAdjacentHTML("beforeend",'<div id="gmRank"></div>');renderRankZone()}
+/* บันไดยศ + เช็คอินรับเหรียญ + แต่งตัว + ร้านแลกของ อยู่ในหน้าเกม */
+async function renderRankZone(){const box=$("gmRank");if(!box||!currentUser)return;
+  await loadCoinSite();const xp=Number(currentData?.xp)||0,lv=currentLevel();
+  box.innerHTML=`<div class="ovc gm-rank"><h3>บันไดยศ · เช็คอินรับเหรียญ</h3>${stairsHtml(lv,xp)}</div>`;
+  box.insertAdjacentHTML("beforeend",shopHtml());bindShop();bindStairs(lv);bindWardrobe(lv)}
 function redrawStage(lv){const k=document.querySelector("#lkStage .st-kid");if(k)k.innerHTML=charHtml(myOutfit(lv),myLook(),"st-body");const n=$("lkName");if(n)n.textContent=([...HAIRS.f,...HAIRS.m].find(h=>h[0]===myLook().hair)||["",""])[1]}
 function redrawChar(lv){const k=dollKeyOf(myLook());if(k&&!dollCache[k]){dollUrl(k).then(()=>redrawChar2(lv));return}redrawChar2(lv)}
 /* เปลี่ยนแค่สี (ไฟล์รูปเดิม) ก็สลับรูปในที่เดิม ไม่สร้างตัวละครใหม่ */
@@ -8162,12 +8166,17 @@ async function renderOverview(){
   list.forEach(a=>Object.entries(a.bySec||{}).forEach(([k,v])=>{const c=Number(v.c)||0,t=Number(v.t)||0;if(!t)return;sum[k]=sum[k]||{c:0,t:0,n:0};sum[k].c+=c;sum[k].t+=t;sum[k].n++;if(!last[k])last[k]={c,t,at:atDate(a)}}));
   const mode=ovMode==="sum"?"sum":"last",src=mode==="sum"?sum:last;
   const badges=Object.entries(src).map(([k,v])=>{const p=Math.round(v.c/v.t*100),g=pctGrade(p);return `<div class="bd ${g}"><div class="c">${p}%</div><span>${escHtml(shortSec(k))}</span><em>${v.c}/${v.t} ข้อ${mode==="sum"?` · ${v.n} ครั้ง`:v.at?` · ${v.at.toLocaleDateString("th-TH",{day:"numeric",month:"short"})}`:""}</em></div>`}).join("");
-  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3>${stairsHtml(lv,xp)}</div>
+  /* เส้นทางยศแบบเส้นระดับ: ทุกขั้นจากยศสูงสุดลงมา ขั้นปัจจุบันเด่น */
+  const steps=[];
+  for(let l=MAX_LEVEL;l>=0;l--){
+    if(l>lv) steps.push(`<div class="lstep next"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>${l===lv+1?"ขั้นถัดไป":l===MAX_LEVEL?"ยศสูงสุด":`อีก ${l-lv} ขั้น`}</small></div>`);
+    else if(l===lv) steps.push(`<div class="lstep now"><img class="lav" src="${escHtml($("topAvatar").src)}" alt=""><div><b>Lv.${l} ${escHtml(rankLabel(l))}</b><span>คุณอยู่ตรงนี้ · ${xp.toLocaleString()} XP</span></div></div>`);
+    else steps.push(`<div class="lstep done"><b>Lv.${l} ${escHtml(rankLabel(l))}</b><small>ผ่านแล้ว</small></div>`);
+  }
+  box.innerHTML=`<div class="ovl"><div class="ovc"><h3>เส้นทางยศของคุณ</h3><div class="ladder">${steps.join("")}</div></div>
     <div><div class="ovc"><h3>${premium&&lv<MAX_LEVEL?`เลื่อนเป็น Lv.${lv+1} ${escHtml(rankLabel(lv+1))}`:"เลื่อนยศ"}</h3>${next}</div>
     <div class="ovc"><div class="ovh"><h3>ผลรายวิชา</h3><div class="ovseg"><button type="button" data-m="last" class="${mode==="last"?"on":""}">ครั้งล่าสุด</button><button type="button" data-m="sum" class="${mode==="sum"?"on":""}">สะสมทั้งหมด</button></div></div>
     <p class="note" style="margin:-4px 0 12px">${mode==="last"?"ผลของครั้งล่าสุดที่ทำแต่ละวิชา ดูว่าตอนนี้วิชาไหนยังอ่อน":"รวมทุกครั้งที่เคยทำแต่ละวิชา ดูภาพรวมระยะยาว"}</p>${badges?`<div class="badges">${badges}</div><p class="note" style="margin-top:10px"><span class="glg">${[["g1","0-29%"],["g2","30-59%"],["g5","60-79%"],["g6","80-100%"]].map(([g,t])=>`<span><i class="${g}"></i>${t}</span>`).join("")}</span></p>`:'<p class="note">ทำแบบทดสอบก่อน แล้วระบบจะสรุปผลแต่ละวิชาให้</p>'}</div></div></div>`;
-  box.insertAdjacentHTML("beforeend",shopHtml());bindShop();
-  bindStairs(lv);bindWardrobe(lv);
   box.querySelectorAll(".ovseg button").forEach(b=>b.onclick=()=>{ovMode=b.dataset.m;try{localStorage.setItem("kasorbOvMode",ovMode)}catch(e){}renderOverview()});
 }
 const loadCatalogSync=id=>(examCatalog||[]).find(e=>e.id===id);
