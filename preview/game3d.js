@@ -1288,7 +1288,7 @@ export function startGame(root,api){
     const bun=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),M(0x9e9e9e));bun.position.set(-.16,.16,0);a.userData.head.add(bun);
     const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.22,.1),M(0xc62828));bag.position.set(0,.85,-.36);a.add(bag);
     const tag=new THREE.Sprite(new THREE.SpriteMaterial({map:txt("ป้าข้างบ้าน",{size:60,color:"#ffffff",bg:"#d81b60",border:"#ffd23f",w:320,h:110,radius:30}),depthTest:false}));tag.scale.set(1.5,.52,1);tag.position.y=2.35;tag.renderOrder=21;a.add(tag);
-    if(!auntDeck.length)auntDeck=AUNT.slice().sort(()=>Math.random()-.5);const line=auntDeck.pop();
+    if(!auntDeck.length){const L=(api.aunt&&api.aunt())||AUNT;auntDeck=L.slice().sort(()=>Math.random()-.5)}const line=auntDeck.pop();
     const say=new THREE.Sprite(new THREE.SpriteMaterial({map:txt(line,{size:52,color:"#4a148c",bg:"#ffffff",border:"#d81b60",w:760,h:120,radius:44}),depthTest:false}));say.scale.set(3.4,.54,1);say.position.set(0,3.95,0);say.renderOrder=21;say.visible=false;a.add(say);
     a.userData.say=say;a.userData.line=line;return a}
   /* คืนหน่วยความจำการ์ดจอเมื่อเอาของออกจากฉาก (ไม่งั้นเล่นนาน ๆ บนมือถือหน่วยความจำเต็ม ของที่มีลายผิวจะกลายเป็นสีดำ) */

@@ -7846,7 +7846,17 @@ function advIdiom(){
   const [id,mean]=advDraw("idiom",ADV_IDIOM),others=shuf(ADV_IDIOM.filter(x=>x[0]!==id)).slice(0,2);
   if(Math.random()<.6){const o=shuf([mean,...others.map(x=>x[1])]);return {q:`"${id}" หมายถึงข้อใด`,opts:o,ans:o.indexOf(mean),box:true}}
   const o=shuf([id,...others.map(x=>x[0])]);return {q:`สำนวนใดหมายถึง "${mean}"`,opts:o,ans:o.indexOf(id),box:true}}
+/* คลังข้อสอบเกม: แอดมินแก้ได้ที่เมนู เกม (เก็บใน site/game) ถ้ายังไม่ได้แก้ ใช้ชุดเริ่มต้น game-bank.json  สุ่มไม่ซ้ำจนครบทุกข้อ สลับตำแหน่งตัวเลือกทุกครั้ง */
+let advBank=null,advAunt=null;
+async function advLoadBank(){let st={},au=null;try{const s=await getDoc(doc(db,"site","game"));if(s.exists()){const d=s.data();st=d.stages||{};au=Array.isArray(d.aunt)&&d.aunt.length?d.aunt:null}}catch(e){console.error(e)}
+  let def={};try{def=await (await fetch("game-bank.json?v="+(GAME_V==="dev"?Date.now():GAME_V))).json()}catch(e){console.error(e)}
+  const b={};for(let i=1;i<=10;i++){const a=Array.isArray(st[i])&&st[i].length?st[i]:def[i];if(Array.isArray(a)&&a.length)b[i]=a;delete advDeck["bank"+i]}advBank=b;advAunt=au}
+function advFromBank(st){const a=advBank&&advBank[st];if(!a)return null;const it=advDraw("bank"+st,a);if(!it||!Array.isArray(it.opts)||it.opts.length<2)return null;
+  const idx=shuf(it.opts.map((_,i)=>i)),o={q:String(it.q||""),opts:idx.map(i=>String(it.opts[i])),ans:idx.indexOf(+it.ans||0)};if(it.pic)o.pic=it.pic;if(it.box)o.box=true;return o}
+/* สลับกัน: ข้อจากคลัง (แอดมินแก้ได้) 1 ข้อ แล้วโจทย์ที่สุ่มสร้างใหม่ 1 ข้อ */
+const advAlt={};
 function advQuestion(st){
+  advAlt[st]=!advAlt[st];if(advAlt[st]){const fb=advFromBank(st);if(fb)return fb}
   if(st===8)return advVocab();
   if(st===10)return advIdiom();
   const kinds=["math"];if(st>=2)kinds.push("seq");if(st>=3)kinds.push("cmp");if(st>=5)kinds.push("logic");
@@ -8026,10 +8036,10 @@ async function advStart(){
       $("advRe").onclick=()=>{m.classList.add("hidden");again()};$("advHome").onclick=()=>{advClose();showAppPage("homePage","หน้าหลัก")}}
   };
   try{
-    const mod=await import("./game3d.js?v="+(GAME_V==="dev"?Date.now():GAME_V));if(!$("advOv"))return;advMod=mod;
+    const [mod]=await Promise.all([import("./game3d.js?v="+(GAME_V==="dev"?Date.now():GAME_V)),advLoadBank()]);if(!$("advOv"))return;advMod=mod;
     const snd=$("advSnd"),sndIc=()=>{snd.innerHTML=mod.SND.isOn()?ADV_ICON.sndOn:ADV_ICON.sndOff};sndIc();snd.onclick=()=>{mod.SND.unlock();mod.SND.setOn(!mod.SND.isOn());sndIc()};
     $("advLoad")?.remove();
-    adv=mod.startGame($("advView"),{question:advQuestion,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref});advGearBar();window.advGame=adv;startBox();
+    adv=mod.startGame($("advView"),{question:advQuestion,aunt:()=>advAunt,best:advBest,clear:advClear,ui,avatar:avatarSrc(),maxStage:advMax,start:()=>advSel,gear:advOwned,gearPref:()=>advPref});advGearBar();window.advGame=adv;startBox();
     const TM=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     const tickClock=()=>{const c=mod.thaiClock(window.__advNow||Date.now()),d=c.d,t=$("advTime");if(!t)return;
       t.textContent=`${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
