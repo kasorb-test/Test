@@ -3755,16 +3755,6 @@ html.desk-view .topnav{gap:10px!important}
 </style>
 </head>
 <body class="on-home">
-<!-- หน้าโหลดตอนเปิด/รีเฟรช: แสดงแทนจอขาวระหว่างรอระบบเข้าสู่ระบบและข้อมูลสมาชิก หายเองเมื่อหน้าเว็บพร้อม -->
-<style>#bootSplash{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(520px 320px at 50% 0,rgba(255,150,100,.32),transparent 70%),linear-gradient(180deg,#fff6f0 0%,#fbf4f0 55%,#eef1f8 100%);font-family:system-ui,sans-serif;transition:opacity .25s}
-#bootSplash.gone{opacity:0;pointer-events:none}#bootSplash .bs-logo{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:18px;background:#16305f;box-shadow:0 10px 24px rgba(22,48,95,.25)}
-#bootSplash .bs-logo b{color:#fff;font-size:26px;font-weight:800;letter-spacing:.02em}#bootSplash .bs-logo i{font-style:normal;padding:3px 9px;border-radius:999px;background:#ff6a00;color:#fff;font-size:13px;font-weight:800;letter-spacing:.08em}
-#bootSplash .bs-spin{width:34px;height:34px;border-radius:50%;border:4px solid #ffd9c2;border-top-color:#ff6a00;animation:bsSpin .8s linear infinite}@keyframes bsSpin{to{transform:rotate(360deg)}}
-#bootSplash p{margin:0;color:#7c4a2d;font-size:14px;text-align:center;padding:0 24px}#bootSplash button{display:none;margin-top:4px;padding:10px 22px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-weight:700;font-size:15px}#bootSplash.slow button{display:block}</style>
-<div id="bootSplash"><div class="bs-logo"><b>กะสอบ</b><i>TEST</i></div><div class="bs-spin"></div><p id="bootMsg">กำลังโหลด…</p><button type="button" onclick="location.reload()">โหลดใหม่</button></div>
-<script>(function(){var t0=Date.now(),el=document.getElementById("bootSplash");var iv=setInterval(function(){var a=document.getElementById("appShell"),u=document.getElementById("authShell");
-  if((a&&!a.classList.contains("hidden"))||(u&&!u.classList.contains("hidden"))){el.classList.add("gone");clearInterval(iv);setTimeout(function(){el.remove()},300);return}
-  if(Date.now()-t0>15000&&!el.classList.contains("slow")){el.classList.add("slow");document.getElementById("bootMsg").textContent="ใช้เวลานานกว่าปกติ กรุณาตรวจสอบอินเทอร์เน็ต แล้วกดโหลดใหม่"}},120)})();</script>
 
 <script>
 /* กล่องข้อความในหน้าเว็บ แทนกล่องของเบราว์เซอร์ (alert / confirm / prompt) */
