@@ -831,6 +831,7 @@ input{
 /* คำว่า TEST ในกรอบสีกรมท่า เหมือนไอคอนแอป */
 .brand-test{display:inline-block;padding:1px .45em 2px;border-radius:999px;background:#16305f;color:#fff!important;font-size:.82em!important;letter-spacing:.08em;line-height:1.25;vertical-align:.08em;margin-left:.1em}
 /* ปุ่มกลับหน้าหลัก */
+#subjectPage:not(.in-sets) .back-home.tests-back{display:none}
 .back-home{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:9px 16px 9px 14px;border:1px solid #f1d9c6;border-radius:999px;background:#fff;color:#e86208;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(20,34,60,.05)}
 .back-home::before{content:"";width:8px;height:8px;border:solid currentColor;border-width:0 0 2.5px 2.5px;transform:rotate(45deg)}
 .back-home:hover{background:#fff6ef}
@@ -3321,6 +3322,7 @@ body.adv-on{overflow:hidden}
 .setc .best.sb{color:#16305f;font-weight:600}
 .xchoose{grid-column:1/-1;display:grid;gap:8px;margin-top:4px;padding:14px;border-radius:14px;background:#fff8f2;border:1px solid #f6dcc8}
 .xchoose .full{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border:0;border-radius:12px;background:#ff6a00;color:#fff;text-align:left;cursor:pointer;font:inherit}
+.xchoose .shuf{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px dashed #f3b98f;border-radius:12px;background:#fff;color:#7c2d12;text-align:left;cursor:pointer;font:inherit}.xchoose .shuf i{flex:0 0 38px;height:22px;border-radius:999px;background:#e5e7eb;position:relative;transition:.2s}.xchoose .shuf i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s}.xchoose .shuf[aria-pressed="true"]{border-style:solid;border-color:#ff6a00;background:#fff3ea}.xchoose .shuf[aria-pressed="true"] i{background:#ff6a00}.xchoose .shuf[aria-pressed="true"] i::after{left:19px}.xchoose .shuf span{display:flex;flex-direction:column}.xchoose .shuf b{font-size:14px}.xchoose .shuf small{font-size:12px;color:#9a5a33}
 .xchoose .full b{font-size:15px}.xchoose .full span{font-size:12.5px;opacity:.9}
 .xchoose .orl{margin-top:4px;font-size:13px;font-weight:800;color:#c2410c}
 .xchoose .secs{display:grid;gap:6px}
@@ -5283,6 +5285,9 @@ document
   back.className="back-home";
   back.textContent="กลับหน้าหลัก";
   back.onclick=()=>showAppPage("homePage","หน้าหลัก");
+  /* เมนูแบบทดสอบ: กลับไปหน้าแบบทดสอบ (หน้าเลือกวิชา/สายงาน) ไม่ใช่หน้าหลัก */
+  if(page.id==="subjectPage"){back.textContent="กลับหน้าแบบทดสอบ";back.classList.add("tests-back");back.onclick=()=>{renderSubjectPage();window.scrollTo(0,0)}}
+  if(page.id==="mockPage"){back.textContent="กลับหน้าแบบทดสอบ";back.onclick=()=>showAppPage("subjectPage","แบบทดสอบรายวิชา")}
   page.prepend(back);
 });
 
@@ -7141,7 +7146,7 @@ async function renderSubjectPage(){
   const my=++subjToken;
   subjTab="subj";
   $("subjRealBox").classList.toggle("hidden",!isPremium());
-  $("subjSetsBox").classList.add("hidden");$("subjListBox").classList.remove("hidden");const box=$("subjList");
+  $("subjSetsBox").classList.add("hidden");$("subjListBox").classList.remove("hidden");$("subjectPage").classList.remove("in-sets");const box=$("subjList");
   $("subjTrackBox").classList.remove("hidden");
   $("subjListTag").textContent=subjTab==="real"?"เฉพาะ Premium":"ตามรายวิชา";
   $("subjListTitle").textContent=subjTab==="real"?"ข้อสอบจริงรายวิชา":`รายวิชาของ${(TRACKS.find(t=>t[0]===subjTrack)||[])[1]||""}`;
@@ -7194,7 +7199,7 @@ function subjIcon(sub){
   return ICO.shield;
 }
 async function openSubject(sub,sets,kind){
-  $("subjListBox").classList.add("hidden");$("subjTrackBox").classList.add("hidden");$("subjRealBox").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");
+  $("subjListBox").classList.add("hidden");$("subjTrackBox").classList.add("hidden");$("subjRealBox").classList.add("hidden");$("subjSetsBox").classList.remove("hidden");$("subjectPage").classList.add("in-sets");
   $("subjName").textContent=(kind==="real"?"ข้อสอบจริง":"")+subjShow(sub);
   const box=$("subjSets");box.innerHTML="";
   const prog=await loadProgress().catch(()=>({best:{}}));
@@ -7209,7 +7214,8 @@ async function openSubject(sub,sets,kind){
     t.title=e?.title||label;
     t.innerHTML=`<span class="n">${no?(kind==="real"?no:slotLabel(sub,no)):"•"}</span><span class="s">${lock?LOCK:st==="ready"?(best?`${best.s}/${best.t}`:(hasSession(e.id)?"ทำต่อ":"เริ่มทำ")):"รอ"}</span>`;
     if(st==="wait") t.disabled=true;
-    t.onclick=()=>lock?showUpgrade():e?startExam(e.id):null;
+    /* ชุดที่เคยทำแล้ว: ถามว่าจะเริ่มตามลำดับเดิม หรือสลับไขว้ข้อสอบ */
+    t.onclick=async()=>{if(lock){showUpgrade();return}if(!e)return;if(best&&!hasSession(e.id)){const pk=await uiChoose("ชุดนี้เคยทำแล้ว เริ่มทำแบบไหน?",[{value:"seq",cls:"ok",label:"เรียงตามลำดับเดิม<small>ข้อสอบเรียงเหมือนเดิม</small>"},{value:"shuf",cls:"no",label:"สลับไขว้ข้อสอบ<small>สลับลำดับข้อ ตัวเลือกในแต่ละข้อเหมือนเดิม</small>"}]);if(!pk)return;startExam(e.id,null,pk==="shuf");return}startExam(e.id)};
     g.appendChild(t);
   };
   if(kind==="real"){
@@ -7243,7 +7249,7 @@ function toggleChooser(el,e){
   document.querySelectorAll("#setList .xchoose").forEach(x=>x.remove());
   const secs=(e.sections||[]).map((x,i)=>({i,name:x.name,n:Math.max(0,x.to-x.from+1)})).filter(x=>x.n>0);
   const box=document.createElement("div");box.className="xchoose";
-  box.innerHTML=`<button type="button" class="full"><b>ทำครบทั้งชุด</b><span>${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที เหมือนสอบจริง</span></button>
+  box.innerHTML=`<button type="button" class="shuf" aria-pressed="false"><i></i><span><b>สลับไขว้ข้อสอบ</b><small>สำหรับทำชุดเดิมซ้ำ สลับลำดับข้อในแต่ละวิชา</small></span></button><button type="button" class="full"><b>ทำครบทั้งชุด</b><span>${Number(e.count)||0} ข้อ · ${Number(e.minutes)||0} นาที เหมือนสอบจริง</span></button>
     ${secs.length>1?`<div class="orl">หรือ เลือกทำเฉพาะวิชา</div>
     <div class="secs">${secs.map(x=>`<label><input type="checkbox" value="${x.i}"><span>${escHtml(x.name)}</span><em>${x.n} ข้อ</em></label>`).join("")}</div>
     <button type="button" class="part" disabled>เลือกวิชาอย่างน้อย 1 วิชา</button>`:""}`;
@@ -7252,8 +7258,10 @@ function toggleChooser(el,e){
     const s=sel(),n=secs.filter(x=>s.includes(x.i)).reduce((a,x)=>a+x.n,0),b=box.querySelector(".part");
     b.disabled=!s.length;b.textContent=s.length?`เริ่มทำ ${s.length} วิชา · ${n} ข้อ · ${secMinutes(e,n)} นาที`:"เลือกวิชาอย่างน้อย 1 วิชา";
   });
-  box.querySelector(".full").onclick=()=>startExam(e.id);
-  const part=box.querySelector(".part");if(part)part.onclick=()=>{const s=sel();if(s.length)startExam(e.id,s)};
+  const shuf=box.querySelector(".shuf"),sh=()=>shuf.getAttribute("aria-pressed")==="true";
+  shuf.onclick=()=>shuf.setAttribute("aria-pressed",sh()?"false":"true");
+  box.querySelector(".full").onclick=()=>startExam(e.id,null,sh());
+  const part=box.querySelector(".part");if(part)part.onclick=()=>{const s=sel();if(s.length)startExam(e.id,s,sh())};
   el.appendChild(box);
 }
 function showUpgrade(){
@@ -7266,11 +7274,28 @@ const sessKey=id=>`kasorbExam:${currentUser?.uid}:${id}`;
 function hasSession(id){try{return !!localStorage.getItem(sessKey(id))}catch(e){return false}}
 function saveSession(){
   if(!exam) return;
-  try{localStorage.setItem(sessKey(exam.meta.id),JSON.stringify({startedAt:exam.startedAt,ans:exam.ans,secs:exam.secs,minutes:exam.minutes}))}catch(e){}
+  try{localStorage.setItem(sessKey(exam.meta.id),JSON.stringify({startedAt:exam.startedAt,ans:exam.ans,secs:exam.secs,minutes:exam.minutes,...(exam.order?{order:exam.order}:{})}))}catch(e){}
 }
 /* เลขวิชาของข้อ (ข้อมูลเก่าไม่มี sec ให้หาจากช่วงข้อ) */
 const secOf=(meta,it)=>Number.isInteger(it.sec)?it.sec:Math.max(0,(meta.sections||[]).findIndex(x=>it.n>=x.from&&it.n<=x.to));
-async function startExam(id,pick){
+/* สลับไขว้ข้อสอบ (สำหรับทำชุดเดิมซ้ำ): สลับลำดับข้อภายในแต่ละวิชา ย้ายทั้งข้อ (โจทย์ รูป ตัวเลือกเดิม) ข้อที่ใช้บทความเดียวกันย้ายไปด้วยกัน
+   เลขข้อเรียงใหม่ 1 2 3 ตามลำดับที่เห็น  order = ตำแหน่งข้อเดิม เก็บไว้กับผลสอบ เปิดผลเก่าจะได้ลำดับเดิม */
+function shuffleOrder(meta,items){
+  const bySec=new Map();items.forEach((it,i)=>{const k=secOf(meta,it);if(!bySec.has(k))bySec.set(k,[]);bySec.get(k).push(i)});
+  const out=[];
+  [...bySec.keys()].sort((a,b)=>a-b).forEach(k=>{const idx=bySec.get(k),blocks=[];
+    idx.forEach(i=>{const g=items[i].group,key=Array.isArray(g)&&g.length?"g"+g[0]:null,last=blocks[blocks.length-1];if(key&&last&&last.key===key)last.ids.push(i);else blocks.push({key,ids:[i]})});
+    for(let j=blocks.length-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[blocks[j],blocks[r]]=[blocks[r],blocks[j]]}
+    blocks.forEach(b=>out.push(...b.ids))});
+  return out}
+function applyOrder(meta,items,order){
+  if(!Array.isArray(order)||order.length!==items.length||new Set(order).size!==items.length||order.some(i=>!(i>=0&&i<items.length)))return null;
+  const list=order.map(i=>({...items[i],sec:secOf(meta,items[i])})),map=new Map();
+  const secs=[...new Set(list.map(it=>it.sec))];
+  secs.forEach(k=>{const grp=list.filter(it=>it.sec===k),ns=grp.map(it=>it.n).sort((a,b)=>a-b);grp.forEach((it,j)=>{map.set(it.n,ns[j]);it.origN=it.n;it.n=ns[j]})});
+  list.forEach(it=>{if(Array.isArray(it.group))it.group=it.group.map(x=>map.has(x)?map.get(x):x)});
+  return list}
+async function startExam(id,pick,shuffle){
   const meta=(await loadCatalog()).find(e=>e.id===id);
   if(!canTake(meta)){showUpgrade();return;}
   let items;
@@ -7288,8 +7313,10 @@ async function startExam(id,pick){
   if(secs) items=items.filter(it=>secs.includes(secOf(meta,it)));
   if(!items.length){alert("วิชาที่เลือกยังไม่มีข้อสอบ");return;}
   const minutes=secs?(saved?.minutes||secMinutes(meta,items.length)):(Number(meta.minutes)||items.length);
+  const order=saved?(Array.isArray(saved.order)?saved.order:null):(shuffle?shuffleOrder(meta,items):null);
+  if(order){const re=applyOrder(meta,items,order);if(re)items=re}
   const ans=saved&&Array.isArray(saved.ans)&&saved.ans.length===items.length?saved.ans:Array(items.length).fill(-1);
-  exam={meta,items,ans,secs,minutes,startedAt:saved?saved.startedAt:Date.now()};
+  exam={meta,items,ans,secs,minutes,order:order&&items[0]&&"origN" in items[0]?order:null,startedAt:saved?saved.startedAt:Date.now()};
   saveSession();
   renderExam();
   document.body.classList.add("exam-mode");
@@ -7423,7 +7450,7 @@ $("xShieldBtn").onclick=()=>{document.body.classList.remove("xhide");$("xShield"
 let lastResult=null;
 async function submitExam(auto){
   if(!exam) return;
-  const {meta,items,ans,secs:pickSecs,minutes}=exam;
+  const {meta,items,ans,secs:pickSecs,minutes,order}=exam;
   const blank=ans.filter(a=>!(a>=0)).length;
   if(!auto && blank && !await uiConfirm(`ยังไม่ได้ตอบ ${blank} ข้อ\nข้อที่ไม่ตอบจะนับเป็นผิด ส่งคำตอบเลยใช่หรือไม่?`,{ok:"ส่งคำตอบ",cancel:"กลับไปทำต่อ"})) return;
   if(!auto && !blank && !await uiConfirm("ส่งคำตอบใช่หรือไม่?",{ok:"ส่งคำตอบ",cancel:"กลับไปทำต่อ"})) return;
@@ -7438,7 +7465,7 @@ async function submitExam(auto){
     if(ok){correct++;bySec[sn].c++;}
     if(a>=0){
       answered++;
-      const qid=`${meta.id}:${it.n}`,hist=prog.h[qid]||[];
+      const qid=`${meta.id}:${it.origN??it.n}`,hist=prog.h[qid]||[];
       if(ok) gained+=xpForAnswer(true,hist.length+1);
       prog.h[qid]=hist.concat(a).slice(-20);
     }
@@ -7457,7 +7484,7 @@ async function submitExam(auto){
     await updateDoc(doc(db,"users",currentUser.uid),{xp,answered:unique});
     currentData.xp=xp;currentData.answered=unique;
     if(answered) await addTodayCount(answered);
-    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,...(pickSecs?{parts:pickSecs}:{}),bySec,at:serverTimestamp()});
+    await addDoc(collection(db,"users",currentUser.uid,"attempts"),{exam:meta.id,title:meta.title,correct,total:items.length,answered,xp:gained,secs,ans,...(pickSecs?{parts:pickSecs}:{}),...(order?{order}:{}),bySec,at:serverTimestamp()});
   }catch(e){console.error(e);saveErr=true;}
   try{localStorage.removeItem(sessKey(meta.id))}catch(e){}
   renderProfile();
@@ -7559,6 +7586,7 @@ async function openAttempt(a,btn){
     let items=await getExamItems(meta).catch(e=>{if(e.message==="missing")return [];throw e});
     if(Array.isArray(a.parts)) items=items.filter(it=>a.parts.includes(secOf(meta,it)));
     if(!Array.isArray(a.ans)||items.length!==a.ans.length){alert("ข้อสอบชุดนี้มีการเพิ่มหรือลบข้อหลังจากที่ทำ จึงเปิดกระดาษคำตอบเดิมไม่ได้");return}
+    if(Array.isArray(a.order)){const re=applyOrder(meta,items,a.order);if(!re){alert("ข้อสอบชุดนี้มีการเพิ่มหรือลบข้อหลังจากที่ทำ จึงเปิดกระดาษคำตอบเดิมไม่ได้");return}items=re}
     const correct=items.reduce((n,it,i)=>n+(a.ans[i]===it.a?1:0),0);
     lastResult={meta,items,ans:a.ans,correct,gained:Number(a.xp)||0,answered:Number(a.answered)||0,secs:Number(a.secs)||0,saveErr:false,
       pickSecs:Array.isArray(a.parts)?a.parts:null,minutes:Array.isArray(a.parts)?secMinutes(meta,items.length):(Number(meta.minutes)||items.length),from:"history"};
@@ -7910,7 +7938,7 @@ function advQuestion(st){
   const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
 /* เลขเวอร์ชันไฟล์เกม: ตอนเผยแพร่ สคริปต์จะใส่เลขใหม่ให้ เครื่องผู้เล่นจะได้โหลดไฟล์เกมใหม่ทุกครั้งที่อัปเดต ไม่ใช้ไฟล์เก่าที่ค้างในเครื่อง */
-const GAME_V="202610021013";
+const GAME_V="202610021049";
 /* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
 let adv=null,advMod=null,advSayQ=[],advSayT=0;
 /* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
