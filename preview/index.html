@@ -8021,7 +8021,9 @@ async function advClear(st,got=0){
   return {gain,note};
 }
 async function advStart(){
-  advClose();
+  /* รีเฟรชระหว่างเล่น: กลับเข้าเกมที่ด่านเดิม (จำไว้ในแท็บนี้ ออกจากเกมแล้วลบทิ้ง) */
+  let keepSt=0;try{keepSt=+sessionStorage.getItem("kasorbGameStage")||0}catch(e){}
+  advClose();try{sessionStorage.setItem("kasorbInGame","1");if(keepSt)sessionStorage.setItem("kasorbGameStage",String(keepSt))}catch(e){}
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
   ov.innerHTML=`<div class="adv-top"><b id="advSt">Stage 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="Menu">☰ MENU</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
@@ -8047,7 +8049,7 @@ async function advStart(){
   $("advMenuBtn").onclick=()=>{menu.classList.remove("hidden");adv?.pause(true)};
   const resume=()=>{menu.classList.add("hidden");if(!$("advStart"))adv?.pause(false)};
   /* หน้าเริ่ม: เลือกด่าน (เล่นได้ถึงด่านถัดจากที่ผ่าน) แล้วกด START */
-  let advSel=Math.min(advBest()+1,advMax()),advRe=false;
+  let advSel=keepSt&&keepSt<=advMax()&&advOpen(keepSt)?keepSt:Math.min(advBest()+1,advMax()),advRe=false;
   const startBox=msg=>{$("advStart")?.remove();adv?.pause(true);const d=document.createElement("div");d.className="adv-start";d.id="advStart";
     const chips=Array.from({length:10},(_,i)=>{const n=i+1,open=advOpen(n),prem=n>5&&advMax()<10;return `<button type="button" class="adv-chip${n===advSel?" on":""}${open?"":" lock"}${prem?" prem":""}" data-n="${n}" title="${escHtml(ADV_NAMES[i])}">${n}</button>`}).join("");
     d.innerHTML=`<div class="adv-start-box"><img src="mascot-2b.svg" alt="">${msg?`<p class="adv-done">${msg}</p>`:""}<h3 id="advStartT"></h3><div class="adv-stages">${chips}</div><p class="adv-lock-note hidden" id="advLockNote"></p><button type="button" class="adv-go" id="advGo">START</button></div>`;
@@ -8069,7 +8071,7 @@ async function advStart(){
     ["pointerup","pointercancel","touchend","touchcancel"].forEach(t=>b.addEventListener(t,off));b.addEventListener("contextmenu",e=>e.preventDefault())});
   $("advJump").addEventListener("pointerdown",e=>{e.preventDefault();adv?.hop()});
   const ui={
-    stage:(st,need,done)=>{$("advSt").textContent=`Stage ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
+    stage:(st,need,done)=>{try{sessionStorage.setItem("kasorbGameStage",String(st))}catch(e){}$("advSt").textContent=`Stage ${st}`;$("advProg").innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<done?"on":""}"></i>`).join("")},
     hearts:n=>{$("advHearts").innerHTML=[0,1,2].map(i=>`<i class="adv-ht${i<n?"":" off"}"></i>`).join("")},
     /* เหรียญที่เก็บในด่านนี้ แสดงรวมกับเหรียญที่มี (บันทึกจริงตอนผ่านด่าน) */
     pts:n=>{advGot=n;const c=$("advCoins");if(c){c.textContent=(coinsOf()+n).toLocaleString();c.parentElement.classList.remove("bump");void c.offsetWidth;if(n)c.parentElement.classList.add("bump")}},
@@ -8108,7 +8110,7 @@ async function advStart(){
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }
 let advClockT=0;
-function advClose(){clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+function advClose(){try{sessionStorage.removeItem("kasorbInGame");sessionStorage.removeItem("kasorbGameStage")}catch(e){}clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
 /* หน้าเลือกเกม: การ์ดเกมที่มี เพิ่มเกมใหม่ได้ภายหลัง */
@@ -8410,11 +8412,13 @@ $("appShell")
 document.body.classList.remove("guest");
 
 let go=pendingPage;pendingPage=null;
-if(!go){try{const lp=JSON.parse(sessionStorage.getItem("kasorbLastPage")||"null");if(lp&&lp.id&&$(lp.id))go=lp}catch(e){}}
+let reGame=false;
+if(!go){try{const lp=JSON.parse(sessionStorage.getItem("kasorbLastPage")||"null");if(lp&&lp.id&&$(lp.id))go=lp;reGame=!!(lp&&lp.id==="gamePage"&&sessionStorage.getItem("kasorbInGame"))}catch(e){}}
 showAppPage(
 go?go.id:"homePage",
 go?go.title:"หน้าหลัก"
 );
+if(reGame)setTimeout(()=>{if(!$("advOv"))advStart()},200);
 
 startPresence();
 loadHome();
