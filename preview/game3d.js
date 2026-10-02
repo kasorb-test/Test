@@ -1391,10 +1391,10 @@ export function startGame(root,api){
       /* ไหว้พระ: พนมมือยื่นไปข้างหน้า ก้มกราบค้างไว้ฟังพระสวดนะโมจนจบ แล้วน้องอธิษฐาน "ขอให้สอบติด" 3 ครั้ง กราบทุกครั้ง */
       u.arms.forEach((a,i)=>{const s2=i?1:-1;a.rotation.set(-1.45,0,-s2*.5)});
       if(b.t>.5&&!b.rang){b.rang=1;SND.play("bell");burst(new THREE.Vector3(S.shrineX+2.2,2.6,-3))}
-      if(b.ph==="chant"){u.body.rotation.x+=(.62-u.body.rotation.x)*Math.min(1,dt*4);if((b.done&&b.t>2)||b.t>16){b.ph="wish";b.n=0;b.pt=0}}
-      else{b.pt+=dt;const R=2.6;if(!b["s"+b.n]){b["s"+b.n]=1;SND.speak("ขอให้สอบติด",false,{pitch:1.35,rate:.95})}
-        /* แต่ละรอบ: ลุกขึ้นพนมมือพูด แล้วก้มกราบ */
-        const q=b.pt/R;u.body.rotation.x=q<.45?.62*(1-Math.min(1,q/.15)):.62*Math.sin(Math.min(1,(q-.45)/.55)*Math.PI);
+      if(b.ph==="chant"){u.body.rotation.x+=(.62-u.body.rotation.x)*Math.min(1,dt*4);if((b.done&&b.t>2)||b.t>16){b.ph="wish";b.n=-1;b.pt=0}}
+      else{b.pt+=dt;const wish=b.n<0,R=wish?2.4:1.7;if(!b["s"+b.n]){b["s"+b.n]=1;SND.speak(wish?"ขอให้สอบติด":"สาธุ",false,{pitch:1.35,rate:wish?.95:.8})}
+        /* ลุกขึ้นพนมมืออธิษฐาน "ขอให้สอบติด" 1 ครั้ง แล้วก้มกราบ 3 ครั้ง พูด "สาธุ" ทุกครั้งที่กราบ */
+        const q=b.pt/R;u.body.rotation.x=wish?.62*(1-Math.min(1,q/.25)):.62*Math.sin(Math.min(1,q/.85)*Math.PI);
         if(b.pt>=R){b.n++;b.pt=0;if(b.n>=3){u.body.rotation.x=0;u.arms.forEach((a,i)=>a.rotation.set(0,0,(i?1:-1)*.35));S.prayed=true;S.mode="walk";SND.play("sparkle");burst(new THREE.Vector3(S.shrineX+2.2,3,-3.2));ui.say&&ui.say("ขอให้สอบติด สมหวังทุกประการ")}}}}
     for(let i=ripples.length-1;i>=0;i--){const R=ripples[i];R.t+=dt;R.o.scale.setScalar(1+R.t*3);R.o.material.opacity=Math.max(0,.9-R.t*.8);if(R.t>1.1){world.remove(R.o);ripples.splice(i,1)}}
     for(let i=ghosts.length-1;i>=0;i--){const G=ghosts[i];G.t+=dt;const t=G.t,o=G.o;
