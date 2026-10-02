@@ -612,12 +612,17 @@ export function startGame(root,api){
   function waterfall(){const g=new THREE.Group(),Hf=rand(8.5,10),W=13,falls=[];
     /* จุดน้ำตก 2-3 สาย กว้างไม่เท่ากัน */
     const nF=Math.random()<.5?2:3;for(let k=0;k<nF;k++)falls.push({x:-W/2+1.8+(W-3.6)*(nF===1?.5:k/(nF-1))+rand(-.6,.6),w:k===Math.floor(nF/2)?rand(2.4,3.4):rand(1,1.8)});
-    /* หน้าผา: แผ่นเรียบที่ดันนูนเป็นหิน มีร่องตรงสายน้ำ สีหินเข้ม-ตะไคร่เขียว */
-    const gm=new THREE.PlaneGeometry(W,Hf+1.4,36,26),p=gm.attributes.position,col=[],cA=new THREE.Color(0x5b554d),cB=new THREE.Color(0x3d3a35),cM=new THREE.Color(0x3f6b2c),cT=new THREE.Color(0x4f8a35),tc=new THREE.Color();
-    for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i)+(Hf+1.4)/2,ledge=Math.sin(y*1.7)*.35+Math.sin(y*4.3+x)*.12,bump=Math.sin(x*1.3+y*.7)*.45+Math.sin(x*3.1-y*1.9)*.22+rand(-.12,.12);
-      let groove=0;for(const f of falls){const d=Math.abs(x-f.x)/(f.w*.75);if(d<1)groove=Math.max(groove,(1-d*d)*.9)}
-      p.setXYZ(i,x,y,bump+ledge-groove);const top=y>Hf-.3,mossy=(Math.sin(x*2.1+y*3.3)*Math.sin(y*.9+x*.4)>.45)||top;tc.copy(Math.random()<.5?cA:cB);if(mossy)tc.lerp(top?cT:cM,top?.85:.45);if(groove>.2)tc.lerp(cB,.5);col.push(tc.r,tc.g,tc.b)}
-    gm.setAttribute("color",new THREE.Float32BufferAttribute(col,3));gm.computeVertexNormals();const cl=new THREE.Mesh(gm,cliffM);cl.receiveShadow=true;g.add(cl);
+    /* หน้าผา: ก้อนหินใหญ่เหลี่ยมชัดซ้อนเป็นชั้น ๆ สีหินแต่ละก้อนต่างกันเล็กน้อย ตะไคร่เฉพาะด้านบน หลังสายน้ำเป็นหินเปียกสีเข้ม */
+    const back=new THREE.Mesh(new THREE.PlaneGeometry(W+2,Hf-.6),M(0x2f2c28,{roughness:1}));back.position.set(0,(Hf-.6)/2,-1.2);g.add(back);
+    const RC=[0x6b6358,0x5e574d,0x766d60,0x544e46,0x82786a,0x4a453f],WET=[0x3a3631,0x2f2c28,0x403b35],MO=[0x4a7a33,0x55883a,0x3f6e2c],pos=[];
+    for(let y=.5;y<Hf+.3;y+=rand(1.05,1.35))for(let x=-W/2-.3;x<W/2+.6;x+=rand(1.15,1.5)){const inF=falls.find(f=>Math.abs(x-f.x)<f.w*.6),top=y>Hf-1;
+      pos.push({x:x+rand(-.2,.2),y:y+rand(-.15,.15),z:inF?-.95:rand(-.25,.15),s:rand(.8,1.1)*(inF?.9:1),c:inF?pick(WET):top&&Math.random()<.7?pick(MO):Math.random()<.12?pick(MO):pick(RC)})}
+    {const rk=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshStandardMaterial({roughness:.92,flatShading:true}),pos.length),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler(),col=new THREE.Color();
+      pos.forEach((b,k)=>{e.set(rand(-.25,.25),rand(-.4,.4),rand(-.3,.3));q.setFromEuler(e);m4.compose(new THREE.Vector3(b.x,b.y,b.z),q,new THREE.Vector3(b.s*1.05,b.s*.72,b.s*.7));rk.setMatrixAt(k,m4);rk.setColorAt(k,col.set(b.c).offsetHSL(0,0,rand(-.03,.03)))});
+      rk.instanceColor.needsUpdate=true;rk.castShadow=true;rk.receiveShadow=true;g.add(rk)}
+    /* ชั้นหินยื่น (ledge) มีตะไคร่ด้านบน ให้หน้าผาดูเป็นชั้น */
+    for(let k=0;k<5;k++){const y=rand(2,Hf-1.5),x=rand(-W/2+1,W/2-1);if(falls.some(f=>Math.abs(x-f.x)<f.w*.6+1))continue;const w=rand(1.4,2.6),l=new THREE.Mesh(new THREE.BoxGeometry(w,.28,.9),M(pick(RC),{flat:true,roughness:.95}));l.position.set(x,y,.45);l.rotation.z=rand(-.08,.08);l.castShadow=true;g.add(l);
+      const mt=new THREE.Mesh(new THREE.BoxGeometry(w*.95,.08,.85),M(pick(MO),{flat:true}));mt.position.set(x,y+.17,.45);mt.rotation.z=l.rotation.z;g.add(mt)}
     /* ขอบบนผา: พุ่มไม้ ต้นไม้ เฟิร์นห้อย */
     for(let k=0;k<6;k++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.6,1.1),1),M(pick([0x2f6b24,0x3a7d2b,0x2b5e22]),{flat:true}));b.position.set(rand(-W/2,W/2),Hf+.5,rand(-.6,.4));if(falls.some(f=>Math.abs(b.position.x-f.x)<f.w*.6))continue;g.add(b)}
     for(let k=0;k<3;k++){const t=roundTree(),x=pick([-W/2+1,W/2-1,rand(-W/2,W/2)]);if(falls.some(f=>Math.abs(x-f.x)<f.w))continue;t.position.set(x,Hf+.3,-.8);g.add(t)}
@@ -627,7 +632,7 @@ export function startGame(root,api){
       const lip=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,f.w*.95,8,1,false,0,Math.PI),new THREE.MeshBasicMaterial({color:0xeaf8ff,transparent:true,opacity:.8,depthWrite:false}));lip.rotation.z=Math.PI/2;lip.position.set(f.x,Hf+.15,.25);g.add(lip);
       /* ฟองขาวตรงที่น้ำตกกระทบ + หมอกลอย */
       const fm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.85,depthWrite:false});for(let k=0;k<7;k++){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.25,.5)*f.w/2,10,8),fm);b.scale.y=.4;b.position.set(f.x+rand(-f.w/2,f.w/2),.15,.9+rand(0,.8));g.add(b)}
-      for(let k=0;k<Math.round(4+f.w*2);k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.75,depthWrite:false}));sp.position.set(f.x+rand(-f.w*.7,f.w*.7),rand(.3,2.2),1+rand(0,1.6));sp.scale.setScalar(rand(1.2,2.6)*(.6+f.w*.25));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}}
+      for(let k=0;k<Math.round(2+f.w);k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.45,depthWrite:false}));sp.position.set(f.x+rand(-f.w*.5,f.w*.5),rand(.2,1),1.2+rand(0,1));sp.scale.setScalar(rand(1,1.8)*(.6+f.w*.2));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}}
     /* แอ่งน้ำสีเขียวมรกต มีระลอก ขอบหินมีตะไคร่ */
     const pool=new THREE.Mesh(new THREE.PlaneGeometry(W+1,7),new THREE.MeshStandardMaterial({color:0x3fb7b0,map:canalRip,roughness:.1,metalness:.1,emissive:0x0d4f55,emissiveIntensity:.25,transparent:true,opacity:.92}));pool.rotation.x=-Math.PI/2;pool.position.set(0,.06,3.6);g.add(pool);
     for(let k=0;k<16;k++){const rr=rock(rand(.35,.75),Math.random()<.5);rr.position.set(rand(-W/2,W/2),.1,7+rand(-.2,.4));g.add(rr)}
@@ -1119,7 +1124,7 @@ export function startGame(root,api){
   function snapshot(){return{sky:(fade?fade.cur.sky:TH.sky.map(C)),fog:scene.fog.color.clone(),ground:groundMat.color.clone(),path:pathMat.color.clone(),edge:pathEdge.color.clone(),
     fn:scene.fog.near,ff:scene.fog.far,hs:hemi.color.clone(),hg:hemi.groundColor.clone(),hi:hemi.intensity,lc:sun.color.clone(),li:sun.intensity,sp:fade?fade.cur.sp:TH.sunPos.slice(),
     lay:layers.map(L=>L.items.map(g=>{const m=g.isMesh?g:g.children[0];return m.material.color.clone()}))}}
-  function target(T){return{fn:T.fogNear||50,ff:T.fogFar||190,sky:T.sky.map(C),fog:C(T.fog),ground:C(T.ground),path:C(T.path),edge:C(T.pathEdge),hs:C(T.hemi[0]),hg:C(T.hemi[1]),hi:T.hemiI,lc:C(T.light),li:T.sunI,sp:T.sunPos.slice(),
+  function target(T){const wf=curBiome==="waterfall";return{fn:Math.max(T.fogNear||50,wf?45:0),ff:Math.max(T.fogFar||190,wf?160:0),sky:T.sky.map(C),fog:C(T.fog),ground:C(T.ground),path:C(T.path),edge:C(T.pathEdge),hs:C(T.hemi[0]),hg:C(T.hemi[1]),hi:T.hemiI,lc:C(T.light),li:T.sunI,sp:T.sunPos.slice(),
     lay:layers.map(L=>L.items.map(()=>C(L.kind===0?pick(T.mounts||[T.mount]):L.kind===1?T.hill2:T.hill1)))}}
   function fadeTo(T){const from=snapshot();TH=T;fade={s0:starMat.opacity,r0:rainMat.opacity,t:0,from,to:target(T),cur:{sky:from.sky.map(c=>c.clone()),sp:from.sp.slice()}}}
   function stepFade(dt){if(!fade)return;fade.t=Math.min(1,fade.t+dt/2);const k=fade.t*fade.t*(3-2*fade.t),f=fade.from,t=fade.to,cur=fade.cur;
