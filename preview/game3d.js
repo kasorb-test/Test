@@ -1263,7 +1263,7 @@ export function startGame(root,api){
   const ghosts=[],ripples=[];
   function scare(){if(biomeOf(S.st)!=="haunted")return;const n=Math.max(0,S.qn-1),cyc=["lady","krasue","west","krahang","lady","west"][n%6],gh=cyc==="lady"?ladyGhost():cyc==="krasue"?krasue():cyc==="krahang"?krahang():ghost(Math.floor(n/3)%5);if(cyc!=="west"){setTimeout(()=>SND.play("thaighost"),250);setTimeout(()=>SND.play("howl"),450)}gh.position.set(S.x+1.4,-1.6,-.4);gh.scale.setScalar(.3);world.add(gh);ghosts.push({o:gh,t:0});SND.play("ghost");S.freeze=2.2;S.scared=2;setTimeout(()=>SND.play("gasp"),350);ui.scare&&ui.scare()}
   const critters=[],leeches=[];
-  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="village")return critter("auntie");if(b==="farm")critter("bite");else if(b==="waterfall")critter("bite","croc");else if(b==="thai")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
+  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="village")return critter("auntie");if(b==="farm")critter("bite","lion");else if(b==="waterfall")critter("bite","croc");else if(b==="thai")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
   function critter(kind,only){const x0=S.x;
     if(kind==="pelt"){S.freeze=3;const parts=[P.userData.body,P.userData.arms[0],P.userData.arms[1],P.userData.legs[0],P.userData.legs[1]];for(let k=0;k<4;k++){const v=(k%2===0?pick(VEGLEAF):pick(VEGTHROW))();v.scale.setScalar(2.2);v.position.set(x0+2.6,1.4,-1.6);world.add(v);
         const part=parts[k===0?0:1+Math.floor(Math.random()*4)],lp=part===P.userData.body?new THREE.Vector3(rand(-.3,.3),k===0?2.35:rand(.9,1.6),.42):new THREE.Vector3(0,-rand(.2,.5),.12);critters.push({o:v,kind:"veg",t:-k*.6,from:v.position.clone(),part,lp})}
@@ -1276,7 +1276,7 @@ export function startGame(root,api){
     if(kind==="crab"){const u=P.userData;S.crabHits=(S.crabHits||0)+1;const want=[[u.arms[0],"arm",-1],[u.arms[1],"arm",1]];if(S.crabHits>=2)want.push([u.legs[0],"leg",-1],[u.legs[1],"leg",1]);let n=0;
       for(const[part,pk,side]of want){if(critters.some(c=>c.kind==="crab"&&c.part===part&&!c.off))continue;const o=crab();o.scale.setScalar(2.2);o.position.set(x0+7,0,.5+side*.35);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:-n*.35,x0,part,pk,side});n++}
       SND.play("pinch");return}
-    const o=only==="croc"||(!only&&Math.random()<.5)?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
+    const o=only==="croc"?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     }
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
   const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา",
