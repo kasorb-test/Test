@@ -7952,7 +7952,7 @@ function advQuestion(st){
   const o=shuf([right,...wrong]);return {q:`ถ้า ${L[0]} > ${L[1]} และ ${L[1]} > ${L[2]} ข้อใดถูก`,opts:o,ans:o.indexOf(right)};
 }
 /* เลขเวอร์ชันไฟล์เกม: ตอนเผยแพร่ สคริปต์จะใส่เลขใหม่ให้ เครื่องผู้เล่นจะได้โหลดไฟล์เกมใหม่ทุกครั้งที่อัปเดต ไม่ใช้ไฟล์เก่าที่ค้างในเครื่อง */
-const GAME_V="202610021431";
+const GAME_V="202610021438";
 /* เกม 3D อยู่ในไฟล์ game3d.js (โหลดเมื่อเข้าหน้าเกมเท่านั้น) ส่วนนี้ทำแถบด้านบน กล่องคำถาม และบันทึกด่าน/เหรียญ */
 let adv=null,advMod=null,advSayQ=[],advSayT=0;
 /* ข้อความในเกมขึ้นทีละข้อความ ไม่ซ้อนกัน */
@@ -8025,7 +8025,7 @@ async function advClear(st,got=0){
 async function advStart(){
   /* รีเฟรชระหว่างเล่น: กลับเข้าเกมที่ด่านเดิม (จำไว้ในแท็บนี้ ออกจากเกมแล้วลบทิ้ง) */
   let keepSt=0;try{keepSt=+sessionStorage.getItem("kasorbGameStage")||0}catch(e){}
-  advClose();try{sessionStorage.setItem("kasorbInGame","1");if(keepSt)sessionStorage.setItem("kasorbGameStage",String(keepSt))}catch(e){}
+  advClose();advPhoneView(true);try{sessionStorage.setItem("kasorbInGame","1");if(keepSt)sessionStorage.setItem("kasorbGameStage",String(keepSt))}catch(e){}
   const ov=document.createElement("div");ov.className="adv-ov";ov.id="advOv";
   ov.innerHTML=`<div class="adv-top"><b id="advSt">Stage 1</b><span class="adv-hearts" id="advHearts"></span><span class="adv-prog" id="advProg"></span><span class="adv-pts" id="advPts">0</span><span class="adv-cn"><i class="st-coin mini"></i><b id="advCoins">${coinsOf().toLocaleString()}</b></span><button type="button" class="adv-snd" id="advSnd" aria-label="เปิดปิดเสียง"></button><button type="button" class="adv-menu-btn" id="advMenuBtn" aria-label="Menu">☰ MENU</button></div>
     <div class="adv-view" id="advView"><div class="adv-load" id="advLoad">กำลังโหลดเกม…</div>
@@ -8112,7 +8112,12 @@ async function advStart(){
   }catch(e){console.error(e);const l=$("advLoad");if(l)l.textContent="เปิดเกมไม่สำเร็จ เครื่องนี้อาจไม่รองรับภาพ 3D"}
 }
 let advClockT=0;
-function advClose(){try{sessionStorage.removeItem("kasorbInGame");sessionStorage.removeItem("kasorbGameStage")}catch(e){}clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
+/* โหมดดูแบบคอมบนมือถือ: ระหว่างเล่นเกมใช้ขนาดจอมือถือปกติ (แถบ ปุ่ม ตัวหนังสือในเกมจะไม่เล็ก) ออกจากเกมแล้วกลับเป็นแบบคอม */
+let advVp=null;
+function advPhoneView(on){const m=document.querySelector('meta[name="viewport"]');if(!m)return;
+  if(on){if(advVp===null&&document.documentElement.classList.contains("desk-view")&&Math.min(screen.width,screen.height)<900){advVp=m.getAttribute("content");m.setAttribute("content","width=device-width,initial-scale=1.0")}}
+  else if(advVp!==null){m.setAttribute("content",advVp);advVp=null}}
+function advClose(){advPhoneView(false);try{sessionStorage.removeItem("kasorbInGame");sessionStorage.removeItem("kasorbGameStage")}catch(e){}clearInterval(advClockT);if(adv)adv.stop();adv=null;window.advGame=null;$("advOv")?.remove();document.body.classList.remove("adv-on")}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClose();showAppPage("homePage","หน้าหลัก")}});
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
 /* หน้าเลือกเกม: การ์ดเกมที่มี เพิ่มเกมใหม่ได้ภายหลัง */
