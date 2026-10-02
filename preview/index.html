@@ -5157,6 +5157,8 @@ title
 if(pageId!=="homePage")ST_MUSIC.stop();
 /* ยังไม่เข้าสู่ระบบ: ดูได้เฉพาะหน้าหลัก หน้าอื่นให้เข้าสู่ระบบก่อน แล้วค่อยพาไปหน้านั้น */
 if(!currentUser && pageId!=="homePage"){ openLogin(pageId,title); return; }
+/* จำหน้าที่เปิดอยู่ รีเฟรชแล้วกลับมาหน้าเดิม (หน้าทำข้อสอบ/ผลสอบ/เฉลยไม่จำ เพราะต้องมีข้อมูลประกอบ) */
+if(currentUser&&!["examPage","resultPage","reviewPage"].includes(pageId)){try{sessionStorage.setItem("kasorbLastPage",JSON.stringify({id:pageId,title:title||""}))}catch(e){}}
 
 document
 .querySelectorAll(".app-page")
@@ -8407,7 +8409,8 @@ $("appShell")
 .remove("hidden");
 document.body.classList.remove("guest");
 
-const go=pendingPage;pendingPage=null;
+let go=pendingPage;pendingPage=null;
+if(!go){try{const lp=JSON.parse(sessionStorage.getItem("kasorbLastPage")||"null");if(lp&&lp.id&&$(lp.id))go=lp}catch(e){}}
 showAppPage(
 go?go.id:"homePage",
 go?go.title:"หน้าหลัก"
