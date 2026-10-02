@@ -3719,6 +3719,23 @@ body .hb .hb-burger i,body .hb .hb-burger i::before,body .hb .hb-burger i::after
 
 /* มุมมองคอมบนมือถือ: ไม่ให้เบราว์เซอร์ขยายตัวหนังสือเอง */
 html.desk-view,html.desk-view body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+/* ===== แถบหัว: ไม่มีข้อความทักทาย, เลื่อนลงแล้วเหลือแค่แถบเมนู, ย่อ/ขยายข้อมูลสมาชิกได้ ===== */
+.hb-text{display:none!important}
+.tn-card{display:inline-flex!important;align-items:center;gap:2px;margin-left:auto;padding:3px 8px 3px 3px!important}
+.tn-card img{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#ffd9c2;border:2px solid #fff;box-shadow:0 0 0 1px #e5e7eb}
+.tn-card svg{transition:transform .15s}
+body.card-shut:not(.card-peek) .tn-card svg,.hb.mini .tn-card svg{transform:rotate(-90deg)}
+body.card-peek .hb.mini .tn-card svg{transform:none}
+body:not(.exam-mode).card-shut:not(.card-peek) .hb .hb-card,body:not(.exam-mode):not(.card-peek) .hb.mini .hb-card{display:none!important}
+body.exam-mode .tn-card{display:none!important}
+@media(min-width:761px){.hb .hb-card{margin-left:auto}}
+@media(max-width:560px){.tn-card{flex:0 0 auto!important;flex-direction:row!important;margin-left:0!important;padding:2px!important;border:0!important}.tn-card img{width:28px;height:28px}.tn-card svg{display:none!important}.topnav{gap:2px!important}.tn-item span{letter-spacing:-.3px;font-size:11px}}
+/* มุมมองคอมบนมือถือ/แท็บเล็ต: หน้าถูกย่อให้พอดีจอ จึงขยายแถบเมนูให้ใหญ่ขึ้น */
+html.desk-view .tn-item{font-size:19px!important;padding:11px 20px!important;gap:8px!important}
+html.desk-view .tn-item .ti{width:24px!important;height:24px!important}
+html.desk-view .tn-card img{width:36px;height:36px}
+html.desk-view .topnav{gap:10px!important}
 </style>
 </head>
 <body class="on-home">
@@ -3985,6 +4002,7 @@ LINE OA @kasorb
 <button type="button" class="tn-item" data-page="gamePage" data-title="เกม"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><path d="M15.5 11.5h.01M18 13.5h.01"></path></svg><span>เกม</span></button>
 <button type="button" class="tn-item tn-group" data-menu="account"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M20 21a8 8 0 0 0-16 0"></path> <circle cx="12" cy="7" r="4"></circle> </svg><span class="lg">บัญชีของฉัน</span><span class="sm">บัญชี</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
 <button type="button" class="tn-item tn-group" data-menu="contact"><svg class="ti" aria-hidden="true" viewbox="0 0 24 24"> <path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.5-4.5A8 8 0 1 1 21 12Z"></path> <path d="M8 12h.01M12 12h.01M16 12h.01"></path> </svg><span class="lg">ติดต่อเรา</span><span class="sm">ติดต่อ</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+<button type="button" class="tn-item tn-card" id="tnCard" aria-expanded="true" aria-label="ย่อหรือขยายข้อมูลสมาชิก"><img id="tnCardAv" src="avatar20.png" alt=""><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
 </nav>
 <div class="tn-panel hidden" id="tnPanel" role="menu"></div>
 <button aria-label="เปิดเมนู" class="hb-burger" id="menuToggle" type="button"><i></i></button>
@@ -4536,6 +4554,11 @@ function setExamCard(open){
   window.scrollBy(0,t1-(t0+d));
 }
 $("hbCardToggle").onclick=()=>setExamCard(!document.body.classList.contains("exam-card-open"));
+/* ปุ่มย่อ/ขยายข้อมูลสมาชิกที่ท้ายแถบเมนู: ตอนอยู่บนสุดจำค่าไว้ ตอนเลื่อนลงแล้วกดเปิดดูชั่วคราว */
+try{if(localStorage.getItem("kasorbCardShut")==="1")document.body.classList.add("card-shut")}catch(e){}
+$("tnCard").onclick=()=>{const b=document.body,mini=document.querySelector(".hb")?.classList.contains("mini");
+  if(mini){b.classList.toggle("card-peek");return}
+  const shut=b.classList.toggle("card-shut");b.classList.remove("card-peek");try{localStorage.setItem("kasorbCardShut",shut?"1":"0")}catch(e){}};
 document.body.appendChild($("tnPanel"));  // อยู่นอกแถบหัว ไม่ให้ถูกตัดขอบเมื่อแถบหัวย่อ
 const TN_SRC={tests:'[data-group="tests"] .submenu',results:'[data-group="results"] .submenu',account:'[data-group="account"] .submenu',contact:'[data-group="contact"] .submenu'};
 function closeTopMenu(){$("tnPanel").classList.add("hidden");document.querySelectorAll(".tn-group.open").forEach(b=>b.classList.remove("open"))}
@@ -5229,7 +5252,7 @@ renderMembershipStatus();
     const y=window.scrollY;
     if(document.body.classList.contains("exam-mode")){bar.classList.add("mini");return}
     if(!bar.classList.contains("mini") && y>90) bar.classList.add("mini");
-    else if(bar.classList.contains("mini") && y<20) bar.classList.remove("mini");
+    else if(bar.classList.contains("mini") && y<20){bar.classList.remove("mini");document.body.classList.remove("card-peek")}
   };
   window.addEventListener("scroll",update,{passive:true});
   update();
@@ -5542,6 +5565,7 @@ rankText();
 
 $("topAvatar").src=
 avatar;
+{const ta=$("tnCardAv");if(ta)ta.src=avatar}
 
 
 $("topNickname")
@@ -7271,7 +7295,7 @@ function renderExam(){
   const {meta,items}=exam;
   $("xTitle").textContent=exam.secs?`${meta.title} (เฉพาะ ${exam.secs.length} วิชา)`:meta.title;
   $("hbExamTitle").textContent=meta.title;
-  $("hbCtogAv").src=$("topAvatar").src;document.body.classList.remove("exam-card-open");
+  $("hbCtogAv").src=$("topAvatar").src;$("tnCardAv").src=$("topAvatar").src;document.body.classList.remove("exam-card-open");
   $("hbExamSub").textContent=exam.secs?`เฉพาะ ${exam.secs.length} วิชา · ${exam.items.length} ข้อ · ${exam.minutes} นาที`:`ทำครบทั้งชุด · ${exam.items.length} ข้อ · ${exam.minutes} นาที`;
   const paper=$("xPaper");paper.innerHTML="";
   let lastSec="";
