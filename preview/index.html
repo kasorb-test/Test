@@ -2661,7 +2661,7 @@ input{
 .ck-note{margin:0 0 14px;font-size:12.5px;color:#64748b}.ck-note.on{padding:8px 12px;border-radius:10px;background:#fff7e0;color:#8a5a00;font-weight:700}
 .cp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
 .cp-it{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:14px;border:1.5px dashed #fdba74;background:#fff7ed}
-.cp-it b{font-size:15px;color:#c2410c}.cp-it span{font-size:12px;color:#64748b;min-height:16px}
+.cp-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#fff;margin-bottom:2px}.cp-it b{font-size:15px;color:#c2410c}.cp-it span{font-size:12px;color:#64748b;min-height:16px}
 .cp-it button{align-self:flex-start;display:flex;align-items:center;gap:4px;margin-top:4px;padding:5px 12px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}.cp-it button:disabled{background:#e5e7eb;color:#9ca3af}
 .cp-mine{display:grid;gap:8px;margin-bottom:14px}
 .cp-code{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;padding:10px 12px;border-radius:12px;background:#f0fdf4;border:1px solid #bbf7d0}
@@ -7589,23 +7589,26 @@ function coinNote(d){
 }
 function shopHtml(){
   const d=activeDrop();
-  const cps=Object.entries(coinSite.coupons).map(([id,c])=>({id,...c})).filter(c=>Number(c.coins)>0&&Number(c.baht)>0).sort((x,y)=>x.coins-y.coins);
+  const cps=Object.entries(coinSite.coupons).map(([id,c])=>({id,...c})).filter(c=>Number(c.coins)>0&&(Number(c.baht)>0||c.name)).sort((x,y)=>x.coins-y.coins);
   const mine=Object.entries(currentData?.coupons||{}).map(([code,c])=>({code,...c})).sort((x,y)=>(y.at||0)-(x.at||0));
   return `<div class="ovc shop" id="shopBox"><div class="ovh"><h3>เหรียญของฉัน</h3><span class="shop-bal"><i class="st-coin mini"></i><b id="shopBal">${coinsOf().toLocaleString()}</b> เหรียญ</span></div>
     <p class="ck-note${d?" on":""}">${coinNote(d)}</p>
-    ${cps.length?`<h4 class="shop-h">แลกส่วนลด</h4><div class="cp-grid">${cps.map(c=>`<div class="cp-it"><b>ลด ${Number(c.baht).toLocaleString()} บาท</b><span>${escHtml(c.name||"")}</span><button type="button" data-cp="${escHtml(c.id)}"${coinsOf()<c.coins?" disabled":""}><i class="st-coin mini"></i>${Number(c.coins).toLocaleString()}</button></div>`).join("")}</div>`:""}
-    ${mine.length?`<h4 class="shop-h">โค้ดส่วนลดของฉัน <small>แจ้งโค้ดนี้ตอนชำระเงิน</small></h4><div class="cp-mine">${mine.map(c=>`<div class="cp-code${c.used?" used":""}"><b>${escHtml(c.code)}</b><span>ลด ${Number(c.baht).toLocaleString()} บาท · ${escHtml(c.name||"")}</span><em>${c.used?"ใช้แล้ว":"ยังไม่ใช้"}</em></div>`).join("")}</div>`:""}
+    ${cps.length?`<h4 class="shop-h">แลกของรางวัล</h4><div class="cp-grid">${cps.map(c=>`<div class="cp-it">${c.img?`<img class="cp-img" data-k="${escHtml(c.img)}" alt="">`:""}<b>${Number(c.baht)>0?`ลด ${Number(c.baht).toLocaleString()} บาท`:escHtml(c.name)}</b><span>${Number(c.baht)>0?escHtml(c.name||""):"สินค้า · แลกแล้วแจ้งโค้ดเพื่อรับของ"}</span><button type="button" data-cp="${escHtml(c.id)}"${coinsOf()<c.coins?" disabled":""}><i class="st-coin mini"></i>${Number(c.coins).toLocaleString()}</button></div>`).join("")}</div>`:""}
+    ${mine.length?`<h4 class="shop-h">ของรางวัลของฉัน <small>แจ้งโค้ดนี้กับแอดมินเพื่อรับของ หรือตอนชำระเงิน</small></h4><div class="cp-mine">${mine.map(c=>{const prod=!(Number(c.baht)>0);return `<div class="cp-code${c.used?" used":""}"><b>${escHtml(c.code)}</b><span>${prod?escHtml(c.name||"สินค้า"):`ลด ${Number(c.baht).toLocaleString()} บาท · ${escHtml(c.name||"")}`}</span><em>${c.used?(prod?"ได้รับของแล้ว":"ใช้แล้ว"):(prod?"รอรับของ":"ยังไม่ใช้")}</em></div>`}).join("")}</div>`:""}
 </div>`;
 }
 function refreshShop(){const b=$("shopBox");if(!b)return;b.outerHTML=shopHtml();bindShop();const bank=$("stBank")?.querySelector("b");if(bank)bank.textContent=coinsOf().toLocaleString()}
+const cpImgCache=new Map();
 function bindShop(){
+  $("shopBox")?.querySelectorAll("img.cp-img").forEach(im=>{const k=im.dataset.k;if(!cpImgCache.has(k))cpImgCache.set(k,getDoc(doc(db,"siteImg",k)).then(d=>d.exists()?d.data().d:"").catch(()=>""));
+    cpImgCache.get(k).then(src=>{if(/^data:image\/(png|jpeg|webp);base64,/.test(src))im.src=src;else im.remove()})});
   $("shopBox")?.querySelectorAll(".cp-it button").forEach(btn=>btn.onclick=async()=>{
     const id=btn.dataset.cp,c=coinSite.coupons[id];if(!c||coinsOf()<c.coins)return;
-    if(!confirm(`แลกส่วนลด ${c.baht} บาท ใช้ ${c.coins} เหรียญ?\nจะได้โค้ดไว้แจ้งตอนชำระเงิน`))return;
+    const prod=!(Number(c.baht)>0);if(!confirm(prod?`แลก "${c.name}" ใช้ ${c.coins} เหรียญ?\nจะได้โค้ดไว้แจ้งแอดมินเพื่อรับของ`:`แลกส่วนลด ${c.baht} บาท ใช้ ${c.coins} เหรียญ?\nจะได้โค้ดไว้แจ้งตอนชำระเงิน`))return;
     btn.disabled=true;
     const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let code="KS";for(let i=0;i<6;i++)code+=A[Math.floor(Math.random()*A.length)];
     const coupons={...(currentData.coupons||{}),[code]:{cid:id,baht:Number(c.baht),name:String(c.name||"").slice(0,40),used:false,at:Date.now()}},coins=coinsOf()-Number(c.coins);
-    try{await updateDoc(doc(db,"users",currentUser.uid),{coins,coupons,lastCoupon:code});currentData.coins=coins;currentData.coupons=coupons;refreshShop();alert(`ได้โค้ดส่วนลด ${code}\nแจ้งโค้ดนี้ตอนชำระเงิน`)}
+    try{await updateDoc(doc(db,"users",currentUser.uid),{coins,coupons,lastCoupon:code});currentData.coins=coins;currentData.coupons=coupons;refreshShop();alert(prod?`แลกสำเร็จ ได้โค้ด ${code}\nแจ้งโค้ดนี้กับแอดมินเพื่อรับของ`:`ได้โค้ดส่วนลด ${code}\nแจ้งโค้ดนี้ตอนชำระเงิน`)}
     catch(e){console.error(e);btn.disabled=false;alert("แลกไม่สำเร็จ ลองใหม่อีกครั้ง")}
   });
 }
