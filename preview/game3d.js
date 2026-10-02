@@ -1306,6 +1306,10 @@ export function startGame(root,api){
     a.userData.say=say;a.userData.line=line;return a}
   /* คืนหน่วยความจำการ์ดจอเมื่อเอาของออกจากฉาก (ไม่งั้นเล่นนาน ๆ บนมือถือหน่วยความจำเต็ม ของที่มีลายผิวจะกลายเป็นสีดำ) */
   function freeObj(o){if(!o)return;o.parent&&o.parent.remove(o);o.traverse(m=>{if(m.geometry)m.geometry.dispose();const ms=m.material?(Array.isArray(m.material)?m.material:[m.material]):[];for(const mt of ms){for(const k of["map","alphaMap","emissiveMap"])if(mt[k]&&mt[k]!==skyT)mt[k].dispose();mt.dispose()}})}
+  /* น้องตกน้ำ: ปลาที่อยู่ใกล้ตกใจกระโดดขึ้นจากน้ำ 1-2 ตัวกระโดดโดนหัวน้องแล้วเด้งตกลงน้ำ */
+  function scareFish(px,pz){const near=[];for(const a of anim){if(a.kind!=="koi"||!live(a)||a.jump)continue;const wx=a.seg.position.x+a.obj.position.x,d=Math.hypot(wx-px,a.obj.position.z-pz);if(d<9)near.push([d,a])}
+    near.sort((x,y)=>x[0]-y[0]);near.slice(0,6).forEach(([d,a],i)=>{const o=a.obj,sx=a.seg.position.x;const head=i<2;
+      a.jump={t:-(i*.18+rand(0,.15)),head,x0:o.position.x,y0:o.position.y,z0:o.position.z,tx:head?px-sx+rand(-.08,.08):o.position.x+rand(-1.4,1.4),tz:head?pz:o.position.z+rand(-1.2,1.2),dir:rand(-1,1),hit:0}})}
   function clearCritters(){S.scared=0;if(S.bang)S.bang.visible=false;P.userData.face.scale.set(1,1,1);for(const c of critters)freeObj(c.o);P.userData.arms[1].rotation.z=0;S.freeze=0;critters.length=0;for(const l of leeches)freeObj(l.o);leeches.length=0}
   function ripple(pos,r=.35){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.025,4,24),M(0xffffff,{transparent:true,opacity:.7}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0})}
   function splash(pos){const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,6,24),M(0xffffff,{transparent:true,opacity:.9}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0});for(let i=0;i<40;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
@@ -1363,7 +1367,7 @@ export function startGame(root,api){
     if(S.mode==="climb"&&!S.climb&&S.inWater)climbOut();
     if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
     if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,wc=sp.br.wx?sp.br.wx(2.2):mid,tx=Math.max(wc-.8,Math.min(wc+.8,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
-      if(!sp.fs){sp.fs=1;SND.play("fall")}if(fy<.05&&!sp.hit){sp.hit=1;SND.play("plunge");splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบข้อใหม่ให้ถูกเพื่อขึ้นจากน้ำ");hurt()}
+      if(!sp.fs){sp.fs=1;SND.play("fall")}if(fy<.05&&!sp.hit){sp.hit=1;SND.play("plunge");scareFish(fx,S.z);splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบข้อใหม่ให้ถูกเพื่อขึ้นจากน้ำ");hurt()}
       if(sp.hit&&t>1.3&&!sp.asked&&S.mode==="splash"){sp.asked=1;S.x=fx;S.inWater={x:fx,br:sp.br};clearAns();ask(sp.br,true)}
       if(sp.hit){S.padT=(S.padT||0)+dt;if(S.padT>.6){S.padT=0;ripple(new THREE.Vector3(fx,.19,S.z));SND.play("paddle")}}
       if(sp.hit&&Math.random()<dt*6){const b=pooled(bubM,rand(.04,.08));b.position.set(fx+rand(-.4,.4),.1,S.z+rand(-.3,.3));b.userData.v=new THREE.Vector3(0,rand(.6,1.2),0);b.userData.life=.6;world.add(b);bursts.push(b)}}
@@ -1473,6 +1477,12 @@ export function startGame(root,api){
       else if(a.kind==="sea"){const pa=o.geometry.attributes.position,ar=pa.array,bs=a.base;for(let v=0;v<ar.length;v+=3){const wx=a.gx+bs[v],z=bs[v+2],far=Math.min(1,Math.max(0,(shoreZ(wx)-z)/6));const sw=Math.sin(wx*.18+z*.55+S.t*1.3);ar[v+1]=.13+far*(.08*(sw*sw*sw+1)+.035*(Math.sin(wx*.7+S.t*1.6+z*.35)+1)+.025*(Math.sin(wx*.23-S.t*1.1+z*.6)+1))*(1+Math.min(1,(shoreZ(wx)-z)/40))}pa.needsUpdate=true;if((S.t*10|0)%3===0)o.geometry.computeVertexNormals()}
       else if(a.kind==="breaker"){const c=((S.t*.18+a.ph)%1);o.position.z=-9*(1-c);o.position.y=Math.sin(Math.PI*c)*.15;o.material.opacity=Math.sin(Math.PI*c)*.8;o.scale.z=1+c}
       else if(a.kind==="foam2"){const k=(Math.sin(S.t*1.4)+1)/2;o.position.z=.25-k*.5;o.material.opacity=.45+k*.45}
+      else if(a.kind==="koi"&&a.jump&&(a.jump.t+=dt)>=0){const J=a.jump;
+        if(J.head&&!J.hit){const k=Math.min(1,J.t/.55),hy=(P.position.y||0)+2.25;o.position.set(J.x0+(J.tx-J.x0)*k,J.y0+(hy-J.y0)*k+Math.sin(Math.PI*k)*.9,J.z0+(J.tz-J.z0)*k);o.rotation.set(0,-Math.PI/2,-1.2+k*1.6);
+          if(k>=1){J.hit=1;J.t2=J.t;J.hx=o.position.x;J.hy=o.position.y;J.hz=o.position.z;SND.play("splat");S.ouch=.15}}
+        else{const T=J.head?.7:.85,u=J.head?J.t-J.t2:J.t,k=Math.min(1,u/T),sx=J.head?J.hx:J.x0,sy=J.head?J.hy:J.y0,sz=J.head?J.hz:J.z0,ex=J.head?sx+J.dir*1.3+.6:J.tx,ez=J.head?sz+.4:J.tz,ey=a.y||.1;
+          o.position.set(sx+(ex-sx)*k,sy+(ey-sy)*k+Math.sin(Math.PI*k)*(J.head?.7:1.1),sz+(ez-sz)*k);o.rotation.set(J.dir*k*4,-Math.PI/2+J.dir*.6,(.5-k)*2.2);
+          if(k>=1){if(!J.sp){J.sp=1;ripple(new THREE.Vector3(a.seg.position.x+o.position.x,.19,o.position.z),.25)}delete a.jump}}}
       else if(a.kind==="koi"){const L=a.len||48,z0=a.z0!=null?a.z0:-36,z=z0+((t*a.sp)%1+1)%1*L,zz=a.local?z:z;o.position.set(a.fx(zz)+a.off+Math.sin(t*.9)*.25,a.y||.1,zz);o.rotation.set(0,-Math.PI/2+Math.cos(t*.9)*.3,Math.sin(t*3)*.05)}
       else if(a.kind==="monk"){o.userData.head.rotation.x=Math.sin(t*.8)*.05}
       else if(a.kind==="hoe"){const c=(t*1.1)%1,k=c<.4?c/.4:1-(c-.4)/.6;o.userData.arms[1].rotation.z=.8-k*2.4;o.userData.arms[0].rotation.z=.6-k*2;o.rotation.z=-k*.25}
