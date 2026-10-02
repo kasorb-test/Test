@@ -265,6 +265,9 @@ function mushroomPatch(){const g=new THREE.Group(),kind=Math.random()<.6?"red":"
   for(let k=0;k<n;k++){const m=mushroom(kind);m.scale.setScalar(k===0?1.25:rand(.55,.9));m.position.set(rand(-.25,.25),0,rand(-.18,.18));m.rotation.set(rand(-.12,.12),rand(0,6),rand(-.12,.12));g.add(m)}return g}
 function fence(){const g=new THREE.Group(),w=M(0xe0954d,{flat:true});for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.BoxGeometry(.12,.7,.12),w);p.position.set(i*.5,.35,0);p.castShadow=true;g.add(p)}for(const y of[.25,.5]){const r=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,.06),w);r.position.set(1,y,0);g.add(r)}return g}
 function cloud(){const g=new THREE.Group(),m=M(0xffffff,{roughness:1,emissive:0xffffff,emissiveIntensity:.55});for(let i=0;i<5;i++){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(1,1.8),12,10),m);b.position.set(i*1.4-2.8,rand(-.3,.4),rand(-.6,.6));g.add(b)}g.scale.setScalar(rand(.8,1.4));return g}
+/* ดาวให้เก็บระหว่างทาง (นับเป็นคะแนนดาว ไม่ใช่เหรียญ) */
+const starGeo=(()=>{const sh=new THREE.Shape();for(let i=0;i<10;i++){const a=Math.PI/2+i*Math.PI/5,r=i%2?.14:.34;i?sh.lineTo(Math.cos(a)*r,Math.sin(a)*r):sh.moveTo(Math.cos(a)*r,Math.sin(a)*r)}const g=new THREE.ExtrudeGeometry(sh,{depth:.08,bevelEnabled:true,bevelThickness:.04,bevelSize:.03,bevelSegments:1});g.center();return g})();
+function starMesh(){const m=new THREE.Mesh(starGeo,M(0xffd21f,{metalness:.2,roughness:.3,emissive:0xffb300,emissiveIntensity:.45}));const g=new THREE.Group();g.add(m);return g}
 function coinMesh(){const c=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.08,24),M(0xffcf1a,{metalness:.15,roughness:.35,emissive:0xffa000,emissiveIntensity:.35}));c.rotation.x=Math.PI/2;const s=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.1,5),M(0xfff2a0,{metalness:.1,roughness:.3,emissive:0xffd54a,emissiveIntensity:.3}));s.rotation.x=Math.PI/2;const g=new THREE.Group();g.add(c);c.add(s);return g}
 /* ตัวเลขคำตอบลอย: ตัวหนังสือสีสดขอบขาว ไม่มีแท่น */
 /* ตัวเลือกคำตอบลอย 3 สไตล์: ป้ายไม้ (wood) ฟองสีสด (bubble) ปุ่มลูกอม (candy) เลือกได้ที่ window.__ansStyle หรือค่าที่จำไว้ */
@@ -612,12 +615,17 @@ export function startGame(root,api){
   function waterfall(){const g=new THREE.Group(),Hf=rand(8.5,10),W=13,falls=[];
     /* จุดน้ำตก 2-3 สาย กว้างไม่เท่ากัน */
     const nF=Math.random()<.5?2:3;for(let k=0;k<nF;k++)falls.push({x:-W/2+1.8+(W-3.6)*(nF===1?.5:k/(nF-1))+rand(-.6,.6),w:k===Math.floor(nF/2)?rand(2.4,3.4):rand(1,1.8)});
-    /* หน้าผา: แผ่นเรียบที่ดันนูนเป็นหิน มีร่องตรงสายน้ำ สีหินเข้ม-ตะไคร่เขียว */
-    const gm=new THREE.PlaneGeometry(W,Hf+1.4,36,26),p=gm.attributes.position,col=[],cA=new THREE.Color(0x5b554d),cB=new THREE.Color(0x3d3a35),cM=new THREE.Color(0x3f6b2c),cT=new THREE.Color(0x4f8a35),tc=new THREE.Color();
-    for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i)+(Hf+1.4)/2,ledge=Math.sin(y*1.7)*.35+Math.sin(y*4.3+x)*.12,bump=Math.sin(x*1.3+y*.7)*.45+Math.sin(x*3.1-y*1.9)*.22+rand(-.12,.12);
-      let groove=0;for(const f of falls){const d=Math.abs(x-f.x)/(f.w*.75);if(d<1)groove=Math.max(groove,(1-d*d)*.9)}
-      p.setXYZ(i,x,y,bump+ledge-groove);const top=y>Hf-.3,mossy=(Math.sin(x*2.1+y*3.3)*Math.sin(y*.9+x*.4)>.45)||top;tc.copy(Math.random()<.5?cA:cB);if(mossy)tc.lerp(top?cT:cM,top?.85:.45);if(groove>.2)tc.lerp(cB,.5);col.push(tc.r,tc.g,tc.b)}
-    gm.setAttribute("color",new THREE.Float32BufferAttribute(col,3));gm.computeVertexNormals();const cl=new THREE.Mesh(gm,cliffM);cl.receiveShadow=true;g.add(cl);
+    /* หน้าผา: ก้อนหินใหญ่เหลี่ยมชัดซ้อนเป็นชั้น ๆ สีหินแต่ละก้อนต่างกันเล็กน้อย ตะไคร่เฉพาะด้านบน หลังสายน้ำเป็นหินเปียกสีเข้ม */
+    const back=new THREE.Mesh(new THREE.PlaneGeometry(W+2,Hf-.6),M(0x2f2c28,{roughness:1}));back.position.set(0,(Hf-.6)/2,-1.2);g.add(back);
+    const RC=[0x6b6358,0x5e574d,0x766d60,0x544e46,0x82786a,0x4a453f],WET=[0x3a3631,0x2f2c28,0x403b35],MO=[0x4a7a33,0x55883a,0x3f6e2c],pos=[];
+    for(let y=.5;y<Hf+.3;y+=rand(1.05,1.35))for(let x=-W/2-.3;x<W/2+.6;x+=rand(1.15,1.5)){const inF=falls.find(f=>Math.abs(x-f.x)<f.w*.6),top=y>Hf-1;
+      pos.push({x:x+rand(-.2,.2),y:y+rand(-.15,.15),z:inF?-.95:rand(-.25,.15),s:rand(.8,1.1)*(inF?.9:1),c:inF?pick(WET):top&&Math.random()<.7?pick(MO):Math.random()<.12?pick(MO):pick(RC)})}
+    {const rk=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshStandardMaterial({roughness:.92,flatShading:true}),pos.length),m4=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler(),col=new THREE.Color();
+      pos.forEach((b,k)=>{e.set(rand(-.25,.25),rand(-.4,.4),rand(-.3,.3));q.setFromEuler(e);m4.compose(new THREE.Vector3(b.x,b.y,b.z),q,new THREE.Vector3(b.s*1.05,b.s*.72,b.s*.7));rk.setMatrixAt(k,m4);rk.setColorAt(k,col.set(b.c).offsetHSL(0,0,rand(-.03,.03)))});
+      rk.instanceColor.needsUpdate=true;rk.castShadow=true;rk.receiveShadow=true;g.add(rk)}
+    /* ชั้นหินยื่น (ledge) มีตะไคร่ด้านบน ให้หน้าผาดูเป็นชั้น */
+    for(let k=0;k<5;k++){const y=rand(2,Hf-1.5),x=rand(-W/2+1,W/2-1);if(falls.some(f=>Math.abs(x-f.x)<f.w*.6+1))continue;const w=rand(1.4,2.6),l=new THREE.Mesh(new THREE.BoxGeometry(w,.28,.9),M(pick(RC),{flat:true,roughness:.95}));l.position.set(x,y,.45);l.rotation.z=rand(-.08,.08);l.castShadow=true;g.add(l);
+      const mt=new THREE.Mesh(new THREE.BoxGeometry(w*.95,.08,.85),M(pick(MO),{flat:true}));mt.position.set(x,y+.17,.45);mt.rotation.z=l.rotation.z;g.add(mt)}
     /* ขอบบนผา: พุ่มไม้ ต้นไม้ เฟิร์นห้อย */
     for(let k=0;k<6;k++){const b=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(.6,1.1),1),M(pick([0x2f6b24,0x3a7d2b,0x2b5e22]),{flat:true}));b.position.set(rand(-W/2,W/2),Hf+.5,rand(-.6,.4));if(falls.some(f=>Math.abs(b.position.x-f.x)<f.w*.6))continue;g.add(b)}
     for(let k=0;k<3;k++){const t=roundTree(),x=pick([-W/2+1,W/2-1,rand(-W/2,W/2)]);if(falls.some(f=>Math.abs(x-f.x)<f.w))continue;t.position.set(x,Hf+.3,-.8);g.add(t)}
@@ -627,7 +635,7 @@ export function startGame(root,api){
       const lip=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,f.w*.95,8,1,false,0,Math.PI),new THREE.MeshBasicMaterial({color:0xeaf8ff,transparent:true,opacity:.8,depthWrite:false}));lip.rotation.z=Math.PI/2;lip.position.set(f.x,Hf+.15,.25);g.add(lip);
       /* ฟองขาวตรงที่น้ำตกกระทบ + หมอกลอย */
       const fm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.85,depthWrite:false});for(let k=0;k<7;k++){const b=new THREE.Mesh(new THREE.SphereGeometry(rand(.25,.5)*f.w/2,10,8),fm);b.scale.y=.4;b.position.set(f.x+rand(-f.w/2,f.w/2),.15,.9+rand(0,.8));g.add(b)}
-      for(let k=0;k<Math.round(4+f.w*2);k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.75,depthWrite:false}));sp.position.set(f.x+rand(-f.w*.7,f.w*.7),rand(.3,2.2),1+rand(0,1.6));sp.scale.setScalar(rand(1.2,2.6)*(.6+f.w*.25));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}}
+      for(let k=0;k<Math.round(2+f.w);k++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:mistTex,transparent:true,opacity:.45,depthWrite:false}));sp.position.set(f.x+rand(-f.w*.5,f.w*.5),rand(.2,1),1.2+rand(0,1));sp.scale.setScalar(rand(1,1.8)*(.6+f.w*.2));g.add(sp);anim.push({seg:null,obj:sp,kind:"mist",ph:rand(0,6),y0:sp.position.y})}}
     /* แอ่งน้ำสีเขียวมรกต มีระลอก ขอบหินมีตะไคร่ */
     const pool=new THREE.Mesh(new THREE.PlaneGeometry(W+1,7),new THREE.MeshStandardMaterial({color:0x3fb7b0,map:canalRip,roughness:.1,metalness:.1,emissive:0x0d4f55,emissiveIntensity:.25,transparent:true,opacity:.92}));pool.rotation.x=-Math.PI/2;pool.position.set(0,.06,3.6);g.add(pool);
     for(let k=0;k<16;k++){const rr=rock(rand(.35,.75),Math.random()<.5);rr.position.set(rand(-W/2,W/2),.1,7+rand(-.2,.4));g.add(rr)}
@@ -647,8 +655,21 @@ export function startGame(root,api){
     const am=pick(AWN),aw=new THREE.Mesh(new THREE.PlaneGeometry(W+.3,1.95),am);aw.rotation.x=-Math.PI/2+.26;aw.position.set(0,2.42,.25);aw.castShadow=true;g.add(aw);
     const va=new THREE.Mesh(new THREE.BoxGeometry(W+.3,.22,.03),am);va.position.set(0,2.06,1.2);g.add(va);
     for(let t=0;t<3;t++){const cx=-1+t,col=cols[t%cols.length],r=nm==="ปลาสด"?.0:.11;const tray=new THREE.Mesh(new THREE.CylinderGeometry(.42,.36,.08,12),M(0xb07a3a));tray.position.set(cx,.95,.05);g.add(tray);
-      if(o.shades){for(let f=0;f<3;f++){const sg=shadesMini(pick([0xe53935,0x1e88e5,0xffb300,0x8e24aa,0x111111]));sg.position.set(cx+(f-1)*.24,1.05,.05+(f%2)*.12);g.add(sg)}}
+      if(o.umb){for(let f=0;f<2;f++){const u=new THREE.Group(),c=new THREE.Mesh(new THREE.ConeGeometry(.24,.16,8,1,true),new THREE.MeshStandardMaterial({color:pick([0xff7043,0x1e88e5,0xffca28,0xab47bc,0x43a047]),side:THREE.DoubleSide,flatShading:true}));c.position.y=.32;u.add(c);const st=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.34,5),M(0x5d4037));st.position.y=.16;u.add(st);u.position.set(cx+(f-.5)*.3,.98,.05);u.rotation.z=(f-.5)*.4;g.add(u)}}
+      else if(o.warm){const cm=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.24,6),M(pick([0xd32f2f,0x1565c0,0x6d4c41]),{flat:true}));cm.position.set(cx-.13,1.1,.05);g.add(cm);const sc=new THREE.Mesh(new THREE.TorusGeometry(.1,.035,6,14),M(pick([0xffeb3b,0xec407a,0x43a047,0x29b6f6])));sc.rotation.x=Math.PI/2;sc.position.set(cx+.17,1.02,.05);g.add(sc)}
+      else if(o.shades){for(let f=0;f<3;f++){const sg=shadesMini(pick([0xe53935,0x1e88e5,0xffb300,0x8e24aa,0x111111]));sg.position.set(cx+(f-1)*.24,1.05,.05+(f%2)*.12);g.add(sg)}}
       else g.add(goods(nm,cx,.98,.05))}
+    /* ร้านเสื้อกันหนาว: ราวแขวนเสื้อข้างร้าน มีเสื้อฮู้ดกับผ้าพันคอแขวนบนไม้แขวน */
+    if(o.warm){const rk=new THREE.Group(),mt=M(0x9e9e9e,{metalness:.6,roughness:.35});for(const x of[-.85,.85]){const p=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,2,8),mt);p.position.set(x,1,0);rk.add(p);const ft=new THREE.Mesh(new THREE.BoxGeometry(.08,.04,.6),mt);ft.position.set(x,.02,0);rk.add(ft)}
+      const bar=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,1.8,8),mt);bar.rotation.z=Math.PI/2;bar.position.y=1.95;rk.add(bar);
+      [0xd32f2f,0x1565c0,0x2e7d32,0xf9a825].forEach((c,k)=>{const x=-.6+k*.4,hg=new THREE.Group();hg.position.set(x,1.95,0);
+        const hk=new THREE.Mesh(new THREE.TorusGeometry(.05,.012,4,10,Math.PI*1.4),mt);hk.position.y=.03;hk.rotation.z=-.3;hg.add(hk);
+        const sh=new THREE.Mesh(new THREE.BoxGeometry(.34,.025,.03),M(0x8d6e63));sh.position.y=-.08;hg.add(sh);
+        if(k===3){const sf=new THREE.Mesh(new THREE.BoxGeometry(.1,.7,.04),M(0xec407a));sf.position.y=-.45;hg.add(sf);const sf2=sf.clone();sf2.position.x=.12;hg.add(sf2)}
+        else{const cm=M(c,{roughness:.85}),bd=new THREE.Mesh(new THREE.BoxGeometry(.3,.5,.12),cm);bd.position.y=-.36;hg.add(bd);for(const sx of[-1,1]){const sl=new THREE.Mesh(new THREE.BoxGeometry(.08,.42,.1),cm);sl.position.set(sx*.19,-.35,0);sl.rotation.z=sx*.12;hg.add(sl)}
+          const hd=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8,0,Math.PI*2,0,Math.PI/2),cm);hd.position.set(0,-.13,-.05);hd.rotation.x=-.6;hg.add(hd);const zp=new THREE.Mesh(new THREE.BoxGeometry(.015,.46,.01),M(0xd9d9d9));zp.position.set(0,-.36,.065);hg.add(zp)}
+        rk.add(hg)});
+      rk.position.set(W/2+1.1,0,.3);rk.rotation.y=-.35;g.add(rk)}
     if(nm==="เนื้อสด")for(let k=0;k<3;k++){const hk=new THREE.Mesh(new THREE.TorusGeometry(.05,.012,4,8,Math.PI),M(0x9e9e9e,{metalness:.7}));hk.position.set(-1+k,2.05,.5);g.add(hk);const mt=new THREE.Mesh(new THREE.BoxGeometry(.22,.4,.12),M(0xb71c1c,{roughness:.5}));mt.position.set(-1+k,1.78,.5);g.add(mt)}
     const v=person({hat:Math.random()<.3,long:Math.random()<.5});v.rotation.y=-Math.PI/2;v.position.set(rand(-.8,.8),0,-D/2-.45);g.add(v);anim.push({seg:null,obj:v,kind:"wave",ph:rand(0,6)});
     const sg=new THREE.Mesh(new THREE.PlaneGeometry(1.5,.5),new THREE.MeshBasicMaterial({map:txt(SHOP_EN[nm]||nm,{size:70,color:"#7a3b00",bg:"#fff8e1",border:"#8d5a2b",w:300,h:100,radius:20}),transparent:true}));sg.position.set(0,2.3,1.23);g.add(sg);
@@ -1104,6 +1125,8 @@ export function startGame(root,api){
       if(segN%4===1&&B!=="haunted"&&B!=="beach"){const h=house();put(h,rand(2,8),rand(24,36))}}
     if(Math.random()<.32&&!(B==="canal"&&segN%2===0)){const c=chest(),cx=rand(2,8);c.position.set(cx,0,-1.75);c.rotation.y=rand(-.25,.25);g.add(c);chests.push({seg:g,o:c,x:cx,open:0})}
     if(B==="beach"&&segN%4===2){const sh=stall({name:"ร้านแว่น",shades:true});sh.position.set(5,0,-3.6);g.add(sh);shops.push({seg:g,x:5,id:"shades",shown:false})}
+    else if(!(B==="canal"&&segN%2===0)&&B!=="market"&&rainNow()&&!owns("umbrella")&&segN%4===1){const sh=stall({name:"ร้านร่ม",umb:true});sh.position.set(6,0,-3.6);g.add(sh);shops.push({seg:g,x:6,id:"umbrella",shown:false})}
+    else if(!(B==="canal"&&segN%2===0)&&B!=="market"&&coldNow()&&(!owns("coat")||!owns("scarf"))&&segN%5===3){const sh=stall({name:"ร้านเสื้อกันหนาว",warm:true});sh.position.set(6,0,-3.6);g.add(sh);shops.push({seg:g,x:6,id:owns("coat")?"scarf":"coat",shown:false})}
     for(const a of anim)if(!a.seg)a.seg=g;
     world.add(g);segs.push(g);segX+=SEG;
   }
@@ -1119,7 +1142,7 @@ export function startGame(root,api){
   function snapshot(){return{sky:(fade?fade.cur.sky:TH.sky.map(C)),fog:scene.fog.color.clone(),ground:groundMat.color.clone(),path:pathMat.color.clone(),edge:pathEdge.color.clone(),
     fn:scene.fog.near,ff:scene.fog.far,hs:hemi.color.clone(),hg:hemi.groundColor.clone(),hi:hemi.intensity,lc:sun.color.clone(),li:sun.intensity,sp:fade?fade.cur.sp:TH.sunPos.slice(),
     lay:layers.map(L=>L.items.map(g=>{const m=g.isMesh?g:g.children[0];return m.material.color.clone()}))}}
-  function target(T){return{fn:T.fogNear||50,ff:T.fogFar||190,sky:T.sky.map(C),fog:C(T.fog),ground:C(T.ground),path:C(T.path),edge:C(T.pathEdge),hs:C(T.hemi[0]),hg:C(T.hemi[1]),hi:T.hemiI,lc:C(T.light),li:T.sunI,sp:T.sunPos.slice(),
+  function target(T){const wf=curBiome==="waterfall";return{fn:Math.max(T.fogNear||50,wf?45:0),ff:Math.max(T.fogFar||190,wf?160:0),sky:T.sky.map(C),fog:C(T.fog),ground:C(T.ground),path:C(T.path),edge:C(T.pathEdge),hs:C(T.hemi[0]),hg:C(T.hemi[1]),hi:T.hemiI,lc:C(T.light),li:T.sunI,sp:T.sunPos.slice(),
     lay:layers.map(L=>L.items.map(()=>C(L.kind===0?pick(T.mounts||[T.mount]):L.kind===1?T.hill2:T.hill1)))}}
   function fadeTo(T){const from=snapshot();TH=T;fade={s0:starMat.opacity,r0:rainMat.opacity,t:0,from,to:target(T),cur:{sky:from.sky.map(c=>c.clone()),sp:from.sp.slice()}}}
   function stepFade(dt){if(!fade)return;fade.t=Math.min(1,fade.t+dt/2);const k=fade.t*fade.t*(3-2*fade.t),f=fade.from,t=fade.to,cur=fade.cur;
@@ -1151,21 +1174,40 @@ export function startGame(root,api){
     const st=new THREE.Group(),sm=M(0xd9b56a,{flat:true});const brim=new THREE.Mesh(new THREE.CylinderGeometry(.82,.82,.04,28),sm);brim.castShadow=true;st.add(brim);const cr=new THREE.Mesh(new THREE.CylinderGeometry(.34,.42,.32,20),sm);cr.position.y=.17;st.add(cr);
     const bandM=M(0xe53935),bd=new THREE.Mesh(new THREE.CylinderGeometry(.425,.425,.08,20),bandM);bd.position.y=.06;st.add(bd);st.scale.setScalar(1.32);st.position.y=2.06;b.add(st);GEAR.straw=st;HATM={cap:capM,straw:bandM};
     const sh=shadesMini(0x111111,2.1);sh.position.set(0,.06,.43);face.add(sh);GEAR.shades=sh;
-    const coat=new THREE.Group();const cm=new THREE.Mesh(new THREE.CylinderGeometry(.47,.5,.62,6),M(0xd32f2f,{flat:true}));cm.position.y=.9;cm.castShadow=true;coat.add(cm);
-    for(let k=0;k<3;k++){const bn=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),M(0xffffff));bn.position.set(0,.72+k*.17,.46);coat.add(bn)}
-    const sc=new THREE.Mesh(new THREE.TorusGeometry(.44,.075,8,24),M(0xffeb3b));sc.rotation.x=Math.PI/2;sc.position.y=1.24;coat.add(sc);const tl=new THREE.Mesh(new THREE.BoxGeometry(.13,.42,.06),M(0xffeb3b));tl.position.set(.2,1.03,.46);tl.rotation.z=.15;coat.add(tl);b.add(coat);GEAR.coat=coat;
+    /* เสื้อกันหนาวมีฮู้ด: ตัวเสื้อยาวคลุมลำตัวช่วงล่าง แขนยาวถึงข้อมือ ฮู้ดพับอยู่ด้านหลัง ซิปหน้า กระเป๋าสองข้าง ขอบแขนกับชายเสื้อสีเข้ม */
+    const coat=new THREE.Group(),coatM=M(0xd32f2f,{roughness:.85}),rib=M(0x2b2b2b,{roughness:.9}),zipM=M(0xd9d9d9,{metalness:.6,roughness:.3});
+    const cBody=new THREE.Mesh(new THREE.CylinderGeometry(.47,.53,.72,16),coatM);cBody.position.y=.92;cBody.castShadow=true;coat.add(cBody);
+    const hem=new THREE.Mesh(new THREE.CylinderGeometry(.535,.535,.08,16),rib);hem.position.y=.57;coat.add(hem);
+    const zip=new THREE.Mesh(new THREE.BoxGeometry(.035,.7,.02),zipM);zip.position.set(0,.93,.5);zip.rotation.x=-.08;coat.add(zip);
+    const pull=new THREE.Mesh(new THREE.BoxGeometry(.06,.1,.02),zipM);pull.position.set(.03,1.22,.49);coat.add(pull);
+    for(const sx of[-1,1]){const pk=new THREE.Mesh(new THREE.BoxGeometry(.2,.16,.03),M(0x000000,{transparent:true,opacity:.18}));pk.position.set(sx*.25,.78,.48);pk.rotation.y=sx*.45;coat.add(pk)}
+    const hood=new THREE.Mesh(new THREE.SphereGeometry(.36,16,10,0,Math.PI,0,Math.PI*.6),coatM);hood.rotation.y=Math.PI;hood.scale.set(1.3,1,.8);hood.position.set(0,1.3,-.32);hood.castShadow=true;coat.add(hood);
+    const hoodIn=new THREE.Mesh(new THREE.SphereGeometry(.33,16,10,0,Math.PI,0,Math.PI*.6),M(0xf5e6d3,{side:THREE.BackSide}));hoodIn.rotation.y=Math.PI;hoodIn.scale.set(1.3,1,.8);hoodIn.position.set(0,1.31,-.31);coat.add(hoodIn);
+    const coll=new THREE.Mesh(new THREE.TorusGeometry(.46,.06,8,24),coatM);coll.rotation.x=Math.PI/2;coll.position.y=1.27;coat.add(coll);
+    const extra=[];for(const a of P.userData.arms){const sl=new THREE.Group(),sv=new THREE.Mesh(new THREE.CylinderGeometry(.095,.1,.42,10),coatM);sv.position.y=-.22;sv.castShadow=true;sl.add(sv);const cuff=new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,.07,10),rib);cuff.position.y=-.42;sl.add(cuff);sl.visible=false;a.add(sl);extra.push(sl)}
+    coat.userData.extra=extra;b.add(coat);GEAR.coat=coat;HATM.coat=coatM;
+    const scarf=new THREE.Group(),scM=M(0xec407a,{roughness:.8});HATM.scarf=scM;const _sc=0,stp=M(0xffffff,{roughness:.8});const ring=new THREE.Mesh(new THREE.TorusGeometry(.44,.09,8,24),scM);ring.rotation.x=Math.PI/2;ring.position.y=1.29;ring.scale.set(1.04,1.04,1);scarf.add(ring);
+    for(let k=0;k<2;k++){const t=new THREE.Mesh(new THREE.BoxGeometry(.15,.42,.06),scM);t.position.set(.16+k*.12,1.05,.47);t.rotation.z=.12+k*.1;scarf.add(t);const bd=new THREE.Mesh(new THREE.BoxGeometry(.155,.05,.065),stp);bd.position.set(.16+k*.12+Math.sin(.12+k*.1)*.13,.92,.47);bd.rotation.z=t.rotation.z;scarf.add(bd)}
+    b.add(scarf);GEAR.scarf=scarf;
     const um=new THREE.Group();const pole=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,2.9,6),M(0x5d4037));pole.position.y=2.25;um.add(pole);
-    const can=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,8,1,true),new THREE.MeshStandardMaterial({color:0xff7043,side:THREE.DoubleSide,flatShading:true}));can.position.y=3.85;can.castShadow=true;um.add(can);
+    const umM=new THREE.MeshStandardMaterial({color:0xff7043,side:THREE.DoubleSide,flatShading:true});HATM.umbrella=umM;const can=new THREE.Mesh(new THREE.ConeGeometry(1.05,.5,8,1,true),umM);can.position.y=3.85;can.castShadow=true;um.add(can);
     const tip=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),M(0x5d4037));tip.position.y=4.12;um.add(tip);const hk=new THREE.Mesh(new THREE.TorusGeometry(.08,.02,6,12,Math.PI),M(0x5d4037));hk.position.set(.08,.8,0);hk.rotation.z=Math.PI;um.add(hk);um.position.set(.62,0,0);b.add(um);GEAR.umbrella=um;
     const fan=new THREE.Mesh(new THREE.CircleGeometry(.34,14,Math.PI/6,Math.PI*2/3),new THREE.MeshStandardMaterial({color:0xec407a,side:THREE.DoubleSide}));fan.position.set(0,-.55,.05);P.userData.arms[0].add(fan);GEAR.fan=fan;
-    for(const k in GEAR)GEAR[k].visible=false}
+    for(const k in GEAR)GEAR[k].visible=false;for(const k in HATM)HATM[k].userData.def="#"+HATM[k].color.getHexString()}
   let gearT=1,gearKey="";
-  const owns=id=>(api.gear?api.gear():[]).includes(id),pref=id=>(api.gearPref?api.gearPref():{})[id];
-  function wantGear(id){if(!owns(id))return false;const pr=pref(id);if(pr===1)return true;if(pr===0)return false;const c=thaiClock(nowMs()),bm=biomeOf(S.st);
-    if(id==="umbrella")return !!(c.rain||TH.rain);if(id==="fan")return c.temp!=null&&c.temp>=35;if(id==="coat")return (c.temp!=null&&c.temp<=22)||(c.season==="cool"&&c.part==="night");
-    if(id==="shades")return bm==="beach";if(id==="straw")return bm==="farm"||bm==="village";if(id==="cap")return !wantGear("straw");return false}
-  function applyGear(){const on={};for(const k in GEAR)on[k]=wantGear(k);if(on.straw)on.cap=false;for(const k in GEAR)GEAR[k].visible=on[k];P.userData.avY=on.straw?3.4:on.cap?3.35:3.15;{const hc=api.hatCol?api.hatCol():{};const H=HATM;if(H){H.cap.color.set(hc.cap||0x1c1c1f);H.straw.color.set(hc.straw||0xe53935)}}
-    const key=JSON.stringify(on);if(key!==gearKey){gearKey=key;ui.gear&&ui.gear(on)}}
+  /* ไอเทมมีหลายสีได้: รหัส "cap" (สีเริ่มต้น) หรือ "cap@1e3a8a" ใส่ได้ทีละสีต่อชนิด */
+  function gearList(){return api.gear?api.gear():[]}
+  function owns(id){return gearList().some(g=>g.split("@")[0]===id)}function pref(id){return (api.gearPref?api.gearPref():{})[id]}
+  function wornVar(id){return gearList().find(g=>g.split("@")[0]===id&&pref(g)===1)}
+  /* ไอเทมที่ซื้อแล้ว ผู้เล่นเลือกใส่เองทั้งหมด (แตะที่แถบด้านขวา) ไม่ใส่ให้อัตโนมัติ */
+  function wantGear(id){return !!wornVar(id)}
+  function rainNow(){const c=thaiClock(nowMs());return !!(c.rain||TH.rain)}function coldNow(){const c=thaiClock(nowMs());return c.season==="cool"||(c.temp!=null&&c.temp<=22)}
+  function applyGear(){const on={};for(const k in GEAR)on[k]=wantGear(k);if(on.straw)on.cap=false;for(const k in GEAR)GEAR[k].visible=on[k];P.userData.avY=on.straw?3.4:on.cap?3.35:3.15;{const H=HATM;if(H)for(const k in H){const v=wornVar(k),c=v&&v.includes("@")?"#"+v.split("@")[1]:H[k].userData.def;H[k].color.set(c)}}
+    /* แขนเสื้อกันหนาวอยู่ที่แขน ต้องซ่อน/แสดงตามเสื้อ */
+    for(const sl of GEAR.coat.userData.extra||[])sl.visible=on.coat
+    const key=JSON.stringify(on);if(key!==gearKey){gearKey=key;ui.gear&&ui.gear(on)}
+    /* ฝนตก: ถามว่าจะกางร่มไหม ถ้ายังไม่มีร่ม บอกว่าข้างหน้ามีร้านขายร่ม */
+    if(rainNow()&&!on.umbrella&&!S.rainAsked&&S.mode==="walk"){S.rainAsked=true;if(owns("umbrella"))ui.rain&&ui.rain(true);else ui.rain&&ui.rain(false)}}
   /* รูปประจำตัวของนักเรียน ลอยอยู่บนหัวน้องดินสอ */
   if(api.avatar){const im=new Image();im.crossOrigin="anonymous";im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");
       x.fillStyle="#fff";x.beginPath();x.arc(128,118,112,0,Math.PI*2);x.fill();x.beginPath();x.moveTo(104,222);x.lineTo(152,222);x.lineTo(128,252);x.fill();
@@ -1176,7 +1218,7 @@ export function startGame(root,api){
   const ui=api.ui;
   function stage(st){
     setBiome(st);
-    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=Math.min(8,4+Math.floor(st/3));S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
+    S.st=st;S.bq=false;SND.ambient(biomeOf(st));if(S.shrine){world.remove(S.shrine);S.shrine=null}S.prayed=false;S.rainAsked=false;S.got=0;ui.pts&&ui.pts(0);clearCritters();S.inWater=null;S.z=0;S.spl=null;S.qBr=null;S.climb=null;S.wet=0;P.rotation.z=0;SND.mode(biomeOf(st)==="haunted"?"haunt":biomeOf(st)==="thai"?"thai":"day");gearT=1;{const T=themeNow();if(T!==TH)fadeTo(T)}S.need=8;S.done=0;S.qMax=Math.max(6,13-Math.floor(st/2));S.nextQ=S.x+10;setSky(st);ui.stage(st,S.need,S.done);spawnCoins(S.x+3,6,false)}
   /* เหรียญเรียงตามทาง บางช่วงลอยสูงต้องแตะให้กระโดดเก็บ */
   function spawnCoins(x0,n,bonus){const arc=Math.random()<.5;for(let i=0;i<n;i++){const c=coinMesh();const h=arc&&i>1&&i<n-1?1.9+Math.sin((i-1)/(n-3)*Math.PI)*.6:.8;c.position.set(x0+i*1.1,h,0);c.userData.bonus=bonus;world.add(c);S.coins.push(c)}}
   function ask(br,water){
@@ -1187,18 +1229,20 @@ export function startGame(root,api){
     ui.ask(S.q);
   }
   /* ตกน้ำแล้วต้องตอบข้อใหม่ให้ถูกก่อนถึงจะปีนขึ้นสะพานได้ ตอบผิดเสียหัวใจแล้วได้ข้อใหม่ */
+  /* ปีนกลับขึ้นสะพานเสมอ: เป้าหมายคือกลางสะพานที่ตกลงไป */
+  function climbOut(){const br=S.inWater.br||S.qBr,mid=(br.x0+br.x1)/2;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:Math.max(br.x0+.6,Math.min(br.x1-.6,mid))}}
   function waterChoose(i){if(S.mode!=="ask")return;ui.hideQ();const ok=i===S.q.ans,a=S.ans[i];
-    if(ok){S.joy=1.6;SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);S.bq=true;
-      const br=S.qBr||S.inWater.br;S.mode="climb";S.climb={t:0,x0:S.inWater.x,tx:Math.max(br.x0+.6,Math.min(br.x1-.6,S.inWater.x))};setTimeout(clearAns,400)}
+    if(ok){S.joy=1.6;SND.play("ok");mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;ui.stage(S.st,S.need,S.done);S.bq=true;
+      climbOut();setTimeout(clearAns,400)}
     else{SND.play("wrong");if(a){mark(a,"#ef4444");a.userData.drop=true}mark(S.ans[S.q.ans],"#22c55e");ui.say&&ui.say("ยังไม่ถูก ลองข้อใหม่นะ");S.mode="wet";hurt();
-      setTimeout(()=>{if(S.mode==="dead"||!S.inWater)return;clearAns();ask(S.inWater.br,true)},1300)}}
+      setTimeout(()=>{if(S.mode!=="wet"||!S.inWater)return;clearAns();ask(S.inWater.br,true)},1300)}}
   function choose(i){
     if(S.inWater){waterChoose(i);return}
     if(S.mode!=="ask")return;S.mode="jumping";ui.hideQ();const ok=i===S.q.ans;
     if(i<0){mark(S.ans[S.q.ans],"#22c55e");SND.play("wrong");if(S.qBr){S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr};return}punish();hurt();setTimeout(clearAns,600);return}
     const a=S.ans[i],to=a.visible?new THREE.Vector3(a.position.x,Math.max(0,a.position.y-.9-groundY(a.position.x)),0):new THREE.Vector3(S.x,0,0);
     S.jump={from:new THREE.Vector3(S.x,S.y,0),to,t:0,dur:.55,done:()=>{
-      if(ok){S.joy=1.6;SND.play("ok");for(const l of leeches)l.drop=1;for(const c of critters)if(c.kind==="crab")c.off=1;S.crabHits=0;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;S.pts+=5;ui.pts(S.pts);ui.stage(S.st,S.need,S.done);
+      if(ok){S.joy=1.6;SND.play("ok");for(const l of leeches)l.drop=1;for(const c of critters)if(c.kind==="crab")c.off=1;S.crabHits=0;mark(a,"#22c55e");burst(a.position);a.userData.gone=true;S.done++;if(S.qBr)S.bq=true;ui.stage(S.st,S.need,S.done);
         S.fall={vy:2};S.mode="falling";S.afterFall=()=>{clearAns();S.mode="walk";afterAnswer(true)}}
       else if(S.qBr){SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.mode="splash";S.spl={t:0,x:S.x,y:S.y+groundY(S.x),br:S.qBr}}
       else{SND.play("wrong");mark(a,"#ef4444");a.userData.drop=true;mark(S.ans[S.q.ans],"#22c55e");S.fall={vy:0};S.mode="falling";S.afterFall=()=>{punish();hurt();if(S.mode!=="dead"){clearAns();S.mode="walk";afterAnswer(false)}}}
@@ -1219,8 +1263,8 @@ export function startGame(root,api){
   const ghosts=[],ripples=[];
   function scare(){if(biomeOf(S.st)!=="haunted")return;const n=Math.max(0,S.qn-1),cyc=["lady","krasue","west","krahang","lady","west"][n%6],gh=cyc==="lady"?ladyGhost():cyc==="krasue"?krasue():cyc==="krahang"?krahang():ghost(Math.floor(n/3)%5);if(cyc!=="west"){setTimeout(()=>SND.play("thaighost"),250);setTimeout(()=>SND.play("howl"),450)}gh.position.set(S.x+1.4,-1.6,-.4);gh.scale.setScalar(.3);world.add(gh);ghosts.push({o:gh,t:0});SND.play("ghost");S.freeze=2.2;S.scared=2;setTimeout(()=>SND.play("gasp"),350);ui.scare&&ui.scare()}
   const critters=[],leeches=[];
-  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="thai")return critter("auntie");if(b==="farm")critter("bite");else if(b==="waterfall")critter("leech");else if(b==="village")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
-  function critter(kind){const x0=S.x;
+  function punish(){const b=biomeOf(S.st);if(b==="haunted")return scare();if(b==="village")return critter("auntie");if(b==="farm")critter("bite");else if(b==="waterfall")critter("bite","croc");else if(b==="thai")critter("chicks");else if(b==="beach")critter("crab");else if(b==="market")critter("pelt")}
+  function critter(kind,only){const x0=S.x;
     if(kind==="pelt"){S.freeze=3;const parts=[P.userData.body,P.userData.arms[0],P.userData.arms[1],P.userData.legs[0],P.userData.legs[1]];for(let k=0;k<4;k++){const v=(k%2===0?pick(VEGLEAF):pick(VEGTHROW))();v.scale.setScalar(2.2);v.position.set(x0+2.6,1.4,-1.6);world.add(v);
         const part=parts[k===0?0:1+Math.floor(Math.random()*4)],lp=part===P.userData.body?new THREE.Vector3(rand(-.3,.3),k===0?2.35:rand(.9,1.6),.42):new THREE.Vector3(0,-rand(.2,.5),.12);critters.push({o:v,kind:"veg",t:-k*.6,from:v.position.clone(),part,lp})}
       {const vd=person({long:true,skirt:0x8e24aa,shirt:0xffcc80,basket:true});vd.position.set(x0+2.8,0,-1.8);vd.rotation.y=Math.PI+.6;world.add(vd);critters.push({o:vd,kind:"vendor",t:0,x0})}SND.play("whoosh");return}
@@ -1232,7 +1276,7 @@ export function startGame(root,api){
     if(kind==="crab"){const u=P.userData;S.crabHits=(S.crabHits||0)+1;const want=[[u.arms[0],"arm",-1],[u.arms[1],"arm",1]];if(S.crabHits>=2)want.push([u.legs[0],"leg",-1],[u.legs[1],"leg",1]);let n=0;
       for(const[part,pk,side]of want){if(critters.some(c=>c.kind==="crab"&&c.part===part&&!c.off))continue;const o=crab();o.scale.setScalar(2.2);o.position.set(x0+7,0,.5+side*.35);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:-n*.35,x0,part,pk,side});n++}
       SND.play("pinch");return}
-    const o=Math.random()<.5?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
+    const o=only==="croc"||(!only&&Math.random()<.5)?croc():lion();setTimeout(()=>SND.play(o.userData.jaw?"growl":"bigroar"),150);o.position.set(x0+7,0,kind==="crab"?.5:.3);o.rotation.y=Math.PI;world.add(o);critters.push({o,kind,t:0,x0});
     }
   /* ด่านภาษาไทย ตอบผิด: ป้าข้างบ้านเดินมาเปรียบเทียบกับลูกป้า ข้อละประโยค ไม่ซ้ำจนครบ */
   const AUNT=["ลูกป้าจบปริญญาตรีแล้วนะ","ลูกป้าทำงานได้เงินเดือนสองหมื่นแล้วนะ","ลูกป้าแต่งงานแล้วนะ","ลูกป้าไม่อ่านก็สอบติด","ลูกป้าได้เกรดสี่ทุกวิชา",
@@ -1249,7 +1293,7 @@ export function startGame(root,api){
   function splash(pos){const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,6,24),M(0xffffff,{transparent:true,opacity:.9}));ring.rotation.x=Math.PI/2;ring.position.copy(pos);world.add(ring);ripples.push({o:ring,t:0});for(let i=0;i<40;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(rand(.05,.11),6,4),M(pick([0xffffff,0xbfe9ff,0x7dd3fc]),{emissive:0x335566}));s.position.copy(pos);s.userData.v=new THREE.Vector3(rand(-1.6,1.6),rand(2.5,5),rand(-1,1.2));s.userData.life=.9;world.add(s);bursts.push(s)}}
   async function passArch(){
     S.mode="cheer";const st=S.st;burst(new THREE.Vector3(S.archX,2.5,0));if(S.arch&&S.arch.userData.tape)S.arch.userData.tape.visible=false;SND.play("clap");SND.play("sparkle");
-    const r=await api.clear(st);ui.toast(st,r);if(S.hearts<3){S.hearts++;ui.hearts(S.hearts)}
+    const r=await api.clear(st,S.got||0);S.got=0;ui.pts(0);ui.toast(st,r);if(S.hearts<3){S.hearts++;ui.hearts(S.hearts)}
     if(st>=(api.maxStage?api.maxStage():10)){setTimeout(()=>{S.mode="done";ui.finish&&ui.finish(st)},900);return}
     setTimeout(()=>{if(S.mode==="dead")return;S.arch=null;stage(st+1);S.mode="walk"},900);
   }
@@ -1295,6 +1339,10 @@ export function startGame(root,api){
     if(S.hop){S.hop.vy-=20*dt;S.y=Math.max(0,S.y+S.hop.vy*dt);if(S.y<=0)S.hop=null}
     if(S.mode==="jumping"&&S.jump){const j=S.jump;j.t+=dt/j.dur;const t=Math.min(1,j.t);S.x=j.from.x+(j.to.x-j.from.x)*t;S.y=j.from.y+(j.to.y-j.from.y)*t+Math.sin(Math.PI*t)*1.4;if(t>=1){S.jump=null;S.y=j.to.y;j.done()}}
     if(S.mode==="falling"){S.fall.vy-=18*dt;S.y=Math.max(0,S.y+S.fall.vy*dt);if(S.y<=0){S.mode="landed";S.afterFall&&S.afterFall()}}
+    /* กันค้าง: อยู่ในน้ำแต่สถานะหลุดไปเป็นอย่างอื่น ให้ปีนขึ้นสะพาน  รอข้อใหม่ในน้ำนานเกินไป ให้ถามใหม่  ปีนนานเกินไป ให้จบการปีน */
+    if(S.inWater&&S.mode!=="ask"&&S.mode!=="wet"&&S.mode!=="climb"&&S.mode!=="dead"&&S.mode!=="splash")climbOut();
+    if(S.mode==="wet"&&S.inWater){S.wetT=(S.wetT||0)+dt;if(S.wetT>3){S.wetT=0;clearAns();ask(S.inWater.br,true)}}else S.wetT=0;
+    if(S.mode==="climb"&&!S.climb&&S.inWater)climbOut();
     if(S.mode==="ask"){S.qT-=dt;ui.timer(Math.max(0,S.qT/S.qMax));if(S.qT<=0)choose(-1)}
     if(S.mode==="splash"){const sp=S.spl;sp.t+=dt;const t=sp.t,fy=sp.y+2.6*t-11*t*t,y=sp.hit?-.75+Math.sin(t*5)*.08:fy;S.z=Math.min(1,t/.6)*2.2;const mid=(sp.br.x0+sp.br.x1)/2,tx=Math.max(mid-1.3,Math.min(mid+1.3,sp.x)),fx=sp.x+(tx-sp.x)*Math.min(1,t/.6);P.position.set(fx,Math.max(-.75,y),S.z);P.rotation.z=sp.hit?Math.sin(t*4)*.25:Math.min(1,t*1.6)*.8;
       if(!sp.fs){sp.fs=1;SND.play("fall")}if(fy<.05&&!sp.hit){sp.hit=1;SND.play("plunge");splash(new THREE.Vector3(fx,.15,S.z));ui.say&&ui.say("ตกน้ำ! ตอบข้อใหม่ให้ถูกเพื่อขึ้นจากน้ำ");hurt()}
@@ -1317,7 +1365,7 @@ export function startGame(root,api){
     ud.shadow.position.y=.02-S.y;if(ud.av)ud.av.position.y=(ud.avY||3.15)+Math.sin(S.t*3)*.05;ud.shadow.scale.setScalar(Math.max(.4,1-S.y*.25));
     for(let i=S.coins.length-1;i>=0;i--){const c=S.coins[i];c.rotation.y+=dt*3;
       if(c.userData.got){c.position.y+=dt*6;c.scale.multiplyScalar(1-dt*4);if(c.scale.x<.1){world.remove(c);S.coins.splice(i,1)}continue}
-      if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.pts+=1;ui.pts(S.pts);SND.play("coin")}
+      if(Math.abs(c.position.x-S.x)<.55&&Math.abs(c.position.y-(S.y+1.1))<1){c.userData.got=1;S.got=(S.got||0)+1;ui.pts(S.got);SND.play("coin")}
       else if(c.position.x<S.x-40){world.remove(c);S.coins.splice(i,1)}}
     for(const a of S.ans){const u=a.userData;
       if(u.gone){a.scale.multiplyScalar(1-dt*5)}else if(u.drop){a.position.y-=dt*7;a.rotation.z+=dt*4}
@@ -1336,7 +1384,7 @@ export function startGame(root,api){
     {const on=biomeOf(S.st)==="beach"&&!TH.night;glit.visible=on;if(on){const a=glitGeo.attributes.position.array,sx=(fade?fade.cur.sp:TH.sunPos)[0];for(let k=0;k<GN;k++){if(Math.random()<.08||Math.abs(a[k*3]-S.x)>90){const z=-rand(14,150),sp=1.2+(-z)*.06;a[k*3]=S.x+3+sx*(-z/170)+rand(-sp,sp);a[k*3+1]=.3;a[k*3+2]=z}}glitGeo.attributes.position.needsUpdate=true;glitMat.opacity=.55+Math.sin(S.t*9)*.25;glitMat.color.set(TH.light)}}
     gearT+=dt;if(gearT>.5){gearT=0;applyGear()}if(GEAR.fan.visible)GEAR.fan.rotation.z=Math.sin(S.t*14)*.45;
     for(let i=chests.length-1;i>=0;i--){const c=chests[i];if(c.seg.parent!==world){chests.splice(i,1);continue}const u=c.o.userData;
-      if(!c.open&&Math.abs(S.x-(c.seg.position.x+c.x))<.9&&S.mode!=="splash"){c.open=1;SND.play("chest");u.lk.visible=false;S.pts+=5;ui.pts(S.pts);
+      if(!c.open&&Math.abs(S.x-(c.seg.position.x+c.x))<.9&&S.mode!=="splash"){c.open=1;SND.play("chest");u.lk.visible=false;S.got=(S.got||0)+5;ui.pts(S.got);
         const wp=new THREE.Vector3(c.seg.position.x+c.x,.8,-1.75);for(let k=0;k<5;k++){const m=coinMesh();m.position.copy(wp);m.userData.v=new THREE.Vector3(rand(-1.2,1.2),rand(4,6),rand(.5,1.5));m.userData.life=1;m.scale.setScalar(.7);world.add(m);bursts.push(m)}
         if(S.hearts<3&&Math.random()<.25){S.hearts++;ui.hearts(S.hearts);SND.play("heart")}}
       if(c.open&&c.open<2){u.lid.rotation.x=Math.max(-1.9,u.lid.rotation.x-dt*7);u.glow.material.opacity=Math.max(0,u.glow.material.opacity-dt*1.5);if(u.lid.rotation.x<=-1.9)c.open=2}
@@ -1381,16 +1429,21 @@ export function startGame(root,api){
       P.userData.expr(S.scared>0?"scared":hurtNow?"hurt":(S.joy>0||S.mode==="cheer")?"happy":"normal")}
     if(S.ouch>0){S.ouch-=dt;P.position.x+=Math.sin(S.t*70)*.05;P.position.y+=Math.abs(Math.sin(S.t*20))*.06}
     if(S.shrine){const u=S.shrine.userData;u.aura.material.opacity=.55+Math.sin(S.t*2)*.2;u.smoke.position.y=1.2+((S.t*.4)%1)*1.4;u.smoke.material.opacity=.5*(1-((S.t*.4)%1))}
-    if(S.mode==="bow"){const b=S.bow,u=P.userData;if(!b.ch){b.ch=1;SND.play("chant");if(!SND.speak("นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ",false,{pitch:.35,rate:.55,onend:()=>{b.done=1}}))b.done=1}b.t+=dt;
-      /* ไหว้พระ: พนมมือยื่นไปข้างหน้า แล้วก้มคำนับ 3 ครั้ง */
-      u.body.rotation.x=b.t<3?Math.abs(Math.sin(b.t*Math.PI/1))*.6:0;u.arms.forEach((a,i)=>{const s2=i?1:-1;a.rotation.set(-1.45,0,-s2*.5)});
+    if(S.mode==="bow"){const b=S.bow,u=P.userData;if(!b.ch){b.ch=1;b.ph="chant";SND.play("chant");if(!SND.speak("นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ",false,{pitch:.35,rate:.55,onend:()=>{b.done=1}}))b.done=1}b.t+=dt;
+      /* ไหว้พระ: พนมมือยื่นไปข้างหน้า ก้มกราบค้างไว้ฟังพระสวดนะโมจนจบ แล้วน้องอธิษฐาน "ขอให้สอบติด" 3 ครั้ง กราบทุกครั้ง */
+      u.arms.forEach((a,i)=>{const s2=i?1:-1;a.rotation.set(-1.45,0,-s2*.5)});
       if(b.t>.5&&!b.rang){b.rang=1;SND.play("bell");burst(new THREE.Vector3(S.shrineX+2.2,2.6,-3))}
-      if(b.t>=3.2&&(b.done||b.t>16)){P.userData.body.rotation.x=0;P.userData.arms.forEach((a,i)=>a.rotation.set(0,0,(i?1:-1)*.35));S.prayed=true;S.mode="walk";SND.play("sparkle");burst(new THREE.Vector3(S.shrineX+2.2,3,-3.2));ui.say&&ui.say("ขอให้สอบติด สมหวังทุกประการ")}}
+      if(b.ph==="chant"){u.body.rotation.x+=(.62-u.body.rotation.x)*Math.min(1,dt*4);if((b.done&&b.t>2)||b.t>16){b.ph="wish";b.n=-1;b.pt=0}}
+      else{b.pt+=dt;const wish=b.n<0,R=wish?2.4:1.7;if(!b["s"+b.n]){b["s"+b.n]=1;SND.speak(wish?"ขอให้สอบติด":"สาธุ",false,{pitch:1.35,rate:wish?.95:.8})}
+        /* ลุกขึ้นพนมมืออธิษฐาน "ขอให้สอบติด" 1 ครั้ง แล้วก้มกราบ 3 ครั้ง พูด "สาธุ" ทุกครั้งที่กราบ */
+        const q=b.pt/R;u.body.rotation.x=wish?.62*(1-Math.min(1,q/.25)):.62*Math.sin(Math.min(1,q/.85)*Math.PI);
+        if(b.pt>=R){b.n++;b.pt=0;if(b.n>=3){u.body.rotation.x=0;u.arms.forEach((a,i)=>a.rotation.set(0,0,(i?1:-1)*.35));S.prayed=true;S.mode="walk";SND.play("sparkle");burst(new THREE.Vector3(S.shrineX+2.2,3,-3.2));ui.say&&ui.say("ขอให้สอบติด สมหวังทุกประการ")}}}}
     for(let i=ripples.length-1;i>=0;i--){const R=ripples[i];R.t+=dt;R.o.scale.setScalar(1+R.t*3);R.o.material.opacity=Math.max(0,.9-R.t*.8);if(R.t>1.1){world.remove(R.o);ripples.splice(i,1)}}
     for(let i=ghosts.length-1;i>=0;i--){const G=ghosts[i];G.t+=dt;const t=G.t,o=G.o;
-      if(t<.45){const k=t/.45;o.position.y=-1.6+k*3.1;o.scale.setScalar(.3+k*.9)}
-      else if(t<1.4){const k=(t-.45)/.95;o.position.z=-.4+k*5;o.position.x=S.x+1.4-k*.8;o.position.y=1.5+Math.sin(t*14)*.12;o.scale.setScalar(1.2+k*.7);o.rotation.z=Math.sin(t*10)*.15}
-      else{const k=Math.min(1,(t-1.4)/.5);o.traverse(m=>{if(m.material){m.material.transparent=true;m.material.opacity=(1-k)*.92}})}
+      /* ผีโผล่ขึ้นตรงหน้าน้อง (ด้านขวา ไม่ทับตัว) พุ่งเข้าหานิดหนึ่ง แล้วลอยออกไปทางขวา */
+      const gx=S.x+2;if(t<.45){const k=t/.45;o.position.set(gx,-1.6+k*2.6,.5);o.scale.setScalar(.3+k*.9);o.rotation.y=-.5}
+      else if(t<1.1){const k=(t-.45)/.65;o.position.set(gx-.25*Math.sin(k*Math.PI),1+Math.sin(t*14)*.1,.5+.4*k);o.scale.setScalar(1.2+.15*Math.sin(k*Math.PI));o.rotation.z=Math.sin(t*10)*.15}
+      else{const k=Math.min(1,(t-1.1)/.8);o.position.set(gx+k*k*7,1+k*1.2,.9);o.rotation.z=-.3*k;o.traverse(m=>{if(m.material){m.material.transparent=true;m.material.opacity=(1-k*k)*.92}})}
       if(o.userData.wings){const f=Math.sin(t*18)*.7;o.userData.wings[0].rotation.y=f;o.userData.wings[1].rotation.y=-f}if(o.userData.thai===2){o.rotation.y=Math.sin(t*2)*.15;o.userData.halo.material.opacity=.5*(.7+Math.random()*.3)}if(o.userData.thai===1){o.rotation.y=Math.sin(t*3)*.3;const fl=Math.random()<.25?.25:1+Math.sin(t*37)*.3;for(const m of o.userData.glows)m.emissiveIntensity=1.3*fl;o.userData.light.intensity=4*fl;o.userData.halo.material.opacity=.6*fl}
       if(t>1.9){world.remove(o);ghosts.splice(i,1)}}
     for(let i=anim.length-1;i>=0;i--){const a=anim[i];if(!live(a)){anim.splice(i,1);continue}const o=a.obj,t=S.t+a.ph;
@@ -1423,9 +1476,9 @@ export function startGame(root,api){
     /* กล้องมองจากด้านข้าง ตามน้องดินสอไปทางขวา ให้ตัวอยู่ค่อนซ้ายของจอ */
     const narrow=W()<600,asking=S.mode==="ask"||S.mode==="jumping"||S.mode==="falling";
     const asp=Math.max(.3,W()/H()),fitD=hw=>hw/(Math.tan(cam.fov*Math.PI/360)*asp),beachW=biomeOf(S.st)==="beach"&&!asking,back=S.mode==="walk"&&S.dir<0,lead=S.inWater||S.mode==="splash"?0:narrow?(asking?3.6:back?-.4:2.2):(asking?4:back?-.6:3),dist=(narrow?(asking||S.inWater?Math.max(14,fitD(5.6)):Math.max(11,fitD(4.4))):(asking?12:10.5))*(beachW?1.45:1);
-    const ly=narrow?2.3:1.9;if(!view.drag){view.idle+=dt;if(view.idle>2.5){view.yaw*=1-Math.min(1,dt*2.5);view.pitch*=1-Math.min(1,dt*2.5)}}
+    const ly=narrow?2.95:1.9;if(!view.drag){view.idle+=dt;if(view.idle>2.5){view.yaw*=1-Math.min(1,dt*2.5);view.pitch*=1-Math.min(1,dt*2.5)}}
     /* กล้องยึดตำแหน่งน้องดินสอแนวนอนตรง ๆ (ไม่หน่วง) จึงไม่ส่ายไปมา ค่อย ๆ ปรับเฉพาะระยะนำหน้า ความไกล และความสูง */
-    const kS=1-Math.exp(-dt*(view.drag?12:2.2));camS.lead+=(lead-camS.lead)*kS;camS.dist+=(dist-camS.dist)*kS;camS.ly+=(ly-camS.ly)*kS;camS.h+=(((narrow?3.0:3.2)+(beachW?1.6:0)+S.y*.2)-camS.h)*(1-Math.exp(-dt*4));
+    const kS=1-Math.exp(-dt*(view.drag?12:2.2));camS.lead+=(lead-camS.lead)*kS;camS.dist+=(dist-camS.dist)*kS;camS.ly+=(ly-camS.ly)*kS;camS.h+=(((narrow?3.35:3.2)+(beachW?1.6:0)+S.y*.2)-camS.h)*(1-Math.exp(-dt*4));
     const px=(S.mode==="splash"||S.mode==="climb"||S.inWater)?P.position.x:S.x,piv=new THREE.Vector3(px+camS.lead,camS.ly,0),off=new THREE.Vector3(0,camS.h-camS.ly+view.pitch*camS.dist,camS.dist).applyAxisAngle(new THREE.Vector3(0,1,0),view.yaw);
     cam.position.copy(piv).add(off);camPiv.copy(piv);cam.lookAt(camPiv);
     /* เงา: ขยับแหล่งแสงเป็นช่วง ๆ ไม่ขยับทุกเฟรม เงาจะได้ไม่สั่นระยิบ */
