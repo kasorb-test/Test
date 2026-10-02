@@ -2924,6 +2924,16 @@ body.adv-on{overflow:hidden}
 .st-music.hh-music{width:34px;height:34px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(15,23,42,.12);color:#1f2937}.st-music.hh-music svg{width:17px;height:17px}.st-music.hh-music.off{background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.6);color:#94a3b8}
 .st-music{position:absolute;right:12px;top:12px;z-index:5;width:40px;height:40px;padding:0;border:3px solid #5a3412;border-radius:50%;background:#e8862a;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 0 #3b2109}.st-music svg{width:22px;height:22px}.st-music.off{background:#9ca3af;border-color:#6b7280}
 .st-jumpbtn{position:absolute;right:10px;bottom:16px;z-index:5;padding:9px 16px;border:0;border-radius:999px;background:#ff6a00;color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 4px 0 #c24e00,0 6px 12px rgba(0,0,0,.2);cursor:pointer}
+/* ป้ายบนแท่นยศแบบป้ายไม้ในเกม: แผ่นไม้ลายเส้น ตอกตะปู ตัวหนังสือสีครีมขอบเข้ม */
+.stairs .st-col b{display:inline-block;position:relative;padding:3px 12px;border:2.5px solid #5a3412;border-radius:8px;background:repeating-linear-gradient(180deg,#dba36a 0 5px,#cd9255 5px 7px);color:#fff4d6;font-size:14px;font-weight:900;letter-spacing:.3px;text-shadow:-1px -1px 0 #3b2109,1px -1px 0 #3b2109,-1px 1px 0 #3b2109,1px 1px 0 #3b2109,0 2px 0 #3b2109;box-shadow:0 3px 0 #3b2109}
+.stairs .st-col b:before,.stairs .st-col b:after{content:"";position:absolute;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:#5a3412}.stairs .st-col b:before{left:4px}.stairs .st-col b:after{right:4px}
+.stairs .st-col{padding-top:8px!important}.stairs .st-col span{display:table!important;margin:5px auto 0;padding:2px 3px;border-radius:6px;background:rgba(40,20,5,.55);color:#fff4d6;font-size:8.5px;line-height:1.3;white-space:nowrap;overflow:visible;padding:2px 6px!important;letter-spacing:-.3px;position:relative;left:50%;transform:translateX(-50%);margin-left:0!important;font-weight:800;text-shadow:0 1px 0 #2a1505;opacity:1}
+.stairs .st-col.now b{background:repeating-linear-gradient(180deg,#8bd64a 0 5px,#79c43a 5px 7px);border-color:#2f6b14;box-shadow:0 3px 0 #1f4a0c;text-shadow:-1px -1px 0 #1f4a0c,1px -1px 0 #1f4a0c,-1px 1px 0 #1f4a0c,1px 1px 0 #1f4a0c,0 2px 0 #1f4a0c}
+/* พื้นดินใต้บันไดยศ: ปุ่มเดินกับปุ่มกระโดดอยู่บนพื้นดินนี้ ไม่บังแท่นยศ */
+.stairs.stairs{height:340px!important}@media(min-width:761px){.ovc .stairs.stairs{height:390px!important}}
+.stairs .st-world{height:calc(100% - 70px)!important}
+.stairs:after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;z-index:1;background:radial-gradient(circle at 12% 40%,rgba(255,255,255,.12) 0 3px,transparent 3.5px) 0 0/46px 30px,radial-gradient(circle at 60% 70%,rgba(0,0,0,.12) 0 2.5px,transparent 3px) 0 0/38px 26px,linear-gradient(180deg,#8a5a32,#6b4424);box-shadow:inset 0 4px 0 #5a3820}
+.stairs .st-pad,.stairs .st-jumpbtn{z-index:6}.stairs .st-pad{bottom:12px!important}.stairs .st-jumpbtn{bottom:12px!important}
 .st-jumpbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c24e00}
 .st-plus{position:absolute;left:44px;top:34px;z-index:5;color:#e6a100;font-weight:900;font-size:15px;opacity:0;pointer-events:none}
 .st-plus.on{animation:stPlus .8s ease-out}
@@ -8009,9 +8019,11 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("advOv")){advClos
 /* ===== หน้าเกม: เข้าเมนูเกมแล้วเปิดฉากเกมเต็มจอทันที เริ่มจากด่านถัดจากที่ผ่านล่าสุด ===== */
 /* หน้าเลือกเกม: การ์ดเกมที่มี เพิ่มเกมใหม่ได้ภายหลัง */
 const GAMES=[{id:"adv",name:"Pencil Adventure",desc:"น้องดินสอผจญภัย 10 ด่าน ตอบคำถามเก็บเหรียญ",img:"mascot-2b.svg",play:()=>advStart()},
-  {id:"village",name:"Village Quest",desc:"เลือกทางไปหมู่บ้านอังกฤษ ภาษาไทย หรือคณิต",img:"mascot-2b-walk.svg",soon:true}];
+  {id:"village",name:"Village Quest",desc:"เลือกทางไปหมู่บ้านอังกฤษ ภาษาไทย หรือคณิต",img:"mascot-2b-walk.svg",soon:true},
+  {id:"math",name:"Math Formula",desc:"เกมสูตรคำนวณเลข ฝึกคิดเร็ว ท่องสูตรลัด",img:"game-math.svg",soon:true},
+  {id:"eng",name:"English Formula",desc:"เกมสูตรตอบภาษาอังกฤษ จำโครงสร้างประโยคและสูตรตอบ",img:"game-eng.svg",soon:true}];
 function renderGamePage(){const box=$("gmBox");if(!box)return;
-  box.innerHTML=`<div class="gm-list">${GAMES.map(g=>`<button type="button" class="gm-card${g.soon?" soon":""}" data-g="${g.id}"${g.soon?" disabled":""}><img src="${g.img}" alt=""><b>${escHtml(g.name)}</b><span>${escHtml(g.desc)}</span><em>${g.soon?"เร็ว ๆ นี้":"เล่นเลย"}</em></button>`).join("")}</div>`;
+  box.innerHTML=`<div class="gm-list">${GAMES.map(g=>`<button type="button" class="gm-card${g.soon?" soon":""}" data-g="${g.id}"${g.soon?" disabled":""}><img src="${g.img}" alt=""><b>${escHtml(g.name)}</b><em>${g.soon?"COMING SOON":"PLAY"}</em></button>`).join("")}</div>`;
   box.querySelectorAll(".gm-card:not(.soon)").forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g)?.play());
   box.insertAdjacentHTML("beforeend",'<div id="gmRank"></div>');renderRankZone()}
 /* บันไดยศ + เช็คอินรับเหรียญ + แต่งตัว + ร้านแลกของ อยู่ในหน้าเกม */
